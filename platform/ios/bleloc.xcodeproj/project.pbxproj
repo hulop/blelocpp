@@ -189,7 +189,6 @@
 		7E6F26061C0F1D79007A97A1 /* RandomGenerator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F25351C0F1D76007A97A1 /* RandomGenerator.hpp */; };
 		7E6F26071C0F1D79007A97A1 /* SerializeUtils.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F25361C0F1D76007A97A1 /* SerializeUtils.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E6F26081C0F1D79007A97A1 /* SerializeUtils.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F25361C0F1D76007A97A1 /* SerializeUtils.hpp */; };
-		B05BD398F2747470204FED13 /* libPods-bleloc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5D651D528829A828244BD797 /* libPods-bleloc.a */; };
 		F52FFB891C08861800508330 /* libopencv_contrib.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F52FFB791C08861800508330 /* libopencv_contrib.dylib */; };
 		F52FFB8A1C08861800508330 /* libopencv_core.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F52FFB7A1C08861800508330 /* libopencv_core.dylib */; };
 		F52FFB8B1C08861800508330 /* libopencv_features2d.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F52FFB7B1C08861800508330 /* libopencv_features2d.dylib */; };
@@ -362,7 +361,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B05BD398F2747470204FED13 /* libPods-bleloc.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
