@@ -816,8 +816,8 @@
 		7E8A88781C071C2F00C32E70 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0710;
-				ORGANIZATIONNAME = "Daisuke Sato";
+				LastUpgradeCheck = 0720;
+				ORGANIZATIONNAME = HULOP;
 				TargetAttributes = {
 					7E60021C1C076D71007A9B2B = {
 						CreatedOnToolsVersion = 7.1.1;
@@ -1099,7 +1099,8 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				MTL_ENABLE_DEBUG_INFO = YES;
-				ONLY_ACTIVE_ARCH = NO;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "$(inherited)";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -1136,6 +1137,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = "$(inherited)";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -1145,10 +1147,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = BD7721527FBC1489894D04B9 /* Pods-bleloc.debug.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				GCC_OPTIMIZATION_LEVEL = 2;
 				ONLY_ACTIVE_ARCH = NO;
-				OTHER_LDFLAGS = "-ObjC";
+				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				VALID_ARCHS = "arm64 armv7 armv7s x86_64 i386";
@@ -1159,8 +1160,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 308D6E89343F046D8CCC70C3 /* Pods-bleloc.release.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
-				OTHER_LDFLAGS = "-ObjC";
+				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				VALID_ARCHS = "arm64 armv7 armv7s x86_64 i386";
@@ -1171,6 +1171,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = A03FCA3CDC596C0179526256 /* Pods-blelocjni.debug.xcconfig */;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				EXECUTABLE_PREFIX = lib;
@@ -1205,6 +1206,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 7654A1CA9FFCCD15F8AD65D2 /* Pods-blelocjni.release.xcconfig */;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				EXECUTABLE_PREFIX = lib;
