@@ -26,13 +26,11 @@ It is necessary to build this library as an iOS Framework before building NavCog
 - Build framework target for Generic iOS device
 - Build bleloc target for Generic iOS device
 
-## About
 ----
+## About
 [About HULOP](https://github.com/hulop/00Readme)
 
-
 ## License
-----
 [MIT](http://opensource.org/licenses/MIT)
 
 ## [README](https://raw.githubusercontent.com/hulop/blelocpp/master/README.txt)
