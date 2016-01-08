@@ -42,6 +42,9 @@ namespace loc{
     private:
         int count_putBeacons = 0;
         long timestampMargin = 1000; //[ms]
+        long prevTimestamp = 0;
+        bool wasReset = false;
+        
         std::string mCsvPath = "";
         std::shared_ptr<StreamLocalizer> mStreamLocalizer;
         

@@ -54,6 +54,7 @@ namespace loc{
         int mNumStates = 1000; //Defalt value
         double mAlphaWeaken = 1.0;
         int resetWaitingTimeMS = 100; // milliseconds
+        long previousTimestampMotion = 0;
         
         //std::queue<Pose> posesForReset;
         std::queue<std::function<void()>> functionsForReset;
@@ -67,9 +68,7 @@ namespace loc{
         
         std::shared_ptr<ObservationModel<State, Beacons>> mObservationModel;
         std::shared_ptr<Resampler<State>> mResampler;
-        
         std::shared_ptr<StatusInitializer> mStatusInitializer;
-        
         std::shared_ptr<BeaconFilter> mBeaconFilter;
         
         void (*mFunctionCalledAfterUpdate)(Status *);
@@ -118,12 +117,11 @@ namespace loc{
         void predictMotionState(long timestamp){
             initializeStatusIfZero();
             
-            static long previousTimestamp = 0;
-            if(previousTimestamp==0) previousTimestamp = timestamp;
+            if(previousTimestampMotion==0) previousTimestampMotion = timestamp;
             
             PoseRandomWalkerInput input;
             input.timestamp(timestamp);
-            input.previousTimestamp(previousTimestamp);
+            input.previousTimestamp(previousTimestampMotion);
             
             std::shared_ptr<States> states = status->states();
             States* statesPredicted = new States(mRandomWalker->predict(*states.get(), input));
@@ -133,8 +131,7 @@ namespace loc{
                 std::cout << "prediction at t=" << timestamp << std::endl;
             }
             
-            previousTimestamp = timestamp;
-            
+            previousTimestampMotion = timestamp;
             mFunctionCalledAfterUpdate(status.get());
         }
         

@@ -60,7 +60,6 @@ namespace loc{
     }
     
     void VirtualDevice::checkTimestampConsistency(long timestamp){
-        static long prevTimestamp = 0;
         if(prevTimestamp == 0){
             prevTimestamp = timestamp;
         }
@@ -95,7 +94,6 @@ namespace loc{
     }
     
     void VirtualDevice::processLine(std::string strBuffer){
-        static bool wasReset = false;
         if(DataUtils::csvCheckAcceleration(strBuffer)){
             Acceleration acc = DataUtils::parseAccelerationCSV(strBuffer);
             mStreamLocalizer->putAcceleration(acc);
