@@ -32,6 +32,7 @@ namespace loc {
         virtual ~StreamLocalizer(){};
         
         virtual StreamLocalizer& updateHandler(void (*functionCalledAfterUpdate)(Status*)) = 0;
+        virtual StreamLocalizer& updateHandler(void (*functionCalledAfterUpdate)(void*, Status*), void* inUserData) = 0;
         
         virtual StreamLocalizer& putAcceleration(const Acceleration acceleration) = 0;
         virtual StreamLocalizer& putAttitude(const Attitude attitude) = 0;

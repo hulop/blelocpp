@@ -56,6 +56,7 @@ namespace loc {
         
         // callback function setter
         StreamParticleFilter& updateHandler(void (*functionCalledAfterUpdate)(Status*)) override;
+        StreamParticleFilter& updateHandler(void (*functionCalledAfterUpdate)(void*, Status*), void* inUserData) override;
         
         // method to input sensor data
         StreamParticleFilter& putAcceleration(const Acceleration acceleration) override;

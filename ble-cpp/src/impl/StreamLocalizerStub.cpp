@@ -29,9 +29,18 @@ namespace loc{
     StreamLocalizerStub::StreamLocalizerStub(){}
     StreamLocalizerStub::~StreamLocalizerStub(){}
 
+    void StreamLocalizerStub::callback(loc::Status * status){
+        if(mFunctionCalledAfterUpdate!=NULL){
+            mFunctionCalledAfterUpdate(status);
+        }
+        if(mFunctionCalledAfterUpdate2!=NULL){
+            mFunctionCalledAfterUpdate2(mUserData, status);
+        }
+    }
+    
     StreamLocalizer& StreamLocalizerStub::putAcceleration(const Acceleration acceleration){
         updateStateStub();
-        mFunctionCalledAfterUpdate(status);
+        callback(status);
         return *this;
     }
     StreamLocalizer& StreamLocalizerStub::putAttitude(const Attitude attitude) {
@@ -39,7 +48,7 @@ namespace loc{
     }
     StreamLocalizer& StreamLocalizerStub::putBeacons(const Beacons beacons) {
         updateStateStub();
-        mFunctionCalledAfterUpdate(status);
+        callback(status);
         return *this;
     }
     
@@ -57,6 +66,13 @@ namespace loc{
         mFunctionCalledAfterUpdate = funcCalledAfterUpdate;
         return *this;
     }
+    
+    StreamLocalizer& StreamLocalizerStub::updateHandler(void (*funcCalledAfterUpdate)(void*, Status*), void* inUserData) {
+        mFunctionCalledAfterUpdate2 = funcCalledAfterUpdate;
+        mUserData = inUserData;
+        return *this;
+    }
+    
     Status* StreamLocalizerStub::getStatus() {
         return status;
     }

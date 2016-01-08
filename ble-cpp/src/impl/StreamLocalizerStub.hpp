@@ -38,6 +38,8 @@ namespace loc {
         StreamLocalizer& putAttitude(const Attitude attitude) override;
         StreamLocalizer& putBeacons(const Beacons beacons) override;
         StreamLocalizer& updateHandler(void (*functionCalledAfterUpdate)(Status*)) override;
+        StreamLocalizer& updateHandler(void (*functionCalledAfterUpdate)(void*, Status*), void* inUserData) override;
+        
         Status* getStatus() override;
         
         bool resetStatus() override;
@@ -52,7 +54,10 @@ namespace loc {
         Status* status;
         void updateStateStub();
         
-        void (*mFunctionCalledAfterUpdate)(Status*);
+        void callback(Status*);
+        void (*mFunctionCalledAfterUpdate)(Status*) = NULL;
+        void (*mFunctionCalledAfterUpdate2)(void*, Status*) = NULL;
+        void *mUserData;
     };
 
 }

@@ -71,7 +71,9 @@ namespace loc{
         std::shared_ptr<StatusInitializer> mStatusInitializer;
         std::shared_ptr<BeaconFilter> mBeaconFilter;
         
-        void (*mFunctionCalledAfterUpdate)(Status *);
+        void (*mFunctionCalledAfterUpdate)(Status*) = NULL;
+        void (*mFunctionCalledAfterUpdate2)(void*, Status*) = NULL;
+        void* mUserData;
         
         bool accelerationIsUpdated = false;
         bool attitudeIsUpdated = false;
@@ -132,7 +134,7 @@ namespace loc{
             }
             
             previousTimestampMotion = timestamp;
-            mFunctionCalledAfterUpdate(status.get());
+            callback(status.get());
         }
         
         void logStates(const States& states, const std::string& filename){
@@ -217,8 +219,7 @@ namespace loc{
             const Beacons& beaconsFiltered = filterBeacons(beacons);
 
             doFiltering(beaconsFiltered);
-            
-            mFunctionCalledAfterUpdate(status.get());
+            callback(status.get());
         };
         
         static std::vector<double> weakenLogLikelihoods(std::vector<double> logLikelihoods, double alphaWeaken){
@@ -247,6 +248,11 @@ namespace loc{
             mFunctionCalledAfterUpdate = functionCalledAfterUpdate;
         }
         
+        void updateHandler(void (*functionCalledAfterUpdate)(void*, Status*), void* inUserData){
+            mFunctionCalledAfterUpdate2 = functionCalledAfterUpdate;
+            mUserData = inUserData;
+        }
+        
         Status* getStatus(){
             return status.get();
         };
@@ -256,6 +262,15 @@ namespace loc{
             return true;
         }
         
+        void callback(Status* status){
+            if(mFunctionCalledAfterUpdate!=NULL){
+                mFunctionCalledAfterUpdate(status);
+            }
+            if(mFunctionCalledAfterUpdate2!=NULL){
+                mFunctionCalledAfterUpdate2(mUserData, status);
+            }
+        }
+        
         bool resetStatus(Pose pose){
             bool orientationWasUpdated = mOrientationmeter->isUpdated();
             if(orientationWasUpdated){
@@ -263,7 +278,7 @@ namespace loc{
                 double orientationMeasured = mOrientationmeter->getYaw();
                 States* states = new States(mStatusInitializer->resetStates(mNumStates, pose, orientationMeasured));
                 status->states(states);
-                mFunctionCalledAfterUpdate(status.get());
+                callback(status.get());
                 return true;
             }else{
                 std::cout << "Orientation has not been updated. Reset input is cached to be processed later." << std::endl;
@@ -283,7 +298,7 @@ namespace loc{
                 double orientationMeasured = mOrientationmeter->getYaw();
                 States* states = new States(mStatusInitializer->resetStates(mNumStates, meanPose, stdevPose, orientationMeasured));
                 status->states(states);
-                mFunctionCalledAfterUpdate(status.get());
+                callback(status.get());
                 return true;
             }else{
                 std::cout << "Orientation has not been updated. Reset input is cached to be processed later." << std::endl;
@@ -399,6 +414,12 @@ namespace loc{
         impl->updateHandler(functionCalledAfterUpdate);
         return *this;
     }
+    
+    StreamParticleFilter& StreamParticleFilter::updateHandler(void (*functionCalledAfterUpdate)(void*, Status*), void* inUserData){
+        impl->updateHandler(functionCalledAfterUpdate, inUserData);
+        return *this;
+    };
+    
     
     Status* StreamParticleFilter::getStatus() {
         return impl->getStatus();
