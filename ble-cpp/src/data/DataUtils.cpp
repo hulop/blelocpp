@@ -369,6 +369,7 @@ namespace loc{
         Pose pose;
         pose.x(x).y(y).z(z).floor(floor).orientation(orientation);
         pose.velocity(0);
+        pose.normalVelocity(0.0);
         return pose;
     }
     

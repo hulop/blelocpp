@@ -39,6 +39,30 @@ namespace loc{
         return *this;
     }
     
+    Location StatusInitializerImpl::perturbLocation(const Location& location){
+        Location locNew(location);
+        double x = locNew.x() + mPoseProperty.stdX() * rand.nextGaussian();
+        double y = locNew.y() + mPoseProperty.stdY() * rand.nextGaussian();
+        locNew.x(x);
+        locNew.y(y);
+        return locNew;
+    }
+    
+    Location StatusInitializerImpl::perturbLocation(const Location& location, const Building& building){
+        bool hasBuilding = building.nFloors()>0? true: false;
+        for(int i=0; i<nPerturbationMax; i++){
+            Location locNew = this->perturbLocation(location);
+            if(hasBuilding){
+                if(building.isMovable(locNew)){
+                    return locNew;
+                }
+            }else{
+                return locNew;
+            }
+        }
+        return location;
+    }
+    
     Locations StatusInitializerImpl::initializeLocations(int n){
         assert(n>0);
         
@@ -50,7 +74,8 @@ namespace loc{
         
         // Filter movable points
         int countNonMovable = 0;
-        if(building.nFloors() > 0){
+        bool hasBuilding = building.nFloors()>0? true : false;
+        if(hasBuilding){
             for(Location loc: uniqueLocations){
                 if(building.isMovable(loc)){
                     movableLocations.push_back(Location(loc));
@@ -73,14 +98,18 @@ namespace loc{
             int idx = indices.at(i);
             //std::cout << "idx=" << idx << std::endl;
             Location loc = movableLocations.at(idx);
+            loc = perturbLocation(loc, building);
             locs.push_back(Location(loc));
         }
         assert(locs.size()==n);
         
-        for(Location loc: locs){
-            assert(building.isMovable(loc));
+        if(hasBuilding){
+            for(Location loc: locs){
+                assert(building.isMovable(loc));
+            }
+        }else{
+            // pass
         }
-        
         return locs;
     }
     
@@ -184,10 +213,17 @@ namespace loc{
                 double floor = s.floor() + stdevPose.floor()*rand.nextGaussian();
                 double orientation = s.orientation() + stdevPose.orientation()*rand.nextGaussian();
                 double orientationBias = orientationMeasured - s.orientation();
-                
-                State stateNew(s);
+
+                // State stateNew(s);
                 s.x(x).y(y).z(z).floor(floor).orientation(orientation);
                 s.orientationBias(orientationBias);
+                
+                // only if meanPose.normalVelocity is valid, normalVelocity is updated.
+                if(mPoseProperty.minVelocity() < meanPose.normalVelocity()
+                   && meanPose.normalVelocity() < mPoseProperty.maxVelocity()){
+                    double normalVelocity = rand.nextTruncatedGaussian(meanPose.normalVelocity(), stdevPose.normalVelocity(), mPoseProperty.minVelocity(), mPoseProperty.maxVelocity());
+                    s.normalVelocity(normalVelocity);
+                }
                 
                 if(building.nFloors()>0){
                     if(building.isMovable(s)){

@@ -80,8 +80,18 @@ namespace loc{
         
     };
     
-    // Template functions
+    // LocationProperty
+    class LocationProperty{
+        double stdX_ = 0.0; //[m]
+        double stdY_ = 0.0; //[m]
+    public:
+        LocationProperty& stdX(double stdX);
+        double stdX() const;
+        LocationProperty& stdY(double stdY);
+        double stdY() const;
+    };
     
+    // Template functions
     template <class Tlocation>
     Location Location::mean(const std::vector<Tlocation>& locations){
         double x = 0;

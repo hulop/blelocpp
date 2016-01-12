@@ -42,6 +42,9 @@ namespace loc{
         RandomGenerator rand;
         std::shared_ptr<DataStore> mDataStore;
         
+        int nPerturbationMax = 100;;
+        Location perturbLocation(const Location& location);
+        Location perturbLocation(const Location& location, const Building& building);
         PoseProperty mPoseProperty;
         StateProperty mStateProperty;
         

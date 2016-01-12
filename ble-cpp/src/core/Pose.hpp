@@ -49,8 +49,6 @@ namespace loc {
         //Pose(const Pose& pose) = default;
         Pose(const Location& location) : Location(location){}
         
-        //Location location();
-        
         double x() const;
         double y() const;
         double floor() const;
@@ -126,7 +124,8 @@ namespace loc {
     }
     
     
-    class PoseProperty{
+    class PoseProperty: public LocationProperty{
+        
         double meanVelocity_ = 1.0; // [m/s]
         double stdVelocity_ = 0.25; // [m/s]
         //double driftVelocity = 0.05; // [m/s/s]
@@ -137,6 +136,7 @@ namespace loc {
         double stdOrientation_ = 3.0/180*M_PI; // [radian/s]
         
     public:
+        
         PoseProperty& meanVelocity(double meanVelocity);
         double meanVelocity() const;
         PoseProperty& stdVelocity(double stdVelocity);

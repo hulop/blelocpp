@@ -179,4 +179,24 @@ namespace loc{
         return os;
     }
     
+    
+    // LocationProperty
+    LocationProperty& LocationProperty::stdX(double stdX){
+        this->stdX_ = stdX;
+        return *this;
+    }
+    
+    double LocationProperty::stdX() const{
+        return stdX_;
+    }
+    
+    LocationProperty& LocationProperty::stdY(double stdY){
+        this->stdY_ = stdY;
+        return *this;
+    }
+    
+    double LocationProperty::stdY() const{
+        return stdY_;
+    }
+    
 }

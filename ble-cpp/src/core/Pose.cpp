@@ -132,6 +132,7 @@ namespace loc{
     
     
     // PoseProperty
+    
     PoseProperty& PoseProperty::meanVelocity(double meanVelocity){
         this->meanVelocity_ = meanVelocity;
         return *this;
