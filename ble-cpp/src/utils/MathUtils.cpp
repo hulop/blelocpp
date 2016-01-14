@@ -20,33 +20,11 @@
  * THE SOFTWARE.
  *******************************************************************************/
 
-#ifndef ObservationModel_hpp
-#define ObservationModel_hpp
+#include <boost/math/distributions/chi_squared.hpp>
+#include "MathUtils.hpp"
 
-#include <stdio.h>
-#include <iostream>
-
-#include <vector>
-
-#include "Location.hpp"
-
-namespace loc{
-
-template<class Tstate, class Tinput> class ObservationModel{
-public:
-    virtual ~ObservationModel(){}
-    
-    virtual std::vector<Tstate>* update(const std::vector<Tstate> & states, const Tinput & input) = 0;
-    
-    virtual std::vector<double> computeLogLikelihood(const std::vector<Tstate> & states, const Tinput & input) = 0;
-    
-    virtual std::vector<std::vector<double>> computeLogLikelihoodRelatedValues(const std::vector<Tstate> & states, const Tinput& input) = 0;
-    
-    //virtual std::vector<double> computeLogLikelihood(const Tstates & states) = 0;
-    //virtual void computeLogLikelihood(double logLikelihoods[], const Tstates & states, const Tinput & input) = 0;
-};
-
-//template class ObservationModel<Location, Input>
-
+double MathUtils::quantileChiSquaredDistribution(int degreeOfFreedom, double quantile){
+    boost::math::chi_squared chi_sq(degreeOfFreedom);
+    double x = boost::math::quantile(chi_sq, quantile);
+    return x;
 }
-#endif /* ObservationModel_hpp */

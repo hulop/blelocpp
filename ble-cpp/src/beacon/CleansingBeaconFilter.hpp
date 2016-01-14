@@ -26,6 +26,9 @@
 #include <stdio.h>
 #include "BeaconFilter.hpp"
 
+/**
+ Duplicated beacons are also removed by this filter. 
+ **/
 namespace loc{
     
     class CleansingBeaconFilter : public BeaconFilter{

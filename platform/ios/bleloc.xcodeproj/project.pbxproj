@@ -207,6 +207,11 @@
 		F52FFB981C08861800508330 /* libopencv_videostab.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F52FFB881C08861800508330 /* libopencv_videostab.dylib */; };
 		FB2E8B131C2404EA00C5C45C /* CoordinateSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB2E8B121C2404EA00C5C45C /* CoordinateSystem.cpp */; };
 		FB2E8B141C2404F600C5C45C /* CoordinateSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB2E8B121C2404EA00C5C45C /* CoordinateSystem.cpp */; };
+		FB71CE4F1C46889F00A4DB67 /* MathUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB71CE4E1C46889F00A4DB67 /* MathUtils.cpp */; };
+		FB71CE561C475B4600A4DB67 /* BeaconFilterChain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB71CE541C475B4600A4DB67 /* BeaconFilterChain.cpp */; };
+		FB71CE571C475B4600A4DB67 /* BeaconFilterChain.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FB71CE551C475B4600A4DB67 /* BeaconFilterChain.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		FB71CE581C475F5C00A4DB67 /* BeaconFilterChain.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FB71CE551C475B4600A4DB67 /* BeaconFilterChain.hpp */; };
+		FB71CE591C475F6500A4DB67 /* BeaconFilterChain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB71CE541C475B4600A4DB67 /* BeaconFilterChain.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -354,6 +359,9 @@
 		F52FFB871C08861800508330 /* libopencv_video.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_video.dylib; path = ../../../../../../usr/local/Cellar/opencv/2.4.12/lib/libopencv_video.dylib; sourceTree = "<group>"; };
 		F52FFB881C08861800508330 /* libopencv_videostab.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_videostab.dylib; path = ../../../../../../usr/local/Cellar/opencv/2.4.12/lib/libopencv_videostab.dylib; sourceTree = "<group>"; };
 		FB2E8B121C2404EA00C5C45C /* CoordinateSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CoordinateSystem.cpp; sourceTree = "<group>"; };
+		FB71CE4E1C46889F00A4DB67 /* MathUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MathUtils.cpp; sourceTree = "<group>"; };
+		FB71CE541C475B4600A4DB67 /* BeaconFilterChain.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BeaconFilterChain.cpp; sourceTree = "<group>"; };
+		FB71CE551C475B4600A4DB67 /* BeaconFilterChain.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BeaconFilterChain.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -400,6 +408,8 @@
 				7E6F24C91C0F1D76007A97A1 /* CleansingBeaconFilter.hpp */,
 				7E6F24CA1C0F1D76007A97A1 /* StrongestBeaconFilter.cpp */,
 				7E6F24CB1C0F1D76007A97A1 /* StrongestBeaconFilter.hpp */,
+				FB71CE551C475B4600A4DB67 /* BeaconFilterChain.hpp */,
+				FB71CE541C475B4600A4DB67 /* BeaconFilterChain.cpp */,
 			);
 			name = beacon;
 			path = "../../ble-cpp/src/beacon";
@@ -539,6 +549,7 @@
 				7E6F252E1C0F1D76007A97A1 /* ArrayUtils.cpp */,
 				7E6F252F1C0F1D76007A97A1 /* ArrayUtils.hpp */,
 				7E6F25331C0F1D76007A97A1 /* MathUtils.hpp */,
+				FB71CE4E1C46889F00A4DB67 /* MathUtils.cpp */,
 				7E6F25341C0F1D76007A97A1 /* RandomGenerator.cpp */,
 				7E6F25351C0F1D76007A97A1 /* RandomGenerator.hpp */,
 				7E6F25361C0F1D76007A97A1 /* SerializeUtils.hpp */,
@@ -704,6 +715,7 @@
 				7E6F255F1C0F1D76007A97A1 /* Location.hpp in Headers */,
 				7E6F25951C0F1D77007A97A1 /* Resampler.hpp in Headers */,
 				7E6F25DF1C0F1D78007A97A1 /* SystemModel.hpp in Headers */,
+				FB71CE571C475B4600A4DB67 /* BeaconFilterChain.hpp in Headers */,
 				7E6F25831C0F1D76007A97A1 /* DataStoreImpl.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -720,6 +732,7 @@
 				7E6F25F61C0F1D79007A97A1 /* PedometerWalkingState.hpp in Headers */,
 				7E6F25C01C0F1D77007A97A1 /* ObservationModel.hpp in Headers */,
 				7E6F26081C0F1D79007A97A1 /* SerializeUtils.hpp in Headers */,
+				FB71CE581C475F5C00A4DB67 /* BeaconFilterChain.hpp in Headers */,
 				7E6F25BA1C0F1D77007A97A1 /* GaussianProcessLDPLMultiModel.hpp in Headers */,
 				7E6F25521C0F1D76007A97A1 /* BLEBeacon.hpp in Headers */,
 				7E6F253E1C0F1D76007A97A1 /* CleansingBeaconFilter.hpp in Headers */,
@@ -963,6 +976,7 @@
 				7E6F25851C0F1D76007A97A1 /* DataUtils.cpp in Sources */,
 				7E6F256D1C0F1D76007A97A1 /* Sample.cpp in Sources */,
 				7E6F25711C0F1D76007A97A1 /* State.cpp in Sources */,
+				FB71CE4F1C46889F00A4DB67 /* MathUtils.cpp in Sources */,
 				7E6F254B1C0F1D76007A97A1 /* Beacon.cpp in Sources */,
 				7E6F25E51C0F1D78007A97A1 /* OrientationMeterAverage.cpp in Sources */,
 				7E6F25D71C0F1D78007A97A1 /* StatusInitializerImpl.cpp in Sources */,
@@ -985,6 +999,7 @@
 				7E6F25F31C0F1D78007A97A1 /* PedometerWalkingState.cpp in Sources */,
 				7E6F25431C0F1D76007A97A1 /* Acceleration.cpp in Sources */,
 				7E6F25891C0F1D76007A97A1 /* LazyDataStore.cpp in Sources */,
+				FB71CE561C475B4600A4DB67 /* BeaconFilterChain.cpp in Sources */,
 				7E6F25AF1C0F1D77007A97A1 /* ImageHolder.cpp in Sources */,
 				7E6F25CF1C0F1D77007A97A1 /* PoseRandomWalkerInBuilding.cpp in Sources */,
 				7E6F25751C0F1D76007A97A1 /* Status.cpp in Sources */,
@@ -1019,6 +1034,7 @@
 				7E6F26041C0F1D79007A97A1 /* RandomGenerator.cpp in Sources */,
 				7E6F256A1C0F1D76007A97A1 /* Pose.cpp in Sources */,
 				7E6F255E1C0F1D76007A97A1 /* Location.cpp in Sources */,
+				FB71CE591C475F6500A4DB67 /* BeaconFilterChain.cpp in Sources */,
 				7E6F257C1C0F1D76007A97A1 /* DataLogger.cpp in Sources */,
 				7E6F25921C0F1D76007A97A1 /* GridResampler.cpp in Sources */,
 				7E6F25D41C0F1D78007A97A1 /* RandomWalker.cpp in Sources */,
@@ -1084,7 +1100,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",

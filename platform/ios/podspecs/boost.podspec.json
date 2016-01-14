@@ -121,7 +121,18 @@
                                     "boost/mpl/**/*.hpp",
                                     "boost/type_traits.hpp",
                                     "boost/type_traits/**/*.hpp",
-                                    "boost/accumulators/**/*.hpp"
+                                    "boost/accumulators/**/*.hpp",
+
+                                    "boost/predef.h",
+                                    "boost/predef/**/*.h",
+                                    "boost/lexical_cast.hpp",
+                                    "boost/lexical_cast/*.hpp",
+                                    "boost/lexical_cast/**/*.hpp",
+                                    "boost/atomic/*.hpp",
+                                    "boost/**/*.h",
+                                    "boost/**/*.hpp",
+                                    "boost/**/**/*.h",
+                                    "boost/**/**/*.hpp"
                                   ]
                },
                {

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2015  IBM Corporation and others
+ * Copyright (c) 2014, 2015, 2016  IBM Corporation and others
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,33 +20,26 @@
  * THE SOFTWARE.
  *******************************************************************************/
 
-#ifndef ObservationModel_hpp
-#define ObservationModel_hpp
+#ifndef BeaconFilterChain_hpp
+#define BeaconFilterChain_hpp
 
-#include <stdio.h>
-#include <iostream>
-
-#include <vector>
-
-#include "Location.hpp"
+#include "BeaconFilter.hpp"
 
 namespace loc{
-
-template<class Tstate, class Tinput> class ObservationModel{
-public:
-    virtual ~ObservationModel(){}
     
-    virtual std::vector<Tstate>* update(const std::vector<Tstate> & states, const Tinput & input) = 0;
-    
-    virtual std::vector<double> computeLogLikelihood(const std::vector<Tstate> & states, const Tinput & input) = 0;
-    
-    virtual std::vector<std::vector<double>> computeLogLikelihoodRelatedValues(const std::vector<Tstate> & states, const Tinput& input) = 0;
-    
-    //virtual std::vector<double> computeLogLikelihood(const Tstates & states) = 0;
-    //virtual void computeLogLikelihood(double logLikelihoods[], const Tstates & states, const Tinput & input) = 0;
-};
-
-//template class ObservationModel<Location, Input>
-
+    class BeaconFilterChain : public BeaconFilter{
+    private:
+        std::vector<std::shared_ptr<BeaconFilter>> filters;
+        
+    public:
+        BeaconFilterChain() = default;
+        ~BeaconFilterChain() = default;
+        
+        BeaconFilterChain& nFilters(int nFilters);
+        std::shared_ptr<BeaconFilter> at(int i) const;
+        BeaconFilterChain& addFilter(std::shared_ptr<BeaconFilter> filter);
+        Beacons filter(const Beacons& beacons) const;
+    };
 }
-#endif /* ObservationModel_hpp */
+
+#endif /* BeaconFilterChain_hpp */

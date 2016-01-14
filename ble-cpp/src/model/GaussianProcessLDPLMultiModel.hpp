@@ -69,6 +69,8 @@ namespace loc{
         std::vector<double> rhos{0, 0, 100, 100};
     };
     
+    
+    
     template<class Tstate, class Tinput>
     class GaussianProcessLDPLMultiModel;
     
@@ -116,6 +118,10 @@ namespace loc{
         Tinput convertInput(const Tinput& input);
         double computeLogLikelihood(const Tstate& state, const Tinput& input);
         std::vector<double> computeLogLikelihood(const std::vector<Tstate> & states, const Tinput& input) override;
+        
+        std::vector<double> computeLogLikelihoodRelatedValues(const Tstate& state, const Tinput& input);
+        std::vector<std::vector<double>> computeLogLikelihoodRelatedValues(const std::vector<Tstate> & states, const Tinput& input) override;
+        
         
         template<class Archive>
         void save(Archive& ar) const;

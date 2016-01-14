@@ -148,17 +148,31 @@ namespace loc{
         }
         
         void doFiltering(const Beacons& beacons){
+            if(beacons.size()==0){
+                return;
+            }
+            
             long timestamp = beacons.timestamp();
             std::shared_ptr<States> states = status->states();
             
             // Logging before likelihood computation
             logStates(*states, "before_likelihood_states_"+std::to_string(timestamp)+".csv");
             
-            std::vector<double> vLogLLs = mObservationModel->computeLogLikelihood(*states, beacons);
+            //std::vector<double> vLogLLs = mObservationModel->computeLogLikelihood(*states, beacons);
+            std::vector<std::vector<double>> vLogLLsAndMDists = mObservationModel->computeLogLikelihoodRelatedValues(*states, beacons);
+            std::vector<double> vLogLLs(states->size());
+            std::vector<double> mDists(states->size());
+            for(int i=0; i<states->size(); i++){
+                vLogLLs[i] = vLogLLsAndMDists.at(i).at(0);
+                mDists[i] = vLogLLsAndMDists.at(i).at(1);
+            }
+            
             vLogLLs = weakenLogLikelihoods(vLogLLs, mAlphaWeaken);
             // Set negative log-likelihoods
             for(int i=0; i<vLogLLs.size(); i++){
-                states->at(i).negativeLogLikelihood(-vLogLLs.at(i));
+                State& s = states->at(i);
+                s.negativeLogLikelihood(-vLogLLs.at(i));
+                s.mahalanobisDistance(mDists.at(i));
             }
             
             std::vector<double> weights = ArrayUtils::computeWeightsFromLogLikelihood(vLogLLs);
@@ -196,8 +210,10 @@ namespace loc{
             for(State s: *statesNew){
                 sumNegaLogLL += s.negativeLogLikelihood();
             }
-            assert( sumNegaLogLL != 0.0);
-            
+            if(sumNegaLogLL==0){
+                throw std::runtime_error("sumNegaLogLL==0");
+            }
+            //assert( sumNegaLogLL != 0.0);
         }
         
         Beacons filterBeacons(const Beacons& beacons){
@@ -217,8 +233,9 @@ namespace loc{
             initializeStatusIfZero();
             
             const Beacons& beaconsFiltered = filterBeacons(beacons);
-
-            doFiltering(beaconsFiltered);
+            if(beaconsFiltered.size()>0){
+                doFiltering(beaconsFiltered);
+            }
             callback(status.get());
         };
         
@@ -313,13 +330,10 @@ namespace loc{
         bool refineStatus(const Beacons& beacons){
             // TODO
             initializeStatusIfZero();
-            /*
-            States* states = new States(mStatusInitializer->initializeStates(mNumStates));
-            status->states(states);
-            */
             const Beacons& beaconsFiltered = filterBeacons(beacons);
-            doFiltering(beaconsFiltered);
-            
+            if(beaconsFiltered.size()>0){
+                doFiltering(beaconsFiltered);
+            }
             std::shared_ptr<States> statesTmp = status->states();
             std::vector<Location> locations(statesTmp->begin(), statesTmp->end());
             States* statesNew = new States(mStatusInitializer->initializeStatesFromLocations(locations));
@@ -329,16 +343,6 @@ namespace loc{
         }
         
         void processResetStatus(){
-            /*
-            if(posesForReset.size()>0){
-                bool orientationWasUpdated = mOrientationmeter->isUpdated();
-                if(orientationWasUpdated){
-                    Pose pose = posesForReset.back();
-                    posesForReset.pop();
-                    resetStatus(pose);
-                }
-            }
-            */
             if(functionsForReset.size()>0){
                 bool orientationWasUpdated = mOrientationmeter->isUpdated();
                 if(orientationWasUpdated){

@@ -23,16 +23,24 @@
 #ifndef MathUtils_hpp
 #define MathUtils_hpp
 
+#include <cmath>
+
 class MathUtils{
     
 public:
     static double probaNormal(double x, double mu, double sigma){
-        return 1.0/(sqrt(2.0*M_PI)*sigma)*exp(-pow(x-mu, 2)/(2*sigma*sigma));
+        return 1.0/(std::sqrt(2.0*M_PI)*sigma)*std::exp(-std::pow(x-mu, 2)/(2*sigma*sigma));
     }
     
     static double logProbaNormal(double x, double mu, double sigma){
-        return -1.0/2.0*log(2*M_PI) -1.0/2.0*log(sigma*sigma)
-        -pow(x-mu, 2)/(2.0*sigma*sigma);
+        return -1.0/2.0*std::log(2*M_PI) -1.0/2.0*std::log(sigma*sigma)
+        -std::pow(x-mu, 2)/(2.0*sigma*sigma);
     }
+    
+    static double maharanobisDistance(double x, double mu, double sigma){
+        return std::pow(x-mu, 2)/(2.0*sigma*sigma);
+    }
+    
+    static double quantileChiSquaredDistribution(int degreeOfFreedom, double quantile);
 };
 #endif /* MathUtils_hpp */

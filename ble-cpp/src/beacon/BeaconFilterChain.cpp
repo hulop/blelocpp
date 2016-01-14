@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2015  IBM Corporation and others
+ * Copyright (c) 2014, 2015, 2016  IBM Corporation and others
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,33 +20,34 @@
  * THE SOFTWARE.
  *******************************************************************************/
 
-#ifndef ObservationModel_hpp
-#define ObservationModel_hpp
-
-#include <stdio.h>
-#include <iostream>
-
-#include <vector>
-
-#include "Location.hpp"
+#include "BeaconFilterChain.hpp"
 
 namespace loc{
-
-template<class Tstate, class Tinput> class ObservationModel{
-public:
-    virtual ~ObservationModel(){}
     
-    virtual std::vector<Tstate>* update(const std::vector<Tstate> & states, const Tinput & input) = 0;
+    BeaconFilterChain& BeaconFilterChain::nFilters(int nFilters){
+        filters.resize(nFilters);
+        return *this;
+    }
     
-    virtual std::vector<double> computeLogLikelihood(const std::vector<Tstate> & states, const Tinput & input) = 0;
+    std::shared_ptr<BeaconFilter> BeaconFilterChain::at(int i) const{
+        return filters.at(i);
+    }
     
-    virtual std::vector<std::vector<double>> computeLogLikelihoodRelatedValues(const std::vector<Tstate> & states, const Tinput& input) = 0;
+    BeaconFilterChain& BeaconFilterChain::addFilter(std::shared_ptr<BeaconFilter> filter){
+        filters.push_back(filter);
+        return *this;
+    }
     
-    //virtual std::vector<double> computeLogLikelihood(const Tstates & states) = 0;
-    //virtual void computeLogLikelihood(double logLikelihoods[], const Tstates & states, const Tinput & input) = 0;
-};
-
-//template class ObservationModel<Location, Input>
-
+    Beacons BeaconFilterChain::filter(const Beacons& beacons) const{
+        if(filters.size()==0){
+            return beacons;
+        }else{
+            Beacons bs = beacons;
+            for(int i=0; i<filters.size(); i++){
+                bs = this->at(i)->filter(bs);
+            }
+            return bs;
+        }
+    }
+    
 }
-#endif /* ObservationModel_hpp */

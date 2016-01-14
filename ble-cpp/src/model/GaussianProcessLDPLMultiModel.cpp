@@ -460,7 +460,16 @@ namespace loc{
     
     template<class Tstate, class Tinput>
     double GaussianProcessLDPLMultiModel<Tstate, Tinput>::computeLogLikelihood(const Tstate& state, const Tinput& input){
+        std::vector<double> values = this->computeLogLikelihoodRelatedValues(state, input);
+        return values.at(0);
+    }
+    
+    template<class Tstate, class Tinput>
+    std::vector<double> GaussianProcessLDPLMultiModel<Tstate, Tinput>::computeLogLikelihoodRelatedValues(const Tstate& state, const Tinput& input){
         //Assuming Tinput = Beacons
+        
+        std::vector<double> returnValues(2); // logLikelihood, maharanobisDistance
+        
         std::vector<int> indices;
         //indices.clear();
         
@@ -484,6 +493,7 @@ namespace loc{
         std::vector<double> dypreds = mGP.predict(xvec, indices);
         
         double jointLogLL = 0;
+        double sumMahaDist = 0;
         int i=0;
         for(auto iter=input.begin(); iter!=input.end(); iter++){
             Beacon b = *iter;
@@ -506,6 +516,10 @@ namespace loc{
                 
                 double logLL = MathUtils::logProbaNormal(rssi, ypred, stdev);
                 jointLogLL += logLL;
+                
+                double mahaDist = MathUtils::maharanobisDistance(rssi, ypred, stdev);
+                sumMahaDist += mahaDist;
+                
                 i++;
             }
             // RSSI of unknown beacons are assumed to be minRssi.
@@ -514,9 +528,15 @@ namespace loc{
                 double stdev = mNormalRssiStandardDeviation;
                 double logLL = MathUtils::logProbaNormal(rssi, ypred, stdev);
                 jointLogLL += logLL;
+                
+                double mahaDist = MathUtils::maharanobisDistance(rssi, ypred, stdev);
+                sumMahaDist = mahaDist;
             }
         }
-        return jointLogLL;
+        returnValues[0] = jointLogLL;
+        returnValues[1] = sumMahaDist;
+        
+        return returnValues;
     }
     
     template<class Tstate, class Tinput>
@@ -527,6 +547,18 @@ namespace loc{
             logLLs[i] = this->computeLogLikelihood(states.at(i), input);
         }
         return logLLs;
+    }
+    
+    template<class Tstate, class Tinput>
+    std::vector<std::vector<double>> GaussianProcessLDPLMultiModel<Tstate, Tinput>::computeLogLikelihoodRelatedValues(const std::vector<Tstate> & states, const Tinput & input) {
+        int n = (int) states.size();
+        std::vector<double> logLLs(n);
+        
+        std::vector<std::vector<double>> values(n);
+        for(int i=0; i<n; i++){
+            values[i] = this->computeLogLikelihoodRelatedValues(states.at(i), input);
+        }
+        return values;
     }
     
     
