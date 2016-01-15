@@ -21,6 +21,7 @@
  *******************************************************************************/
 
 #include "RandomWalker.hpp"
+#include "PoseRandomWalker.hpp"
 #include <random>
 
 namespace loc{
@@ -32,7 +33,7 @@ namespace loc{
     }
     
     template<class Ts, class Tin>
-    Ts RandomWalker<Ts, Tin>::predict(const Ts loc, const Tin input){
+    Ts RandomWalker<Ts, Tin>::predict(Ts loc, Tin input){
         
         double x = loc.x();
         double y = loc.y();
@@ -42,7 +43,8 @@ namespace loc{
         x += mRWProperty.sigma * mRandGen.nextGaussian();
         y += mRWProperty.sigma * mRandGen.nextGaussian();
         
-        Ts locNew(x, y, z, floor);
+        Ts locNew;
+        locNew.x(x).y(y).z(z).floor(floor);
         return locNew;
     }
     
@@ -51,10 +53,14 @@ namespace loc{
         std::vector<Ts> locsNew;
         
         for(Ts loc: locations){
-            Location locNew = predict(loc, input);
+            Ts locNew = predict(loc, input);
             locsNew.push_back(locNew);
         }
         
         return locsNew;
     }
+    
+    // Explicit instantiation
+    template class RandomWalker<State, PoseRandomWalkerInput>;
+    
 }

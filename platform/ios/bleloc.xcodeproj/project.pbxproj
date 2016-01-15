@@ -292,7 +292,7 @@
 		7E6F25061C0F1D76007A97A1 /* FloorMap.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FloorMap.hpp; sourceTree = "<group>"; };
 		7E6F25071C0F1D76007A97A1 /* ImageHolder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ImageHolder.cpp; sourceTree = "<group>"; };
 		7E6F25081C0F1D76007A97A1 /* ImageHolder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ImageHolder.hpp; sourceTree = "<group>"; };
-		7E6F250A1C0F1D76007A97A1 /* GaussianProcess.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GaussianProcess.cpp; sourceTree = "<group>"; };
+		7E6F250A1C0F1D76007A97A1 /* GaussianProcess.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GaussianProcess.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		7E6F250B1C0F1D76007A97A1 /* GaussianProcess.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GaussianProcess.hpp; sourceTree = "<group>"; };
 		7E6F250C1C0F1D76007A97A1 /* GaussianProcessLDPLMultiModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GaussianProcessLDPLMultiModel.cpp; sourceTree = "<group>"; };
 		7E6F250D1C0F1D76007A97A1 /* GaussianProcessLDPLMultiModel.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GaussianProcessLDPLMultiModel.hpp; sourceTree = "<group>"; };

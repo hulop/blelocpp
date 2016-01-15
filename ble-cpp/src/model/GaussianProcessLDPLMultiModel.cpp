@@ -368,9 +368,10 @@ namespace loc{
         for(int i=0; i<mRssiStandardDeviations.size(); i++){
             std::cout << "stdev(" << i<< ")=" << mRssiStandardDeviations.at(i) <<std::endl;
         }
-        if(mStdevRssiForUnknownBeacon == 0){
+        if(mStdevRssiForUnknownBeacon==0){
             mStdevRssiForUnknownBeacon = computeNormalStandardDeviation(mRssiStandardDeviations);
         }
+        
         return *this;
     }
     
@@ -469,7 +470,7 @@ namespace loc{
     std::vector<double> GaussianProcessLDPLMultiModel<Tstate, Tinput>::computeLogLikelihoodRelatedValues(const Tstate& state, const Tinput& input){
         //Assuming Tinput = Beacons
         
-        std::vector<double> returnValues(2); // logLikelihood, maharanobisDistance
+        std::vector<double> returnValues(4); // logLikelihood, maharanobisDistance, #knownBeacons, #unknownBeacons
         
         std::vector<int> indices;
         //indices.clear();
@@ -488,6 +489,8 @@ namespace loc{
             }
         }
         countKnown = static_cast<int>(indices.size());
+        returnValues[2] = countKnown;
+        returnValues[3] = countUnknown;
         
         double xvec[4];
         MLAdapter::locationToVec(state, xvec);
@@ -531,7 +534,7 @@ namespace loc{
                 jointLogLL += logLL;
                 
                 double mahaDist = MathUtils::maharanobisDistance(rssi, ypred, stdev);
-                sumMahaDist = mahaDist;
+                sumMahaDist += mahaDist;
             }
         }
         returnValues[0] = jointLogLL;

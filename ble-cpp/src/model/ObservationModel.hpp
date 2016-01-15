@@ -41,9 +41,7 @@ public:
     virtual std::vector<double> computeLogLikelihood(const std::vector<Tstate> & states, const Tinput & input) = 0;
     
     virtual std::vector<std::vector<double>> computeLogLikelihoodRelatedValues(const std::vector<Tstate> & states, const Tinput& input) = 0;
-    
-    //virtual std::vector<double> computeLogLikelihood(const Tstates & states) = 0;
-    //virtual void computeLogLikelihood(double logLikelihoods[], const Tstates & states, const Tinput & input) = 0;
+
 };
 
 //template class ObservationModel<Location, Input>
