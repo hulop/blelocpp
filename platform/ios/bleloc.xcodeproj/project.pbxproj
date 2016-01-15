@@ -272,7 +272,7 @@
 		7E6F24ED1C0F1D76007A97A1 /* DataStoreImpl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DataStoreImpl.cpp; sourceTree = "<group>"; };
 		7E6F24EE1C0F1D76007A97A1 /* DataStoreImpl.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = DataStoreImpl.hpp; sourceTree = "<group>"; };
 		7E6F24EF1C0F1D76007A97A1 /* DataUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DataUtils.cpp; sourceTree = "<group>"; };
-		7E6F24F01C0F1D76007A97A1 /* DataUtils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = DataUtils.hpp; sourceTree = "<group>"; };
+		7E6F24F01C0F1D76007A97A1 /* DataUtils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = DataUtils.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		7E6F24F11C0F1D76007A97A1 /* LazyDataStore.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LazyDataStore.cpp; sourceTree = "<group>"; };
 		7E6F24F21C0F1D76007A97A1 /* LazyDataStore.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LazyDataStore.hpp; sourceTree = "<group>"; };
 		7E6F24F31C0F1D76007A97A1 /* VirtualDevice.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VirtualDevice.cpp; sourceTree = "<group>"; };
@@ -1100,7 +1100,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_OPTIMIZATION_LEVEL = 2;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -1143,6 +1143,7 @@
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 2;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;

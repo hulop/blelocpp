@@ -38,7 +38,7 @@ public:
     }
     
     static double maharanobisDistance(double x, double mu, double sigma){
-        return std::pow(x-mu, 2)/(2.0*sigma*sigma);
+        return std::pow(x-mu, 2)/(sigma*sigma);
     }
     
     static double quantileChiSquaredDistribution(int degreeOfFreedom, double quantile);

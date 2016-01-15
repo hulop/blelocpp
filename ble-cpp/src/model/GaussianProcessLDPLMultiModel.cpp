@@ -368,8 +368,9 @@ namespace loc{
         for(int i=0; i<mRssiStandardDeviations.size(); i++){
             std::cout << "stdev(" << i<< ")=" << mRssiStandardDeviations.at(i) <<std::endl;
         }
-        mNormalRssiStandardDeviation = computeNormalStandardDeviation(mRssiStandardDeviations);
-        
+        if(mStdevRssiForUnknownBeacon == 0){
+            mStdevRssiForUnknownBeacon = computeNormalStandardDeviation(mRssiStandardDeviations);
+        }
         return *this;
     }
     
@@ -525,7 +526,7 @@ namespace loc{
             // RSSI of unknown beacons are assumed to be minRssi.
             else{
                 double ypred = BeaconConfig::minRssi();
-                double stdev = mNormalRssiStandardDeviation;
+                double stdev = mStdevRssiForUnknownBeacon;
                 double logLL = MathUtils::logProbaNormal(rssi, ypred, stdev);
                 jointLogLL += logLL;
                 
@@ -561,6 +562,17 @@ namespace loc{
         return values;
     }
     
+    template<class Tstate, class Tinput>
+    GaussianProcessLDPLMultiModel<Tstate, Tinput>& GaussianProcessLDPLMultiModel<Tstate, Tinput>::rssiStandardDeviationForUnknownBeacons(double stdevRssi){
+        mStdevRssiForUnknownBeacon = stdevRssi;
+        return *this;
+    }
+    
+    template<class Tstate, class Tinput>
+    double GaussianProcessLDPLMultiModel<Tstate, Tinput>::rssiStandardDeviationForUnknownBeacons() const{
+        return mStdevRssiForUnknownBeacon;
+    }
+    
     
     // CEREAL function
     template<class Tstate, class Tinput>
@@ -586,7 +598,7 @@ namespace loc{
         ar(CEREAL_NVP(mGP));
         ar(CEREAL_NVP(mRssiStandardDeviations));
         mBeaconIdIndexMap = BLEBeacon::constructBeaconIdToIndexMap(mBLEBeacons);
-        mNormalRssiStandardDeviation = computeNormalStandardDeviation(mRssiStandardDeviations);
+        mStdevRssiForUnknownBeacon = computeNormalStandardDeviation(mRssiStandardDeviations);
     }
     
     //explicit instantiation
