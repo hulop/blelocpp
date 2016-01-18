@@ -39,7 +39,7 @@ namespace loc{
         double rssiBias_ = 0;
         double weight_ = 1.0;
         double negativeLogLikelihood_;
-        double maharanobisDistance_;
+        double mahalanobisDistance_;
         
     public:
         State() = default;
@@ -50,12 +50,12 @@ namespace loc{
         double rssiBias() const;
         double weight() const;
         double negativeLogLikelihood() const;
-        double maharanobisDistance() const;
+        double mahalanobisDistance() const;
         State& orientationBias(double orientationBias);
         State& rssiBias(double rssiBias);
         State& weight(double weight);
         State& negativeLogLikelihood(double negativeLogLikelihood);
-        State& mahalanobisDistance(double maharanobisDistance);
+        State& mahalanobisDistance(double mahalanobisDistance);
         
         // for string stream
         friend std::ostream& operator<<(std::ostream&os, const State& pose);

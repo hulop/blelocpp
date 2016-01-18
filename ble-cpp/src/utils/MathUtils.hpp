@@ -37,7 +37,7 @@ public:
         -std::pow(x-mu, 2)/(2.0*sigma*sigma);
     }
     
-    static double maharanobisDistance(double x, double mu, double sigma){
+    static double mahalanobisDistance(double x, double mu, double sigma){
         return std::pow(x-mu, 2)/(sigma*sigma);
     }
     

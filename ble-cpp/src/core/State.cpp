@@ -45,8 +45,8 @@ namespace  loc {
         return negativeLogLikelihood_;
     }
     
-    double State::maharanobisDistance() const{
-        return maharanobisDistance_;
+    double State::mahalanobisDistance() const{
+        return mahalanobisDistance_;
     }
     
     State& State::orientationBias(double orientationBias){
@@ -69,8 +69,8 @@ namespace  loc {
         return *this;
     }
     
-    State& State::mahalanobisDistance(double maharanobisDistance){
-        maharanobisDistance_ = maharanobisDistance;
+    State& State::mahalanobisDistance(double mahalanobisDistance){
+        mahalanobisDistance_ = mahalanobisDistance;
         return *this;
     }
     

@@ -470,7 +470,7 @@ namespace loc{
     std::vector<double> GaussianProcessLDPLMultiModel<Tstate, Tinput>::computeLogLikelihoodRelatedValues(const Tstate& state, const Tinput& input){
         //Assuming Tinput = Beacons
         
-        std::vector<double> returnValues(4); // logLikelihood, maharanobisDistance, #knownBeacons, #unknownBeacons
+        std::vector<double> returnValues(4); // logLikelihood, mahalanobisDistance, #knownBeacons, #unknownBeacons
         
         std::vector<int> indices;
         //indices.clear();
@@ -521,7 +521,7 @@ namespace loc{
                 double logLL = MathUtils::logProbaNormal(rssi, ypred, stdev);
                 jointLogLL += logLL;
                 
-                double mahaDist = MathUtils::maharanobisDistance(rssi, ypred, stdev);
+                double mahaDist = MathUtils::mahalanobisDistance(rssi, ypred, stdev);
                 sumMahaDist += mahaDist;
                 
                 i++;
@@ -533,7 +533,7 @@ namespace loc{
                 double logLL = MathUtils::logProbaNormal(rssi, ypred, stdev);
                 jointLogLL += logLL;
                 
-                double mahaDist = MathUtils::maharanobisDistance(rssi, ypred, stdev);
+                double mahaDist = MathUtils::mahalanobisDistance(rssi, ypred, stdev);
                 sumMahaDist += mahaDist;
             }
         }
