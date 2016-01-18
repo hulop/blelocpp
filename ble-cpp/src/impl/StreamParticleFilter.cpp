@@ -77,7 +77,7 @@ namespace loc{
         
         bool accelerationIsUpdated = false;
         bool attitudeIsUpdated = false;
-        bool beaconsIsUpdated = false;
+        //bool beaconsIsUpdated = false;
         
         CleansingBeaconFilter cleansingBeaconFilter;
         
@@ -239,7 +239,12 @@ namespace loc{
             return weakenedLogLLs;
         }
         
+        void reset(){
+            previousTimestampMotion = 0;
+        }
+        
         void initializeStatus(){
+            this->reset();
             mPedometer->reset();
             mOrientationmeter->reset();
             States* states = new States(mStatusInitializer->initializeStates(mNumStates));
