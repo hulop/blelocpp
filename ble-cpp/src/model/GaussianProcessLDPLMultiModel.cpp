@@ -489,8 +489,6 @@ namespace loc{
             }
         }
         countKnown = static_cast<int>(indices.size());
-        returnValues[2] = countKnown;
-        returnValues[3] = countUnknown;
         
         double xvec[4];
         MLAdapter::locationToVec(state, xvec);
@@ -527,7 +525,7 @@ namespace loc{
                 i++;
             }
             // RSSI of unknown beacons are assumed to be minRssi.
-            else{
+            else if(mFillsUnknownBeaconRssi){
                 double ypred = BeaconConfig::minRssi();
                 double stdev = mStdevRssiForUnknownBeacon;
                 double logLL = MathUtils::logProbaNormal(rssi, ypred, stdev);
@@ -539,6 +537,8 @@ namespace loc{
         }
         returnValues[0] = jointLogLL;
         returnValues[1] = sumMahaDist;
+        returnValues[2] = countKnown;
+        returnValues[3] = countUnknown;
         
         return returnValues;
     }
@@ -563,6 +563,17 @@ namespace loc{
             values[i] = this->computeLogLikelihoodRelatedValues(states.at(i), input);
         }
         return values;
+    }
+    
+    template<class Tstate, class Tinput>
+    GaussianProcessLDPLMultiModel<Tstate, Tinput>& GaussianProcessLDPLMultiModel<Tstate, Tinput>::fillsUnknownBeaconRssi(bool fills){
+        mFillsUnknownBeaconRssi = fills;
+        return *this;
+    }
+    
+    template<class Tstate, class Tinput>
+    bool GaussianProcessLDPLMultiModel<Tstate, Tinput>::fillsUnknownBeaconRssi() const{
+        return mFillsUnknownBeaconRssi;
     }
     
     template<class Tstate, class Tinput>

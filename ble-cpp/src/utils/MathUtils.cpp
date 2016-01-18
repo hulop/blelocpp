@@ -23,8 +23,8 @@
 #include <boost/math/distributions/chi_squared.hpp>
 #include "MathUtils.hpp"
 
-double MathUtils::quantileChiSquaredDistribution(int degreeOfFreedom, double quantile){
+double MathUtils::quantileChiSquaredDistribution(int degreeOfFreedom, double cumulativeDensity){
     boost::math::chi_squared chi_sq(degreeOfFreedom);
-    double x = boost::math::quantile(chi_sq, quantile);
+    double x = boost::math::quantile(chi_sq, cumulativeDensity);
     return x;
 }

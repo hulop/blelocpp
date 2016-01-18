@@ -41,6 +41,6 @@ public:
         return std::pow(x-mu, 2)/(sigma*sigma);
     }
     
-    static double quantileChiSquaredDistribution(int degreeOfFreedom, double quantile);
+    static double quantileChiSquaredDistribution(int degreeOfFreedom, double cumulativeDensity);
 };
 #endif /* MathUtils_hpp */

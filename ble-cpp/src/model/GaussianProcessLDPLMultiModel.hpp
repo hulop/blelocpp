@@ -93,6 +93,7 @@ namespace loc{
         std::map<long, int> mBeaconIdIndexMap;
         //boost::bimaps::bimap<long, int> mBeaconIdIndexBimap;
         std::vector<double> mRssiStandardDeviations;
+        bool mFillsUnknownBeaconRssi = false;
         double mStdevRssiForUnknownBeacon = 0.0;
         double computeNormalStandardDeviation(std::vector<double> standardDeviations);
         
@@ -121,6 +122,9 @@ namespace loc{
         
         std::vector<double> computeLogLikelihoodRelatedValues(const Tstate& state, const Tinput& input);
         std::vector<std::vector<double>> computeLogLikelihoodRelatedValues(const std::vector<Tstate> & states, const Tinput& input) override;
+        
+        GaussianProcessLDPLMultiModel& fillsUnknownBeaconRssi(bool fills);
+        bool fillsUnknownBeaconRssi() const;
         
         GaussianProcessLDPLMultiModel& rssiStandardDeviationForUnknownBeacons(double stdevRssi);
         double rssiStandardDeviationForUnknownBeacons() const;

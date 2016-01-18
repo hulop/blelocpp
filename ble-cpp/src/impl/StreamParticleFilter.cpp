@@ -205,15 +205,6 @@ namespace loc{
             
             // Logging after resampling
             logStates(*statesNew, "resampled_states_"+std::to_string(timestamp)+".csv");
-            
-            double sumNegaLogLL = 0;
-            for(State s: *statesNew){
-                sumNegaLogLL += s.negativeLogLikelihood();
-            }
-            if(sumNegaLogLL==0){
-                throw std::runtime_error("sumNegaLogLL==0");
-            }
-            //assert( sumNegaLogLL != 0.0);
         }
         
         Beacons filterBeacons(const Beacons& beacons){
