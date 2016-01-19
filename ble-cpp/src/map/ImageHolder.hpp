@@ -70,6 +70,7 @@ namespace loc {
         int rows() const;
         int cols() const;
         
+        bool checkValid(int y, int x) const;
         Color get(int y, int x) const;
     };
     

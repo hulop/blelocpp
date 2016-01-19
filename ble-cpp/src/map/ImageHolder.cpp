@@ -59,6 +59,15 @@ namespace loc{
         }
     }
     
+    bool ImageHolder::checkValid(int y, int x) const
+    {
+        if(0<=y && y<rows() && 0<=x && x<cols()){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    
     class ImageHolder::Impl{
     public:
         virtual ~Impl() = default;

@@ -113,7 +113,11 @@ namespace loc{
 
         int count=0;
         while(count<=norm_int){
-            if(mImage.get(static_cast<int>(y), static_cast<int>(x)).equals(color::colorWall)){
+            int yInt = static_cast<int>(y);
+            int xInt = static_cast<int>(x);
+            Color c = mImage.get(yInt, xInt);
+            bool pixelIsValid = mImage.checkValid(yInt, xInt);
+            if(c.equals(color::colorWall) || !pixelIsValid){
                 return ((double)count-1)/norm_int;
             }
             x+=dx;
