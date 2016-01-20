@@ -22,9 +22,9 @@ It is necessary to build this library as an iOS Framework before building NavCog
 - $pod install
 - Open the Xcode workspace by typing $open bleloc.xcworkspace
 - Product > Clean
-- Build bleloc target for Generic iOS device
-- Build framework target for Generic iOS device
-- Build bleloc target for Generic iOS device
+- Build scheme "bleloc" for Generic iOS device target
+- Remove libPods-bleloc.a from "Link Binary With Libraries" in "Build Phrases" in bleloc project
+- Build scheme "framework" for Generic iOS device target
 
 ----
 ## About
