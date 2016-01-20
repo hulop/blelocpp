@@ -64,6 +64,8 @@ namespace loc{
         States resetStates(int n, Pose meanPose, Pose stdevPose, double orientationMeasured);
         
         States initializeStatesFromLocations(const std::vector<Location>& locations);
+        Locations extractLocationsCloseToBeacons(const std::vector<Beacon>& beacons, double radius2D);
+        
     };
     
 }

@@ -76,15 +76,17 @@ namespace loc{
         states_->clear();
         states_.reset(states);
         
+        size_t n = states->size();
+        std::vector<double> weights(n);
+        for(int i=0; i<n; i++){
+            weights[i] = states->at(i).weight();
+        }
+        
         // Compute mean Location
-        std::vector<Location> locs(states->begin(), states->end());
-//        for(State state: *states){
-//            locs.push_back(state);
-//        }
-        Location* meanLoc = new Location(Location::mean(locs));
+        Location* meanLoc = new Location(Location::weightedMean(*states, weights));
         meanLocation(meanLoc);
         
-        Pose* meanPs = new Pose(Pose::mean(*states));
+        Pose* meanPs = new Pose(Pose::weightedMean(*states, weights));
         meanPose(meanPs);
         
         return *this;

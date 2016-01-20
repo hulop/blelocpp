@@ -241,4 +241,36 @@ namespace loc{
         return states;
     }
     
+    
+    Locations StatusInitializerImpl::extractLocationsCloseToBeacons(const std::vector<Beacon> &beacons, double radius2D){
+        
+        auto samples = mDataStore->getSamples();
+        auto bleBeacons = mDataStore->getBLEBeacons();
+        
+        std::map<long, int> idToIndexMap = BLEBeacon::constructBeaconIdToIndexMap(bleBeacons);
+        std::vector<Location> selectedLocations;
+
+        std::vector<BLEBeacon> observedBLEBeacons;
+        for(auto b: beacons){
+            long id = b.id();
+            if(idToIndexMap.count(id)>0){
+                observedBLEBeacons.push_back(bleBeacons.at(idToIndexMap.at(id)));
+            }
+        }
+        
+        for(auto s: samples){
+            auto loc = s.location();
+            for(auto bloc: observedBLEBeacons){
+                double dist = Location::distance2D(loc, bloc);
+                double floorDiff = Location::floorDifference(loc, bloc);
+                if(dist <= radius2D && floorDiff==0){
+                    selectedLocations.push_back(loc);
+                    continue;
+                }
+            }
+        }
+        return selectedLocations;
+    }
+    
+    
 }

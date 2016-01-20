@@ -74,7 +74,9 @@ namespace loc {
         Pose& normalVelocity(double);
         
         template<class Tpose>
-        static Pose mean(std::vector<Tpose> poses);
+        static Pose mean(const std::vector<Tpose>& poses);
+        template<class Tpose>
+        static Pose weightedMean(const std::vector<Tpose>& poses, const std::vector<double>& weights);
         
         static double normalizeOrientaion(double orientation);
         static double computeOrientationDifference(double o1, double o2);
@@ -85,33 +87,39 @@ namespace loc {
     
     // Template function
     template<class Tpose>
-    Pose Pose::mean(std::vector<Tpose> poses){
+    Pose Pose::mean(const std::vector<Tpose>& poses){
+        size_t n = poses.size();
+        double w = 1.0/n;
+        std::vector<double> weights(n, w);
+        return weightedMean(poses, weights);
+    }
+    
+    template<class Tpose>
+    Pose Pose::weightedMean(const std::vector<Tpose>& poses, const std::vector<double>& weights){
         size_t n = poses.size();
         double xm = 0, ym = 0, zm = 0, floorm = 0;
         double vxm = 0, vym = 0;
         double vxrepm = 0, vyrepm = 0;
         
-        for(Tpose pose: poses){
-            xm += pose.Location::x();
-            ym += pose.Location::y();
-            zm += pose.Location::z();
-            floorm += pose.Location::floor();
-            vxm += pose.velocity()*std::cos(pose.orientation());
-            vym += pose.velocity()*std::sin(pose.orientation());
-            vxrepm += pose.normalVelocity()*cos(pose.orientation());
-            vyrepm += pose.normalVelocity()*sin(pose.orientation());
+        //for(Tpose pose: poses){
+        double weightSum = 0;
+        for(int i=0; i<n; i++){
+            weightSum += weights.at(i);
         }
-        xm/=n;
-        ym/=n;
-        zm/=n;
-        floorm/=n;
         
-        vxm/=n;
-        vym/=n;
+        for(int i=0; i<n; i++){
+            const Tpose& pose = poses.at(i);
+            double w = weights.at(i)/weightSum;
+            xm += w * pose.x();
+            ym += w * pose.y();
+            zm += w * pose.z();
+            floorm += w * pose.floor();
+            vxm += w * pose.velocity()*std::cos(pose.orientation());
+            vym += w * pose.velocity()*std::sin(pose.orientation());
+            vxrepm += w * pose.normalVelocity()*cos(pose.orientation());
+            vyrepm += w * pose.normalVelocity()*sin(pose.orientation());
+        }
         double vm = std::sqrt(vxm*vxm + vym*vym);
-        
-        vxrepm/=n;
-        vyrepm/=n;
         double vrepm = std::sqrt(vxrepm*vxrepm + vyrepm*vyrepm);
         
         double orientationm = atan2(vyrepm, vxrepm); // orientation must be calculated by representative velocity.

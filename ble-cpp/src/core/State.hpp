@@ -80,7 +80,6 @@ namespace loc{
         StateProperty& diffusionOrientationBias(double diffusionOrientationBias);
         double diffusionOrientationBias();
     };
-
 }
 
 

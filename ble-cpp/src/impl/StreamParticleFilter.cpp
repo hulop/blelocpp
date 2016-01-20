@@ -50,11 +50,12 @@ namespace loc{
     class StreamParticleFilter::Impl{
 
     private:
-        bool optVerbose = false;
+        bool mOptVerbose = false;
         int mNumStates = 1000; //Defalt value
         double mAlphaWeaken = 1.0;
         int resetWaitingTimeMS = 100; // milliseconds
         long previousTimestampMotion = 0;
+        Location mLocStdevLB;
         
         //std::queue<Pose> posesForReset;
         std::queue<std::function<void()>> functionsForReset;
@@ -129,12 +130,13 @@ namespace loc{
             States* statesPredicted = new States(mRandomWalker->predict(*states.get(), input));
             status->states(statesPredicted);
             
-            if(optVerbose){
+            if(mOptVerbose){
                 std::cout << "prediction at t=" << timestamp << std::endl;
             }
             
-            previousTimestampMotion = timestamp;
             callback(status.get());
+            
+            previousTimestampMotion = timestamp;
         }
         
         void logStates(const States& states, const std::string& filename){
@@ -199,7 +201,7 @@ namespace loc{
                 statesNew->at(i).weight(weight);
             }
             status->states(statesNew);
-            if(optVerbose){
+            if(mOptVerbose){
                 std::cout << "resampling at t=" << beacons.timestamp() << std::endl;
             }
             
@@ -212,7 +214,7 @@ namespace loc{
             const Beacons& beaconsCleansed = cleansingBeaconFilter.filter(beacons);
             Beacons beaconsFiltered = mBeaconFilter? mBeaconFilter->filter(beaconsCleansed) : beaconsCleansed;
             size_t nAfter = beaconsFiltered.size();
-            if(optVerbose){
+            if(mOptVerbose){
                 if(nAfter!=nBefore){
                     std::cout << "BeaconFilter #beacons "<< nBefore << ">>" << nAfter <<std::endl;
                 }
@@ -225,7 +227,13 @@ namespace loc{
             
             const Beacons& beaconsFiltered = filterBeacons(beacons);
             if(beaconsFiltered.size()>0){
-                doFiltering(beaconsFiltered);
+                if(checkIfDoFiltering()){
+                    doFiltering(beaconsFiltered);
+                }else{
+                    if(mOptVerbose){
+                        std::cout<<"resampling step was not applied."<<std::endl;
+                    }
+                }
             }
             callback(status.get());
         };
@@ -295,7 +303,6 @@ namespace loc{
                 return true;
             }else{
                 std::cout << "Orientation has not been updated. Reset input is cached to be processed later." << std::endl;
-                //posesForReset.push(pose);
                 std::function<void()> func = [this,pose](){
                     return resetStatus(pose);
                 };
@@ -328,7 +335,9 @@ namespace loc{
             initializeStatusIfZero();
             const Beacons& beaconsFiltered = filterBeacons(beacons);
             if(beaconsFiltered.size()>0){
-                doFiltering(beaconsFiltered);
+                if(checkIfDoFiltering()){
+                    doFiltering(beaconsFiltered);
+                }
             }
             std::shared_ptr<States> statesTmp = status->states();
             std::vector<Location> locations(statesTmp->begin(), statesTmp->end());
@@ -350,12 +359,53 @@ namespace loc{
             }
         }
         
+        bool checkIfDoFiltering() const{
+            auto states = status->states();
+            double variance2D = computeStates2DVariance(*states);
+            double variance2DLowerBound = std::pow(mLocStdevLB.x(), 2)*std::pow(mLocStdevLB.y(),2);
+            if(mOptVerbose){
+                std::cout<<"variance2D="<<variance2D<<", "<<"variance2DLowerBound="<<variance2DLowerBound<<std::endl;
+            }
+            if(variance2D<variance2DLowerBound){
+                return false;
+            }else{
+                return true;
+            }
+        }
+        
+        double computeStates2DVariance(const States& states) const{
+            auto meanLoc = Location::mean(states);
+            double varx = 0, vary = 0, covxy = 0; // = yx
+            size_t n = states.size();
+            for(int i=0; i<n; i++){
+                const State& s = states.at(i);
+                double dx = s.x() - meanLoc.x();
+                double dy = s.y() - meanLoc.y();
+                varx += dx*dx;
+                vary += dy*dy;
+                covxy += dx*dy;
+            }
+            varx/=n;
+            vary/=n;
+            covxy/=n;
+            double det = varx*vary - covxy*covxy;
+            return det;
+        }
+        
+        void optVerbose(bool optVerbose){
+            mOptVerbose = optVerbose;
+        }
+        
         void numStates(int numStates){
             mNumStates = numStates;
         }
         
         void alphaWeaken(double alphaWeaken){
             mAlphaWeaken = alphaWeaken;
+        }
+        
+        void locationStandardDeviationLowerBound(Location loc){
+            mLocStdevLB = loc;
         }
         
         void pedometer(std::shared_ptr<Pedometer> pedometer){
@@ -442,6 +492,10 @@ namespace loc{
         return impl->refineStatus(beacons);
     }
     
+    StreamParticleFilter& StreamParticleFilter::optVerbose(bool optVerbose){
+        impl->optVerbose(optVerbose);
+        return *this;
+    }
     
     StreamParticleFilter& StreamParticleFilter::numStates(int numStates){
         impl->numStates(numStates);
@@ -452,6 +506,12 @@ namespace loc{
         impl->alphaWeaken(alphaWeaken);
         return *this;
     }
+    
+    StreamParticleFilter& StreamParticleFilter::locationStandardDeviationLowerBound(loc::Location loc){
+        impl->locationStandardDeviationLowerBound(loc);
+        return *this;
+    }
+    
     
     StreamParticleFilter& StreamParticleFilter::pedometer(std::shared_ptr<Pedometer> pedometer){
         impl->pedometer(pedometer);

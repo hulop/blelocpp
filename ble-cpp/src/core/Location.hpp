@@ -61,6 +61,9 @@ namespace loc{
         template <class Tlocation>
         static Location mean(const std::vector<Tlocation>& locations);
         template <class Tlocation>
+        static Location weightedMean(const std::vector<Tlocation>& locations, const std::vector<double> weights);
+        
+        template <class Tlocation>
         static Location standardDeviation(const std::vector<Tlocation>& locations);
         
         static bool equals(const Location& location1, const Location& location2);
@@ -94,21 +97,33 @@ namespace loc{
     // Template functions
     template <class Tlocation>
     Location Location::mean(const std::vector<Tlocation>& locations){
+        size_t n = locations.size();
+        double w = 1.0/n;
+        std::vector<double> weights(n, w);
+        return weightedMean(locations, weights);
+    }
+    
+    template <class Tlocation>
+    Location Location::weightedMean(const std::vector<Tlocation>& locations, const std::vector<double> weights){
+        
         double x = 0;
         double y = 0;
         double floor = 0;
         double z = 0;
         size_t n = locations.size();
-        for(Location loc: locations){
-            x += loc.x();
-            y += loc.y();
-            floor += loc.floor();
-            z += loc.z();
+        double weightSum = 0;
+        for(int i=0; i<n; i++){
+            weightSum += weights.at(i);
         }
-        x/=n;
-        y/=n;
-        floor/=n;
-        z/=n;
+        for(int i=0; i<n; i++){
+            Tlocation loc = locations.at(i);
+            double weight = weights.at(i)/weightSum;
+            x += loc.x() * weight;
+            y += loc.y() * weight;
+            floor += loc.floor() * weight;
+            z += loc.z() * weight;
+        }
+        
         Location meanLocation(x,y,z,floor);
         return meanLocation;
     }

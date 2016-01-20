@@ -42,8 +42,10 @@ namespace loc {
         ~StreamParticleFilter();
         
         // setter
+        StreamParticleFilter& optVerbose(bool);
         StreamParticleFilter& numStates(int);
         StreamParticleFilter& alphaWeaken(double);
+        StreamParticleFilter& locationStandardDeviationLowerBound(Location loc);
         
         StreamParticleFilter& pedometer(std::shared_ptr<Pedometer> pedometer);
         StreamParticleFilter& orientationMeter(std::shared_ptr<OrientationMeter>  orientationMeter);

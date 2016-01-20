@@ -78,13 +78,14 @@ namespace  loc {
     std::ostream& operator<<(std::ostream&os, const State& state){
         os << state.x() <<"," << state.y() <<"," << state.z() <<"," << state.floor()
         << "," << state.orientation() << "," << state.velocity() <<"," << state.normalVelocity()
-        << "," << state.orientationBias() << "," << state.rssiBias() << "," << state.weight();
+        << "," << state.orientationBias() << "," << state.rssiBias() << "," << state.weight()
+        << "," << state.negativeLogLikelihood() << "," << state.mahalanobisDistance();
         return os;
     }
     
     std::string header(){
         std::string str;
-        str = "x,y,z,floor,orientation,velocity,normalVelocity,orientationBias,rssiBias,weight";
+        str = "x,y,z,floor,orientation,velocity,normalVelocity,orientationBias,rssiBias,weight,negativeLogLikelihood,mahalanobisDistance";
         return str;
     }
     
