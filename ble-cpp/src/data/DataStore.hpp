@@ -39,10 +39,10 @@ class DataStore{
     
 public:
     virtual ~DataStore() = default;
-    virtual Samples getSamples() const = 0;
-    virtual BLEBeacons getBLEBeacons() const = 0;
+    virtual const Samples& getSamples() const = 0;
+    virtual const BLEBeacons& getBLEBeacons() const = 0;
     
-    virtual Building getBuilding() const = 0;
+    virtual const Building& getBuilding() const = 0;
 };
     
 }

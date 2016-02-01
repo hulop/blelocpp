@@ -45,7 +45,7 @@ namespace loc{
         ~Sample() = default;
         
         
-        long timestamp(){
+        long timestamp() const{
             return timestamp_;
         }
         
@@ -54,7 +54,7 @@ namespace loc{
             return this;
         }
         
-        Location location(){
+        Location location() const{
             return location_;
         }
         
@@ -63,7 +63,7 @@ namespace loc{
             return this;
         }
         
-        Beacons beacons(){
+        Beacons beacons() const{
             return beacons_;
         }
         

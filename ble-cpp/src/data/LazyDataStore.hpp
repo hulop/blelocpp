@@ -35,6 +35,8 @@ namespace loc{
     private:
         std::vector<std::string> mSamplesFilePathes;
         std::vector<std::string> mBLEBeaconsFilePathes;
+        mutable Samples samples;
+        mutable BLEBeacons bleBeacons;
         Building mBuilding;
         
     public:
@@ -45,10 +47,10 @@ namespace loc{
         LazyDataStore& bleBeaconsFilePathes(std::vector<std::string> bleBeaconsFilePathes);
         LazyDataStore& building(Building building);
         
-        Samples getSamples() const override;
-        BLEBeacons getBLEBeacons() const override;
+        const Samples& getSamples() const override;
+        const BLEBeacons& getBLEBeacons() const override;
         
-        Building getBuilding() const override;
+        const Building& getBuilding() const override;
     };
 }
 

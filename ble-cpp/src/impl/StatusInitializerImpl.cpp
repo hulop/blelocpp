@@ -66,8 +66,8 @@ namespace loc{
     Locations StatusInitializerImpl::initializeLocations(int n){
         assert(n>0);
         
-        Samples samples = mDataStore->getSamples();
-        Building building = mDataStore->getBuilding();
+        const Samples& samples = mDataStore->getSamples();
+        const Building& building = mDataStore->getBuilding();
         
         std::vector<Location> uniqueLocations = Sample::extractUniqueLocations(samples);
         std::vector<Location> movableLocations;
@@ -251,16 +251,16 @@ namespace loc{
         std::vector<Location> selectedLocations;
 
         std::vector<BLEBeacon> observedBLEBeacons;
-        for(auto b: beacons){
+        for(auto& b: beacons){
             long id = b.id();
             if(idToIndexMap.count(id)>0){
                 observedBLEBeacons.push_back(bleBeacons.at(idToIndexMap.at(id)));
             }
         }
         
-        for(auto s: samples){
+        for(auto& s: samples){
             auto loc = s.location();
-            for(auto bloc: observedBLEBeacons){
+            for(auto& bloc: observedBLEBeacons){
                 double dist = Location::distance2D(loc, bloc);
                 double floorDiff = Location::floorDifference(loc, bloc);
                 if(dist <= radius2D && floorDiff==0){

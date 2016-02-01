@@ -44,27 +44,31 @@ namespace loc{
         return *this;
     }
     
-    Samples LazyDataStore::getSamples() const{
-        Samples samples;
-        for(std::string trainPath: mSamplesFilePathes){
-            std::ifstream  istream(trainPath);
-            Samples samplesTmp = DataUtils::csvSamplesToSamples(istream);
-            samples.insert(samples.end(), samplesTmp.begin(), samplesTmp.end());
+    const Samples& LazyDataStore::getSamples() const{
+        //Samples samples;
+        if(samples.size()==0){
+            for(std::string trainPath: mSamplesFilePathes){
+                std::ifstream  istream(trainPath);
+                Samples samplesTmp = DataUtils::csvSamplesToSamples(istream);
+                samples.insert(samples.end(), samplesTmp.begin(), samplesTmp.end());
+            }
         }
         return samples;
     }
     
-    BLEBeacons LazyDataStore::getBLEBeacons() const{
-        BLEBeacons bleBeacons;
-        for(std::string bleBeaconPath : mBLEBeaconsFilePathes){
-            std::ifstream bleBeaconIStream(bleBeaconPath);
-            BLEBeacons bleBeaconsTmp = DataUtils::csvBLEBeaconsToBLEBeacons(bleBeaconIStream);
-            bleBeacons.insert(bleBeacons.end(), bleBeaconsTmp.begin(), bleBeaconsTmp.end());
+    const BLEBeacons& LazyDataStore::getBLEBeacons() const{
+        //BLEBeacons bleBeacons;
+        if(bleBeacons.size()==0){
+            for(std::string bleBeaconPath : mBLEBeaconsFilePathes){
+                std::ifstream bleBeaconIStream(bleBeaconPath);
+                BLEBeacons bleBeaconsTmp = DataUtils::csvBLEBeaconsToBLEBeacons(bleBeaconIStream);
+                bleBeacons.insert(bleBeacons.end(), bleBeaconsTmp.begin(), bleBeaconsTmp.end());
+            }
         }
         return bleBeacons;
     }
     
-    Building LazyDataStore::getBuilding() const{
+    const Building& LazyDataStore::getBuilding() const{
         return mBuilding;
     }
     

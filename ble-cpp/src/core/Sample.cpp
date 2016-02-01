@@ -136,7 +136,7 @@ namespace loc{
     std::vector<Location> Sample::extractUniqueLocations(const Samples& samples){
         std::set<Location> locationSet;
         
-        for(Sample smp: samples){
+        for(const Sample& smp: samples){
             Location loc = smp.location();
             locationSet.insert(loc);
         }

@@ -47,15 +47,15 @@ namespace loc{
         return *this;
     }
     
-    Samples DataStoreImpl::getSamples() const{
+    const Samples& DataStoreImpl::getSamples() const{
         return mSamples;
     }
     
-    BLEBeacons DataStoreImpl::getBLEBeacons() const{
+    const BLEBeacons& DataStoreImpl::getBLEBeacons() const{
         return mBLEBeacons;
     }
     
-    Building DataStoreImpl::getBuilding() const{
+    const Building& DataStoreImpl::getBuilding() const{
         return mBuilding;
     }
 

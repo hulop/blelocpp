@@ -50,10 +50,10 @@ namespace loc{
         DataStoreImpl& building(Building building);
         
         void readSamples(std::ifstream &ifs);
-        Samples getSamples() const override;
-        BLEBeacons getBLEBeacons() const override;
+        const Samples& getSamples() const override;
+        const BLEBeacons& getBLEBeacons() const override;
         
-        Building getBuilding() const override;
+        const Building& getBuilding() const override;
     };
     
 }
