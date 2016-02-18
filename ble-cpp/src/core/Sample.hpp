@@ -28,6 +28,7 @@
 #include <sstream>
 #include "Location.hpp"
 #include "Beacon.hpp"
+#include "BLEBeacon.hpp"
 
 namespace loc{
     
@@ -94,6 +95,8 @@ namespace loc{
         static std::vector<Sample> meanUniqueLocations(std::vector<Sample> samples);
         
         static std::vector<Location> extractUniqueLocations(const Samples& samples);
+        
+        static Samples filterUnregisteredBeacons(const Samples& samples, const BLEBeacons& bleBeacons);
         
     };
     

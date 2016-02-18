@@ -642,12 +642,14 @@ namespace loc{
         Samples samples = mDataStore->getSamples();
         BLEBeacons bleBeacons = mDataStore->getBLEBeacons();
         
-        assert(samples.size()>0);
+        Samples samplesFiltered = Sample::filterUnregisteredBeacons(samples, bleBeacons);
+        
+        assert(samplesFiltered.size()>0);
         assert(bleBeacons.size()>0);
         
         GaussianProcessLDPLMultiModel<Tstate, Tinput>* obsModel = new GaussianProcessLDPLMultiModel<Tstate, Tinput>();
         obsModel->bleBeacons(bleBeacons);
-        obsModel->train(samples);
+        obsModel->train(samplesFiltered);
         
         return obsModel;
     }
