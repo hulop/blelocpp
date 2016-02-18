@@ -95,6 +95,8 @@ namespace loc{
             return strstream.str();
         }
         
+        template<class Tbeacon>
+        static bool checkNoDuplication(const std::vector<Tbeacon>& beacons);
         
         template<class Tbeacon>
         static std::map<long, int> constructBeaconIdToIndexMap(std::vector<Tbeacon> beacons);
@@ -110,7 +112,26 @@ namespace loc{
     
     // Definition of template method
     template<class Tbeacon>
+    bool BLEBeacon::checkNoDuplication(const std::vector<Tbeacon>& beacons){
+        std::set<long> ids;
+        bool flag = true;
+        for(Tbeacon b: beacons){
+            long id = Beacon::convertMajorMinorToId(b.major(), b.minor());
+            if(ids.count(id)>0){
+                std::stringstream ss;
+                ss << "BLEBeacon(major=" << b.major() <<", minor=" << b.minor() << ") is duplicated";
+                flag = false;
+                throw std::runtime_error(ss.str());
+            }
+            ids.insert(id);
+        }
+        return flag;
+    }
+    
+    template<class Tbeacon>
     std::map<long, int> BLEBeacon::constructBeaconIdToIndexMap(std::vector<Tbeacon> beacons){
+        assert(checkNoDuplication(beacons)==true);
+        
         std::map<long, int> beaconIdIndexMap;
         int i = 0;
         for(Tbeacon b: beacons){
@@ -141,7 +162,6 @@ namespace loc{
         }
         return beaconIdIndexMap;
     }
-    
 }
 
 #endif /* BLEBeacon_hpp */
