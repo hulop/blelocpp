@@ -40,18 +40,27 @@ namespace loc{
     }
     
     Location StatusInitializerImpl::perturbLocation(const Location& location){
-        Location locNew(location);
-        double x = locNew.x() + mPoseProperty.stdX() * rand.nextGaussian();
-        double y = locNew.y() + mPoseProperty.stdY() * rand.nextGaussian();
-        locNew.x(x);
-        locNew.y(y);
-        return locNew;
+        const Building& building = mDataStore->getBuilding();
+        return perturbLocation(location, building);
+    }
+    
+    State StatusInitializerImpl::perturbRssiBias(const State &state){
+        State stateNew(state);
+        double rssiBias = state.rssiBias()+ rand.nextGaussian() * mStateProperty.diffusionRssiBias();
+        stateNew.rssiBias(rssiBias);
+        return stateNew;
     }
     
     Location StatusInitializerImpl::perturbLocation(const Location& location, const Building& building){
         bool hasBuilding = building.nFloors()>0? true: false;
         for(int i=0; i<nPerturbationMax; i++){
-            Location locNew = this->perturbLocation(location);
+            
+            Location locNew(location);
+            double x = locNew.x() + mPoseProperty.stdX() * rand.nextGaussian();
+            double y = locNew.y() + mPoseProperty.stdY() * rand.nextGaussian();
+            locNew.x(x);
+            locNew.y(y);
+            
             if(hasBuilding){
                 if(building.isMovable(locNew)){
                     return locNew;
@@ -63,46 +72,59 @@ namespace loc{
         return location;
     }
     
-    Locations StatusInitializerImpl::initializeLocations(int n){
-        assert(n>0);
-        
-        const Samples& samples = mDataStore->getSamples();
+    Locations StatusInitializerImpl::extractMovableLocations(const Locations& locations){
         const Building& building = mDataStore->getBuilding();
-        
-        std::vector<Location> uniqueLocations = Sample::extractUniqueLocations(samples);
         std::vector<Location> movableLocations;
         
         // Filter movable points
-        int countNonMovable = 0;
         bool hasBuilding = building.nFloors()>0? true : false;
         if(hasBuilding){
-            for(Location loc: uniqueLocations){
+            for(auto loc: locations){
                 if(building.isMovable(loc)){
                     movableLocations.push_back(Location(loc));
-                }else{
-                    countNonMovable++;
-                    //std::cout << "Location="<<loc<< " is not a movable point." <<std::endl;
                 }
             }
         }else{
-            movableLocations.insert(movableLocations.end(), uniqueLocations.begin(), uniqueLocations.end());
+            movableLocations.insert(movableLocations.end(), locations.begin(), locations.end());
         }
-        std::cout << "Invalid " << countNonMovable << " points are not used for initialization." << std::endl;
-        
-        // Random sampling
+        return movableLocations;
+    }
+    
+    Locations StatusInitializerImpl::randomSampleLocationsWithPerturbation(int n, const Locations& locations){
         Locations locs;
-        int nSamples = (int) movableLocations.size();
+        int nSamples = (int) locations.size();
         assert(nSamples>0);
         std::vector<int> indices = rand.randomSet(nSamples, n);
         for(int i=0; i<n; i++){
             int idx = indices.at(i);
             //std::cout << "idx=" << idx << std::endl;
-            Location loc = movableLocations.at(idx);
-            loc = perturbLocation(loc, building);
+            Location loc = locations.at(idx);
+            loc = perturbLocation(loc);
             locs.push_back(Location(loc));
         }
+        return locs;
+    }
+    
+    Locations StatusInitializerImpl::initializeLocations(int n){
+        assert(n>0);
+        
+        const Samples& samples = mDataStore->getSamples();
+        
+        std::vector<Location> uniqueLocations = Sample::extractUniqueLocations(samples);
+        std::vector<Location> movableLocations = extractMovableLocations(uniqueLocations);
+        
+        // Filter movable points
+        int countNonMovable = uniqueLocations.size() - movableLocations.size();
+
+        std::cout << "Invalid " << countNonMovable << " points are not used for initialization." << std::endl;
+        
+        // Random sampling
+        Locations locs = randomSampleLocationsWithPerturbation(n, movableLocations);
         assert(locs.size()==n);
         
+        // Check if all locations are valid.
+        const Building& building = mDataStore->getBuilding();
+        bool hasBuilding = building.nFloors()>0? true : false;
         if(hasBuilding){
             for(Location loc: locs){
                 assert(building.isMovable(loc));
@@ -176,8 +198,7 @@ namespace loc{
         double floorReset = pose.floor();
         double orientationReset = pose.orientation();
         double orientationBiasReset = orientationMeasured - orientationReset;
-        
-        
+
         //std::cout << "Reset status(PoseReset="<<pose<<", yaw="<<orientationMeasured<< ",orientationBias=" << orientationBiasReset << std::endl;
         
         States states = initializeStates(n);
@@ -241,8 +262,19 @@ namespace loc{
         return states;
     }
     
+    void StatusInitializerImpl::beaconEffectiveRadius2D(double radius2D){
+        mRadius2D = radius2D;
+    }
     
-    Locations StatusInitializerImpl::extractLocationsCloseToBeacons(const std::vector<Beacon> &beacons, double radius2D){
+    States StatusInitializerImpl::resetStates(int n, const std::vector<Beacon>& beacons){
+        Locations locs = extractLocationsCloseToBeacons(beacons, mRadius2D);
+        Locations movableLocs = extractMovableLocations(locs);
+        Locations selectedLocs = randomSampleLocationsWithPerturbation(n, movableLocs);
+        return initializeStatesFromLocations(selectedLocs);
+    }
+    
+    
+    Locations StatusInitializerImpl::extractLocationsCloseToBeacons(const std::vector<Beacon> &beacons, double radius2D) const{
         
         auto samples = mDataStore->getSamples();
         auto bleBeacons = mDataStore->getBLEBeacons();
@@ -258,8 +290,8 @@ namespace loc{
             }
         }
         
-        for(auto& s: samples){
-            auto loc = s.location();
+        auto locations = Sample::extractUniqueLocations(samples);
+        for(auto& loc: locations){
             for(auto& bloc: observedBLEBeacons){
                 double dist = Location::distance2D(loc, bloc);
                 double floorDiff = Location::floorDifference(loc, bloc);
@@ -269,6 +301,7 @@ namespace loc{
                 }
             }
         }
+        
         return selectedLocations;
     }
     

@@ -72,6 +72,8 @@ namespace loc{
         std::shared_ptr<StatusInitializer> mStatusInitializer;
         std::shared_ptr<BeaconFilter> mBeaconFilter;
         
+        std::shared_ptr<ObservationDependentInitializer<State, Beacons>> mMetro;
+        
         void (*mFunctionCalledAfterUpdate)(Status*) = NULL;
         void (*mFunctionCalledAfterUpdate2)(void*, Status*) = NULL;
         void* mUserData;
@@ -330,9 +332,30 @@ namespace loc{
             }
         }
         
+        bool resetStatus(const Beacons& beacons){
+            initializeStatusIfZero();
+            const Beacons& beaconsFiltered = filterBeacons(beacons);
+            std::stringstream ss;
+            ss << "Status was initialized by ";
+            if(mMetro){
+                ss << "an ObservationDependentInitializer.";
+                mMetro->input(beaconsFiltered);
+                States states = mMetro->sampling(mNumStates);
+                std::vector<Location> locations(states.begin(), states.end());
+                States* statesNew = new States(mStatusInitializer->initializeStatesFromLocations(locations));
+                status->states(statesNew);
+            }else{
+                ss << "a StatusInitializer.";
+                States* statesNew = new States(mStatusInitializer->resetStates(mNumStates, beaconsFiltered));
+                status->states(statesNew);
+            }
+            std::cout << ss.str() << std::endl;
+            return false;
+        }
+        
+        
         bool refineStatus(const Beacons& beacons){
             // TODO
-            initializeStatusIfZero();
             const Beacons& beaconsFiltered = filterBeacons(beacons);
             if(beaconsFiltered.size()>0){
                 if(checkIfDoFiltering()){
@@ -436,6 +459,10 @@ namespace loc{
             mBeaconFilter = beaconFilter;
         }
         
+        void observationDependentInitializer(std::shared_ptr<ObservationDependentInitializer<State, Beacons>> metro){
+            mMetro = metro;
+        }
+        
     };
     
     
@@ -486,6 +513,10 @@ namespace loc{
     
     bool StreamParticleFilter::resetStatus(Pose meanPose, Pose stdevPose){
         return impl->resetStatus(meanPose, stdevPose);
+    }
+    
+    bool StreamParticleFilter::resetStatus(const Beacons &beacons){
+        return impl->resetStatus(beacons);
     }
     
     bool StreamParticleFilter::refineStatus(const Beacons& beacons){
@@ -545,6 +576,11 @@ namespace loc{
     StreamParticleFilter& StreamParticleFilter::beaconFilter(std::shared_ptr<BeaconFilter> beaconFilter){
         impl->beaconFilter(beaconFilter);
         return *this;
+    }
+    
+    StreamParticleFilter& StreamParticleFilter::observationDependentInitializer(std::shared_ptr<ObservationDependentInitializer<State, Beacons>> metro){
+        impl->observationDependentInitializer(metro);
+        return * this;
     }
     
 }

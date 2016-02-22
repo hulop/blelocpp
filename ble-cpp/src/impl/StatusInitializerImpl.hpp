@@ -36,14 +36,16 @@ namespace loc{
     /**
      sampling points based status initializer
     **/
+    
     class StatusInitializerImpl : public StatusInitializer{
         
     private:
         RandomGenerator rand;
         std::shared_ptr<DataStore> mDataStore;
         
-        int nPerturbationMax = 100;;
-        Location perturbLocation(const Location& location);
+        int nPerturbationMax = 100;
+        double mRadius2D = 10; //[m]
+
         Location perturbLocation(const Location& location, const Building& building);
         PoseProperty mPoseProperty;
         StateProperty mStateProperty;
@@ -52,19 +54,26 @@ namespace loc{
         States initializeStatesFromPoses(Poses poses);
         
     public:
+        void beaconEffectiveRadius2D(double);
         StatusInitializerImpl& dataStore(std::shared_ptr<DataStore> dataStore);
         StatusInitializerImpl& poseProperty(PoseProperty poseProperty);
         StatusInitializerImpl& stateProperty(StateProperty stateProperty);
         
+        Location perturbLocation(const Location& location);
+        State perturbRssiBias(const State& state);
+        
         Locations initializeLocations(int n);
+        Locations extractMovableLocations(const Locations& locations);
+        Locations randomSampleLocationsWithPerturbation(int n, const Locations& locations);
         Poses initializePoses(int n);
         States initializeStates(int n);
-        
+
         States resetStates(int n, Pose pose, double orientationMeasured);
         States resetStates(int n, Pose meanPose, Pose stdevPose, double orientationMeasured);
+        States resetStates(int n, const std::vector<Beacon>& beacons);
         
         States initializeStatesFromLocations(const std::vector<Location>& locations);
-        Locations extractLocationsCloseToBeacons(const std::vector<Beacon>& beacons, double radius2D);
+        Locations extractLocationsCloseToBeacons(const std::vector<Beacon>& beacons, double radius2D) const;
         
     };
     

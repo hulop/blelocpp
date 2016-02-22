@@ -31,6 +31,7 @@
 #include "PoseRandomWalker.hpp"
 #include "ObservationModel.hpp"
 #include "Resampler.hpp"
+#include "ObservationDependentInitializer.hpp"
 
 #include "BeaconFilter.hpp"
 
@@ -56,6 +57,8 @@ namespace loc {
         
         StreamParticleFilter& beaconFilter(std::shared_ptr<BeaconFilter> beaconFilter);
         
+        StreamParticleFilter& observationDependentInitializer(std::shared_ptr<ObservationDependentInitializer<State, Beacons>> metro);
+        
         // callback function setter
         StreamParticleFilter& updateHandler(void (*functionCalledAfterUpdate)(Status*)) override;
         StreamParticleFilter& updateHandler(void (*functionCalledAfterUpdate)(void*, Status*), void* inUserData) override;
@@ -70,6 +73,7 @@ namespace loc {
         bool resetStatus() override;
         bool resetStatus(Pose pose) override;
         bool resetStatus(Pose meanPose, Pose stdevPose) override;
+        bool resetStatus(const Beacons& beacons) override;
         
         // (unstable functions)
         // Call this function to search initial location

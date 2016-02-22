@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2015  IBM Corporation and others
+ * Copyright (c) 2014-2016  IBM Corporation and others
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,30 +20,45 @@
  * THE SOFTWARE.
  *******************************************************************************/
 
-#ifndef StreamLocalizer_hpp
-#define StreamLocalizer_hpp
+#ifndef MetropolisAlgorithm_hpp
+#define MetropolisAlgorithm_hpp
 
 #include <stdio.h>
+#include <algorithm>
 #include "bleloc.h"
+#include "ObservationDependentInitializer.hpp"
+#include "ObservationModel.hpp"
+#include "StatusInitializer.hpp"
+#include "StatusInitializerImpl.hpp"
 
-namespace loc {
-    class StreamLocalizer{
+namespace loc{
+    
+    template<class Tstate, class Tinput>
+    class MetropolisSampler : public ObservationDependentInitializer<Tstate, Tinput>{
+    private:
+        int mBurnIn = 5000;
+        int mInterval = 10;
+        double mRadius2D = 10; // [m]
+        RandomGenerator randGen;
+        std::shared_ptr<ObservationModel<Tstate,Tinput>> mObsModel;
+        std::shared_ptr<StatusInitializerImpl> mStatusInitializer;
+        Tinput mInput;
+        
+        State findInitialMaxLikelihoodState();
+        std::vector<State> sampling(int n, Tstate initialState);
+        State transitState(Tstate state);
+        
     public:
-        virtual ~StreamLocalizer(){};
+        void burnIn(int burnIn);
+        void radius2D(double radius2D);
+        void input(const Tinput& input);
         
-        virtual StreamLocalizer& updateHandler(void (*functionCalledAfterUpdate)(Status*)) = 0;
-        virtual StreamLocalizer& updateHandler(void (*functionCalledAfterUpdate)(void*, Status*), void* inUserData) = 0;
+        void observationModel(std::shared_ptr<ObservationModel<Tstate, Tinput>> obsModel);
+        void statusInitializer(std::shared_ptr<StatusInitializerImpl> statusInitializer);
         
-        virtual StreamLocalizer& putAcceleration(const Acceleration acceleration) = 0;
-        virtual StreamLocalizer& putAttitude(const Attitude attitude) = 0;
-        virtual StreamLocalizer& putBeacons(const Beacons beacons) = 0;
-        virtual Status* getStatus() = 0;
-        
-        virtual bool resetStatus() = 0;
-        virtual bool resetStatus(Pose pose) = 0;
-        virtual bool resetStatus(Pose meanPose, Pose stdevPose) = 0;
-        virtual bool resetStatus(const Beacons& beacons) = 0;
+        std::vector<Tstate> sampling(int n);
     };
+    
 }
 
-#endif /* StreamLocalizer_hpp */
+#endif /* MetropolisAlgorithm_hpp */

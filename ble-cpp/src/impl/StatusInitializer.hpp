@@ -36,6 +36,7 @@ namespace loc{
         
         virtual std::vector<State> resetStates(int n, Pose pose, double orientationMeasured) = 0;
         virtual std::vector<State> resetStates(int n, Pose meanPose, Pose stdevPose, double orientationMeasured) = 0;
+        virtual std::vector<State> resetStates(int n, const std::vector<Beacon>& beacons) = 0;
         
         virtual States initializeStatesFromLocations(const Locations& locations) = 0;
     };

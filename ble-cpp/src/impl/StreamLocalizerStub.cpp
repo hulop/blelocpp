@@ -92,6 +92,12 @@ namespace loc{
         return true;
     }
     
+    bool StreamLocalizerStub::resetStatus(const loc::Beacons &beacons){
+        resetStatus();
+        return true;
+    }
+    
+    
     /*
     StreamLocalizer* StreamLocalizerStub::pedometer(Pedometer* pedometer){
         return this;

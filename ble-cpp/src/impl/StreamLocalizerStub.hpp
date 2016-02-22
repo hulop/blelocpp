@@ -49,6 +49,7 @@ namespace loc {
         StreamLocalizer* pedometer(Pedometer* pedometer);
         StreamLocalizer* orientationMeter(OrientationMeter*  orientationMeter);
         */
+        bool resetStatus(const Beacons& beacons) override;
         
     private:
         Status* status;

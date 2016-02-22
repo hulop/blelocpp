@@ -207,6 +207,9 @@
 		F52FFB981C08861800508330 /* libopencv_videostab.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F52FFB881C08861800508330 /* libopencv_videostab.dylib */; };
 		FB2E8B131C2404EA00C5C45C /* CoordinateSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB2E8B121C2404EA00C5C45C /* CoordinateSystem.cpp */; };
 		FB2E8B141C2404F600C5C45C /* CoordinateSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB2E8B121C2404EA00C5C45C /* CoordinateSystem.cpp */; };
+		FB5B4BF11C7C41B600D00E8E /* MetropolisAlgorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB5B4BEE1C7C41B600D00E8E /* MetropolisAlgorithm.cpp */; };
+		FB5B4BF21C7C41B600D00E8E /* MetropolisAlgorithm.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FB5B4BEF1C7C41B600D00E8E /* MetropolisAlgorithm.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		FB5B4BF31C7C41B600D00E8E /* ObservationDependentInitializer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FB5B4BF01C7C41B600D00E8E /* ObservationDependentInitializer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		FB71CE4F1C46889F00A4DB67 /* MathUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB71CE4E1C46889F00A4DB67 /* MathUtils.cpp */; };
 		FB71CE561C475B4600A4DB67 /* BeaconFilterChain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB71CE541C475B4600A4DB67 /* BeaconFilterChain.cpp */; };
 		FB71CE571C475B4600A4DB67 /* BeaconFilterChain.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FB71CE551C475B4600A4DB67 /* BeaconFilterChain.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -359,6 +362,9 @@
 		F52FFB871C08861800508330 /* libopencv_video.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_video.dylib; path = ../../../../../../usr/local/Cellar/opencv/2.4.12/lib/libopencv_video.dylib; sourceTree = "<group>"; };
 		F52FFB881C08861800508330 /* libopencv_videostab.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_videostab.dylib; path = ../../../../../../usr/local/Cellar/opencv/2.4.12/lib/libopencv_videostab.dylib; sourceTree = "<group>"; };
 		FB2E8B121C2404EA00C5C45C /* CoordinateSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CoordinateSystem.cpp; sourceTree = "<group>"; };
+		FB5B4BEE1C7C41B600D00E8E /* MetropolisAlgorithm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MetropolisAlgorithm.cpp; sourceTree = "<group>"; };
+		FB5B4BEF1C7C41B600D00E8E /* MetropolisAlgorithm.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MetropolisAlgorithm.hpp; sourceTree = "<group>"; };
+		FB5B4BF01C7C41B600D00E8E /* ObservationDependentInitializer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ObservationDependentInitializer.hpp; sourceTree = "<group>"; };
 		FB71CE4E1C46889F00A4DB67 /* MathUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MathUtils.cpp; sourceTree = "<group>"; };
 		FB71CE541C475B4600A4DB67 /* BeaconFilterChain.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BeaconFilterChain.cpp; sourceTree = "<group>"; };
 		FB71CE551C475B4600A4DB67 /* BeaconFilterChain.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BeaconFilterChain.hpp; sourceTree = "<group>"; };
@@ -591,6 +597,7 @@
 				7E6F25091C0F1D76007A97A1 /* model */,
 				7E6F25211C0F1D76007A97A1 /* sensor */,
 				7E6F252D1C0F1D76007A97A1 /* utils */,
+				FB5B4BED1C7C417600D00E8E /* mc */,
 			);
 			path = bleloc;
 			sourceTree = SOURCE_ROOT;
@@ -634,6 +641,17 @@
 			name = Headers;
 			path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/System/Library/Frameworks/JavaVM.framework/Versions/A/Headers;
 			sourceTree = DEVELOPER_DIR;
+		};
+		FB5B4BED1C7C417600D00E8E /* mc */ = {
+			isa = PBXGroup;
+			children = (
+				FB5B4BEE1C7C41B600D00E8E /* MetropolisAlgorithm.cpp */,
+				FB5B4BEF1C7C41B600D00E8E /* MetropolisAlgorithm.hpp */,
+				FB5B4BF01C7C41B600D00E8E /* ObservationDependentInitializer.hpp */,
+			);
+			name = mc;
+			path = "../../ble-cpp/src/mc";
+			sourceTree = SOURCE_ROOT;
 		};
 		FCECB81158285F2B717D06A8 /* Frameworks */ = {
 			isa = PBXGroup;
@@ -715,7 +733,9 @@
 				7E6F255F1C0F1D76007A97A1 /* Location.hpp in Headers */,
 				7E6F25951C0F1D77007A97A1 /* Resampler.hpp in Headers */,
 				7E6F25DF1C0F1D78007A97A1 /* SystemModel.hpp in Headers */,
+				FB5B4BF21C7C41B600D00E8E /* MetropolisAlgorithm.hpp in Headers */,
 				FB71CE571C475B4600A4DB67 /* BeaconFilterChain.hpp in Headers */,
+				FB5B4BF31C7C41B600D00E8E /* ObservationDependentInitializer.hpp in Headers */,
 				7E6F25831C0F1D76007A97A1 /* DataStoreImpl.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -982,6 +1002,7 @@
 				7E6F25D71C0F1D78007A97A1 /* StatusInitializerImpl.cpp in Sources */,
 				7E6F25CB1C0F1D77007A97A1 /* PoseRandomWalker.cpp in Sources */,
 				7E6F25471C0F1D76007A97A1 /* Attitude.cpp in Sources */,
+				FB5B4BF11C7C41B600D00E8E /* MetropolisAlgorithm.cpp in Sources */,
 				7E6F255D1C0F1D76007A97A1 /* Location.cpp in Sources */,
 				7E6F25811C0F1D76007A97A1 /* DataStoreImpl.cpp in Sources */,
 				7E6F258D1C0F1D76007A97A1 /* VirtualDevice.cpp in Sources */,
