@@ -57,6 +57,8 @@ namespace loc{
         
         std::string toString() const;
         
+        void copyLocation(const Location& location);
+        
         //static Location mean(const std::vector<Location>& locations);
         template <class Tlocation>
         static Location mean(const std::vector<Tlocation>& locations);

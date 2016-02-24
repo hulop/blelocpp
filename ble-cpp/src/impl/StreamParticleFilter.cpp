@@ -46,7 +46,7 @@
 #include "CleansingBeaconFilter.hpp"
 
 namespace loc{
-    
+
     class StreamParticleFilter::Impl{
 
     private:
@@ -57,90 +57,94 @@ namespace loc{
         long previousTimestampMotion = 0;
         Location mLocStdevLB;
         
+        MixtureParameters mMixParams;
+
         //std::queue<Pose> posesForReset;
         std::queue<std::function<void()>> functionsForReset;
-        
+
         std::shared_ptr<Status> status;
-        
+
         std::shared_ptr<Pedometer> mPedometer;
         std::shared_ptr<OrientationMeter> mOrientationmeter;
-        
+
         std::shared_ptr<SystemModel<State, PoseRandomWalkerInput>> mRandomWalker;
-        
+
         std::shared_ptr<ObservationModel<State, Beacons>> mObservationModel;
         std::shared_ptr<Resampler<State>> mResampler;
         std::shared_ptr<StatusInitializer> mStatusInitializer;
         std::shared_ptr<BeaconFilter> mBeaconFilter;
-        
+
         std::shared_ptr<ObservationDependentInitializer<State, Beacons>> mMetro;
+        std::shared_ptr<RandomGenerator> mRand;
         
         void (*mFunctionCalledAfterUpdate)(Status*) = NULL;
         void (*mFunctionCalledAfterUpdate2)(void*, Status*) = NULL;
         void* mUserData;
-        
+
         bool accelerationIsUpdated = false;
         bool attitudeIsUpdated = false;
         //bool beaconsIsUpdated = false;
-        
+
         CleansingBeaconFilter cleansingBeaconFilter;
-        
+
     public:
-        
+
         Impl() : status(new Status()),
-                mBeaconFilter(new BaseBeaconFilter())
+                mBeaconFilter(new BaseBeaconFilter()),
+                mRand(new RandomGenerator())
         { }
-        
+
         ~Impl(){}
-        
+
         void initializeStatusIfZero(){
             if(status->states()->size()==0) {
                 initializeStatus();
             }
         }
-        
+
         void putAcceleration(const Acceleration acceleration){
             initializeStatusIfZero();
 
             mPedometer->putAcceleration(acceleration);
             accelerationIsUpdated = mPedometer->isUpdated();
-            
+
             // TODO (Tentative implementation)
             if(accelerationIsUpdated && attitudeIsUpdated){
                 predictMotionState(acceleration.timestamp());
             }
-            
+
         }
-        
+
         void putAttitude(const Attitude attitude){
             initializeStatusIfZero();
             mOrientationmeter->putAttitude(attitude);
             attitudeIsUpdated = mOrientationmeter->isUpdated();
-            
+
             processResetStatus();
         }
-        
+
         void predictMotionState(long timestamp){
             initializeStatusIfZero();
-            
+
             if(previousTimestampMotion==0) previousTimestampMotion = timestamp;
-            
+
             PoseRandomWalkerInput input;
             input.timestamp(timestamp);
             input.previousTimestamp(previousTimestampMotion);
-            
+
             std::shared_ptr<States> states = status->states();
             States* statesPredicted = new States(mRandomWalker->predict(*states.get(), input));
             status->states(statesPredicted);
-            
+
             if(mOptVerbose){
                 std::cout << "prediction at t=" << timestamp << std::endl;
             }
-            
+
             callback(status.get());
-            
+
             previousTimestampMotion = timestamp;
         }
-        
+
         void logStates(const States& states, const std::string& filename){
             std::stringstream ss;
             for(State s: states){
@@ -150,19 +154,74 @@ namespace loc{
                 DataLogger::getInstance()->log(filename, ss.str());
             }
         }
+
+
+        void mixStates(States& states, const Beacons&beacons, double mixProba){
+            size_t nStates = states.size();
+            std::vector<int> indices;
+            // Select particles that will be removed randomly.
+            for(int i=0; i<nStates; i++){
+                double u = mRand->nextDouble();
+                if(u< mixProba){
+                    indices.push_back(i);
+                }
+            }
+            int nGen = static_cast<int>(indices.size());
+            if(nGen==0){
+                return;
+            }
+            // Generate states
+            int burnInLight = mMixParams.burnInQuick;
+            States statesGen;
+            if(mMetro){
+                mMetro->input(beacons);
+                mMetro->startBurnIn(burnInLight);
+                statesGen = mMetro->sampling(nGen);
+            }else{
+                statesGen = mStatusInitializer->resetStates(nGen, beacons);
+            }
+
+            Location locMean = Location::mean(states);
+            // Copy location of generated states to the existing states.
+            for(int i=0; i<nGen; i++){
+                auto& st = statesGen.at(i);
+                if(mRand->nextDouble() <  computeStateAcceptProbability(locMean, st)){
+                    int idx = indices.at(i);
+                    states.at(idx).copyLocation(st);
+                }
+            }
+        }
         
+        double computeStateAcceptProbability(const Location& locMean, const Location& locNew){
+            double rejectDist = mMixParams.rejectDistance;
+            double floorDiff = Location::floorDifference(locMean, locNew);
+            double dist = Location::distance(locMean, locNew);
+            
+            if(floorDiff>0.5){
+                return 1;
+            }
+            if(dist>rejectDist){
+                return 1;
+            }
+            return 0;
+        }
+        
+
         void doFiltering(const Beacons& beacons){
+
             if(beacons.size()==0){
                 return;
             }
-            
+
             long timestamp = beacons.timestamp();
             std::shared_ptr<States> states = status->states();
-            
+
             // Logging before likelihood computation
             logStates(*states, "before_likelihood_states_"+std::to_string(timestamp)+".csv");
+
+            mixStates(*states, beacons, mMixParams.mixtureProbability);
             
-            //std::vector<double> vLogLLs = mObservationModel->computeLogLikelihood(*states, beacons);
+            // Compute log likelihood
             std::vector<std::vector<double>> vLogLLsAndMDists = mObservationModel->computeLogLikelihoodRelatedValues(*states, beacons);
             std::vector<double> vLogLLs(states->size());
             std::vector<double> mDists(states->size());
@@ -170,7 +229,7 @@ namespace loc{
                 vLogLLs[i] = vLogLLsAndMDists.at(i).at(0);
                 mDists[i] = vLogLLsAndMDists.at(i).at(1);
             }
-            
+
             vLogLLs = weakenLogLikelihoods(vLogLLs, mAlphaWeaken);
             // Set negative log-likelihoods
             for(int i=0; i<vLogLLs.size(); i++){
@@ -178,7 +237,7 @@ namespace loc{
                 s.negativeLogLikelihood(-vLogLLs.at(i));
                 s.mahalanobisDistance(mDists.at(i));
             }
-            
+
             std::vector<double> weights = ArrayUtils::computeWeightsFromLogLikelihood(vLogLLs);
             double sumWeights = 0;
             // Multiply loglikelihood-based weights and particle weights.
@@ -192,10 +251,10 @@ namespace loc{
                 weights[i] = weights[i]/sumWeights;
                 states->at(i).weight(weights[i]);
             }
-            
+
             // Logging after likelihood computation
             logStates(*states, "after_likelihood_states_"+std::to_string(timestamp)+".csv");
-            
+
             States* statesNew = mResampler->resample(*states, &weights[0]);
             // Assign equal weights after resampling
             for(int i=0; i<weights.size(); i++){
@@ -206,11 +265,11 @@ namespace loc{
             if(mOptVerbose){
                 std::cout << "resampling at t=" << beacons.timestamp() << std::endl;
             }
-            
+
             // Logging after resampling
             logStates(*statesNew, "resampled_states_"+std::to_string(timestamp)+".csv");
         }
-        
+
         Beacons filterBeacons(const Beacons& beacons){
             size_t nBefore = beacons.size();
             const Beacons& beaconsCleansed = cleansingBeaconFilter.filter(beacons);
@@ -223,10 +282,10 @@ namespace loc{
             }
             return beaconsFiltered;
         }
-        
+
         void putBeacon(const Beacons & beacons){
             initializeStatusIfZero();
-            
+
             const Beacons& beaconsFiltered = filterBeacons(beacons);
             if(beaconsFiltered.size()>0){
                 if(checkIfDoFiltering()){
@@ -239,7 +298,7 @@ namespace loc{
             }
             callback(status.get());
         };
-        
+
         static std::vector<double> weakenLogLikelihoods(std::vector<double> logLikelihoods, double alphaWeaken){
             size_t n = logLikelihoods.size();
             std::vector<double> weakenedLogLLs(n);
@@ -248,11 +307,11 @@ namespace loc{
             }
             return weakenedLogLLs;
         }
-        
+
         void reset(){
             previousTimestampMotion = 0;
         }
-        
+
         void initializeStatus(){
             this->reset();
             mPedometer->reset();
@@ -260,31 +319,31 @@ namespace loc{
             States* states = new States(mStatusInitializer->initializeStates(mNumStates));
             updateStatus(states);
         }
-        
+
         void updateStatus(States* states){
             Status *st = new Status();
             st->states(states);
             status.reset(st);
         }
-        
+
         void updateHandler(void (*functionCalledAfterUpdate)(Status*)){
             mFunctionCalledAfterUpdate = functionCalledAfterUpdate;
         }
-        
+
         void updateHandler(void (*functionCalledAfterUpdate)(void*, Status*), void* inUserData){
             mFunctionCalledAfterUpdate2 = functionCalledAfterUpdate;
             mUserData = inUserData;
         }
-        
+
         Status* getStatus(){
             return status.get();
         };
-        
+
         bool resetStatus(){
             initializeStatus();
             return true;
         }
-        
+
         void callback(Status* status){
             if(mFunctionCalledAfterUpdate!=NULL){
                 mFunctionCalledAfterUpdate(status);
@@ -293,7 +352,7 @@ namespace loc{
                 mFunctionCalledAfterUpdate2(mUserData, status);
             }
         }
-        
+
         bool resetStatus(Pose pose){
             bool orientationWasUpdated = mOrientationmeter->isUpdated();
             if(orientationWasUpdated){
@@ -312,7 +371,7 @@ namespace loc{
                 return false;
             }
         }
-        
+
         bool resetStatus(Pose meanPose, Pose stdevPose){
             bool orientationWasUpdated = mOrientationmeter->isUpdated();
             if(orientationWasUpdated){
@@ -331,32 +390,45 @@ namespace loc{
                 return false;
             }
         }
-        
+
         bool resetStatus(const Beacons& beacons){
             initializeStatusIfZero();
             const Beacons& beaconsFiltered = filterBeacons(beacons);
             std::stringstream ss;
             ss << "Status was initialized by ";
+            States statesTmp = sampleStatesByObservation(mNumStates, beaconsFiltered);
+            States* statesNew = new States(statesTmp);
+            status->states(statesNew);
             if(mMetro){
                 ss << "an ObservationDependentInitializer.";
-                mMetro->input(beaconsFiltered);
-                States states = mMetro->sampling(mNumStates);
-                std::vector<Location> locations(states.begin(), states.end());
-                States* statesNew = new States(mStatusInitializer->initializeStatesFromLocations(locations));
-                status->states(statesNew);
             }else{
                 ss << "a StatusInitializer.";
-                States* statesNew = new States(mStatusInitializer->resetStates(mNumStates, beaconsFiltered));
-                status->states(statesNew);
             }
             std::cout << ss.str() << std::endl;
             return false;
         }
-        
-        
+
+
+        States sampleStatesByObservation(int n, const Beacons& beacons){
+            const Beacons& beaconsFiltered = filterBeacons(beacons);
+            States statesNew;
+            if(mMetro){
+                mMetro->input(beaconsFiltered);
+                mMetro->startBurnIn();
+                States states = mMetro->sampling(n);
+                std::vector<Location> locations(states.begin(), states.end());
+                statesNew = mStatusInitializer->initializeStatesFromLocations(locations);
+            }else{
+                statesNew = mStatusInitializer->resetStates(n, beaconsFiltered);
+            }
+            return statesNew;
+        }
+
+
         bool refineStatus(const Beacons& beacons){
             // TODO
             const Beacons& beaconsFiltered = filterBeacons(beacons);
+
             if(beaconsFiltered.size()>0){
                 if(checkIfDoFiltering()){
                     doFiltering(beaconsFiltered);
@@ -366,10 +438,11 @@ namespace loc{
             std::vector<Location> locations(statesTmp->begin(), statesTmp->end());
             States* statesNew = new States(mStatusInitializer->initializeStatesFromLocations(locations));
             status->states(statesNew);
-            
+
+            callback(status.get());
             return false;
         }
-        
+
         void processResetStatus(){
             if(functionsForReset.size()>0){
                 bool orientationWasUpdated = mOrientationmeter->isUpdated();
@@ -381,7 +454,7 @@ namespace loc{
                 }
             }
         }
-        
+
         bool checkIfDoFiltering() const{
             auto states = status->states();
             double variance2D = computeStates2DVariance(*states);
@@ -395,7 +468,7 @@ namespace loc{
                 return true;
             }
         }
-        
+
         double computeStates2DVariance(const States& states) const{
             auto meanLoc = Location::mean(states);
             double varx = 0, vary = 0, covxy = 0; // = yx
@@ -414,136 +487,145 @@ namespace loc{
             double det = varx*vary - covxy*covxy;
             return det;
         }
-        
+
         void optVerbose(bool optVerbose){
             mOptVerbose = optVerbose;
         }
-        
+
         void numStates(int numStates){
             mNumStates = numStates;
         }
-        
+
         void alphaWeaken(double alphaWeaken){
             mAlphaWeaken = alphaWeaken;
         }
         
+        void mixtureParameters(MixtureParameters mixParams){
+            mMixParams = mixParams;
+        }
+
         void locationStandardDeviationLowerBound(Location loc){
             mLocStdevLB = loc;
         }
-        
+
         void pedometer(std::shared_ptr<Pedometer> pedometer){
             mPedometer=pedometer;
         }
-        
+
         void orientationmeter(std::shared_ptr<OrientationMeter> orientationMeter){
             mOrientationmeter = orientationMeter;
         }
-        
+
         void systemModel(std::shared_ptr<SystemModel<State, PoseRandomWalkerInput>> randomWalker){
             mRandomWalker = randomWalker;
         }
-        
+
         void observationModel(std::shared_ptr<ObservationModel<State, Beacons>> observationModel){
             mObservationModel = observationModel;
         }
-        
+
         void resampler(std::shared_ptr<Resampler<State>> resampler){
             mResampler = resampler;
         }
-        
+
         void statusInitializer(std::shared_ptr<StatusInitializer> statusInitializer){
             mStatusInitializer = statusInitializer;
         }
-        
+
         void beaconFilter(std::shared_ptr<BeaconFilter> beaconFilter){
             mBeaconFilter = beaconFilter;
         }
-        
+
         void observationDependentInitializer(std::shared_ptr<ObservationDependentInitializer<State, Beacons>> metro){
             mMetro = metro;
         }
-        
+
     };
-    
-    
+
+
     // Delegation to StreamParticleFilter::Impl class
-    
+
     StreamParticleFilter::StreamParticleFilter() : impl(new StreamParticleFilter::Impl()) {}
-    
+
     StreamParticleFilter::~StreamParticleFilter(){}
-    
+
     StreamParticleFilter& StreamParticleFilter::putAcceleration(const Acceleration acceleration){
         impl->putAcceleration(acceleration);
         return *this;
     }
-    
+
     StreamParticleFilter& StreamParticleFilter::putAttitude(const Attitude attitude) {
         impl->putAttitude(attitude);
         return *this;
     }
-    
+
     StreamParticleFilter& StreamParticleFilter::putBeacons(const Beacons beacons) {
         impl->putBeacon(beacons);
         return *this;
     }
-    
+
     StreamParticleFilter& StreamParticleFilter::updateHandler(void (*functionCalledAfterUpdate)(Status*)) {
         impl->updateHandler(functionCalledAfterUpdate);
         return *this;
     }
-    
+
     StreamParticleFilter& StreamParticleFilter::updateHandler(void (*functionCalledAfterUpdate)(void*, Status*), void* inUserData){
         impl->updateHandler(functionCalledAfterUpdate, inUserData);
         return *this;
     };
-    
-    
+
+
     Status* StreamParticleFilter::getStatus() {
         return impl->getStatus();
     }
-    
-    
+
+
     bool StreamParticleFilter::resetStatus(){
         return impl->resetStatus();
     }
-    
+
     bool StreamParticleFilter::resetStatus(Pose pose){
         return impl->resetStatus(pose);
     }
-    
+
     bool StreamParticleFilter::resetStatus(Pose meanPose, Pose stdevPose){
         return impl->resetStatus(meanPose, stdevPose);
     }
-    
+
     bool StreamParticleFilter::resetStatus(const Beacons &beacons){
         return impl->resetStatus(beacons);
     }
-    
+
     bool StreamParticleFilter::refineStatus(const Beacons& beacons){
         return impl->refineStatus(beacons);
     }
-    
+
     StreamParticleFilter& StreamParticleFilter::optVerbose(bool optVerbose){
         impl->optVerbose(optVerbose);
         return *this;
     }
-    
+
     StreamParticleFilter& StreamParticleFilter::numStates(int numStates){
         impl->numStates(numStates);
         return *this;
     }
-    
+
     StreamParticleFilter& StreamParticleFilter::alphaWeaken(double alphaWeaken){
         impl->alphaWeaken(alphaWeaken);
         return *this;
     }
-    
+
+    StreamParticleFilter& StreamParticleFilter::mixtureParameters(MixtureParameters mixParams){
+        impl->mixtureParameters(mixParams);
+        return *this;
+    }
+
     StreamParticleFilter& StreamParticleFilter::locationStandardDeviationLowerBound(loc::Location loc){
         impl->locationStandardDeviationLowerBound(loc);
         return *this;
     }
-    
-    
+
+
     StreamParticleFilter& StreamParticleFilter::pedometer(std::shared_ptr<Pedometer> pedometer){
         impl->pedometer(pedometer);
         return *this;
@@ -552,35 +634,35 @@ namespace loc{
         impl->orientationmeter(orientationMeter);
         return *this;
     }
-    
+
     StreamParticleFilter& StreamParticleFilter::systemModel(std::shared_ptr<SystemModel<State, PoseRandomWalkerInput>> randomWalker){
         impl->systemModel(randomWalker);
         return *this;
     }
-    
+
     StreamParticleFilter& StreamParticleFilter::observationModel(std::shared_ptr<ObservationModel<State, Beacons>> observationModel){
         impl->observationModel(observationModel);
         return *this;
     }
-    
+
     StreamParticleFilter& StreamParticleFilter::resampler(std::shared_ptr<Resampler<State>> resampler){
         impl->resampler(resampler);
         return *this;
     }
-    
+
     StreamParticleFilter& StreamParticleFilter::statusInitializer(std::shared_ptr<StatusInitializer> statusInitializer){
         impl->statusInitializer(statusInitializer);
         return *this;
     }
-    
+
     StreamParticleFilter& StreamParticleFilter::beaconFilter(std::shared_ptr<BeaconFilter> beaconFilter){
         impl->beaconFilter(beaconFilter);
         return *this;
     }
-    
+
     StreamParticleFilter& StreamParticleFilter::observationDependentInitializer(std::shared_ptr<ObservationDependentInitializer<State, Beacons>> metro){
         impl->observationDependentInitializer(metro);
         return * this;
     }
-    
+
 }

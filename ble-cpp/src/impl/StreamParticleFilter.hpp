@@ -36,9 +36,17 @@
 #include "BeaconFilter.hpp"
 
 namespace loc {
+    
     //template<class Tsys, class Tobs>
     class StreamParticleFilter : public StreamLocalizer{
     public:
+        class MixtureParameters{
+        public:
+            double mixtureProbability=0;
+            double rejectDistance=5;
+            int burnInQuick = 50;
+        };
+        
         StreamParticleFilter();
         ~StreamParticleFilter();
         
@@ -46,6 +54,8 @@ namespace loc {
         StreamParticleFilter& optVerbose(bool);
         StreamParticleFilter& numStates(int);
         StreamParticleFilter& alphaWeaken(double);
+        StreamParticleFilter& mixtureParameters(MixtureParameters);
+        
         StreamParticleFilter& locationStandardDeviationLowerBound(Location loc);
         
         StreamParticleFilter& pedometer(std::shared_ptr<Pedometer> pedometer);

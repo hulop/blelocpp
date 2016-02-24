@@ -18,10 +18,10 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- *******************************************************************************/
+*******************************************************************************/
 
-#ifndef MetropolisAlgorithm_hpp
-#define MetropolisAlgorithm_hpp
+#ifndef MetropolisSampler_hpp
+#define MetropolisSampler_hpp
 
 #include <stdio.h>
 #include <algorithm>
@@ -33,32 +33,46 @@
 
 namespace loc{
     
+    // This class generates samples following p(state|observation) by using the Metropolis algorithm.
+    
     template<class Tstate, class Tinput>
     class MetropolisSampler : public ObservationDependentInitializer<Tstate, Tinput>{
     private:
-        int mBurnIn = 5000;
+        int mBurnIn = 1000;
         int mInterval = 10;
         double mRadius2D = 10; // [m]
         RandomGenerator randGen;
+        Location mStdevLocation;
         std::shared_ptr<ObservationModel<Tstate,Tinput>> mObsModel;
         std::shared_ptr<StatusInitializerImpl> mStatusInitializer;
         Tinput mInput;
         
+        void initialize();
+        
+        Tstate currentState;
+        double currentLogLL;
+        
         State findInitialMaxLikelihoodState();
-        std::vector<State> sampling(int n, Tstate initialState);
         State transitState(Tstate state);
         
     public:
         void burnIn(int burnIn);
         void radius2D(double radius2D);
         void input(const Tinput& input);
+        void stdevLocation(const Location& stdevLocation){
+            mStdevLocation = stdevLocation;
+        }
         
         void observationModel(std::shared_ptr<ObservationModel<Tstate, Tinput>> obsModel);
         void statusInitializer(std::shared_ptr<StatusInitializerImpl> statusInitializer);
         
+        void prepare();
+        void startBurnIn();
+        void startBurnIn(int burnIn);
+        bool sample();
         std::vector<Tstate> sampling(int n);
     };
     
 }
 
-#endif /* MetropolisAlgorithm_hpp */
+#endif /* MetropolisSampler_hpp */

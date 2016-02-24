@@ -40,6 +40,8 @@ namespace loc{
         virtual void statusInitializer(std::shared_ptr<StatusInitializerImpl> statusInitializer) = 0;
         
         virtual void input(const Tinput& input) = 0;
+        virtual void startBurnIn() = 0;
+        virtual void startBurnIn(int n) = 0;
         virtual std::vector<Tstate> sampling(int n) = 0;
         
     };

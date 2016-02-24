@@ -38,11 +38,7 @@ namespace loc{
         mStateProperty = stateProperty;
         return *this;
     }
-    
-    Location StatusInitializerImpl::perturbLocation(const Location& location){
-        const Building& building = mDataStore->getBuilding();
-        return perturbLocation(location, building);
-    }
+
     
     State StatusInitializerImpl::perturbRssiBias(const State &state){
         State stateNew(state);
@@ -51,11 +47,20 @@ namespace loc{
         return stateNew;
     }
     
-    Location StatusInitializerImpl::perturbLocation(const Location& location, const Building& building){
+    template <class Tstate>
+    Tstate StatusInitializerImpl::perturbLocation(const Tstate& location){
+        const Building& building = mDataStore->getBuilding();
+        return perturbLocation(location, building);
+    }
+    template Location StatusInitializerImpl::perturbLocation<Location>(const Location& location);
+    template Pose StatusInitializerImpl::perturbLocation<Pose>(const Pose& location);
+    template State StatusInitializerImpl::perturbLocation<State>(const State& location);
+    
+    template <class Tstate>
+    Tstate StatusInitializerImpl::perturbLocation(const Tstate& location, const Building& building){
         bool hasBuilding = building.nFloors()>0? true: false;
         for(int i=0; i<nPerturbationMax; i++){
-            
-            Location locNew(location);
+            Tstate locNew(location);
             double x = locNew.x() + mPoseProperty.stdX() * rand.nextGaussian();
             double y = locNew.y() + mPoseProperty.stdY() * rand.nextGaussian();
             locNew.x(x);

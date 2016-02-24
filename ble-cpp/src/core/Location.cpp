@@ -124,6 +124,14 @@ namespace loc{
     }
     
     
+    void Location::copyLocation(const Location& location){
+        x_ = location.x();
+        y_ = location.y();
+        z_ = location.z();
+        floor_ = location.floor();
+    }
+    
+    
     bool Location::operator<(const loc::Location &right) const{
         if(this->floor() < right.floor()){
             return true;

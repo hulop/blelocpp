@@ -18,9 +18,9 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- *******************************************************************************/
+*******************************************************************************/
 
-#include "MetropolisAlgorithm.hpp"
+#include "MetropolisSampler.hpp"
 
 namespace loc{
     
@@ -38,6 +38,7 @@ namespace loc{
     template <class Tstate, class Tinput>
     void MetropolisSampler<Tstate, Tinput>::input(const Tinput& input){
         mInput = input;
+        initialize();
     }
     
     template <class Tstate, class Tinput>
@@ -62,58 +63,73 @@ namespace loc{
     }
     
     template <class Tstate, class Tinput>
-    std::vector<State> MetropolisSampler<Tstate, Tinput>::sampling(int n, Tstate initialState){
-        
-        std::vector<Tstate> sampledStates;
-        int i=0;
-        Tstate state = initialState;
-        double logLL;
-        {
-            std::vector<Tstate> ss = {state};
-            logLL = mObsModel->computeLogLikelihood(ss, mInput).at(0);
-        }
-        
-        int count = 0;
-        int countAccepted = 0;
-        while(true){
-            Tstate stateNew = transitState(state);
-            double logLLNew;
-            {
-                std::vector<Tstate> ss = {stateNew};
-                logLLNew = mObsModel->computeLogLikelihood(ss, mInput).at(0);
-            }
-            double r = std::exp(logLLNew-logLL); // p(xnew)/p(x) = exp(log(p(xnew))-log(p(xpre)))
-            
-            bool isAccepted = false;
-            if(randGen.nextDouble() < r){
-                state = stateNew;
-                isAccepted = true;
-            }
-            i++;
-            
-            if(i>mBurnIn){
-                count++;
-                if(isAccepted){
-                    countAccepted++;
-                }
-                if(i%mInterval==0){
-                    sampledStates.push_back(state);
-                }
-                if(sampledStates.size()>=n){
-                    break;
-                }
-            }
-        }
-        
-        std::cout << "M-H acceptance rate = " << (double)countAccepted / (double) count << std::endl;
-        
-        return sampledStates;
+    void MetropolisSampler<Tstate, Tinput>::initialize(){
+        currentState = findInitialMaxLikelihoodState();
+        std::vector<Tstate> ss = {currentState};
+        currentLogLL = mObsModel->computeLogLikelihood(ss, mInput).at(0);
     }
     
     template <class Tstate, class Tinput>
+    void MetropolisSampler<Tstate, Tinput>::prepare(){
+        startBurnIn();
+    }
+    
+    template <class Tstate, class Tinput>
+    void MetropolisSampler<Tstate, Tinput>::startBurnIn(int burnIn){
+        for(int i=0; i<burnIn; i++){
+            sample();
+        }
+    }
+    
+    template <class Tstate, class Tinput>
+    void MetropolisSampler<Tstate, Tinput>::startBurnIn(){
+        startBurnIn(mBurnIn);
+    }
+    
+    
+    // This function returns the result whether a proposed sample was accepted or not.
+    template <class Tstate, class Tinput>
+    bool MetropolisSampler<Tstate, Tinput>::sample(){
+        Tstate stateNew = transitState(currentState);
+        
+        std::vector<Tstate> ss = {stateNew};
+        double logLLNew = mObsModel->computeLogLikelihood(ss, mInput).at(0);
+        
+        double r = std::exp(logLLNew-currentLogLL); // p(xnew)/p(x) = exp(log(p(xnew))-log(p(xpre)))
+        
+        bool isAccepted = false;
+        if(randGen.nextDouble() < r){
+            currentState = stateNew;
+            currentLogLL = logLLNew;
+            isAccepted = true;
+        }
+        return isAccepted;
+    }
+    
+    
+    template <class Tstate, class Tinput>
     std::vector<Tstate> MetropolisSampler<Tstate, Tinput>::sampling(int n){
-        Tstate locMaxLL = findInitialMaxLikelihoodState();
-        return sampling(n, locMaxLL);
+        
+        std::vector<Tstate> sampledStates;
+        int count = 0;
+        int countAccepted = 0;
+        for(int i=1; ;i++){
+            bool isAccepted = sample();
+            count++;
+            if(isAccepted){
+                countAccepted++;
+            }
+            if(i%mInterval==0){
+                sampledStates.push_back(Tstate(currentState));
+            }
+            if(sampledStates.size()>=n){
+                break;
+            }
+        }
+        
+        std::cout << "M-H acceptance rate = " << (double)countAccepted / (double) count << " (" << countAccepted << "/" << count << ")" << std::endl;
+        
+        return sampledStates;
     }
     
     template <class Tstate, class Tinput>

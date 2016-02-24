@@ -18,7 +18,7 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- *******************************************************************************/
+*******************************************************************************/
 
 #ifndef StatusInitializerImpl_hpp
 #define StatusInitializerImpl_hpp
@@ -46,7 +46,8 @@ namespace loc{
         int nPerturbationMax = 100;
         double mRadius2D = 10; //[m]
 
-        Location perturbLocation(const Location& location, const Building& building);
+        template<class Tstate>
+        Tstate perturbLocation(const Tstate& location, const Building& building);
         PoseProperty mPoseProperty;
         StateProperty mStateProperty;
         
@@ -59,7 +60,12 @@ namespace loc{
         StatusInitializerImpl& poseProperty(PoseProperty poseProperty);
         StatusInitializerImpl& stateProperty(StateProperty stateProperty);
         
-        Location perturbLocation(const Location& location);
+        template<class Tstate>
+        Tstate perturbLocation(const Tstate& location);
+        
+        template<class Tstate>
+        std::vector<Tstate> perturbLocations(const std::vector<Tstate>& locations);
+        
         State perturbRssiBias(const State& state);
         
         Locations initializeLocations(int n);
@@ -74,8 +80,18 @@ namespace loc{
         
         States initializeStatesFromLocations(const std::vector<Location>& locations);
         Locations extractLocationsCloseToBeacons(const std::vector<Beacon>& beacons, double radius2D) const;
-        
     };
+    
+    // Implementation
+    template <class Tstate>
+    std::vector<Tstate> StatusInitializerImpl::perturbLocations(const std::vector<Tstate>& locations){
+        std::vector<Tstate> locsNew;
+        for(Tstate& loc: locations){
+            Tstate locNew = perturbLocation(loc);
+            locsNew.push_back(locNew);
+        }
+        return locsNew;
+    }
     
 }
 
