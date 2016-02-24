@@ -37,10 +37,16 @@ namespace loc{
     
     template<class Tstate, class Tinput>
     class MetropolisSampler : public ObservationDependentInitializer<Tstate, Tinput>{
+    public:
+        class Parameters{
+        public:
+            int burnIn = 1000;
+            int interval = 10;
+            double radius2D = 10;
+        };
+        
     private:
-        int mBurnIn = 1000;
-        int mInterval = 10;
-        double mRadius2D = 10; // [m]
+        Parameters mParams;
         RandomGenerator randGen;
         Location mStdevLocation;
         std::shared_ptr<ObservationModel<Tstate,Tinput>> mObsModel;
@@ -56,8 +62,8 @@ namespace loc{
         State transitState(Tstate state);
         
     public:
-        void burnIn(int burnIn);
-        void radius2D(double radius2D);
+        
+        void parameters(Parameters params);
         void input(const Tinput& input);
         void stdevLocation(const Location& stdevLocation){
             mStdevLocation = stdevLocation;
@@ -72,6 +78,13 @@ namespace loc{
         bool sample();
         std::vector<Tstate> sampling(int n);
     };
+    
+    
+    // Implementation
+    template <class Tstate, class Tinput>
+    void MetropolisSampler<Tstate, Tinput>::parameters(Parameters params){
+        mParams = params;
+    }
     
 }
 

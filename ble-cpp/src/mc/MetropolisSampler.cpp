@@ -25,15 +25,6 @@
 namespace loc{
     
     // Implementation
-    template <class Tstate, class Tinput>
-    void MetropolisSampler<Tstate, Tinput>::burnIn(int burnIn){
-        mBurnIn = burnIn;
-    }
-    
-    template <class Tstate, class Tinput>
-    void MetropolisSampler<Tstate, Tinput>::radius2D(double radius2D){
-        mRadius2D = radius2D;
-    }
     
     template <class Tstate, class Tinput>
     void MetropolisSampler<Tstate, Tinput>::input(const Tinput& input){
@@ -53,7 +44,7 @@ namespace loc{
     
     template <class Tstate, class Tinput>
     State MetropolisSampler<Tstate, Tinput>::findInitialMaxLikelihoodState(){
-        auto locations = mStatusInitializer->extractLocationsCloseToBeacons(mInput, mRadius2D);
+        auto locations = mStatusInitializer->extractLocationsCloseToBeacons(mInput, mParams.radius2D);
         auto states = mStatusInitializer->initializeStatesFromLocations(locations);
         std::vector<double> logLLs = mObsModel->computeLogLikelihood(states, mInput);
         auto iterMax = std::max_element(logLLs.begin(), logLLs.end());
@@ -83,7 +74,7 @@ namespace loc{
     
     template <class Tstate, class Tinput>
     void MetropolisSampler<Tstate, Tinput>::startBurnIn(){
-        startBurnIn(mBurnIn);
+        startBurnIn(mParams.burnIn);
     }
     
     
@@ -119,7 +110,7 @@ namespace loc{
             if(isAccepted){
                 countAccepted++;
             }
-            if(i%mInterval==0){
+            if(i%mParams.interval==0){
                 sampledStates.push_back(Tstate(currentState));
             }
             if(sampledStates.size()>=n){
