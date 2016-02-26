@@ -23,7 +23,7 @@
 #ifndef EigenSerializeUtils_h
 #define EigenSerializeUtils_h
 
-#include <Eigen/Dense>
+#include <Eigen/Core>
 
 #include <cereal/archives/xml.hpp>
 #include <cereal/types/vector.hpp>
