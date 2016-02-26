@@ -20,7 +20,7 @@
  * THE SOFTWARE.
  *******************************************************************************/
 
-#include <Eigen/Sparse>
+#include <Eigen/SparseCore>
 #include <boost/bimap.hpp>
 #include "ImageHolder.hpp"
 
