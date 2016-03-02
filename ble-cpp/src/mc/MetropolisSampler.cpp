@@ -55,6 +55,7 @@ namespace loc{
     
     template <class Tstate, class Tinput>
     void MetropolisSampler<Tstate, Tinput>::initialize(){
+        clear();
         currentState = findInitialMaxLikelihoodState();
         std::vector<Tstate> ss = {currentState};
         currentLogLL = mObsModel->computeLogLikelihood(ss, mInput).at(0);
@@ -70,6 +71,7 @@ namespace loc{
         for(int i=0; i<burnIn; i++){
             sample();
         }
+        isBurnInFinished = true;
     }
     
     template <class Tstate, class Tinput>
@@ -94,13 +96,19 @@ namespace loc{
             currentLogLL = logLLNew;
             isAccepted = true;
         }
+        // Save current state
+        allStates.push_back(Tstate(currentState));
+        allLogLLs.push_back(currentLogLL);
+        
         return isAccepted;
     }
     
     
+    
     template <class Tstate, class Tinput>
     std::vector<Tstate> MetropolisSampler<Tstate, Tinput>::sampling(int n){
-        
+        return sampling(n, mParams.withOrdering);
+        /*
         std::vector<Tstate> sampledStates;
         int count = 0;
         int countAccepted = 0;
@@ -121,7 +129,66 @@ namespace loc{
         std::cout << "M-H acceptance rate = " << (double)countAccepted / (double) count << " (" << countAccepted << "/" << count << ")" << std::endl;
         
         return sampledStates;
+        */
     }
+    
+    template <class Tstate, class Tinput>
+    std::vector<Tstate> MetropolisSampler<Tstate, Tinput>::sampling(int n, bool withOrderging){
+        
+        if(! isBurnInFinished){
+            this->startBurnIn();
+        }
+        
+        std::vector<Tstate> sampledStates;
+        int count = 0;
+        int countAccepted = 0;
+        for(int i=1; ;i++){
+            bool isAccepted = sample();
+            count++;
+            if(isAccepted){
+                countAccepted++;
+            }
+            if(i%mParams.interval==0){
+                sampledStates.push_back(Tstate(currentState));
+            }
+            if(sampledStates.size()>=n){
+                break;
+            }
+        }
+        
+        std::cout << "M-H acceptance rate = " << (double)countAccepted / (double) count << " (" << countAccepted << "/" << count << ")" << std::endl;
+        
+        if(! withOrderging){
+            return sampledStates;
+        }else{
+            sampledStates = std::vector<State>();
+            std::vector<int> indices(allStates.size());
+            // create indices = {1,2,3,...,n};
+            std::iota(indices.begin(), indices.end(), 0);
+    
+            std::sort(indices.begin(), indices.end(), [&](int a, int b){
+                return allLogLLs.at(a) < allLogLLs.at(b);
+            });
+            
+            double logLLMemo = std::numeric_limits<double>::lowest();
+            for(int i=0; ;i++){
+                //std::cout << "indices.size() = " << indices.size() << std::endl;
+                int index = indices.at(indices.size()-1-i);
+                double logLL = allLogLLs.at(index);
+//                if(logLLMemo!=logLL)
+                {
+                    logLLMemo = logLL;
+                    sampledStates.push_back(allStates.at(index));
+                    std::cout << "state=" << allStates.at(index) << ", logLL=" << logLLMemo << std::endl;
+                }
+                if(sampledStates.size()>=n){
+                    break;
+                }
+            }
+        }
+        return sampledStates;
+    }
+    
     
     template <class Tstate, class Tinput>
     State MetropolisSampler<Tstate, Tinput>::transitState(Tstate state){
@@ -131,6 +198,18 @@ namespace loc{
         stateNew.x(locNew.x());
         stateNew.y(locNew.y());
         return stateNew;
+    }
+    
+    template <class Tstate, class Tinput>
+    void MetropolisSampler<Tstate, Tinput>::clear(){
+        allStates.clear();
+        allLogLLs.clear();
+    }
+    
+    template <class Tstate, class Tinput>
+    void MetropolisSampler<Tstate, Tinput>::print(){
+        std::cout << "allStates.size()=" << allStates.size() << std::endl;
+        std::cout << "allLogLLs.size()=" << allLogLLs.size() << std::endl;
     }
     
     // explicit instantiation

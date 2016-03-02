@@ -65,6 +65,8 @@ namespace loc{
         
         static Beacons filter(const Beacons& beacons, double minRssi, double maxRssi);
         static Beacons sortByRssi(const Beacons& beacons);
+        
+        friend std::ostream& operator<<(std::ostream&os, const Beacon& beacon);
     };
     
     // Beacons class

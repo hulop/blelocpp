@@ -160,6 +160,11 @@ namespace loc{
         return beaconsSorted;
     }
     
+    std::ostream& operator<<(std::ostream&os, const Beacon& beacon){
+        os << beacon.major() <<"," << beacon.minor() <<"," << beacon.rssi();
+        return os;
+    }
+    
     template
     Beacons Beacon::meanBeaconsVector<Beacons>(std::vector<Beacons> beaconsVector);
     

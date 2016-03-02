@@ -34,7 +34,7 @@
 namespace loc{
     
     // This class generates samples following p(state|observation) by using the Metropolis algorithm.
-    
+    // When withOrdering is set to true, sampling(int n) function returns n largest log-likelihood states from the all generated samples. When withOrdering is false, the latest n samples with the defined interval are returned.
     template<class Tstate, class Tinput>
     class MetropolisSampler : public ObservationDependentInitializer<Tstate, Tinput>{
     public:
@@ -43,6 +43,7 @@ namespace loc{
             int burnIn = 1000;
             int interval = 10;
             double radius2D = 10;
+            bool withOrdering = false;
         };
         
     private:
@@ -57,6 +58,11 @@ namespace loc{
         
         Tstate currentState;
         double currentLogLL;
+        
+        bool isBurnInFinished = false;
+        
+        std::vector<Tstate> allStates;
+        std::vector<double> allLogLLs;
         
         State findInitialMaxLikelihoodState();
         State transitState(Tstate state);
@@ -75,8 +81,15 @@ namespace loc{
         void prepare();
         void startBurnIn();
         void startBurnIn(int burnIn);
+        
         bool sample();
         std::vector<Tstate> sampling(int n);
+        std::vector<Tstate> sampling(int n, bool withOrdering);
+        
+        void clear();
+        
+        void print();
+        
     };
     
     
