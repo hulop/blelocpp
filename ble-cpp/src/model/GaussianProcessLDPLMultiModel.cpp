@@ -489,6 +489,9 @@ namespace loc{
             }
         }
         countKnown = static_cast<int>(indices.size());
+        if(countKnown==0){
+            std::cout << "ObservationModel does not know the input data." << std::endl;
+        }
         
         double xvec[4];
         MLAdapter::locationToVec(state, xvec);

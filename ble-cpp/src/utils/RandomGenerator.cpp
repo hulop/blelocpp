@@ -20,6 +20,7 @@
  * THE SOFTWARE.
  *******************************************************************************/
 
+#include <iostream>
 #include "RandomGenerator.hpp"
 
 namespace loc{
@@ -38,8 +39,11 @@ namespace loc{
     }
     
     double RandomGenerator::nextTruncatedGaussian(double mean, double std, double min, double max){
-        assert(min <= mean);
-        assert(mean <= max);
+        if(!(min<=mean && mean<= max)){
+            std::cout << "mean=" << mean << ", min=" << min << ", max=" << max << std::endl;
+            assert(min<=mean);
+            assert(mean<= max);
+        }
         double value = mean;
         for(int i=0;i<max_iteration; i++){
             value = mean + std*nextGaussian();

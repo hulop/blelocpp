@@ -60,7 +60,7 @@ namespace loc{
         
         // Perturb variables in State
         state.orientationBias(state.orientationBias() + stateProperty.diffusionOrientationBias()*randomGenerator.nextGaussian()*dTime );
-        state.rssiBias(state.rssiBias() + stateProperty.diffusionRssiBias()*randomGenerator.nextGaussian()*dTime);
+        state.rssiBias(randomGenerator.nextTruncatedGaussian(state.rssiBias(), stateProperty.diffusionRssiBias()*dTime , stateProperty.minRssiBias(), stateProperty.maxRssiBias()));
         
         // Update orientation
         double previousOrientation = state.orientation();

@@ -86,7 +86,7 @@ namespace loc{
     template <class Tstate>
     std::vector<Tstate> StatusInitializerImpl::perturbLocations(const std::vector<Tstate>& locations){
         std::vector<Tstate> locsNew;
-        for(Tstate& loc: locations){
+        for(const Tstate& loc: locations){
             Tstate locNew = perturbLocation(loc);
             locsNew.push_back(locNew);
         }

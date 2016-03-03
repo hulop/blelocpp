@@ -56,10 +56,12 @@ namespace loc{
         State& weight(double weight);
         State& negativeLogLikelihood(double negativeLogLikelihood);
         State& mahalanobisDistance(double mahalanobisDistance);
+        static State mean(const std::vector<State>& states);
         
         // for string stream
         friend std::ostream& operator<<(std::ostream&os, const State& pose);
-        std::string header();
+        
+        std::string header() const;
     };
     
     class StateProperty{
@@ -67,8 +69,10 @@ namespace loc{
         double meanRssiBias_ = 0.0; // [dBm/s]
         double stdRssiBias_ = 0.0; // [dBm/s]
         double diffusionRssiBias_ = 0.0; // [dBm/s]
-
         double diffusionOrientationBias_ = 0.0/180*M_PI; // [radian/s]
+        
+        double minRssiBias_ = -10;
+        double maxRssiBias_ = 10;
         
     public:
         StateProperty& meanRssiBias(double meanRssiBias);
@@ -79,8 +83,10 @@ namespace loc{
         double diffusionRssiBias() const;
         StateProperty& diffusionOrientationBias(double diffusionOrientationBias);
         double diffusionOrientationBias();
+        StateProperty& minRssiBias(double minRssiBias);
+        double minRssiBias() const;
+        StateProperty& maxRssiBias(double maxRssiBias);
+        double maxRssiBias() const;
     };
 }
-
-
 #endif /* State_hpp */

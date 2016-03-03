@@ -42,7 +42,7 @@ namespace loc{
     
     State StatusInitializerImpl::perturbRssiBias(const State &state){
         State stateNew(state);
-        double rssiBias = state.rssiBias()+ rand.nextGaussian() * mStateProperty.diffusionRssiBias();
+        double rssiBias = rand.nextTruncatedGaussian(state.rssiBias(), mStateProperty.diffusionRssiBias(), mStateProperty.minRssiBias(), mStateProperty.maxRssiBias());
         stateNew.rssiBias(rssiBias);
         return stateNew;
     }
@@ -174,7 +174,7 @@ namespace loc{
             State state(pose);
             
             double orientationBias = 2.0*M_PI*rand.nextDouble();
-            double rssiBias = mStateProperty.meanRssiBias() + mStateProperty.stdRssiBias()*rand.nextGaussian();
+            double rssiBias = rand.nextTruncatedGaussian(mStateProperty.meanRssiBias(), mStateProperty.stdRssiBias(), mStateProperty.minRssiBias(), mStateProperty.maxRssiBias());
             
             state.orientationBias(orientationBias).rssiBias(rssiBias);
             state.weight(1.0/n);
@@ -266,6 +266,7 @@ namespace loc{
         }
         return states;
     }
+    
     
     void StatusInitializerImpl::beaconEffectiveRadius2D(double radius2D){
         mRadius2D = radius2D;

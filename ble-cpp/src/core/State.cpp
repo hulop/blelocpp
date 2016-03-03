@@ -83,11 +83,32 @@ namespace  loc {
         return os;
     }
     
-    std::string header(){
+    std::string State::header() const{
         std::string str;
         str = "x,y,z,floor,orientation,velocity,normalVelocity,orientationBias,rssiBias,weight,negativeLogLikelihood,mahalanobisDistance";
         return str;
     }
+    
+    
+    State State::mean(const std::vector<State>& states){
+        Pose meanPose = Pose::mean<State>(states);
+        State meanState(meanPose);
+        
+        double meanRssiBias = 0;
+        double xOri = 0;
+        double yOri = 0;
+        for(const State& s: states){
+            meanRssiBias += s.rssiBias();
+            xOri += std::cos(s.orientationBias());
+            yOri += std::sin(s.orientationBias());
+        }
+        meanRssiBias/=(double)states.size();
+        double meanOriB = std::atan2(yOri, xOri);
+        meanState.rssiBias(meanRssiBias);
+        meanState.orientationBias(meanOriB);
+        return meanState;
+    }
+    
     
     // State Property
     StateProperty& StateProperty::meanRssiBias(double meanRssiBias){
@@ -124,6 +145,24 @@ namespace  loc {
     
     double StateProperty::diffusionOrientationBias(){
         return diffusionOrientationBias_;
+    }
+    
+    StateProperty& StateProperty::minRssiBias(double minRssiBias){
+        minRssiBias_ = minRssiBias;
+        return *this;
+    }
+    
+    double StateProperty::minRssiBias() const{
+        return minRssiBias_;
+    }
+    
+    StateProperty& StateProperty::maxRssiBias(double maxRssiBias){
+        maxRssiBias_ = maxRssiBias;
+        return *this;
+    }
+    
+    double StateProperty::maxRssiBias() const{
+        return maxRssiBias_;
     }
     
 }

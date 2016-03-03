@@ -166,7 +166,7 @@ namespace loc{
             // create indices = {1,2,3,...,n};
             std::iota(indices.begin(), indices.end(), 0);
     
-            std::sort(indices.begin(), indices.end(), [&](int a, int b){
+            std::sort(indices.begin(), indices.end(),[&](int a, int b){
                 return allLogLLs.at(a) < allLogLLs.at(b);
             });
             
@@ -179,7 +179,7 @@ namespace loc{
                 {
                     logLLMemo = logLL;
                     sampledStates.push_back(allStates.at(index));
-                    std::cout << "state=" << allStates.at(index) << ", logLL=" << logLLMemo << std::endl;
+                    //std::cout << "state=" << allStates.at(index) << ", logLL=" << logLLMemo << std::endl;
                 }
                 if(sampledStates.size()>=n){
                     break;
@@ -197,6 +197,8 @@ namespace loc{
         auto locNew = mStatusInitializer->perturbLocation(stateNew);
         stateNew.x(locNew.x());
         stateNew.y(locNew.y());
+        stateNew = mStatusInitializer->perturbRssiBias(stateNew);
+        
         return stateNew;
     }
     
