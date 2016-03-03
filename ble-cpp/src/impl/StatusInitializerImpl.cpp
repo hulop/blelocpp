@@ -212,7 +212,7 @@ namespace loc{
                 double z = s.z() + stdevPose.z()*rand.nextGaussian();
                 double floor = s.floor() + stdevPose.floor()*rand.nextGaussian();
                 double orientation = s.orientation() + stdevPose.orientation()*rand.nextGaussian();
-                double orientationBias = orientationMeasured - s.orientation();
+                double orientationBias = orientationMeasured - orientation;
 
                 // State stateNew(s);
                 s.x(x).y(y).z(z).floor(floor).orientation(orientation);
