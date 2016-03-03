@@ -49,20 +49,23 @@ namespace loc{
         return this;
     }
     
-    long Attitude::timestamp(){
+    long Attitude::timestamp() const{
         return timestamp_;
     }
     
-    double Attitude::pitch(){
+    double Attitude::pitch() const{
         return pitch_;
     }
     
-    double Attitude::roll(){
+    double Attitude::roll() const{
         return roll_;
     }
     
-    double Attitude::yaw(){
+    double Attitude::yaw() const{
         return yaw_;
     }
     
+    std::ostream& operator<<(std::ostream&os, const loc::Attitude& att){
+        return os<<att.roll() << "," << att.pitch() << "," << att.yaw();
+    }
 }

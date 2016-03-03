@@ -23,7 +23,7 @@
 #ifndef Acceleration_hpp
 #define Acceleration_hpp
 
-#include <stdio.h>
+#include <iostream>
 #include <vector>
 
 namespace loc{
@@ -49,6 +49,8 @@ namespace loc{
         Acceleration* ax(double ax);
         Acceleration* ay(double ay);
         Acceleration* az(double az);
+        
+        friend std::ostream& operator<<(std::ostream&os, const Acceleration& acc);
     };
     
     typedef std::vector<Acceleration> Accelerations;

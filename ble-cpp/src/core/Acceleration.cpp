@@ -63,5 +63,9 @@ namespace loc{
     double Acceleration::az() const{
         return az_;
     }
+    
+    std::ostream& operator<<(std::ostream&os, const loc::Acceleration& acc){
+        os << acc.ax() << "," << acc.ay() << "," << acc.az();
+        return os;
+    }
 }
-

@@ -23,7 +23,7 @@
 #ifndef Attitude_hpp
 #define Attitude_hpp
 
-#include <stdio.h>
+#include <iostream>
 #include <vector>
 
 namespace loc{
@@ -40,20 +40,20 @@ namespace loc{
         Attitude(long timestamp, double pitch, double roll, double yaw);
         ~Attitude();
         
-        long timestamp();
-        double pitch();
-        double roll();
-        double yaw();
+        long timestamp() const;
+        double pitch() const;
+        double roll() const;
+        double yaw() const;
         
         Attitude* timestamp(long timestamp);
         Attitude* pitch(double pitch);
         Attitude* roll(double roll);
         Attitude* yaw(double yaw);
+        
+        friend std::ostream& operator<<(std::ostream&os, const Attitude& att);
     };
     
-    
     typedef std::vector<Attitude> Attitudes;
-    
 }
 
 #endif /* Attitude_hpp */
