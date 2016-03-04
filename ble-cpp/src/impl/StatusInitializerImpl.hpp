@@ -75,7 +75,9 @@ namespace loc{
         States initializeStates(int n);
 
         States resetStates(int n, Pose pose, double orientationMeasured);
+        [[deprecated("please use resetStates(int n, Pose meanPose, State stdevState, double orientationMeasured)")]]
         States resetStates(int n, Pose meanPose, Pose stdevPose, double orientationMeasured);
+        States resetStates(int n, Pose meanPose, State stdevState, double orientationMeasured);
         States resetStates(int n, const std::vector<Beacon>& beacons);
         
         States initializeStatesFromLocations(const std::vector<Location>& locations);

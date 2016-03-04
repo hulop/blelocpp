@@ -219,6 +219,13 @@ namespace loc{
     }
     
     States StatusInitializerImpl::resetStates(int n,  Pose meanPose, Pose stdevPose, double orientationMeasured){
+        State stdevState(stdevPose);
+        stdevState.orientationBias(stdevPose.orientation());
+        stdevState.orientation(0);
+        return resetStates(n, meanPose, stdevState, orientationMeasured);
+    }
+    
+    States StatusInitializerImpl::resetStates(int n,  Pose meanPose, State stdevState, double orientationMeasured){
         
         Building building = mDataStore->getBuilding();
         
@@ -233,13 +240,16 @@ namespace loc{
         for(int i=0; i<n; ){
             while(true){
                 State s = statesTmp.at(i);
-                double x = s.x() + stdevPose.x()*rand.nextGaussian();
-                double y = s.y() + stdevPose.y()*rand.nextGaussian();
-                double z = s.z() + stdevPose.z()*rand.nextGaussian();
-                double floor = s.floor() + stdevPose.floor()*rand.nextGaussian();
-                double orientation = s.orientation() + stdevPose.orientation()*rand.nextGaussian();
-                double orientationBias = orientationMeasured - orientation;
-
+                double x = s.x() + stdevState.x()*rand.nextGaussian();
+                double y = s.y() + stdevState.y()*rand.nextGaussian();
+                double z = s.z() + stdevState.z()*rand.nextGaussian();
+                double floor = s.floor() + stdevState.floor()*rand.nextGaussian();
+                //double orientation = s.orientation() + stdevState.orientation()*rand.nextGaussian();
+                double orientationBias = orientationMeasured - s.orientation();
+                orientationBias += stdevState.orientationBias()*rand.nextGaussian();
+                double orientation = orientationMeasured - orientationBias;
+                orientation += stdevState.orientation()*rand.nextGaussian();
+                
                 // State stateNew(s);
                 s.x(x).y(y).z(z).floor(floor).orientation(orientation);
                 s.orientationBias(orientationBias);
@@ -247,7 +257,7 @@ namespace loc{
                 // only if meanPose.normalVelocity is valid, normalVelocity is updated.
                 if(mPoseProperty.minVelocity() < meanPose.normalVelocity()
                    && meanPose.normalVelocity() < mPoseProperty.maxVelocity()){
-                    double normalVelocity = rand.nextTruncatedGaussian(meanPose.normalVelocity(), stdevPose.normalVelocity(), mPoseProperty.minVelocity(), mPoseProperty.maxVelocity());
+                    double normalVelocity = rand.nextTruncatedGaussian(meanPose.normalVelocity(), stdevState.normalVelocity(), mPoseProperty.minVelocity(), mPoseProperty.maxVelocity());
                     s.normalVelocity(normalVelocity);
                 }
                 
@@ -266,6 +276,7 @@ namespace loc{
         }
         return states;
     }
+    
     
     
     void StatusInitializerImpl::beaconEffectiveRadius2D(double radius2D){
