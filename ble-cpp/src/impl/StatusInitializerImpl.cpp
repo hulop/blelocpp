@@ -293,8 +293,8 @@ namespace loc{
     
     Locations StatusInitializerImpl::extractLocationsCloseToBeacons(const std::vector<Beacon> &beacons, double radius2D) const{
         
-        auto samples = mDataStore->getSamples();
-        auto bleBeacons = mDataStore->getBLEBeacons();
+        auto& samples = mDataStore->getSamples();
+        auto& bleBeacons = mDataStore->getBLEBeacons();
         
         std::map<long, int> idToIndexMap = BLEBeacon::constructBeaconIdToIndexMap(bleBeacons);
         std::vector<Location> selectedLocations;

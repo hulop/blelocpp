@@ -144,6 +144,7 @@ namespace loc{
         for(Location loc: locationSet){
             locs.push_back(loc);
         }
+        
         return locs;
     }
     

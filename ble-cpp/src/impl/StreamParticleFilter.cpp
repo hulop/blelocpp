@@ -146,15 +146,14 @@ namespace loc{
         }
 
         void logStates(const States& states, const std::string& filename){
-            std::stringstream ss;
-            for(State s: states){
-                ss << s << std::endl;
-            }
             if(DataLogger::getInstance()){
+                std::stringstream ss;
+                for(const auto& s: states){
+                    ss << s << std::endl;
+                }
                 DataLogger::getInstance()->log(filename, ss.str());
             }
         }
-
 
         void mixStates(States& states, const Beacons&beacons, double mixProba){
             size_t nStates = states.size();
