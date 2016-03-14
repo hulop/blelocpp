@@ -134,6 +134,7 @@ namespace loc{
 
             std::shared_ptr<States> states = status->states();
             States* statesPredicted = new States(mRandomWalker->predict(*states.get(), input));
+            status->timestamp(timestamp);
             status->states(statesPredicted);
 
             if(mOptVerbose){
@@ -213,6 +214,7 @@ namespace loc{
             }
 
             long timestamp = beacons.timestamp();
+            status->timestamp(timestamp);
             std::shared_ptr<States> states = status->states();
 
             // Logging before likelihood computation

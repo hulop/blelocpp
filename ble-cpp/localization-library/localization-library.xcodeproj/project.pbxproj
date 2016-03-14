@@ -8,13 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		FB2450181C05835F00CC9BFB /* DataStoreImpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB2450161C05835F00CC9BFB /* DataStoreImpl.cpp */; };
-		FB2450191C05835F00CC9BFB /* DataStoreImpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB2450161C05835F00CC9BFB /* DataStoreImpl.cpp */; };
 		FB2E8B101C22F01D00C5C45C /* CoordinateSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB2E8B0F1C22F01D00C5C45C /* CoordinateSystem.cpp */; };
-		FB2E8B111C22F01D00C5C45C /* CoordinateSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB2E8B0F1C22F01D00C5C45C /* CoordinateSystem.cpp */; };
 		FB61058F1BF9BA1100657E20 /* StrongestBeaconFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB61058D1BF9BA1100657E20 /* StrongestBeaconFilter.cpp */; };
-		FB6105901BF9BA1100657E20 /* StrongestBeaconFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB61058D1BF9BA1100657E20 /* StrongestBeaconFilter.cpp */; };
 		FB6105981BF9D60E00657E20 /* GaussianProcess.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB6105961BF9D60E00657E20 /* GaussianProcess.cpp */; };
-		FB6105991BF9D60E00657E20 /* GaussianProcess.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB6105961BF9D60E00657E20 /* GaussianProcess.cpp */; };
 		FB684E621BD760BE00F1A21C /* Acceleration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB684E4A1BD760BE00F1A21C /* Acceleration.cpp */; };
 		FB684E641BD760BE00F1A21C /* Attitude.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB684E4C1BD760BE00F1A21C /* Attitude.cpp */; };
 		FB684E661BD760BE00F1A21C /* Beacon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB684E4E1BD760BE00F1A21C /* Beacon.cpp */; };
@@ -28,64 +24,78 @@
 		FB684E991BD7613F00F1A21C /* StatusInitializerStub.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB684E8E1BD7613F00F1A21C /* StatusInitializerStub.cpp */; };
 		FB684EAF1BD7742300F1A21C /* Sample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB684EAD1BD7742300F1A21C /* Sample.cpp */; };
 		FB6B11E31BF5C6E1008BE650 /* KernelFunction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB6B11E11BF5C6E1008BE650 /* KernelFunction.cpp */; };
-		FB6B11E41BF5C6E1008BE650 /* KernelFunction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB6B11E11BF5C6E1008BE650 /* KernelFunction.cpp */; };
 		FB84B6C71C09EDAE00EE3489 /* State.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB84B6C61C09EDAE00EE3489 /* State.cpp */; };
-		FB84B6C81C09EDAE00EE3489 /* State.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB84B6C61C09EDAE00EE3489 /* State.cpp */; };
 		FB84B6CB1C0C010100EE3489 /* DataLogger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB84B6C91C0C010100EE3489 /* DataLogger.cpp */; };
-		FB84B6CD1C0C121D00EE3489 /* DataLogger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB84B6C91C0C010100EE3489 /* DataLogger.cpp */; };
 		FB84B6D21C0D953800EE3489 /* CleansingBeaconFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB84B6D01C0D953800EE3489 /* CleansingBeaconFilter.cpp */; };
-		FB84B6D31C0D953800EE3489 /* CleansingBeaconFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB84B6D01C0D953800EE3489 /* CleansingBeaconFilter.cpp */; };
 		FB84B6D61C0DB9BC00EE3489 /* LazyDataStore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB84B6D41C0DB9BC00EE3489 /* LazyDataStore.cpp */; };
-		FB84B6D71C0DB9BC00EE3489 /* LazyDataStore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB84B6D41C0DB9BC00EE3489 /* LazyDataStore.cpp */; };
 		FBC72E091BF3155000EFB5F5 /* PoseRandomWalkerInBuilding.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBC72E071BF3155000EFB5F5 /* PoseRandomWalkerInBuilding.cpp */; };
-		FBC72E111BF4714800EFB5F5 /* PoseRandomWalkerInBuilding.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBC72E071BF3155000EFB5F5 /* PoseRandomWalkerInBuilding.cpp */; };
 		FBCDA4A01BE75A3500EEDBFB /* StatusInitializerImpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBCDA49E1BE75A3500EEDBFB /* StatusInitializerImpl.cpp */; };
-		FBCDA4A21BE75A3500EEDBFB /* StatusInitializerImpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBCDA49E1BE75A3500EEDBFB /* StatusInitializerImpl.cpp */; };
 		FBCDA4AE1BE9AF9D00EEDBFB /* GaussianProcessLDPLMultiModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBCDA4AC1BE9AF9D00EEDBFB /* GaussianProcessLDPLMultiModel.cpp */; };
-		FBCDA4AF1BE9AF9D00EEDBFB /* GaussianProcessLDPLMultiModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBCDA4AC1BE9AF9D00EEDBFB /* GaussianProcessLDPLMultiModel.cpp */; };
 		FBCDA4B31BEA32E000EEDBFB /* PedometerWalkingState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBCDA4B11BEA32E000EEDBFB /* PedometerWalkingState.cpp */; };
-		FBCDA4B41BEA32E000EEDBFB /* PedometerWalkingState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBCDA4B11BEA32E000EEDBFB /* PedometerWalkingState.cpp */; };
 		FBCDA4B81BEA3DA800EEDBFB /* Building.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBCDA4B61BEA3DA800EEDBFB /* Building.cpp */; };
-		FBCDA4B91BEA3DA800EEDBFB /* Building.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBCDA4B61BEA3DA800EEDBFB /* Building.cpp */; };
 		FBCDA4BC1BEA3E6800EEDBFB /* ImageHolder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBCDA4BA1BEA3E6800EEDBFB /* ImageHolder.cpp */; };
-		FBCDA4BD1BEA3E6800EEDBFB /* ImageHolder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBCDA4BA1BEA3E6800EEDBFB /* ImageHolder.cpp */; };
-		FBE099CC1BDE0E27001CBF80 /* Acceleration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB684E4A1BD760BE00F1A21C /* Acceleration.cpp */; };
-		FBE099CE1BDE0E3C001CBF80 /* RandomGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBF347681BD4D1E700A25F38 /* RandomGenerator.cpp */; };
-		FBE099CF1BDE0E40001CBF80 /* ArrayUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBF3484F1BD65B1400A25F38 /* ArrayUtils.cpp */; };
-		FBE099D21BDE0E4E001CBF80 /* GridResampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBF3475B1BD1188100A25F38 /* GridResampler.cpp */; };
-		FBE099D31BDE0E52001CBF80 /* VirtualDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBF347791BD4E91F00A25F38 /* VirtualDevice.cpp */; };
-		FBE099D41BDE0E55001CBF80 /* DataUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBF347721BD4E67000A25F38 /* DataUtils.cpp */; };
-		FBE099D51BDE0E5B001CBF80 /* Attitude.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB684E4C1BD760BE00F1A21C /* Attitude.cpp */; };
-		FBE099D61BDE0E71001CBF80 /* Beacon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB684E4E1BD760BE00F1A21C /* Beacon.cpp */; };
-		FBE099D91BDE0E78001CBF80 /* Location.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB684E551BD760BE00F1A21C /* Location.cpp */; };
-		FBE099DC1BDE0E81001CBF80 /* Pose.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB684E5B1BD760BE00F1A21C /* Pose.cpp */; };
-		FBE099DD1BDE0E8C001CBF80 /* Status.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB684E5E1BD760BE00F1A21C /* Status.cpp */; };
-		FBE099DF1BDE0E95001CBF80 /* Sample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB684EAD1BD7742300F1A21C /* Sample.cpp */; };
-		FBE099E01BDE0E98001CBF80 /* BLEBeacon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBFC7B9C1BDA96130023F70F /* BLEBeacon.cpp */; };
-		FBE099E21BDE0EA1001CBF80 /* StreamParticleFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB684E7B1BD760EC00F1A21C /* StreamParticleFilter.cpp */; };
-		FBE099E31BDE0EA5001CBF80 /* StreamLocalizerStub.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB684E7D1BD760EC00F1A21C /* StreamLocalizerStub.cpp */; };
-		FBE099E61BDE0EAD001CBF80 /* PoseRandomWalker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB684E8A1BD7613F00F1A21C /* PoseRandomWalker.cpp */; };
-		FBE099E71BDE0EAF001CBF80 /* RandomWalker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB684E8C1BD7613F00F1A21C /* RandomWalker.cpp */; };
-		FBE099E81BDE0EB1001CBF80 /* StatusInitializerStub.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB684E8E1BD7613F00F1A21C /* StatusInitializerStub.cpp */; };
-		FBE099EC1BDE0EBA001CBF80 /* OrientationMeterAverage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBFC7B991BD8F19A0023F70F /* OrientationMeterAverage.cpp */; };
+		FBE6645E1C969FD70044386E /* MetropolisSampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBE6645B1C969FD70044386E /* MetropolisSampler.cpp */; };
+		FBE664611C96A1240044386E /* CoordinateSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB2E8B0F1C22F01D00C5C45C /* CoordinateSystem.cpp */; };
+		FBE664621C96A1240044386E /* Building.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBCDA4B61BEA3DA800EEDBFB /* Building.cpp */; };
+		FBE664631C96A1240044386E /* DataLogger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB84B6C91C0C010100EE3489 /* DataLogger.cpp */; };
+		FBE664641C96A1240044386E /* Pose.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB684E5B1BD760BE00F1A21C /* Pose.cpp */; };
+		FBE664651C96A1240044386E /* PoseRandomWalker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB684E8A1BD7613F00F1A21C /* PoseRandomWalker.cpp */; };
+		FBE664661C96A1240044386E /* Sample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB684EAD1BD7742300F1A21C /* Sample.cpp */; };
+		FBE664671C96A1240044386E /* ArrayUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBF3484F1BD65B1400A25F38 /* ArrayUtils.cpp */; };
+		FBE664681C96A1240044386E /* DataUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBF347721BD4E67000A25F38 /* DataUtils.cpp */; };
+		FBE664691C96A1240044386E /* RandomGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBF347681BD4D1E700A25F38 /* RandomGenerator.cpp */; };
+		FBE6646A1C96A1240044386E /* OrientationMeterAverage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBFC7B991BD8F19A0023F70F /* OrientationMeterAverage.cpp */; };
+		FBE6646B1C96A1240044386E /* ImageHolder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBCDA4BA1BEA3E6800EEDBFB /* ImageHolder.cpp */; };
+		FBE6646C1C96A1240044386E /* FloorMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBF234931BEB2DD500FF25C8 /* FloorMap.cpp */; };
+		FBE6646D1C96A1240044386E /* PoseRandomWalkerInBuilding.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBC72E071BF3155000EFB5F5 /* PoseRandomWalkerInBuilding.cpp */; };
+		FBE6646E1C96A1240044386E /* StatusInitializerStub.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB684E8E1BD7613F00F1A21C /* StatusInitializerStub.cpp */; };
+		FBE6646F1C96A1240044386E /* State.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB84B6C61C09EDAE00EE3489 /* State.cpp */; };
+		FBE664701C96A1240044386E /* BLEBeacon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBFC7B9C1BDA96130023F70F /* BLEBeacon.cpp */; };
+		FBE664711C96A1240044386E /* Beacon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB684E4E1BD760BE00F1A21C /* Beacon.cpp */; };
+		FBE664721C96A1240044386E /* Status.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB684E5E1BD760BE00F1A21C /* Status.cpp */; };
+		FBE664731C96A1240044386E /* Acceleration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB684E4A1BD760BE00F1A21C /* Acceleration.cpp */; };
+		FBE664741C96A1240044386E /* StreamLocalizerStub.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB684E7D1BD760EC00F1A21C /* StreamLocalizerStub.cpp */; };
+		FBE664751C96A1240044386E /* GridResampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBF3475B1BD1188100A25F38 /* GridResampler.cpp */; };
+		FBE664761C96A1240044386E /* StreamParticleFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB684E7B1BD760EC00F1A21C /* StreamParticleFilter.cpp */; };
+		FBE664771C96A1240044386E /* Location.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB684E551BD760BE00F1A21C /* Location.cpp */; };
+		FBE664781C96A1240044386E /* GaussianProcess.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB6105961BF9D60E00657E20 /* GaussianProcess.cpp */; };
+		FBE664791C96A1240044386E /* LazyDataStore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB84B6D41C0DB9BC00EE3489 /* LazyDataStore.cpp */; };
+		FBE6647A1C96A1240044386E /* CleansingBeaconFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB84B6D01C0D953800EE3489 /* CleansingBeaconFilter.cpp */; };
+		FBE6647B1C96A1240044386E /* DataStoreImpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB2450161C05835F00CC9BFB /* DataStoreImpl.cpp */; };
+		FBE6647C1C96A1240044386E /* PedometerWalkingState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBCDA4B11BEA32E000EEDBFB /* PedometerWalkingState.cpp */; };
+		FBE6647D1C96A1240044386E /* Attitude.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB684E4C1BD760BE00F1A21C /* Attitude.cpp */; };
+		FBE6647E1C96A1240044386E /* KernelFunction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB6B11E11BF5C6E1008BE650 /* KernelFunction.cpp */; };
+		FBE6647F1C96A1240044386E /* StatusInitializerImpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBCDA49E1BE75A3500EEDBFB /* StatusInitializerImpl.cpp */; };
+		FBE664801C96A1240044386E /* StrongestBeaconFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB61058D1BF9BA1100657E20 /* StrongestBeaconFilter.cpp */; };
+		FBE664811C96A1240044386E /* MetropolisSampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBE6645B1C969FD70044386E /* MetropolisSampler.cpp */; };
+		FBE664821C96A1240044386E /* RandomWalker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB684E8C1BD7613F00F1A21C /* RandomWalker.cpp */; };
+		FBE664831C96A1240044386E /* GaussianProcessLDPLMultiModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBCDA4AC1BE9AF9D00EEDBFB /* GaussianProcessLDPLMultiModel.cpp */; };
+		FBE664841C96A1240044386E /* VirtualDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBF347791BD4E91F00A25F38 /* VirtualDevice.cpp */; };
+		FBE664871C96A1240044386E /* libopencv_contrib.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FBF2349C1BEB3EC700FF25C8 /* libopencv_contrib.dylib */; };
+		FBE664881C96A1240044386E /* libopencv_core.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FBF2349F1BEB3EC700FF25C8 /* libopencv_core.dylib */; };
+		FBE664891C96A1240044386E /* libopencv_features2d.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FBF234A21BEB3EC700FF25C8 /* libopencv_features2d.dylib */; };
+		FBE6648A1C96A1240044386E /* libopencv_flann.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FBF234A51BEB3EC700FF25C8 /* libopencv_flann.dylib */; };
+		FBE6648B1C96A1240044386E /* libopencv_gpu.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FBF234A81BEB3EC700FF25C8 /* libopencv_gpu.dylib */; };
+		FBE6648C1C96A1240044386E /* libopencv_highgui.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FBF234AB1BEB3EC700FF25C8 /* libopencv_highgui.dylib */; };
+		FBE6648D1C96A1240044386E /* libopencv_imgproc.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FBF234AE1BEB3EC700FF25C8 /* libopencv_imgproc.dylib */; };
+		FBE6648E1C96A1240044386E /* libopencv_legacy.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FBF234B11BEB3EC700FF25C8 /* libopencv_legacy.dylib */; };
+		FBE6648F1C96A1240044386E /* libopencv_ml.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FBF234B41BEB3EC700FF25C8 /* libopencv_ml.dylib */; };
+		FBE664901C96A1240044386E /* libopencv_objdetect.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FBF234BA1BEB3EC700FF25C8 /* libopencv_objdetect.dylib */; };
+		FBE664911C96A1240044386E /* libopencv_ocl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FBF234BD1BEB3EC700FF25C8 /* libopencv_ocl.dylib */; };
+		FBE664921C96A1240044386E /* libopencv_photo.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FBF234C01BEB3EC700FF25C8 /* libopencv_photo.dylib */; };
+		FBE664931C96A1240044386E /* libopencv_stitching.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FBF234C31BEB3EC700FF25C8 /* libopencv_stitching.dylib */; };
+		FBE664941C96A1240044386E /* libopencv_superres.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FBF234C61BEB3EC700FF25C8 /* libopencv_superres.dylib */; };
+		FBE664951C96A1240044386E /* libopencv_video.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FBF234CA1BEB3EC700FF25C8 /* libopencv_video.dylib */; };
+		FBE664961C96A1240044386E /* libopencv_videostab.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FBF234CD1BEB3EC700FF25C8 /* libopencv_videostab.dylib */; };
+		FBE664A11C96A4640044386E /* NavCogLogPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBE6649F1C96A4640044386E /* NavCogLogPlayer.cpp */; };
+		FBE664A31C96A4B10044386E /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBE664A21C96A4B10044386E /* main.cpp */; };
+		FBE664A61C96A68C0044386E /* libboost_date_time.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FBE664A51C96A68C0044386E /* libboost_date_time.dylib */; };
+		FBE664A71C96A68C0044386E /* libboost_date_time.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FBE664A51C96A68C0044386E /* libboost_date_time.dylib */; };
+		FBE664A91C96AA920044386E /* libboost_program_options.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FBE664A81C96AA920044386E /* libboost_program_options.dylib */; };
+		FBE664AC1C96C2FA0044386E /* StreamParticleFilterBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBE664AA1C96C2FA0044386E /* StreamParticleFilterBuilder.cpp */; };
+		FBE664AF1C96C7120044386E /* BeaconFilterChain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBE664AD1C96C7120044386E /* BeaconFilterChain.cpp */; };
+		FBE664B01C96C7120044386E /* BeaconFilterChain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBE664AD1C96C7120044386E /* BeaconFilterChain.cpp */; };
 		FBF234951BEB2DD500FF25C8 /* FloorMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBF234931BEB2DD500FF25C8 /* FloorMap.cpp */; };
-		FBF234961BEB2DD500FF25C8 /* FloorMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBF234931BEB2DD500FF25C8 /* FloorMap.cpp */; };
-		FBF234D31BEB3EC700FF25C8 /* libopencv_contrib.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FBF2349C1BEB3EC700FF25C8 /* libopencv_contrib.dylib */; };
-		FBF234D61BEB3EC700FF25C8 /* libopencv_core.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FBF2349F1BEB3EC700FF25C8 /* libopencv_core.dylib */; };
-		FBF234D91BEB3EC700FF25C8 /* libopencv_features2d.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FBF234A21BEB3EC700FF25C8 /* libopencv_features2d.dylib */; };
-		FBF234DC1BEB3EC700FF25C8 /* libopencv_flann.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FBF234A51BEB3EC700FF25C8 /* libopencv_flann.dylib */; };
-		FBF234DF1BEB3EC700FF25C8 /* libopencv_gpu.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FBF234A81BEB3EC700FF25C8 /* libopencv_gpu.dylib */; };
-		FBF234E21BEB3EC700FF25C8 /* libopencv_highgui.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FBF234AB1BEB3EC700FF25C8 /* libopencv_highgui.dylib */; };
-		FBF234E51BEB3EC700FF25C8 /* libopencv_imgproc.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FBF234AE1BEB3EC700FF25C8 /* libopencv_imgproc.dylib */; };
-		FBF234E81BEB3EC700FF25C8 /* libopencv_legacy.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FBF234B11BEB3EC700FF25C8 /* libopencv_legacy.dylib */; };
-		FBF234EB1BEB3EC700FF25C8 /* libopencv_ml.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FBF234B41BEB3EC700FF25C8 /* libopencv_ml.dylib */; };
-		FBF234F11BEB3EC700FF25C8 /* libopencv_objdetect.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FBF234BA1BEB3EC700FF25C8 /* libopencv_objdetect.dylib */; };
-		FBF234F41BEB3EC700FF25C8 /* libopencv_ocl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FBF234BD1BEB3EC700FF25C8 /* libopencv_ocl.dylib */; };
-		FBF234F71BEB3EC700FF25C8 /* libopencv_photo.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FBF234C01BEB3EC700FF25C8 /* libopencv_photo.dylib */; };
-		FBF234FA1BEB3EC700FF25C8 /* libopencv_stitching.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FBF234C31BEB3EC700FF25C8 /* libopencv_stitching.dylib */; };
-		FBF234FD1BEB3EC700FF25C8 /* libopencv_superres.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FBF234C61BEB3EC700FF25C8 /* libopencv_superres.dylib */; };
-		FBF235011BEB3EC700FF25C8 /* libopencv_video.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FBF234CA1BEB3EC700FF25C8 /* libopencv_video.dylib */; };
-		FBF235041BEB3EC700FF25C8 /* libopencv_videostab.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FBF234CD1BEB3EC700FF25C8 /* libopencv_videostab.dylib */; };
 		FBF2350B1BEB410200FF25C8 /* libopencv_contrib.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FBF2349C1BEB3EC700FF25C8 /* libopencv_contrib.dylib */; };
 		FBF2350E1BEB410200FF25C8 /* libopencv_core.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FBF2349F1BEB3EC700FF25C8 /* libopencv_core.dylib */; };
 		FBF235111BEB410200FF25C8 /* libopencv_features2d.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FBF234A21BEB3EC700FF25C8 /* libopencv_features2d.dylib */; };
@@ -121,14 +131,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		FBE099951BDE0C4C001CBF80 /* CopyFiles */ = {
+		FBE664851C96A1240044386E /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = /usr/share/man/man1/;
-			dstSubfolderSpec = 0;
+			buildActionMask = 12;
+			dstPath = "";
+			dstSubfolderSpec = 16;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 1;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
@@ -201,7 +211,19 @@
 		FBCDA4BA1BEA3E6800EEDBFB /* ImageHolder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ImageHolder.cpp; sourceTree = "<group>"; };
 		FBCDA4BB1BEA3E6800EEDBFB /* ImageHolder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ImageHolder.hpp; sourceTree = "<group>"; };
 		FBCDA4C31BEA409100EEDBFB /* CoordinateSystem.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CoordinateSystem.hpp; sourceTree = "<group>"; };
-		FBE099971BDE0C4C001CBF80 /* localization-library-BoostTests */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "localization-library-BoostTests"; sourceTree = BUILT_PRODUCTS_DIR; };
+		FBE6645B1C969FD70044386E /* MetropolisSampler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MetropolisSampler.cpp; sourceTree = "<group>"; };
+		FBE6645C1C969FD70044386E /* MetropolisSampler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MetropolisSampler.hpp; path = ../../src/mc/MetropolisSampler.hpp; sourceTree = "<group>"; };
+		FBE6645D1C969FD70044386E /* ObservationDependentInitializer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ObservationDependentInitializer.hpp; path = ../../src/mc/ObservationDependentInitializer.hpp; sourceTree = "<group>"; };
+		FBE6649A1C96A1240044386E /* localization-library-logplay */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "localization-library-logplay"; sourceTree = BUILT_PRODUCTS_DIR; };
+		FBE6649F1C96A4640044386E /* NavCogLogPlayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = NavCogLogPlayer.cpp; path = ../src/log/NavCogLogPlayer.cpp; sourceTree = "<group>"; };
+		FBE664A01C96A4640044386E /* NavCogLogPlayer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = NavCogLogPlayer.hpp; path = ../src/log/NavCogLogPlayer.hpp; sourceTree = "<group>"; };
+		FBE664A21C96A4B10044386E /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = ../src/log/main.cpp; sourceTree = "<group>"; };
+		FBE664A51C96A68C0044386E /* libboost_date_time.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libboost_date_time.dylib; path = ../../../../../../usr/local/Cellar/boost/1.58.0/lib/libboost_date_time.dylib; sourceTree = "<group>"; };
+		FBE664A81C96AA920044386E /* libboost_program_options.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libboost_program_options.dylib; path = ../../../../../../usr/local/Cellar/boost/1.58.0/lib/libboost_program_options.dylib; sourceTree = "<group>"; };
+		FBE664AA1C96C2FA0044386E /* StreamParticleFilterBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = StreamParticleFilterBuilder.cpp; path = ../src/log/StreamParticleFilterBuilder.cpp; sourceTree = "<group>"; };
+		FBE664AB1C96C2FA0044386E /* StreamParticleFilterBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = StreamParticleFilterBuilder.hpp; path = ../src/log/StreamParticleFilterBuilder.hpp; sourceTree = "<group>"; };
+		FBE664AD1C96C7120044386E /* BeaconFilterChain.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BeaconFilterChain.cpp; sourceTree = "<group>"; };
+		FBE664AE1C96C7120044386E /* BeaconFilterChain.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BeaconFilterChain.hpp; sourceTree = "<group>"; };
 		FBF234931BEB2DD500FF25C8 /* FloorMap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FloorMap.cpp; sourceTree = "<group>"; };
 		FBF234941BEB2DD500FF25C8 /* FloorMap.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FloorMap.hpp; sourceTree = "<group>"; };
 		FBF2349C1BEB3EC700FF25C8 /* libopencv_contrib.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_contrib.dylib; path = /usr/local/Cellar/opencv/2.4.12/lib/libopencv_contrib.dylib; sourceTree = "<absolute>"; };
@@ -238,26 +260,28 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		FBE099941BDE0C4C001CBF80 /* Frameworks */ = {
+		FBE664861C96A1240044386E /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FBF234D31BEB3EC700FF25C8 /* libopencv_contrib.dylib in Frameworks */,
-				FBF234D61BEB3EC700FF25C8 /* libopencv_core.dylib in Frameworks */,
-				FBF234D91BEB3EC700FF25C8 /* libopencv_features2d.dylib in Frameworks */,
-				FBF234DC1BEB3EC700FF25C8 /* libopencv_flann.dylib in Frameworks */,
-				FBF234DF1BEB3EC700FF25C8 /* libopencv_gpu.dylib in Frameworks */,
-				FBF234E21BEB3EC700FF25C8 /* libopencv_highgui.dylib in Frameworks */,
-				FBF234E51BEB3EC700FF25C8 /* libopencv_imgproc.dylib in Frameworks */,
-				FBF234E81BEB3EC700FF25C8 /* libopencv_legacy.dylib in Frameworks */,
-				FBF234EB1BEB3EC700FF25C8 /* libopencv_ml.dylib in Frameworks */,
-				FBF234F11BEB3EC700FF25C8 /* libopencv_objdetect.dylib in Frameworks */,
-				FBF234F41BEB3EC700FF25C8 /* libopencv_ocl.dylib in Frameworks */,
-				FBF234F71BEB3EC700FF25C8 /* libopencv_photo.dylib in Frameworks */,
-				FBF234FA1BEB3EC700FF25C8 /* libopencv_stitching.dylib in Frameworks */,
-				FBF234FD1BEB3EC700FF25C8 /* libopencv_superres.dylib in Frameworks */,
-				FBF235011BEB3EC700FF25C8 /* libopencv_video.dylib in Frameworks */,
-				FBF235041BEB3EC700FF25C8 /* libopencv_videostab.dylib in Frameworks */,
+				FBE664871C96A1240044386E /* libopencv_contrib.dylib in Frameworks */,
+				FBE664881C96A1240044386E /* libopencv_core.dylib in Frameworks */,
+				FBE664891C96A1240044386E /* libopencv_features2d.dylib in Frameworks */,
+				FBE6648A1C96A1240044386E /* libopencv_flann.dylib in Frameworks */,
+				FBE6648B1C96A1240044386E /* libopencv_gpu.dylib in Frameworks */,
+				FBE6648C1C96A1240044386E /* libopencv_highgui.dylib in Frameworks */,
+				FBE6648D1C96A1240044386E /* libopencv_imgproc.dylib in Frameworks */,
+				FBE6648E1C96A1240044386E /* libopencv_legacy.dylib in Frameworks */,
+				FBE6648F1C96A1240044386E /* libopencv_ml.dylib in Frameworks */,
+				FBE664901C96A1240044386E /* libopencv_objdetect.dylib in Frameworks */,
+				FBE664911C96A1240044386E /* libopencv_ocl.dylib in Frameworks */,
+				FBE664921C96A1240044386E /* libopencv_photo.dylib in Frameworks */,
+				FBE664931C96A1240044386E /* libopencv_stitching.dylib in Frameworks */,
+				FBE664941C96A1240044386E /* libopencv_superres.dylib in Frameworks */,
+				FBE664A91C96AA920044386E /* libboost_program_options.dylib in Frameworks */,
+				FBE664951C96A1240044386E /* libopencv_video.dylib in Frameworks */,
+				FBE664961C96A1240044386E /* libopencv_videostab.dylib in Frameworks */,
+				FBE664A71C96A68C0044386E /* libboost_date_time.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -281,6 +305,7 @@
 				FBF235351BEB410300FF25C8 /* libopencv_superres.dylib in Frameworks */,
 				FBF235391BEB410300FF25C8 /* libopencv_video.dylib in Frameworks */,
 				FBF2353C1BEB410300FF25C8 /* libopencv_videostab.dylib in Frameworks */,
+				FBE664A61C96A68C0044386E /* libboost_date_time.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -290,8 +315,10 @@
 		FB372FFC1BCF963600EFFC14 = {
 			isa = PBXGroup;
 			children = (
+				FBE664A41C96A6750044386E /* boost */,
 				FBF235051BEB3EDC00FF25C8 /* opencv */,
 				FB3730071BCF963600EFFC14 /* localization-library */,
+				FBE6649B1C96A3AF0044386E /* localization-library-logplay */,
 				FB3730061BCF963600EFFC14 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -300,7 +327,7 @@
 			isa = PBXGroup;
 			children = (
 				FB3730051BCF963600EFFC14 /* localization-library */,
-				FBE099971BDE0C4C001CBF80 /* localization-library-BoostTests */,
+				FBE6649A1C96A1240044386E /* localization-library-logplay */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -317,6 +344,7 @@
 				FB3730761BD0A8F400EFFC14 /* impl */,
 				FB3730361BCFBE9900EFFC14 /* model */,
 				FB37306F1BD0A7EB00EFFC14 /* sensor */,
+				FBE6645A1C969FA70044386E /* mc */,
 			);
 			path = "localization-library";
 			sourceTree = SOURCE_ROOT;
@@ -406,6 +434,8 @@
 		FB6105891BF9B9B900657E20 /* beacon */ = {
 			isa = PBXGroup;
 			children = (
+				FBE664AD1C96C7120044386E /* BeaconFilterChain.cpp */,
+				FBE664AE1C96C7120044386E /* BeaconFilterChain.hpp */,
 				FB61058B1BF9B9F000657E20 /* BeaconFilter.hpp */,
 				FB61059F1BFB340D00657E20 /* BaseBeaconFilter.hpp */,
 				FB61058E1BF9BA1100657E20 /* StrongestBeaconFilter.hpp */,
@@ -432,6 +462,46 @@
 			name = map;
 			path = ../src/map;
 			sourceTree = SOURCE_ROOT;
+		};
+		FBE6645A1C969FA70044386E /* mc */ = {
+			isa = PBXGroup;
+			children = (
+				FBE6645B1C969FD70044386E /* MetropolisSampler.cpp */,
+				FBE6645C1C969FD70044386E /* MetropolisSampler.hpp */,
+				FBE6645D1C969FD70044386E /* ObservationDependentInitializer.hpp */,
+			);
+			name = mc;
+			path = ../src/mc;
+			sourceTree = SOURCE_ROOT;
+		};
+		FBE6649B1C96A3AF0044386E /* localization-library-logplay */ = {
+			isa = PBXGroup;
+			children = (
+				FBE6649C1C96A3F10044386E /* log */,
+			);
+			name = "localization-library-logplay";
+			sourceTree = SOURCE_ROOT;
+		};
+		FBE6649C1C96A3F10044386E /* log */ = {
+			isa = PBXGroup;
+			children = (
+				FBE6649F1C96A4640044386E /* NavCogLogPlayer.cpp */,
+				FBE664A01C96A4640044386E /* NavCogLogPlayer.hpp */,
+				FBE664A21C96A4B10044386E /* main.cpp */,
+				FBE664AA1C96C2FA0044386E /* StreamParticleFilterBuilder.cpp */,
+				FBE664AB1C96C2FA0044386E /* StreamParticleFilterBuilder.hpp */,
+			);
+			name = log;
+			sourceTree = "<group>";
+		};
+		FBE664A41C96A6750044386E /* boost */ = {
+			isa = PBXGroup;
+			children = (
+				FBE664A81C96AA920044386E /* libboost_program_options.dylib */,
+				FBE664A51C96A68C0044386E /* libboost_date_time.dylib */,
+			);
+			name = boost;
+			sourceTree = "<group>";
 		};
 		FBF235051BEB3EDC00FF25C8 /* opencv */ = {
 			isa = PBXGroup;
@@ -520,21 +590,21 @@
 			productReference = FB3730051BCF963600EFFC14 /* localization-library */;
 			productType = "com.apple.product-type.tool";
 		};
-		FBE099961BDE0C4C001CBF80 /* localization-library-BoostTests */ = {
+		FBE6645F1C96A1240044386E /* localization-library-logplay */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = FBE0999B1BDE0C4C001CBF80 /* Build configuration list for PBXNativeTarget "localization-library-BoostTests" */;
+			buildConfigurationList = FBE664971C96A1240044386E /* Build configuration list for PBXNativeTarget "localization-library-logplay" */;
 			buildPhases = (
-				FBE099931BDE0C4C001CBF80 /* Sources */,
-				FBE099941BDE0C4C001CBF80 /* Frameworks */,
-				FBE099951BDE0C4C001CBF80 /* CopyFiles */,
+				FBE664601C96A1240044386E /* Sources */,
+				FBE664851C96A1240044386E /* CopyFiles */,
+				FBE664861C96A1240044386E /* Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = "localization-library-BoostTests";
-			productName = "localization-library-BoostTests";
-			productReference = FBE099971BDE0C4C001CBF80 /* localization-library-BoostTests */;
+			name = "localization-library-logplay";
+			productName = "localization-library";
+			productReference = FBE6649A1C96A1240044386E /* localization-library-logplay */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
@@ -544,13 +614,10 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0710;
-				ORGANIZATIONNAME = IBM;
+				ORGANIZATIONNAME = HULOP;
 				TargetAttributes = {
 					FB3730041BCF963600EFFC14 = {
 						CreatedOnToolsVersion = 7.0.1;
-					};
-					FBE099961BDE0C4C001CBF80 = {
-						CreatedOnToolsVersion = 7.1;
 					};
 				};
 			};
@@ -567,7 +634,7 @@
 			projectRoot = "";
 			targets = (
 				FB3730041BCF963600EFFC14 /* localization-library */,
-				FBE099961BDE0C4C001CBF80 /* localization-library-BoostTests */,
+				FBE6645F1C96A1240044386E /* localization-library-logplay */,
 			);
 		};
 /* End PBXProject section */
@@ -609,51 +676,58 @@
 				FB6B11E31BF5C6E1008BE650 /* KernelFunction.cpp in Sources */,
 				FBCDA4A01BE75A3500EEDBFB /* StatusInitializerImpl.cpp in Sources */,
 				FB61058F1BF9BA1100657E20 /* StrongestBeaconFilter.cpp in Sources */,
+				FBE664AF1C96C7120044386E /* BeaconFilterChain.cpp in Sources */,
+				FBE6645E1C969FD70044386E /* MetropolisSampler.cpp in Sources */,
 				FB684E971BD7613F00F1A21C /* RandomWalker.cpp in Sources */,
 				FBCDA4AE1BE9AF9D00EEDBFB /* GaussianProcessLDPLMultiModel.cpp in Sources */,
 				FBF3477B1BD4E91F00A25F38 /* VirtualDevice.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		FBE099931BDE0C4C001CBF80 /* Sources */ = {
+		FBE664601C96A1240044386E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FBCDA4AF1BE9AF9D00EEDBFB /* GaussianProcessLDPLMultiModel.cpp in Sources */,
-				FBE099D61BDE0E71001CBF80 /* Beacon.cpp in Sources */,
-				FBE099CF1BDE0E40001CBF80 /* ArrayUtils.cpp in Sources */,
-				FBE099D51BDE0E5B001CBF80 /* Attitude.cpp in Sources */,
-				FB6105991BF9D60E00657E20 /* GaussianProcess.cpp in Sources */,
-				FBE099D41BDE0E55001CBF80 /* DataUtils.cpp in Sources */,
-				FBCDA4B91BEA3DA800EEDBFB /* Building.cpp in Sources */,
-				FB6105901BF9BA1100657E20 /* StrongestBeaconFilter.cpp in Sources */,
-				FB84B6D31C0D953800EE3489 /* CleansingBeaconFilter.cpp in Sources */,
-				FBE099D91BDE0E78001CBF80 /* Location.cpp in Sources */,
-				FB84B6C81C09EDAE00EE3489 /* State.cpp in Sources */,
-				FBCDA4BD1BEA3E6800EEDBFB /* ImageHolder.cpp in Sources */,
-				FBE099CE1BDE0E3C001CBF80 /* RandomGenerator.cpp in Sources */,
-				FBCDA4B41BEA32E000EEDBFB /* PedometerWalkingState.cpp in Sources */,
-				FBE099E21BDE0EA1001CBF80 /* StreamParticleFilter.cpp in Sources */,
-				FBE099D21BDE0E4E001CBF80 /* GridResampler.cpp in Sources */,
-				FB2E8B111C22F01D00C5C45C /* CoordinateSystem.cpp in Sources */,
-				FBE099E31BDE0EA5001CBF80 /* StreamLocalizerStub.cpp in Sources */,
-				FB6B11E41BF5C6E1008BE650 /* KernelFunction.cpp in Sources */,
-				FBE099E61BDE0EAD001CBF80 /* PoseRandomWalker.cpp in Sources */,
-				FBE099E71BDE0EAF001CBF80 /* RandomWalker.cpp in Sources */,
-				FB84B6CD1C0C121D00EE3489 /* DataLogger.cpp in Sources */,
-				FBE099E81BDE0EB1001CBF80 /* StatusInitializerStub.cpp in Sources */,
-				FB84B6D71C0DB9BC00EE3489 /* LazyDataStore.cpp in Sources */,
-				FBF234961BEB2DD500FF25C8 /* FloorMap.cpp in Sources */,
-				FBE099EC1BDE0EBA001CBF80 /* OrientationMeterAverage.cpp in Sources */,
-				FBE099DD1BDE0E8C001CBF80 /* Status.cpp in Sources */,
-				FBCDA4A21BE75A3500EEDBFB /* StatusInitializerImpl.cpp in Sources */,
-				FBE099E01BDE0E98001CBF80 /* BLEBeacon.cpp in Sources */,
-				FBE099CC1BDE0E27001CBF80 /* Acceleration.cpp in Sources */,
-				FBE099D31BDE0E52001CBF80 /* VirtualDevice.cpp in Sources */,
-				FBE099DF1BDE0E95001CBF80 /* Sample.cpp in Sources */,
-				FBE099DC1BDE0E81001CBF80 /* Pose.cpp in Sources */,
-				FB2450191C05835F00CC9BFB /* DataStoreImpl.cpp in Sources */,
-				FBC72E111BF4714800EFB5F5 /* PoseRandomWalkerInBuilding.cpp in Sources */,
+				FBE664611C96A1240044386E /* CoordinateSystem.cpp in Sources */,
+				FBE664621C96A1240044386E /* Building.cpp in Sources */,
+				FBE664631C96A1240044386E /* DataLogger.cpp in Sources */,
+				FBE664641C96A1240044386E /* Pose.cpp in Sources */,
+				FBE664651C96A1240044386E /* PoseRandomWalker.cpp in Sources */,
+				FBE664661C96A1240044386E /* Sample.cpp in Sources */,
+				FBE664671C96A1240044386E /* ArrayUtils.cpp in Sources */,
+				FBE664681C96A1240044386E /* DataUtils.cpp in Sources */,
+				FBE664691C96A1240044386E /* RandomGenerator.cpp in Sources */,
+				FBE6646A1C96A1240044386E /* OrientationMeterAverage.cpp in Sources */,
+				FBE6646B1C96A1240044386E /* ImageHolder.cpp in Sources */,
+				FBE6646C1C96A1240044386E /* FloorMap.cpp in Sources */,
+				FBE6646D1C96A1240044386E /* PoseRandomWalkerInBuilding.cpp in Sources */,
+				FBE6646E1C96A1240044386E /* StatusInitializerStub.cpp in Sources */,
+				FBE6646F1C96A1240044386E /* State.cpp in Sources */,
+				FBE664701C96A1240044386E /* BLEBeacon.cpp in Sources */,
+				FBE664711C96A1240044386E /* Beacon.cpp in Sources */,
+				FBE664A11C96A4640044386E /* NavCogLogPlayer.cpp in Sources */,
+				FBE664721C96A1240044386E /* Status.cpp in Sources */,
+				FBE664731C96A1240044386E /* Acceleration.cpp in Sources */,
+				FBE664741C96A1240044386E /* StreamLocalizerStub.cpp in Sources */,
+				FBE664751C96A1240044386E /* GridResampler.cpp in Sources */,
+				FBE664761C96A1240044386E /* StreamParticleFilter.cpp in Sources */,
+				FBE664B01C96C7120044386E /* BeaconFilterChain.cpp in Sources */,
+				FBE664AC1C96C2FA0044386E /* StreamParticleFilterBuilder.cpp in Sources */,
+				FBE664771C96A1240044386E /* Location.cpp in Sources */,
+				FBE664781C96A1240044386E /* GaussianProcess.cpp in Sources */,
+				FBE664791C96A1240044386E /* LazyDataStore.cpp in Sources */,
+				FBE6647A1C96A1240044386E /* CleansingBeaconFilter.cpp in Sources */,
+				FBE6647B1C96A1240044386E /* DataStoreImpl.cpp in Sources */,
+				FBE6647C1C96A1240044386E /* PedometerWalkingState.cpp in Sources */,
+				FBE6647D1C96A1240044386E /* Attitude.cpp in Sources */,
+				FBE6647E1C96A1240044386E /* KernelFunction.cpp in Sources */,
+				FBE6647F1C96A1240044386E /* StatusInitializerImpl.cpp in Sources */,
+				FBE664A31C96A4B10044386E /* main.cpp in Sources */,
+				FBE664801C96A1240044386E /* StrongestBeaconFilter.cpp in Sources */,
+				FBE664811C96A1240044386E /* MetropolisSampler.cpp in Sources */,
+				FBE664821C96A1240044386E /* RandomWalker.cpp in Sources */,
+				FBE664831C96A1240044386E /* GaussianProcessLDPLMultiModel.cpp in Sources */,
+				FBE664841C96A1240044386E /* VirtualDevice.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -684,7 +758,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_OPTIMIZATION_LEVEL = 2;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -800,42 +874,44 @@
 			};
 			name = Release;
 		};
-		FBE0999C1BDE0C4C001CBF80 /* Debug */ = {
+		FBE664981C96A1240044386E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "-";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
 				GCC_OPTIMIZATION_LEVEL = 2;
 				HEADER_SEARCH_PATHS = (
-					/usr/local/Cellar/boost/1.58.0/include/,
-					"~/git/cereal/include",
-					/usr/local/Cellar/opencv/2.4.12/include/,
-					/usr/local/Cellar/eigen/3.2.6/include/eigen3/,
+					"\"/usr/local/Cellar/boost/1.58.0/include/\"",
+					"\"~/git/cereal/include\"",
+					"\"/usr/local/Cellar/opencv/2.4.12/include/\"",
+					"\"/usr/local/Cellar/eigen/3.2.6/include/eigen3\"",
 					"\"~/git/picojson\"",
 				);
 				LIBRARY_SEARCH_PATHS = (
-					/usr/local/Cellar/boost/1.58.0/lib/,
-					/usr/local/Cellar/opencv/2.4.12/lib/,
-					/usr/local/Cellar/opencv/2.4.12/lib,
+					"$(inherited)",
+					"\"/usr/local/Cellar/boost/1.58.0/lib\"",
+					"\"/usr/local/Cellar/opencv/2.4.12/lib/\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
 		};
-		FBE0999D1BDE0C4C001CBF80 /* Release */ = {
+		FBE664991C96A1240044386E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "-";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
 				HEADER_SEARCH_PATHS = (
-					/usr/local/Cellar/boost/1.58.0/include/,
-					"~/git/cereal/include",
-					/usr/local/Cellar/opencv/2.4.12/include/,
-					/usr/local/Cellar/eigen/3.2.6/include/eigen3/,
+					"\"/usr/local/Cellar/boost/1.58.0/include/\"",
+					"\"~/git/cereal/include\"",
+					"\"/usr/local/Cellar/opencv/2.4.12/include/\"",
+					"\"/usr/local/Cellar/eigen/3.2.6/include/eigen3\"",
 					"\"~/git/picojson\"",
 				);
 				LIBRARY_SEARCH_PATHS = (
-					/usr/local/Cellar/boost/1.58.0/lib/,
-					/usr/local/Cellar/opencv/2.4.12/lib/,
-					/usr/local/Cellar/opencv/2.4.12/lib,
+					"$(inherited)",
+					"\"/usr/local/Cellar/boost/1.58.0/lib\"",
+					"\"/usr/local/Cellar/opencv/2.4.12/lib/\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -862,11 +938,11 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		FBE0999B1BDE0C4C001CBF80 /* Build configuration list for PBXNativeTarget "localization-library-BoostTests" */ = {
+		FBE664971C96A1240044386E /* Build configuration list for PBXNativeTarget "localization-library-logplay" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				FBE0999C1BDE0C4C001CBF80 /* Debug */,
-				FBE0999D1BDE0C4C001CBF80 /* Release */,
+				FBE664981C96A1240044386E /* Debug */,
+				FBE664991C96A1240044386E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

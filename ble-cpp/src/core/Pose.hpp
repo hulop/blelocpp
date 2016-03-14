@@ -82,6 +82,7 @@ namespace loc {
         static double computeOrientationDifference(double o1, double o2);
         
         // for string stream
+        static std::string header();
         friend std::ostream& operator<<(std::ostream&os, const Pose& pose);
     };
     

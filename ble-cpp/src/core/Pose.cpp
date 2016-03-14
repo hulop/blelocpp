@@ -124,6 +124,11 @@ namespace loc{
     
     
     // for string stream
+    std::string Pose::header(){
+        std::string str = "x,y,z,floor,orientation,velocity,normalVelocity";
+        return str;
+    }
+    
     std::ostream& operator<<(std::ostream&os, const Pose& pose){
         os << pose.x() <<"," << pose.y() <<"," << pose.z() <<"," << pose.floor()
         << "," << pose.orientation() << "," << pose.velocity() <<"," << pose.normalVelocity();
