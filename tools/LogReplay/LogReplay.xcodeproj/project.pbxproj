@@ -1,0 +1,794 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		4864357D990F65BE15E38799 /* libPods-LogReplay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E9F26190EDF40A0FFFE3B3E6 /* libPods-LogReplay.a */; };
+		7E7727D11C9797FF0013FC40 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E7727D01C9797FF0013FC40 /* main.cpp */; };
+		7E7727DB1C97982F0013FC40 /* NavCogLogPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E7727D71C97982F0013FC40 /* NavCogLogPlayer.cpp */; };
+		7E7727DC1C97982F0013FC40 /* StreamParticleFilterBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E7727D91C97982F0013FC40 /* StreamParticleFilterBuilder.cpp */; };
+		7E7728591C97D34F0013FC40 /* libopencv_contrib.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E7728491C97D34F0013FC40 /* libopencv_contrib.dylib */; };
+		7E77285A1C97D34F0013FC40 /* libopencv_core.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E77284A1C97D34F0013FC40 /* libopencv_core.dylib */; };
+		7E77285B1C97D34F0013FC40 /* libopencv_features2d.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E77284B1C97D34F0013FC40 /* libopencv_features2d.dylib */; };
+		7E77285C1C97D34F0013FC40 /* libopencv_flann.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E77284C1C97D34F0013FC40 /* libopencv_flann.dylib */; };
+		7E77285D1C97D34F0013FC40 /* libopencv_gpu.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E77284D1C97D34F0013FC40 /* libopencv_gpu.dylib */; };
+		7E77285E1C97D34F0013FC40 /* libopencv_highgui.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E77284E1C97D34F0013FC40 /* libopencv_highgui.dylib */; };
+		7E77285F1C97D34F0013FC40 /* libopencv_imgproc.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E77284F1C97D34F0013FC40 /* libopencv_imgproc.dylib */; };
+		7E7728601C97D34F0013FC40 /* libopencv_legacy.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E7728501C97D34F0013FC40 /* libopencv_legacy.dylib */; };
+		7E7728611C97D34F0013FC40 /* libopencv_ml.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E7728511C97D34F0013FC40 /* libopencv_ml.dylib */; };
+		7E7728621C97D34F0013FC40 /* libopencv_objdetect.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E7728521C97D34F0013FC40 /* libopencv_objdetect.dylib */; };
+		7E7728631C97D34F0013FC40 /* libopencv_ocl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E7728531C97D34F0013FC40 /* libopencv_ocl.dylib */; };
+		7E7728641C97D34F0013FC40 /* libopencv_photo.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E7728541C97D34F0013FC40 /* libopencv_photo.dylib */; };
+		7E7728651C97D34F0013FC40 /* libopencv_stitching.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E7728551C97D34F0013FC40 /* libopencv_stitching.dylib */; };
+		7E7728661C97D34F0013FC40 /* libopencv_superres.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E7728561C97D34F0013FC40 /* libopencv_superres.dylib */; };
+		7E7728671C97D34F0013FC40 /* libopencv_video.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E7728571C97D34F0013FC40 /* libopencv_video.dylib */; };
+		7E7728681C97D34F0013FC40 /* libopencv_videostab.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E7728581C97D34F0013FC40 /* libopencv_videostab.dylib */; };
+		7E7728691C97D5D80013FC40 /* BeaconFilterChain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E7727E11C97985D0013FC40 /* BeaconFilterChain.cpp */; };
+		7E77286A1C97D5D80013FC40 /* CleansingBeaconFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E7727E31C97985D0013FC40 /* CleansingBeaconFilter.cpp */; };
+		7E77286B1C97D5D80013FC40 /* StrongestBeaconFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E7727E51C97985D0013FC40 /* StrongestBeaconFilter.cpp */; };
+		7E77286C1C97D5D80013FC40 /* Acceleration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E7727E81C97985D0013FC40 /* Acceleration.cpp */; };
+		7E77286D1C97D5D80013FC40 /* Attitude.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E7727EA1C97985D0013FC40 /* Attitude.cpp */; };
+		7E77286E1C97D5D80013FC40 /* Beacon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E7727EC1C97985D0013FC40 /* Beacon.cpp */; };
+		7E77286F1C97D5D80013FC40 /* BLEBeacon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E7727EE1C97985D0013FC40 /* BLEBeacon.cpp */; };
+		7E7728701C97D5D80013FC40 /* Location.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E7727F11C97985D0013FC40 /* Location.cpp */; };
+		7E7728711C97D5D80013FC40 /* Pose.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E7727F31C97985D0013FC40 /* Pose.cpp */; };
+		7E7728721C97D5D80013FC40 /* Sample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E7727F51C97985D0013FC40 /* Sample.cpp */; };
+		7E7728731C97D5D80013FC40 /* State.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E7727F71C97985D0013FC40 /* State.cpp */; };
+		7E7728741C97D5D80013FC40 /* Status.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E7727F91C97985D0013FC40 /* Status.cpp */; };
+		7E7728751C97D5D80013FC40 /* DataLogger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E7727FD1C97985D0013FC40 /* DataLogger.cpp */; };
+		7E7728761C97D5D80013FC40 /* DataStoreImpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E7728001C97985D0013FC40 /* DataStoreImpl.cpp */; };
+		7E7728771C97D5D80013FC40 /* DataUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E7728021C97985D0013FC40 /* DataUtils.cpp */; };
+		7E7728781C97D5D80013FC40 /* LazyDataStore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E7728041C97985D0013FC40 /* LazyDataStore.cpp */; };
+		7E7728791C97D5D80013FC40 /* VirtualDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E7728061C97985D0013FC40 /* VirtualDevice.cpp */; };
+		7E77287A1C97D5D80013FC40 /* GridResampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E7728091C97985D0013FC40 /* GridResampler.cpp */; };
+		7E77287B1C97D5D80013FC40 /* StatusInitializerImpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E77280E1C97985D0013FC40 /* StatusInitializerImpl.cpp */; };
+		7E77287C1C97D5D80013FC40 /* StatusInitializerStub.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E7728101C97985D0013FC40 /* StatusInitializerStub.cpp */; };
+		7E77287D1C97D5D80013FC40 /* StreamLocalizerStub.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E7728121C97985D0013FC40 /* StreamLocalizerStub.cpp */; };
+		7E77287E1C97D5D80013FC40 /* StreamParticleFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E7728141C97985D0013FC40 /* StreamParticleFilter.cpp */; };
+		7E7728821C97D5D80013FC40 /* Building.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E77281D1C97985D0013FC40 /* Building.cpp */; };
+		7E7728831C97D5D80013FC40 /* CoordinateSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E77281F1C97985D0013FC40 /* CoordinateSystem.cpp */; };
+		7E7728841C97D5D80013FC40 /* FloorMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E7728211C97985D0013FC40 /* FloorMap.cpp */; };
+		7E7728851C97D5D80013FC40 /* ImageHolder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E7728231C97985D0013FC40 /* ImageHolder.cpp */; };
+		7E7728861C97D5D80013FC40 /* MetropolisSampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E7728261C97985D0013FC40 /* MetropolisSampler.cpp */; };
+		7E7728871C97D5D80013FC40 /* GaussianProcess.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E77282A1C97985D0013FC40 /* GaussianProcess.cpp */; };
+		7E7728881C97D5D80013FC40 /* GaussianProcessLDPLMultiModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E77282C1C97985D0013FC40 /* GaussianProcessLDPLMultiModel.cpp */; };
+		7E7728891C97D5D80013FC40 /* KernelFunction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E77282E1C97985D0013FC40 /* KernelFunction.cpp */; };
+		7E77288A1C97D5D80013FC40 /* PoseRandomWalker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E7728321C97985D0013FC40 /* PoseRandomWalker.cpp */; };
+		7E77288B1C97D5D80013FC40 /* PoseRandomWalkerInBuilding.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E7728341C97985D0013FC40 /* PoseRandomWalkerInBuilding.cpp */; };
+		7E77288C1C97D5D80013FC40 /* RandomWalker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E7728361C97985D0013FC40 /* RandomWalker.cpp */; };
+		7E77288D1C97D5D80013FC40 /* OrientationMeterAverage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E77283B1C97985D0013FC40 /* OrientationMeterAverage.cpp */; };
+		7E77288E1C97D5D80013FC40 /* PedometerWalkingState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E77283E1C97985D0013FC40 /* PedometerWalkingState.cpp */; };
+		7E77288F1C97D5D80013FC40 /* ArrayUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E7728411C97985D0013FC40 /* ArrayUtils.cpp */; };
+		7E7728901C97D5D80013FC40 /* MathUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E7728431C97985D0013FC40 /* MathUtils.cpp */; };
+		7E7728911C97D5D80013FC40 /* RandomGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E7728451C97985D0013FC40 /* RandomGenerator.cpp */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		7E7727CB1C9797FF0013FC40 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		65E12EC685C21A6161293BCD /* Pods-LogReplay.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LogReplay.release.xcconfig"; path = "Pods/Target Support Files/Pods-LogReplay/Pods-LogReplay.release.xcconfig"; sourceTree = "<group>"; };
+		79904DC52699C08C82BBFDFB /* Pods-LogReplay.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LogReplay.debug.xcconfig"; path = "Pods/Target Support Files/Pods-LogReplay/Pods-LogReplay.debug.xcconfig"; sourceTree = "<group>"; };
+		7E7727CD1C9797FF0013FC40 /* LogReplay */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = LogReplay; sourceTree = BUILT_PRODUCTS_DIR; };
+		7E7727D01C9797FF0013FC40 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		7E7727D71C97982F0013FC40 /* NavCogLogPlayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NavCogLogPlayer.cpp; sourceTree = "<group>"; };
+		7E7727D81C97982F0013FC40 /* NavCogLogPlayer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = NavCogLogPlayer.hpp; sourceTree = "<group>"; };
+		7E7727D91C97982F0013FC40 /* StreamParticleFilterBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StreamParticleFilterBuilder.cpp; sourceTree = "<group>"; };
+		7E7727DA1C97982F0013FC40 /* StreamParticleFilterBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = StreamParticleFilterBuilder.hpp; sourceTree = "<group>"; };
+		7E7727DF1C97985D0013FC40 /* BaseBeaconFilter.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BaseBeaconFilter.hpp; sourceTree = "<group>"; };
+		7E7727E01C97985D0013FC40 /* BeaconFilter.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BeaconFilter.hpp; sourceTree = "<group>"; };
+		7E7727E11C97985D0013FC40 /* BeaconFilterChain.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BeaconFilterChain.cpp; sourceTree = "<group>"; };
+		7E7727E21C97985D0013FC40 /* BeaconFilterChain.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BeaconFilterChain.hpp; sourceTree = "<group>"; };
+		7E7727E31C97985D0013FC40 /* CleansingBeaconFilter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CleansingBeaconFilter.cpp; sourceTree = "<group>"; };
+		7E7727E41C97985D0013FC40 /* CleansingBeaconFilter.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CleansingBeaconFilter.hpp; sourceTree = "<group>"; };
+		7E7727E51C97985D0013FC40 /* StrongestBeaconFilter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StrongestBeaconFilter.cpp; sourceTree = "<group>"; };
+		7E7727E61C97985D0013FC40 /* StrongestBeaconFilter.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = StrongestBeaconFilter.hpp; sourceTree = "<group>"; };
+		7E7727E81C97985D0013FC40 /* Acceleration.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Acceleration.cpp; sourceTree = "<group>"; };
+		7E7727E91C97985D0013FC40 /* Acceleration.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Acceleration.hpp; sourceTree = "<group>"; };
+		7E7727EA1C97985D0013FC40 /* Attitude.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Attitude.cpp; sourceTree = "<group>"; };
+		7E7727EB1C97985D0013FC40 /* Attitude.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Attitude.hpp; sourceTree = "<group>"; };
+		7E7727EC1C97985D0013FC40 /* Beacon.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Beacon.cpp; sourceTree = "<group>"; };
+		7E7727ED1C97985D0013FC40 /* Beacon.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Beacon.hpp; sourceTree = "<group>"; };
+		7E7727EE1C97985D0013FC40 /* BLEBeacon.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BLEBeacon.cpp; sourceTree = "<group>"; };
+		7E7727EF1C97985D0013FC40 /* BLEBeacon.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BLEBeacon.hpp; sourceTree = "<group>"; };
+		7E7727F01C97985D0013FC40 /* bleloc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = bleloc.h; sourceTree = "<group>"; };
+		7E7727F11C97985D0013FC40 /* Location.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Location.cpp; sourceTree = "<group>"; };
+		7E7727F21C97985D0013FC40 /* Location.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Location.hpp; sourceTree = "<group>"; };
+		7E7727F31C97985D0013FC40 /* Pose.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Pose.cpp; sourceTree = "<group>"; };
+		7E7727F41C97985D0013FC40 /* Pose.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Pose.hpp; sourceTree = "<group>"; };
+		7E7727F51C97985D0013FC40 /* Sample.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Sample.cpp; sourceTree = "<group>"; };
+		7E7727F61C97985D0013FC40 /* Sample.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Sample.hpp; sourceTree = "<group>"; };
+		7E7727F71C97985D0013FC40 /* State.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = State.cpp; sourceTree = "<group>"; };
+		7E7727F81C97985D0013FC40 /* State.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = State.hpp; sourceTree = "<group>"; };
+		7E7727F91C97985D0013FC40 /* Status.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Status.cpp; sourceTree = "<group>"; };
+		7E7727FA1C97985D0013FC40 /* Status.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Status.hpp; sourceTree = "<group>"; };
+		7E7727FB1C97985D0013FC40 /* StreamLocalizer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = StreamLocalizer.hpp; sourceTree = "<group>"; };
+		7E7727FD1C97985D0013FC40 /* DataLogger.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DataLogger.cpp; sourceTree = "<group>"; };
+		7E7727FE1C97985D0013FC40 /* DataLogger.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DataLogger.hpp; sourceTree = "<group>"; };
+		7E7727FF1C97985D0013FC40 /* DataStore.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DataStore.hpp; sourceTree = "<group>"; };
+		7E7728001C97985D0013FC40 /* DataStoreImpl.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DataStoreImpl.cpp; sourceTree = "<group>"; };
+		7E7728011C97985D0013FC40 /* DataStoreImpl.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DataStoreImpl.hpp; sourceTree = "<group>"; };
+		7E7728021C97985D0013FC40 /* DataUtils.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DataUtils.cpp; sourceTree = "<group>"; };
+		7E7728031C97985D0013FC40 /* DataUtils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DataUtils.hpp; sourceTree = "<group>"; };
+		7E7728041C97985D0013FC40 /* LazyDataStore.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LazyDataStore.cpp; sourceTree = "<group>"; };
+		7E7728051C97985D0013FC40 /* LazyDataStore.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LazyDataStore.hpp; sourceTree = "<group>"; };
+		7E7728061C97985D0013FC40 /* VirtualDevice.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VirtualDevice.cpp; sourceTree = "<group>"; };
+		7E7728071C97985D0013FC40 /* VirtualDevice.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = VirtualDevice.hpp; sourceTree = "<group>"; };
+		7E7728091C97985D0013FC40 /* GridResampler.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GridResampler.cpp; sourceTree = "<group>"; };
+		7E77280A1C97985D0013FC40 /* GridResampler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GridResampler.hpp; sourceTree = "<group>"; };
+		7E77280B1C97985D0013FC40 /* Resampler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Resampler.hpp; sourceTree = "<group>"; };
+		7E77280D1C97985D0013FC40 /* StatusInitializer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = StatusInitializer.hpp; sourceTree = "<group>"; };
+		7E77280E1C97985D0013FC40 /* StatusInitializerImpl.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StatusInitializerImpl.cpp; sourceTree = "<group>"; };
+		7E77280F1C97985D0013FC40 /* StatusInitializerImpl.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = StatusInitializerImpl.hpp; sourceTree = "<group>"; };
+		7E7728101C97985D0013FC40 /* StatusInitializerStub.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StatusInitializerStub.cpp; sourceTree = "<group>"; };
+		7E7728111C97985D0013FC40 /* StatusInitializerStub.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = StatusInitializerStub.hpp; sourceTree = "<group>"; };
+		7E7728121C97985D0013FC40 /* StreamLocalizerStub.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StreamLocalizerStub.cpp; sourceTree = "<group>"; };
+		7E7728131C97985D0013FC40 /* StreamLocalizerStub.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = StreamLocalizerStub.hpp; sourceTree = "<group>"; };
+		7E7728141C97985D0013FC40 /* StreamParticleFilter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StreamParticleFilter.cpp; sourceTree = "<group>"; };
+		7E7728151C97985D0013FC40 /* StreamParticleFilter.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = StreamParticleFilter.hpp; sourceTree = "<group>"; };
+		7E77281D1C97985D0013FC40 /* Building.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Building.cpp; sourceTree = "<group>"; };
+		7E77281E1C97985D0013FC40 /* Building.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Building.hpp; sourceTree = "<group>"; };
+		7E77281F1C97985D0013FC40 /* CoordinateSystem.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CoordinateSystem.cpp; sourceTree = "<group>"; };
+		7E7728201C97985D0013FC40 /* CoordinateSystem.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CoordinateSystem.hpp; sourceTree = "<group>"; };
+		7E7728211C97985D0013FC40 /* FloorMap.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FloorMap.cpp; sourceTree = "<group>"; };
+		7E7728221C97985D0013FC40 /* FloorMap.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = FloorMap.hpp; sourceTree = "<group>"; };
+		7E7728231C97985D0013FC40 /* ImageHolder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ImageHolder.cpp; sourceTree = "<group>"; };
+		7E7728241C97985D0013FC40 /* ImageHolder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ImageHolder.hpp; sourceTree = "<group>"; };
+		7E7728261C97985D0013FC40 /* MetropolisSampler.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MetropolisSampler.cpp; sourceTree = "<group>"; };
+		7E7728271C97985D0013FC40 /* MetropolisSampler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MetropolisSampler.hpp; sourceTree = "<group>"; };
+		7E7728281C97985D0013FC40 /* ObservationDependentInitializer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ObservationDependentInitializer.hpp; sourceTree = "<group>"; };
+		7E77282A1C97985D0013FC40 /* GaussianProcess.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GaussianProcess.cpp; sourceTree = "<group>"; };
+		7E77282B1C97985D0013FC40 /* GaussianProcess.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GaussianProcess.hpp; sourceTree = "<group>"; };
+		7E77282C1C97985D0013FC40 /* GaussianProcessLDPLMultiModel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GaussianProcessLDPLMultiModel.cpp; sourceTree = "<group>"; };
+		7E77282D1C97985D0013FC40 /* GaussianProcessLDPLMultiModel.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GaussianProcessLDPLMultiModel.hpp; sourceTree = "<group>"; };
+		7E77282E1C97985D0013FC40 /* KernelFunction.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = KernelFunction.cpp; sourceTree = "<group>"; };
+		7E77282F1C97985D0013FC40 /* KernelFunction.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = KernelFunction.hpp; sourceTree = "<group>"; };
+		7E7728301C97985D0013FC40 /* ObservationModel.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ObservationModel.hpp; sourceTree = "<group>"; };
+		7E7728311C97985D0013FC40 /* ObservationModelTrainer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ObservationModelTrainer.hpp; sourceTree = "<group>"; };
+		7E7728321C97985D0013FC40 /* PoseRandomWalker.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PoseRandomWalker.cpp; sourceTree = "<group>"; };
+		7E7728331C97985D0013FC40 /* PoseRandomWalker.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PoseRandomWalker.hpp; sourceTree = "<group>"; };
+		7E7728341C97985D0013FC40 /* PoseRandomWalkerInBuilding.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PoseRandomWalkerInBuilding.cpp; sourceTree = "<group>"; };
+		7E7728351C97985D0013FC40 /* PoseRandomWalkerInBuilding.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PoseRandomWalkerInBuilding.hpp; sourceTree = "<group>"; };
+		7E7728361C97985D0013FC40 /* RandomWalker.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RandomWalker.cpp; sourceTree = "<group>"; };
+		7E7728371C97985D0013FC40 /* RandomWalker.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = RandomWalker.hpp; sourceTree = "<group>"; };
+		7E7728381C97985D0013FC40 /* SystemModel.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SystemModel.hpp; sourceTree = "<group>"; };
+		7E77283A1C97985D0013FC40 /* OrientationMeter.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = OrientationMeter.hpp; sourceTree = "<group>"; };
+		7E77283B1C97985D0013FC40 /* OrientationMeterAverage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = OrientationMeterAverage.cpp; sourceTree = "<group>"; };
+		7E77283C1C97985D0013FC40 /* OrientationMeterAverage.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = OrientationMeterAverage.hpp; sourceTree = "<group>"; };
+		7E77283D1C97985D0013FC40 /* Pedometer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Pedometer.hpp; sourceTree = "<group>"; };
+		7E77283E1C97985D0013FC40 /* PedometerWalkingState.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PedometerWalkingState.cpp; sourceTree = "<group>"; };
+		7E77283F1C97985D0013FC40 /* PedometerWalkingState.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PedometerWalkingState.hpp; sourceTree = "<group>"; };
+		7E7728411C97985D0013FC40 /* ArrayUtils.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ArrayUtils.cpp; sourceTree = "<group>"; };
+		7E7728421C97985D0013FC40 /* ArrayUtils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ArrayUtils.hpp; sourceTree = "<group>"; };
+		7E7728431C97985D0013FC40 /* MathUtils.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MathUtils.cpp; sourceTree = "<group>"; };
+		7E7728441C97985D0013FC40 /* MathUtils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MathUtils.hpp; sourceTree = "<group>"; };
+		7E7728451C97985D0013FC40 /* RandomGenerator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RandomGenerator.cpp; sourceTree = "<group>"; };
+		7E7728461C97985D0013FC40 /* RandomGenerator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = RandomGenerator.hpp; sourceTree = "<group>"; };
+		7E7728471C97985D0013FC40 /* SerializeUtils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SerializeUtils.hpp; sourceTree = "<group>"; };
+		7E7728491C97D34F0013FC40 /* libopencv_contrib.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_contrib.dylib; path = ../../../../../../../../usr/local/Cellar/opencv/2.4.12/lib/libopencv_contrib.dylib; sourceTree = "<group>"; };
+		7E77284A1C97D34F0013FC40 /* libopencv_core.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_core.dylib; path = ../../../../../../../../usr/local/Cellar/opencv/2.4.12/lib/libopencv_core.dylib; sourceTree = "<group>"; };
+		7E77284B1C97D34F0013FC40 /* libopencv_features2d.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_features2d.dylib; path = ../../../../../../../../usr/local/Cellar/opencv/2.4.12/lib/libopencv_features2d.dylib; sourceTree = "<group>"; };
+		7E77284C1C97D34F0013FC40 /* libopencv_flann.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_flann.dylib; path = ../../../../../../../../usr/local/Cellar/opencv/2.4.12/lib/libopencv_flann.dylib; sourceTree = "<group>"; };
+		7E77284D1C97D34F0013FC40 /* libopencv_gpu.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_gpu.dylib; path = ../../../../../../../../usr/local/Cellar/opencv/2.4.12/lib/libopencv_gpu.dylib; sourceTree = "<group>"; };
+		7E77284E1C97D34F0013FC40 /* libopencv_highgui.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_highgui.dylib; path = ../../../../../../../../usr/local/Cellar/opencv/2.4.12/lib/libopencv_highgui.dylib; sourceTree = "<group>"; };
+		7E77284F1C97D34F0013FC40 /* libopencv_imgproc.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_imgproc.dylib; path = ../../../../../../../../usr/local/Cellar/opencv/2.4.12/lib/libopencv_imgproc.dylib; sourceTree = "<group>"; };
+		7E7728501C97D34F0013FC40 /* libopencv_legacy.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_legacy.dylib; path = ../../../../../../../../usr/local/Cellar/opencv/2.4.12/lib/libopencv_legacy.dylib; sourceTree = "<group>"; };
+		7E7728511C97D34F0013FC40 /* libopencv_ml.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_ml.dylib; path = ../../../../../../../../usr/local/Cellar/opencv/2.4.12/lib/libopencv_ml.dylib; sourceTree = "<group>"; };
+		7E7728521C97D34F0013FC40 /* libopencv_objdetect.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_objdetect.dylib; path = ../../../../../../../../usr/local/Cellar/opencv/2.4.12/lib/libopencv_objdetect.dylib; sourceTree = "<group>"; };
+		7E7728531C97D34F0013FC40 /* libopencv_ocl.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_ocl.dylib; path = ../../../../../../../../usr/local/Cellar/opencv/2.4.12/lib/libopencv_ocl.dylib; sourceTree = "<group>"; };
+		7E7728541C97D34F0013FC40 /* libopencv_photo.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_photo.dylib; path = ../../../../../../../../usr/local/Cellar/opencv/2.4.12/lib/libopencv_photo.dylib; sourceTree = "<group>"; };
+		7E7728551C97D34F0013FC40 /* libopencv_stitching.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_stitching.dylib; path = ../../../../../../../../usr/local/Cellar/opencv/2.4.12/lib/libopencv_stitching.dylib; sourceTree = "<group>"; };
+		7E7728561C97D34F0013FC40 /* libopencv_superres.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_superres.dylib; path = ../../../../../../../../usr/local/Cellar/opencv/2.4.12/lib/libopencv_superres.dylib; sourceTree = "<group>"; };
+		7E7728571C97D34F0013FC40 /* libopencv_video.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_video.dylib; path = ../../../../../../../../usr/local/Cellar/opencv/2.4.12/lib/libopencv_video.dylib; sourceTree = "<group>"; };
+		7E7728581C97D34F0013FC40 /* libopencv_videostab.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_videostab.dylib; path = ../../../../../../../../usr/local/Cellar/opencv/2.4.12/lib/libopencv_videostab.dylib; sourceTree = "<group>"; };
+		7E7728971C98A67B0013FC40 /* train.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = train.txt; sourceTree = "<group>"; };
+		7E7728981C98A67B0013FC40 /* beacons.csv */ = {isa = PBXFileReference; lastKnownFileType = text; path = beacons.csv; sourceTree = "<group>"; };
+		7E77289A1C98ABFB0013FC40 /* navcog.log */ = {isa = PBXFileReference; lastKnownFileType = text; path = navcog.log; sourceTree = "<group>"; };
+		7E77289B1C98BDE60013FC40 /* map.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = map.png; sourceTree = "<group>"; };
+		7E77289C1C98BE9F0013FC40 /* out.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = out.txt; sourceTree = "<group>"; };
+		E9F26190EDF40A0FFFE3B3E6 /* libPods-LogReplay.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-LogReplay.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		7E7727CA1C9797FF0013FC40 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7E7728631C97D34F0013FC40 /* libopencv_ocl.dylib in Frameworks */,
+				4864357D990F65BE15E38799 /* libPods-LogReplay.a in Frameworks */,
+				7E7728621C97D34F0013FC40 /* libopencv_objdetect.dylib in Frameworks */,
+				7E77285A1C97D34F0013FC40 /* libopencv_core.dylib in Frameworks */,
+				7E7728681C97D34F0013FC40 /* libopencv_videostab.dylib in Frameworks */,
+				7E7728661C97D34F0013FC40 /* libopencv_superres.dylib in Frameworks */,
+				7E7728611C97D34F0013FC40 /* libopencv_ml.dylib in Frameworks */,
+				7E7728651C97D34F0013FC40 /* libopencv_stitching.dylib in Frameworks */,
+				7E77285B1C97D34F0013FC40 /* libopencv_features2d.dylib in Frameworks */,
+				7E77285F1C97D34F0013FC40 /* libopencv_imgproc.dylib in Frameworks */,
+				7E7728601C97D34F0013FC40 /* libopencv_legacy.dylib in Frameworks */,
+				7E7728641C97D34F0013FC40 /* libopencv_photo.dylib in Frameworks */,
+				7E77285C1C97D34F0013FC40 /* libopencv_flann.dylib in Frameworks */,
+				7E77285D1C97D34F0013FC40 /* libopencv_gpu.dylib in Frameworks */,
+				7E7728591C97D34F0013FC40 /* libopencv_contrib.dylib in Frameworks */,
+				7E77285E1C97D34F0013FC40 /* libopencv_highgui.dylib in Frameworks */,
+				7E7728671C97D34F0013FC40 /* libopencv_video.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1721D55F05FE485A3CB3D8C4 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				79904DC52699C08C82BBFDFB /* Pods-LogReplay.debug.xcconfig */,
+				65E12EC685C21A6161293BCD /* Pods-LogReplay.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		7E7727C41C9797FF0013FC40 = {
+			isa = PBXGroup;
+			children = (
+				7E7728921C988E9F0013FC40 /* Example */,
+				7E7728481C97D3350013FC40 /* OpenCV */,
+				7E7727DD1C9798490013FC40 /* localization-library */,
+				7E7727CF1C9797FF0013FC40 /* LogReplay */,
+				7E7727CE1C9797FF0013FC40 /* Products */,
+				1721D55F05FE485A3CB3D8C4 /* Pods */,
+				C72D2CD72658DC4FA27584B0 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		7E7727CE1C9797FF0013FC40 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				7E7727CD1C9797FF0013FC40 /* LogReplay */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		7E7727CF1C9797FF0013FC40 /* LogReplay */ = {
+			isa = PBXGroup;
+			children = (
+				7E7727D01C9797FF0013FC40 /* main.cpp */,
+				7E7727D71C97982F0013FC40 /* NavCogLogPlayer.cpp */,
+				7E7727D81C97982F0013FC40 /* NavCogLogPlayer.hpp */,
+				7E7727D91C97982F0013FC40 /* StreamParticleFilterBuilder.cpp */,
+				7E7727DA1C97982F0013FC40 /* StreamParticleFilterBuilder.hpp */,
+			);
+			path = LogReplay;
+			sourceTree = "<group>";
+		};
+		7E7727DD1C9798490013FC40 /* localization-library */ = {
+			isa = PBXGroup;
+			children = (
+				7E7727DE1C97985D0013FC40 /* beacon */,
+				7E7727E71C97985D0013FC40 /* core */,
+				7E7727FC1C97985D0013FC40 /* data */,
+				7E7728081C97985D0013FC40 /* filter */,
+				7E77280C1C97985D0013FC40 /* impl */,
+				7E77281C1C97985D0013FC40 /* map */,
+				7E7728251C97985D0013FC40 /* mc */,
+				7E7728291C97985D0013FC40 /* model */,
+				7E7728391C97985D0013FC40 /* sensor */,
+				7E7728401C97985D0013FC40 /* utils */,
+			);
+			name = "localization-library";
+			sourceTree = "<group>";
+		};
+		7E7727DE1C97985D0013FC40 /* beacon */ = {
+			isa = PBXGroup;
+			children = (
+				7E7727DF1C97985D0013FC40 /* BaseBeaconFilter.hpp */,
+				7E7727E01C97985D0013FC40 /* BeaconFilter.hpp */,
+				7E7727E11C97985D0013FC40 /* BeaconFilterChain.cpp */,
+				7E7727E21C97985D0013FC40 /* BeaconFilterChain.hpp */,
+				7E7727E31C97985D0013FC40 /* CleansingBeaconFilter.cpp */,
+				7E7727E41C97985D0013FC40 /* CleansingBeaconFilter.hpp */,
+				7E7727E51C97985D0013FC40 /* StrongestBeaconFilter.cpp */,
+				7E7727E61C97985D0013FC40 /* StrongestBeaconFilter.hpp */,
+			);
+			name = beacon;
+			path = "../../ble-cpp/src/beacon";
+			sourceTree = "<group>";
+		};
+		7E7727E71C97985D0013FC40 /* core */ = {
+			isa = PBXGroup;
+			children = (
+				7E7727E81C97985D0013FC40 /* Acceleration.cpp */,
+				7E7727E91C97985D0013FC40 /* Acceleration.hpp */,
+				7E7727EA1C97985D0013FC40 /* Attitude.cpp */,
+				7E7727EB1C97985D0013FC40 /* Attitude.hpp */,
+				7E7727EC1C97985D0013FC40 /* Beacon.cpp */,
+				7E7727ED1C97985D0013FC40 /* Beacon.hpp */,
+				7E7727EE1C97985D0013FC40 /* BLEBeacon.cpp */,
+				7E7727EF1C97985D0013FC40 /* BLEBeacon.hpp */,
+				7E7727F01C97985D0013FC40 /* bleloc.h */,
+				7E7727F11C97985D0013FC40 /* Location.cpp */,
+				7E7727F21C97985D0013FC40 /* Location.hpp */,
+				7E7727F31C97985D0013FC40 /* Pose.cpp */,
+				7E7727F41C97985D0013FC40 /* Pose.hpp */,
+				7E7727F51C97985D0013FC40 /* Sample.cpp */,
+				7E7727F61C97985D0013FC40 /* Sample.hpp */,
+				7E7727F71C97985D0013FC40 /* State.cpp */,
+				7E7727F81C97985D0013FC40 /* State.hpp */,
+				7E7727F91C97985D0013FC40 /* Status.cpp */,
+				7E7727FA1C97985D0013FC40 /* Status.hpp */,
+				7E7727FB1C97985D0013FC40 /* StreamLocalizer.hpp */,
+			);
+			name = core;
+			path = "../../ble-cpp/src/core";
+			sourceTree = "<group>";
+		};
+		7E7727FC1C97985D0013FC40 /* data */ = {
+			isa = PBXGroup;
+			children = (
+				7E7727FD1C97985D0013FC40 /* DataLogger.cpp */,
+				7E7727FE1C97985D0013FC40 /* DataLogger.hpp */,
+				7E7727FF1C97985D0013FC40 /* DataStore.hpp */,
+				7E7728001C97985D0013FC40 /* DataStoreImpl.cpp */,
+				7E7728011C97985D0013FC40 /* DataStoreImpl.hpp */,
+				7E7728021C97985D0013FC40 /* DataUtils.cpp */,
+				7E7728031C97985D0013FC40 /* DataUtils.hpp */,
+				7E7728041C97985D0013FC40 /* LazyDataStore.cpp */,
+				7E7728051C97985D0013FC40 /* LazyDataStore.hpp */,
+				7E7728061C97985D0013FC40 /* VirtualDevice.cpp */,
+				7E7728071C97985D0013FC40 /* VirtualDevice.hpp */,
+			);
+			name = data;
+			path = "../../ble-cpp/src/data";
+			sourceTree = "<group>";
+		};
+		7E7728081C97985D0013FC40 /* filter */ = {
+			isa = PBXGroup;
+			children = (
+				7E7728091C97985D0013FC40 /* GridResampler.cpp */,
+				7E77280A1C97985D0013FC40 /* GridResampler.hpp */,
+				7E77280B1C97985D0013FC40 /* Resampler.hpp */,
+			);
+			name = filter;
+			path = "../../ble-cpp/src/filter";
+			sourceTree = "<group>";
+		};
+		7E77280C1C97985D0013FC40 /* impl */ = {
+			isa = PBXGroup;
+			children = (
+				7E77280D1C97985D0013FC40 /* StatusInitializer.hpp */,
+				7E77280E1C97985D0013FC40 /* StatusInitializerImpl.cpp */,
+				7E77280F1C97985D0013FC40 /* StatusInitializerImpl.hpp */,
+				7E7728101C97985D0013FC40 /* StatusInitializerStub.cpp */,
+				7E7728111C97985D0013FC40 /* StatusInitializerStub.hpp */,
+				7E7728121C97985D0013FC40 /* StreamLocalizerStub.cpp */,
+				7E7728131C97985D0013FC40 /* StreamLocalizerStub.hpp */,
+				7E7728141C97985D0013FC40 /* StreamParticleFilter.cpp */,
+				7E7728151C97985D0013FC40 /* StreamParticleFilter.hpp */,
+			);
+			name = impl;
+			path = "../../ble-cpp/src/impl";
+			sourceTree = "<group>";
+		};
+		7E77281C1C97985D0013FC40 /* map */ = {
+			isa = PBXGroup;
+			children = (
+				7E77281D1C97985D0013FC40 /* Building.cpp */,
+				7E77281E1C97985D0013FC40 /* Building.hpp */,
+				7E77281F1C97985D0013FC40 /* CoordinateSystem.cpp */,
+				7E7728201C97985D0013FC40 /* CoordinateSystem.hpp */,
+				7E7728211C97985D0013FC40 /* FloorMap.cpp */,
+				7E7728221C97985D0013FC40 /* FloorMap.hpp */,
+				7E7728231C97985D0013FC40 /* ImageHolder.cpp */,
+				7E7728241C97985D0013FC40 /* ImageHolder.hpp */,
+			);
+			name = map;
+			path = "../../ble-cpp/src/map";
+			sourceTree = "<group>";
+		};
+		7E7728251C97985D0013FC40 /* mc */ = {
+			isa = PBXGroup;
+			children = (
+				7E7728261C97985D0013FC40 /* MetropolisSampler.cpp */,
+				7E7728271C97985D0013FC40 /* MetropolisSampler.hpp */,
+				7E7728281C97985D0013FC40 /* ObservationDependentInitializer.hpp */,
+			);
+			name = mc;
+			path = "../../ble-cpp/src/mc";
+			sourceTree = "<group>";
+		};
+		7E7728291C97985D0013FC40 /* model */ = {
+			isa = PBXGroup;
+			children = (
+				7E77282A1C97985D0013FC40 /* GaussianProcess.cpp */,
+				7E77282B1C97985D0013FC40 /* GaussianProcess.hpp */,
+				7E77282C1C97985D0013FC40 /* GaussianProcessLDPLMultiModel.cpp */,
+				7E77282D1C97985D0013FC40 /* GaussianProcessLDPLMultiModel.hpp */,
+				7E77282E1C97985D0013FC40 /* KernelFunction.cpp */,
+				7E77282F1C97985D0013FC40 /* KernelFunction.hpp */,
+				7E7728301C97985D0013FC40 /* ObservationModel.hpp */,
+				7E7728311C97985D0013FC40 /* ObservationModelTrainer.hpp */,
+				7E7728321C97985D0013FC40 /* PoseRandomWalker.cpp */,
+				7E7728331C97985D0013FC40 /* PoseRandomWalker.hpp */,
+				7E7728341C97985D0013FC40 /* PoseRandomWalkerInBuilding.cpp */,
+				7E7728351C97985D0013FC40 /* PoseRandomWalkerInBuilding.hpp */,
+				7E7728361C97985D0013FC40 /* RandomWalker.cpp */,
+				7E7728371C97985D0013FC40 /* RandomWalker.hpp */,
+				7E7728381C97985D0013FC40 /* SystemModel.hpp */,
+			);
+			name = model;
+			path = "../../ble-cpp/src/model";
+			sourceTree = "<group>";
+		};
+		7E7728391C97985D0013FC40 /* sensor */ = {
+			isa = PBXGroup;
+			children = (
+				7E77283A1C97985D0013FC40 /* OrientationMeter.hpp */,
+				7E77283B1C97985D0013FC40 /* OrientationMeterAverage.cpp */,
+				7E77283C1C97985D0013FC40 /* OrientationMeterAverage.hpp */,
+				7E77283D1C97985D0013FC40 /* Pedometer.hpp */,
+				7E77283E1C97985D0013FC40 /* PedometerWalkingState.cpp */,
+				7E77283F1C97985D0013FC40 /* PedometerWalkingState.hpp */,
+			);
+			name = sensor;
+			path = "../../ble-cpp/src/sensor";
+			sourceTree = "<group>";
+		};
+		7E7728401C97985D0013FC40 /* utils */ = {
+			isa = PBXGroup;
+			children = (
+				7E7728411C97985D0013FC40 /* ArrayUtils.cpp */,
+				7E7728421C97985D0013FC40 /* ArrayUtils.hpp */,
+				7E7728431C97985D0013FC40 /* MathUtils.cpp */,
+				7E7728441C97985D0013FC40 /* MathUtils.hpp */,
+				7E7728451C97985D0013FC40 /* RandomGenerator.cpp */,
+				7E7728461C97985D0013FC40 /* RandomGenerator.hpp */,
+				7E7728471C97985D0013FC40 /* SerializeUtils.hpp */,
+			);
+			name = utils;
+			path = "../../ble-cpp/src/utils";
+			sourceTree = "<group>";
+		};
+		7E7728481C97D3350013FC40 /* OpenCV */ = {
+			isa = PBXGroup;
+			children = (
+				7E7728491C97D34F0013FC40 /* libopencv_contrib.dylib */,
+				7E77284A1C97D34F0013FC40 /* libopencv_core.dylib */,
+				7E77284B1C97D34F0013FC40 /* libopencv_features2d.dylib */,
+				7E77284C1C97D34F0013FC40 /* libopencv_flann.dylib */,
+				7E77284D1C97D34F0013FC40 /* libopencv_gpu.dylib */,
+				7E77284E1C97D34F0013FC40 /* libopencv_highgui.dylib */,
+				7E77284F1C97D34F0013FC40 /* libopencv_imgproc.dylib */,
+				7E7728501C97D34F0013FC40 /* libopencv_legacy.dylib */,
+				7E7728511C97D34F0013FC40 /* libopencv_ml.dylib */,
+				7E7728521C97D34F0013FC40 /* libopencv_objdetect.dylib */,
+				7E7728531C97D34F0013FC40 /* libopencv_ocl.dylib */,
+				7E7728541C97D34F0013FC40 /* libopencv_photo.dylib */,
+				7E7728551C97D34F0013FC40 /* libopencv_stitching.dylib */,
+				7E7728561C97D34F0013FC40 /* libopencv_superres.dylib */,
+				7E7728571C97D34F0013FC40 /* libopencv_video.dylib */,
+				7E7728581C97D34F0013FC40 /* libopencv_videostab.dylib */,
+			);
+			name = OpenCV;
+			sourceTree = "<group>";
+		};
+		7E7728921C988E9F0013FC40 /* Example */ = {
+			isa = PBXGroup;
+			children = (
+				7E7728971C98A67B0013FC40 /* train.txt */,
+				7E7728981C98A67B0013FC40 /* beacons.csv */,
+				7E77289B1C98BDE60013FC40 /* map.png */,
+				7E77289A1C98ABFB0013FC40 /* navcog.log */,
+				7E77289C1C98BE9F0013FC40 /* out.txt */,
+			);
+			name = Example;
+			sourceTree = "<group>";
+		};
+		C72D2CD72658DC4FA27584B0 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E9F26190EDF40A0FFFE3B3E6 /* libPods-LogReplay.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		7E7727CC1C9797FF0013FC40 /* LogReplay */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7E7727D41C9797FF0013FC40 /* Build configuration list for PBXNativeTarget "LogReplay" */;
+			buildPhases = (
+				AC104D4FBAF9A6F405F29D87 /* Check Pods Manifest.lock */,
+				7E7727C91C9797FF0013FC40 /* Sources */,
+				7E7727CA1C9797FF0013FC40 /* Frameworks */,
+				7E7727CB1C9797FF0013FC40 /* CopyFiles */,
+				F722DA91D24D04F7772A92F4 /* Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = LogReplay;
+			productName = LogReplay;
+			productReference = 7E7727CD1C9797FF0013FC40 /* LogReplay */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		7E7727C51C9797FF0013FC40 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0720;
+				ORGANIZATIONNAME = "Daisuke Sato";
+				TargetAttributes = {
+					7E7727CC1C9797FF0013FC40 = {
+						CreatedOnToolsVersion = 7.2.1;
+					};
+				};
+			};
+			buildConfigurationList = 7E7727C81C9797FF0013FC40 /* Build configuration list for PBXProject "LogReplay" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 7E7727C41C9797FF0013FC40;
+			productRefGroup = 7E7727CE1C9797FF0013FC40 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				7E7727CC1C9797FF0013FC40 /* LogReplay */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		AC104D4FBAF9A6F405F29D87 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		F722DA91D24D04F7772A92F4 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-LogReplay/Pods-LogReplay-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		7E7727C91C9797FF0013FC40 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7E7728691C97D5D80013FC40 /* BeaconFilterChain.cpp in Sources */,
+				7E77286A1C97D5D80013FC40 /* CleansingBeaconFilter.cpp in Sources */,
+				7E77286B1C97D5D80013FC40 /* StrongestBeaconFilter.cpp in Sources */,
+				7E77286C1C97D5D80013FC40 /* Acceleration.cpp in Sources */,
+				7E77286D1C97D5D80013FC40 /* Attitude.cpp in Sources */,
+				7E77286E1C97D5D80013FC40 /* Beacon.cpp in Sources */,
+				7E77286F1C97D5D80013FC40 /* BLEBeacon.cpp in Sources */,
+				7E7728701C97D5D80013FC40 /* Location.cpp in Sources */,
+				7E7728711C97D5D80013FC40 /* Pose.cpp in Sources */,
+				7E7728721C97D5D80013FC40 /* Sample.cpp in Sources */,
+				7E7728731C97D5D80013FC40 /* State.cpp in Sources */,
+				7E7728741C97D5D80013FC40 /* Status.cpp in Sources */,
+				7E7728751C97D5D80013FC40 /* DataLogger.cpp in Sources */,
+				7E7728761C97D5D80013FC40 /* DataStoreImpl.cpp in Sources */,
+				7E7728771C97D5D80013FC40 /* DataUtils.cpp in Sources */,
+				7E7728781C97D5D80013FC40 /* LazyDataStore.cpp in Sources */,
+				7E7728791C97D5D80013FC40 /* VirtualDevice.cpp in Sources */,
+				7E77287A1C97D5D80013FC40 /* GridResampler.cpp in Sources */,
+				7E77287B1C97D5D80013FC40 /* StatusInitializerImpl.cpp in Sources */,
+				7E77287C1C97D5D80013FC40 /* StatusInitializerStub.cpp in Sources */,
+				7E77287D1C97D5D80013FC40 /* StreamLocalizerStub.cpp in Sources */,
+				7E77287E1C97D5D80013FC40 /* StreamParticleFilter.cpp in Sources */,
+				7E7728821C97D5D80013FC40 /* Building.cpp in Sources */,
+				7E7728831C97D5D80013FC40 /* CoordinateSystem.cpp in Sources */,
+				7E7728841C97D5D80013FC40 /* FloorMap.cpp in Sources */,
+				7E7728851C97D5D80013FC40 /* ImageHolder.cpp in Sources */,
+				7E7728861C97D5D80013FC40 /* MetropolisSampler.cpp in Sources */,
+				7E7728871C97D5D80013FC40 /* GaussianProcess.cpp in Sources */,
+				7E7728881C97D5D80013FC40 /* GaussianProcessLDPLMultiModel.cpp in Sources */,
+				7E7728891C97D5D80013FC40 /* KernelFunction.cpp in Sources */,
+				7E77288A1C97D5D80013FC40 /* PoseRandomWalker.cpp in Sources */,
+				7E77288B1C97D5D80013FC40 /* PoseRandomWalkerInBuilding.cpp in Sources */,
+				7E77288C1C97D5D80013FC40 /* RandomWalker.cpp in Sources */,
+				7E77288D1C97D5D80013FC40 /* OrientationMeterAverage.cpp in Sources */,
+				7E77288E1C97D5D80013FC40 /* PedometerWalkingState.cpp in Sources */,
+				7E77288F1C97D5D80013FC40 /* ArrayUtils.cpp in Sources */,
+				7E7728901C97D5D80013FC40 /* MathUtils.cpp in Sources */,
+				7E7728911C97D5D80013FC40 /* RandomGenerator.cpp in Sources */,
+				7E7727D11C9797FF0013FC40 /* main.cpp in Sources */,
+				7E7727DB1C97982F0013FC40 /* NavCogLogPlayer.cpp in Sources */,
+				7E7727DC1C97982F0013FC40 /* StreamParticleFilterBuilder.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		7E7727D21C9797FF0013FC40 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		7E7727D31C9797FF0013FC40 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		7E7727D51C9797FF0013FC40 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 79904DC52699C08C82BBFDFB /* Pods-LogReplay.debug.xcconfig */;
+			buildSettings = {
+				HEADER_SEARCH_PATHS = (
+					"\"${PODS_ROOT}/boost\"",
+					"\"${PODS_ROOT}/cereal/include\"",
+					"\"${PODS_ROOT}/eigen\"",
+					"$(inherited)",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/boost\"",
+					"\"${PODS_ROOT}/Headers/Public/cereal\"",
+					"\"${PODS_ROOT}/Headers/Public/eigen\"",
+					"\"${PODS_ROOT}/Headers/Public/picojson\"",
+					"\"/usr/local/Cellar/opencv/2.4.12/include/\"",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/usr/local/Cellar/opencv/2.4.12/lib,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		7E7727D61C9797FF0013FC40 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 65E12EC685C21A6161293BCD /* Pods-LogReplay.release.xcconfig */;
+			buildSettings = {
+				HEADER_SEARCH_PATHS = (
+					"\"${PODS_ROOT}/boost\"",
+					"\"${PODS_ROOT}/cereal/include\"",
+					"\"${PODS_ROOT}/eigen\"",
+					"$(inherited)",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/boost\"",
+					"\"${PODS_ROOT}/Headers/Public/cereal\"",
+					"\"${PODS_ROOT}/Headers/Public/eigen\"",
+					"\"${PODS_ROOT}/Headers/Public/picojson\"",
+					"\"/usr/local/Cellar/opencv/2.4.12/include/\"",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/usr/local/Cellar/opencv/2.4.12/lib,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		7E7727C81C9797FF0013FC40 /* Build configuration list for PBXProject "LogReplay" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7E7727D21C9797FF0013FC40 /* Debug */,
+				7E7727D31C9797FF0013FC40 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7E7727D41C9797FF0013FC40 /* Build configuration list for PBXNativeTarget "LogReplay" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7E7727D51C9797FF0013FC40 /* Debug */,
+				7E7727D61C9797FF0013FC40 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 7E7727C51C9797FF0013FC40 /* Project object */;
+}
