@@ -305,6 +305,70 @@ namespace loc{
         return std::move(samples);
     }
     
+    Sample DataUtils::parseShortSampleCSV(const std::string& csvLine) throw(std::invalid_argument) {
+        //Location location = parseLocationCSV(csvLine);
+        //Beacons beacons = parseBeaconsCSV(csvLine);
+        
+        const char *buffer = csvLine.c_str();
+        long timestamp = 0;
+        double x, y, z = 0, floor = 0;
+        int num, n = 0;
+        sscanf(buffer, "%lf,%lf,%d,%n", &x, &y, &num, &n);
+        
+        if(n==0){
+            throw std::invalid_argument("Invalid csv line was found.");
+        }
+        
+        buffer += n;
+        Location location(x,y,z,floor);
+        
+        int major, minor;
+        double rssi;
+        Beacons beacons;
+        beacons.timestamp(timestamp);
+        for(int i = 0; i < num; i++) {
+            sscanf(buffer, "%d,%d,%lf,%n", &major, &minor, &rssi, &n);
+            buffer += n;
+            beacons.push_back(Beacon(major, minor, rssi));
+        }
+        
+        Sample sample;
+        sample.timestamp(timestamp)->location(location)->beacons(beacons);
+        return sample;
+    }
+    
+    void DataUtils::shortCsvSamplesToSamples(std::istream& istream, Samples &samples){
+        std::string strBuffer;
+        while(std::getline(istream, strBuffer)){
+            try{
+                Sample sample = parseShortSampleCSV(strBuffer);
+                samples.push_back(sample);
+            } catch (std::invalid_argument e){
+                std::cout << "Invalid short csv line was found. line=" <<strBuffer << std::endl;
+                //std::cout << "Header line is found in csv samples." << std::endl;
+            }
+        }
+    }
+
+    Samples DataUtils::shortCsvSamplesToSamples(std::istream& istream){
+        Samples samples;
+        std::string strBuffer;
+        while(std::getline(istream, strBuffer)){
+            try{
+                Sample sample = parseShortSampleCSV(strBuffer);
+                samples.push_back(sample);
+            } catch (std::invalid_argument e){
+                std::cout << "Invalid short csv line was found. line=" <<strBuffer << std::endl;
+            }
+        }
+        if(samples.size()==0){
+            std::cout << "Samples CSV was not found." << std::endl;
+        }
+        return std::move(samples);
+    }
+    
+    
+    
     BLEBeacon DataUtils::parseBLEBeaconCSV(const std::string& csvLine) throw (std::invalid_argument){
         std::list<std::string> stringList = splitAndTrimCSV(csvLine);
         std::list<std::string>::iterator iter;
