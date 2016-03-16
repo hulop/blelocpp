@@ -39,19 +39,24 @@ struct Option{
     std::string mapFilePath = "";
     std::string outputFilePath = "";
     
-    void print(){
-        std::cout << "trainFilePath=" << trainFilePath << std::endl;
-        std::cout << "beaconFilePath=" << beaconFilePath << std::endl;
-        std::cout << "mapFilePath=" << mapFilePath << std::endl;
-        std::cout << "logFilePath" << logFilePath << std::endl;
-        std::cout << "outputFilePath=" << outputFilePath << std::endl;
+    std::string strRequired() const{
+        std::stringstream ss;
+        ss << "trainFilePath=" << trainFilePath << std::endl;
+        ss << "beaconFilePath=" << beaconFilePath << std::endl;
+        ss << "mapFilePath=" << mapFilePath << std::endl;
+        ss << "logFilePath=" << logFilePath;
+        return ss.str();
     }
     
-    bool isFilled(){
+    std::string str() const{
+        std::stringstream ss;
+        ss << strRequired();
+        ss << "outputFilePath=" << outputFilePath;
+        return ss.str();
+    }
+    
+    bool isPrepared(){
         if(trainFilePath==""){
-            return false;
-        }
-        if(logFilePath==""){
             return false;
         }
         if(beaconFilePath==""){
@@ -60,9 +65,14 @@ struct Option{
         if(mapFilePath==""){
             return false;
         }
+        if(logFilePath==""){
+            return false;
+        }
+        /*
         if(outputFilePath==""){
             return false;
         }
+        */
         return true;
     }
     
@@ -87,7 +97,7 @@ Option parseArguments(int argc,char *argv[]){
     {
         case 'h':
             printHelp();
-            abort();
+            exit(0);
         case 't':
             opt.trainFilePath.assign(optarg);
             break;
@@ -107,6 +117,11 @@ Option parseArguments(int argc,char *argv[]){
             abort();
     }
     
+    if(! opt.isPrepared()){
+        std::cerr << "Please input all required options." << std::endl;
+        std::cerr << opt.strRequired() << std::endl;
+        exit(1);
+    }
     return opt;
 }
 
@@ -129,7 +144,7 @@ int main(int argc,char *argv[]){
     std::cout<<"Log play start"<<std::endl;
     
     Option opt = parseArguments(argc, argv);
-    opt.print();
+    std::cout << opt.str() << std::endl;
     
     loc::StreamParticleFilterBuilder builder;
     builder.usesObservationDependentInitializer = false;
