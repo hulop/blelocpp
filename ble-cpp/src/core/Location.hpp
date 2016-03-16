@@ -75,6 +75,9 @@ namespace loc{
         static double distance(const Location& loc1, const Location& loc2, double offset);
         static double floorDifference(const Location& location1, const Location& location2);
         
+        template <class Tlocation>
+        static std::vector<Tlocation> filterLocationsOnFlatFloor(const std::vector<Tlocation>& locations);
+        
         // for container
         bool operator<(const Location &right) const;
         bool operator==(const Location &right) const;
@@ -152,6 +155,16 @@ namespace loc{
         return stdevLocation;
     }
     
+    template <class Tlocation>
+    std::vector<Tlocation> Location::filterLocationsOnFlatFloor(const std::vector<Tlocation>& locations){
+        std::vector<Tlocation> locsNew;
+        for(const auto& loc: locations){
+            if(loc.z() == 0.0){
+                locsNew.push_back(loc);
+            }
+        }
+        return locsNew;
+    }
 }
 
 #endif /* Location_hpp */
