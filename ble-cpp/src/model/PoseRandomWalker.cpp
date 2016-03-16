@@ -59,8 +59,10 @@ namespace loc{
         double yaw = mProperty.orientationMeter()->getYaw();
         
         // Perturb variables in State
-        state.orientationBias(state.orientationBias() + stateProperty.diffusionOrientationBias()*randomGenerator.nextGaussian()*dTime );
-        state.rssiBias(randomGenerator.nextTruncatedGaussian(state.rssiBias(), stateProperty.diffusionRssiBias()*dTime , stateProperty.minRssiBias(), stateProperty.maxRssiBias()));
+        if(nSteps>0 || mProperty.doesUpdateWhenStopping() ){
+            state.orientationBias(state.orientationBias() + stateProperty.diffusionOrientationBias()*randomGenerator.nextGaussian()*dTime );
+            state.rssiBias(randomGenerator.nextTruncatedGaussian(state.rssiBias(), stateProperty.diffusionRssiBias()*dTime , stateProperty.minRssiBias(), stateProperty.maxRssiBias()));
+        }
         
         // Update orientation
         double previousOrientation = state.orientation();
@@ -77,11 +79,14 @@ namespace loc{
         
         // Perturb variables in Pose
         double v = 0.0;
-        double nV = randomGenerator.nextTruncatedGaussian(state.normalVelocity(),
+        double nV = state.normalVelocity();
+        if(nSteps >0 || mProperty.doesUpdateWhenStopping()){
+            nV = randomGenerator.nextTruncatedGaussian(state.normalVelocity(),
                                                           poseProperty.diffusionVelocity(),
                                                           poseProperty.minVelocity(),
                                                           poseProperty.maxVelocity());
-        state.normalVelocity(nV);
+            state.normalVelocity(nV);
+        }
         if(nSteps>0){
             v = nV * mVelocityRate * turningVelocityRate;
         }else{

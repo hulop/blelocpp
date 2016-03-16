@@ -43,6 +43,7 @@ namespace loc{
         OrientationMeter* pOrientationMeter;
         
         double mAngularVelocityLimit = 30.0/180.0*M_PI;
+        bool mDoesUpdateWhenStopping = false;
         
     public:
         void pedometer(Pedometer* pedometer){
@@ -54,6 +55,9 @@ namespace loc{
         void angularVelocityLimit(double angularVelocityLimit){
             mAngularVelocityLimit = angularVelocityLimit;
         }
+        void doesUpdateWhenStopping(bool doesUpdate){
+            mDoesUpdateWhenStopping = doesUpdate;
+        }
         Pedometer* pedometer(){
             return pPedomter;
         }
@@ -62,6 +66,9 @@ namespace loc{
         }
         double angularVelocityLimit() const{
             return mAngularVelocityLimit;
+        }
+        bool doesUpdateWhenStopping() const{
+            return mDoesUpdateWhenStopping;
         }
     };
     
