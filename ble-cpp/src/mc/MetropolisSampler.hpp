@@ -40,8 +40,8 @@ namespace loc{
     public:
         class Parameters{
         public:
-            int burnIn = 1000;
-            int interval = 10;
+            int burnIn = 100;
+            int interval = 1;
             double radius2D = 10;
             bool withOrdering = false;
         };

@@ -297,6 +297,7 @@ namespace loc{
                     }
                 }
             }
+            status->timestamp(beacons.timestamp());
             callback(status.get());
         };
 
@@ -400,6 +401,7 @@ namespace loc{
             States statesTmp = sampleStatesByObservation(mNumStates, beaconsFiltered);
             States* statesNew = new States(statesTmp);
             status->states(statesNew);
+            status->timestamp(beacons.timestamp());
             if(mMetro){
                 ss << "an ObservationDependentInitializer.";
             }else{
@@ -439,7 +441,7 @@ namespace loc{
             std::vector<Location> locations(statesTmp->begin(), statesTmp->end());
             States* statesNew = new States(mStatusInitializer->initializeStatesFromLocations(locations));
             status->states(statesNew);
-
+            status->timestamp(beacons.timestamp());
             callback(status.get());
             return false;
         }

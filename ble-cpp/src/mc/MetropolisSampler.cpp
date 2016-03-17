@@ -46,6 +46,10 @@ namespace loc{
     State MetropolisSampler<Tstate, Tinput>::findInitialMaxLikelihoodState(){
         auto locations = mStatusInitializer->extractLocationsCloseToBeacons(mInput, mParams.radius2D);
         locations = Location::filterLocationsOnFlatFloor(locations); // Remove locations with an unusual z value.
+        if(locations.size()==0){
+            std::cerr << "All locations were removed at filtering step in sampler.　Not filtered locations are used." << std::endl;
+            locations = mStatusInitializer->extractLocationsCloseToBeacons(mInput, mParams.radius2D);
+        }
         auto states = mStatusInitializer->initializeStatesFromLocations(locations);
         std::vector<double> logLLs = mObsModel->computeLogLikelihood(states, mInput);
         auto iterMax = std::max_element(logLLs.begin(), logLLs.end());
