@@ -153,6 +153,9 @@ void functionCalledWhenUpdated(void *userData, loc::Status *pStatus){
     auto meanPose = pStatus->meanPose();
     std::cout << timestamp << "," << *meanPose << std::endl;
     ud->ss << timestamp << "," << *meanPose << std::endl;
+    
+    // TODO calculate error here with the ground truth. (static variable)
+    // meanPose->y() is the y value.
 }
 
 
@@ -209,7 +212,12 @@ int main(int argc,char *argv[]){
     });
     logPlayer.functionCalledWhenReset([&](Pose poseReset){
         localizer->resetStatus(poseReset);
+        // TODO start error calcuration from when this is called
     });
+    logPlayer.functionCalledWhenReached([&](long time_stamp, double pos){
+        // TODO update ground truth position
+    });
+
     logPlayer.run();
     
     if(opt.outputFilePath!=""){
