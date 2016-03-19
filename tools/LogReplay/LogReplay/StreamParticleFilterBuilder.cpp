@@ -44,7 +44,7 @@ namespace loc{
             }
             samples.insert(samples.end(), samplesTmp.begin(), samplesTmp.end());
         }
-        for(loc::Sample sample: samples) {
+        for(loc::Sample& sample: samples) {
             Location l = sample.location();
             l = Location(l.x()*unit, l.y()*unit, l.z()*unit, l.floor());
             sample.location(l);
@@ -60,7 +60,7 @@ namespace loc{
             BLEBeacons bleBeaconsTmp = DataUtils::csvBLEBeaconsToBLEBeacons(bleBeaconIStream);
             bleBeacons.insert(bleBeacons.end(), bleBeaconsTmp.begin(), bleBeaconsTmp.end());
         }
-        for(loc::BLEBeacon beacon: bleBeacons) {
+        for(loc::BLEBeacon& beacon: bleBeacons) {
             beacon.Location::x(beacon.Location::x()*unit);
             beacon.Location::y(beacon.Location::y()*unit);
         }
