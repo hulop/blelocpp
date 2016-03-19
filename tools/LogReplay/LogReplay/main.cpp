@@ -94,7 +94,7 @@ void printHelp(std::string command){
     std::cout << " -m mapImageFile      set map image file (PNG). Map image is treated as 8 pixel per meter." << std::endl;
     std::cout << " -l logFile           set NavCog log file" << std::endl;
     std::cout << " -1 starty,endy       set 1D-PDR mode and the start/end point. specify like -1 0,9" << std::endl;
-    std::cout << " -o outputFile        set output file" << std::endl;
+    std::cout << " -o outputFile        set output file" << std::endl;
     std::cout << std::endl;
     std::cout << "Example" << std::endl;
     std::cout << "$ " << command << " -t train.txt -b beacon.csv -m map.png -l navcog.log -o out.txt" << std::endl;
@@ -147,17 +147,24 @@ struct UserData{
     std::stringstream ss;
 };
 
+static double reached = NAN;
+
 void functionCalledWhenUpdated(void *userData, loc::Status *pStatus){
     UserData* ud = (UserData*) userData;
     long timestamp = pStatus->timestamp();
     auto meanPose = pStatus->meanPose();
-    std::cout << timestamp << "," << *meanPose << std::endl;
-    ud->ss << timestamp << "," << *meanPose << std::endl;
+    
+    if (!isnan(reached)) {
+        std::cout << timestamp << "," << *meanPose << "," << reached << std::endl;
+        ud->ss << timestamp << "," << *meanPose << "," << reached << std::endl;
+    } else {
+        std::cout << timestamp << "," << *meanPose << std::endl;
+        ud->ss << timestamp << "," << *meanPose << std::endl;
+    }
     
     // TODO calculate error here with the ground truth. (static variable)
     // meanPose->y() is the y value.
 }
-
 
 int main(int argc,char *argv[]){
     
@@ -216,6 +223,8 @@ int main(int argc,char *argv[]){
     });
     logPlayer.functionCalledWhenReached([&](long time_stamp, double pos){
         // TODO update ground truth position
+        // std::cout << time_stamp << "," << pos*3*opt.unit << ",Reached" << std::endl;
+        reached = pos*3*opt.unit;
     });
 
     logPlayer.run();

@@ -60,6 +60,10 @@ namespace loc{
             BLEBeacons bleBeaconsTmp = DataUtils::csvBLEBeaconsToBLEBeacons(bleBeaconIStream);
             bleBeacons.insert(bleBeacons.end(), bleBeaconsTmp.begin(), bleBeaconsTmp.end());
         }
+        for(loc::BLEBeacon beacon: bleBeacons) {
+            beacon.Location::x(beacon.Location::x()*unit);
+            beacon.Location::y(beacon.Location::y()*unit);
+        }
         dataStore->bleBeacons(bleBeacons);
         
         // Building
