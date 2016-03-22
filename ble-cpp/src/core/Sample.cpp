@@ -161,8 +161,18 @@ namespace loc{
                     bsnew.push_back(b);
                 }
             }
-            s.beacons(bsnew);
-            smps.push_back(s);
+            if(bsnew.size()>0){
+                s.beacons(bsnew);
+                smps.push_back(s);
+            }
+        }
+        if(smps.size()==0){
+            std::stringstream ss1;
+            ss1 << "Registered beacons(major,minor) = ";
+            for(const BLEBeacon& ble: bleBeacons){
+                ss1 << "(" << ble.major() << "," << ble.minor() <<"),";
+            }
+            throw new std::runtime_error("No sample contains beacon signals from the registered beacons");
         }
         return smps;
     }
