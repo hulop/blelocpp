@@ -39,16 +39,19 @@ namespace loc{
             Samples samplesTmp;
             if (shortCSV) {
                 samplesTmp = DataUtils::shortCsvSamplesToSamples(istream);
+                
+                // assume it is in 3-feet unit
+                for(loc::Sample& sample: samplesTmp) {
+                    Location l = sample.location();
+                    l = Location(l.x()*3*0.3048, l.y()*3*0.3048, l.z()*3*0.3048, l.floor());
+                    sample.location(l);
+                }
             } else {
                 samplesTmp = DataUtils::csvSamplesToSamples(istream);
             }
             samples.insert(samples.end(), samplesTmp.begin(), samplesTmp.end());
         }
-        for(loc::Sample& sample: samples) {
-            Location l = sample.location();
-            l = Location(l.x()*unit, l.y()*unit, l.z()*unit, l.floor());
-            sample.location(l);
-        }
+        
         dataStore->samples(samples);
         
         // BLE beacon locations
@@ -63,6 +66,8 @@ namespace loc{
         for(loc::BLEBeacon& beacon: bleBeacons) {
             beacon.Location::x(beacon.Location::x()*unit);
             beacon.Location::y(beacon.Location::y()*unit);
+            
+            std::cout << beacon << std::endl;
         }
         dataStore->bleBeacons(bleBeacons);
         

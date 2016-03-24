@@ -88,12 +88,12 @@ void printHelp(std::string command){
     std::cout << "Options for NavCog log play" << std::endl;
     std::cout << " -h                   show this help" << std::endl;
     std::cout << " -t trainingDataFile  set training data file (long csv format)" << std::endl;
-    std::cout << " -s                   indicates <trainingDataFile> is in short csv format" << std::endl;
-    std::cout << " -f                   indicates <trainingDataFile> is in feet unit" << std::endl;
+    std::cout << " -s                   indicates <trainingDataFile> is in short csv format (3-feet unit)" << std::endl;
     std::cout << " -b beaconDataFile    set beacon data file" << std::endl;
+    std::cout << " -f                   indicates <beaconDataFile> is in feet unit" << std::endl;
     std::cout << " -m mapImageFile      set map image file (PNG). Map image is treated as 8 pixel per meter." << std::endl;
     std::cout << " -l logFile           set NavCog log file" << std::endl;
-    std::cout << " -1 starty,endy       set 1D-PDR mode and the start/end point. specify like -1 0,9" << std::endl;
+    std::cout << " -1 starty,endy       set 1D-PDR mode and the start/end point. specify like -1 0,9 in feet" << std::endl;
     std::cout << " -o outputFile        set output file" << std::endl;
     std::cout << std::endl;
     std::cout << "Example" << std::endl;
@@ -197,7 +197,7 @@ int main(int argc,char *argv[]){
     if (opt.oneDPDR) {
         loc::Pose pose;
         float orientation = atan2(opt.endy-opt.starty, 0);
-        pose.x(0).y(opt.starty*opt.unit).z(0).floor(0).orientation(orientation);
+        pose.x(0).y(opt.starty*0.3048).z(0).floor(0).orientation(orientation);
         loc::Pose stdevPose;
         stdevPose.x(0.25).y(0.25).orientation(1.0/180.0*M_PI);
         localizer->resetStatus(pose, stdevPose);
@@ -224,7 +224,7 @@ int main(int argc,char *argv[]){
     logPlayer.functionCalledWhenReached([&](long time_stamp, double pos){
         // TODO update ground truth position
         // std::cout << time_stamp << "," << pos*3*opt.unit << ",Reached" << std::endl;
-        reached = pos*3*opt.unit;
+        reached = pos*3*0.3048;
     });
 
     logPlayer.run();
