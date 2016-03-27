@@ -30,6 +30,7 @@
 #include "StreamParticleFilter.hpp"
 
 #include "PoseRandomWalker.hpp"
+#include "RandomWalker.hpp"
 
 #include "GridResampler.hpp"
 #include "StatusInitializerStub.hpp"
@@ -67,8 +68,10 @@ namespace loc {
         
         double mixProbability = 0.0;
         bool usesObservationDependentInitializer = false;
-        bool shortCSV;
+        bool shortCSV = false;
         float unit = 1.0;
+        float alphaWeaken = 0.3;
+        bool randomWalker = false;
         
         StreamParticleFilterBuilder& trainDataPath(std::string trainDataPath){
             mTrainDataPath = trainDataPath;

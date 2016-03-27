@@ -43,6 +43,8 @@ struct Option{
     bool oneDPDR = false;
     float starty = 0;
     float endy = 0;
+    float alphaWeaken = 0.3;
+    bool randomWalker = false;
     
     void print(){
         std::cout << "------------------------------------" << std::endl;
@@ -54,6 +56,8 @@ struct Option{
         std::cout << " logFilePath    =" << logFilePath << std::endl;
         std::cout << " outputFilePath =" << outputFilePath << std::endl;
         std::cout << " oneDPDR        =" << (oneDPDR?"true":"false") << " (" << starty << "->" << endy << ")" << std::endl;
+        std::cout << " alphaWeaken    =" << alphaWeaken << std::endl;
+        std::cout << " randomWalker   =" << randomWalker << std::endl;
         std::cout << "------------------------------------" << std::endl;
     }
     
@@ -95,6 +99,8 @@ void printHelp(std::string command){
     std::cout << " -l logFile           set NavCog log file" << std::endl;
     std::cout << " -1 starty,endy       set 1D-PDR mode and the start/end point. specify like -1 0,9 in feet" << std::endl;
     std::cout << " -o outputFile        set output file" << std::endl;
+    std::cout << " -a <float>           set alphaWeaken value" << std::endl;
+    std::cout << " -r                   use random walker instead pdr" << std::endl;
     std::cout << std::endl;
     std::cout << "Example" << std::endl;
     std::cout << "$ " << command << " -t train.txt -b beacon.csv -m map.png -l navcog.log -o out.txt" << std::endl;
@@ -105,7 +111,7 @@ Option parseArguments(int argc,char *argv[]){
     Option opt;
     
     int c = 0;
-    while ((c = getopt (argc, argv, "shft:b:l:o:m:1:")) != -1)
+    while ((c = getopt (argc, argv, "shft:b:l:o:m:1:a:r")) != -1)
         switch (c)
     {
         case 'h':
@@ -135,6 +141,12 @@ Option parseArguments(int argc,char *argv[]){
             break;
         case 'm':
             opt.mapFilePath.assign(optarg);
+            break;
+        case 'a':
+            sscanf(optarg, "%f", &(opt.alphaWeaken));
+            break;
+        case 'r':
+            opt.randomWalker = true;
             break;
         default:
             abort();
@@ -186,8 +198,10 @@ int main(int argc,char *argv[]){
     builder.trainDataPath(opt.trainFilePath);
     builder.shortCSV = opt.shortCSV;
     builder.unit = opt.unit;
+    builder.alphaWeaken = opt.alphaWeaken;
     builder.beaconDataPath(opt.beaconFilePath);
     builder.mapDataPath(opt.mapFilePath);
+    builder.randomWalker = opt.randomWalker;
     
     std::shared_ptr<loc::StreamLocalizer> localizer = builder.build();
     
