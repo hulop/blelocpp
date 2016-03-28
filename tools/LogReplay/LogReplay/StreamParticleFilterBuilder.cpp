@@ -208,6 +208,7 @@ namespace loc{
         
         std::shared_ptr<GaussianProcessLDPLMultiModel<State, Beacons>> obsModel;
         obsModel.reset(obsModelTrainer->train());
+        this->mObsModel = obsModel;
         
         // Set localizer
         localizer->observationModel(obsModel);

@@ -45,6 +45,7 @@ struct Option{
     float endy = 0;
     float alphaWeaken = 0.3;
     bool randomWalker = false;
+    std::string trainedModelPath = "";
     
     void print(){
         std::cout << "------------------------------------" << std::endl;
@@ -101,6 +102,7 @@ void printHelp(std::string command){
     std::cout << " -o outputFile        set output file" << std::endl;
     std::cout << " -a <float>           set alphaWeaken value" << std::endl;
     std::cout << " -r                   use random walker instead pdr" << std::endl;
+    std::cout << " -p modelFile         set the name of saved model file" << std::endl;
     std::cout << std::endl;
     std::cout << "Example" << std::endl;
     std::cout << "$ " << command << " -t train.txt -b beacon.csv -m map.png -l navcog.log -o out.txt" << std::endl;
@@ -111,7 +113,7 @@ Option parseArguments(int argc,char *argv[]){
     Option opt;
     
     int c = 0;
-    while ((c = getopt (argc, argv, "shft:b:l:o:m:1:a:r")) != -1)
+    while ((c = getopt (argc, argv, "shft:b:l:o:m:1:a:rp:")) != -1)
         switch (c)
     {
         case 'h':
@@ -147,6 +149,9 @@ Option parseArguments(int argc,char *argv[]){
             break;
         case 'r':
             opt.randomWalker = true;
+            break;
+        case 'p':
+            opt.trainedModelPath.assign(optarg);
             break;
         default:
             abort();
@@ -204,6 +209,9 @@ int main(int argc,char *argv[]){
     builder.randomWalker = opt.randomWalker;
     
     std::shared_ptr<loc::StreamLocalizer> localizer = builder.build();
+    if(opt.trainedModelPath!=""){
+        builder.saveTrainedModel(opt.trainedModelPath);
+    }
     
     UserData userData;
     localizer->updateHandler(functionCalledWhenUpdated, &userData);
@@ -241,7 +249,9 @@ int main(int argc,char *argv[]){
         reached = pos*3*0.3048;
     });
 
-    logPlayer.run();
+    if(opt.logFilePath!=""){
+        logPlayer.run();
+    }
     
     if(opt.outputFilePath!=""){
         std::ofstream ofs(opt.outputFilePath);

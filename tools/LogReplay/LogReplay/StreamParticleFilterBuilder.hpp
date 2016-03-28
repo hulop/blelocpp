@@ -64,6 +64,8 @@ namespace loc {
         std::string mBeaconDataPath;
         std::string mMapDataPath;
         
+        std::shared_ptr<GaussianProcessLDPLMultiModel<State, Beacons>> mObsModel;
+        
     public:
         
         double mixProbability = 0.0;
@@ -86,6 +88,13 @@ namespace loc {
         StreamParticleFilterBuilder& mapDataPath(std::string mapDataPath){
             mMapDataPath = mapDataPath;
             return *this;
+        }
+        
+        void saveTrainedModel(std::string trainedModelPath){
+            if(trainedModelPath!=""){
+                std::ofstream ofs(trainedModelPath);
+                mObsModel->save(ofs);
+            }
         }
         
         std::shared_ptr<DataStore> buildDataStore();
