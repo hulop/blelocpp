@@ -121,8 +121,7 @@ namespace loc{
         }
         return ret;
     }
-    
-    
+        
     // for string stream
     std::string Pose::header(){
         std::string str = "x,y,z,floor,orientation,velocity,normalVelocity";

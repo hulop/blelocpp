@@ -25,6 +25,23 @@
 
 #include <cmath>
 
+class DirectionalStatistics{
+    double mCircularMean;
+    double mCircularVariance;
+    
+public:
+    DirectionalStatistics(double theta, double v){
+        this->mCircularMean = theta;
+        this->mCircularVariance = v;
+    }
+    double circularMean() const{
+        return mCircularMean;
+    }
+    double circularVariance() const{
+        return mCircularVariance;
+    }
+};
+
 class MathUtils{
     
 public:
@@ -42,5 +59,7 @@ public:
     }
     
     static double quantileChiSquaredDistribution(int degreeOfFreedom, double cumulativeDensity);
+    
+    static DirectionalStatistics computeDirectionalStatistics(std::vector<double> orientations);
 };
 #endif /* MathUtils_hpp */

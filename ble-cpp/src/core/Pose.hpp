@@ -27,6 +27,7 @@
 #include <vector>
 #include <cmath>
 #include "Location.hpp"
+#include "MathUtils.hpp"
 
 namespace loc {
     
@@ -77,6 +78,8 @@ namespace loc {
         static Pose mean(const std::vector<Tpose>& poses);
         template<class Tpose>
         static Pose weightedMean(const std::vector<Tpose>& poses, const std::vector<double>& weights);
+        template<class Tpose>
+        static DirectionalStatistics computeDirectionalStatistics(const std::vector<Tpose>& poses);
         
         static double normalizeOrientaion(double orientation);
         static double computeOrientationDifference(double o1, double o2);
@@ -86,7 +89,7 @@ namespace loc {
         friend std::ostream& operator<<(std::ostream&os, const Pose& pose);
     };
     
-    // Template function
+    // Template functions
     template<class Tpose>
     Pose Pose::mean(const std::vector<Tpose>& poses){
         size_t n = poses.size();
@@ -132,6 +135,17 @@ namespace loc {
         return poseMean;
     }
     
+    template <class Tpose>
+    DirectionalStatistics Pose::computeDirectionalStatistics(const std::vector<Tpose>& poses){
+        std::vector<double> oris;
+        for(const auto& p: poses){
+            oris.push_back(p.orientation());
+        }
+        return MathUtils::computeDirectionalStatistics(oris);
+    }
+    
+    
+    // Pose property //
     
     class PoseProperty: public LocationProperty{
         
