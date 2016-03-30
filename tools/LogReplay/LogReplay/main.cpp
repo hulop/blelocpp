@@ -228,6 +228,9 @@ int main(int argc,char *argv[]){
     loc::NavCogLogPlayer logPlayer;
     logPlayer.filePath(opt.logFilePath);
     logPlayer.functionCalledWhenBeaconsUpdated([&](Beacons beacons){
+        if (opt.randomWalker) {
+            localizer->resetStatus();
+        }
         localizer->putBeacons(beacons);
     });
     logPlayer.functionCalledWhenAccelerationUpdated([&](Acceleration acc){
