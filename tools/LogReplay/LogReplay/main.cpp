@@ -43,6 +43,9 @@ struct Option{
     bool oneDPDR = false;
     float starty = 0;
     float endy = 0;
+    float alphaWeaken = 0.3;
+    bool randomWalker = false;
+    std::string trainedModelPath = "";
     
     void print(){
         std::cout << "------------------------------------" << std::endl;
@@ -54,6 +57,8 @@ struct Option{
         std::cout << " logFilePath    =" << logFilePath << std::endl;
         std::cout << " outputFilePath =" << outputFilePath << std::endl;
         std::cout << " oneDPDR        =" << (oneDPDR?"true":"false") << " (" << starty << "->" << endy << ")" << std::endl;
+        std::cout << " alphaWeaken    =" << alphaWeaken << std::endl;
+        std::cout << " randomWalker   =" << randomWalker << std::endl;
         std::cout << "------------------------------------" << std::endl;
     }
     
@@ -88,13 +93,16 @@ void printHelp(std::string command){
     std::cout << "Options for NavCog log play" << std::endl;
     std::cout << " -h                   show this help" << std::endl;
     std::cout << " -t trainingDataFile  set training data file (long csv format)" << std::endl;
-    std::cout << " -s                   indicates <trainingDataFile> is in short csv format" << std::endl;
-    std::cout << " -f                   indicates <trainingDataFile> is in feet unit" << std::endl;
+    std::cout << " -s                   indicates <trainingDataFile> is in short csv format (3-feet unit)" << std::endl;
     std::cout << " -b beaconDataFile    set beacon data file" << std::endl;
+    std::cout << " -f                   indicates <beaconDataFile> is in feet unit" << std::endl;
     std::cout << " -m mapImageFile      set map image file (PNG). Map image is treated as 8 pixel per meter." << std::endl;
     std::cout << " -l logFile           set NavCog log file" << std::endl;
-    std::cout << " -1 starty,endy       set 1D-PDR mode and the start/end point. specify like -1 0,9" << std::endl;
-    std::cout << " -o outputFile        set output file" << std::endl;
+    std::cout << " -1 starty,endy       set 1D-PDR mode and the start/end point. specify like -1 0,9 in feet" << std::endl;
+    std::cout << " -o outputFile        set output file" << std::endl;
+    std::cout << " -a <float>           set alphaWeaken value" << std::endl;
+    std::cout << " -r                   use random walker instead pdr" << std::endl;
+    std::cout << " -p modelFile         set the name of saved model file" << std::endl;
     std::cout << std::endl;
     std::cout << "Example" << std::endl;
     std::cout << "$ " << command << " -t train.txt -b beacon.csv -m map.png -l navcog.log -o out.txt" << std::endl;
@@ -105,7 +113,7 @@ Option parseArguments(int argc,char *argv[]){
     Option opt;
     
     int c = 0;
-    while ((c = getopt (argc, argv, "shft:b:l:o:m:1:")) != -1)
+    while ((c = getopt (argc, argv, "shft:b:l:o:m:1:a:rp:")) != -1)
         switch (c)
     {
         case 'h':
@@ -136,6 +144,15 @@ Option parseArguments(int argc,char *argv[]){
         case 'm':
             opt.mapFilePath.assign(optarg);
             break;
+        case 'a':
+            sscanf(optarg, "%f", &(opt.alphaWeaken));
+            break;
+        case 'r':
+            opt.randomWalker = true;
+            break;
+        case 'p':
+            opt.trainedModelPath.assign(optarg);
+            break;
         default:
             abort();
     }
@@ -147,14 +164,24 @@ struct UserData{
     std::stringstream ss;
 };
 
+static double reached = NAN;
+
 void functionCalledWhenUpdated(void *userData, loc::Status *pStatus){
     UserData* ud = (UserData*) userData;
     long timestamp = pStatus->timestamp();
     auto meanPose = pStatus->meanPose();
-    std::cout << timestamp << "," << *meanPose << std::endl;
-    ud->ss << timestamp << "," << *meanPose << std::endl;
+    
+    if (!isnan(reached)) {
+        std::cout << timestamp << "," << *meanPose << "," << reached << std::endl;
+        ud->ss << timestamp << "," << *meanPose << "," << reached << std::endl;
+    } else {
+        std::cout << timestamp << "," << *meanPose << std::endl;
+        ud->ss << timestamp << "," << *meanPose << std::endl;
+    }
+    
+    // TODO calculate error here with the ground truth. (static variable)
+    // meanPose->y() is the y value.
 }
-
 
 int main(int argc,char *argv[]){
     
@@ -176,10 +203,15 @@ int main(int argc,char *argv[]){
     builder.trainDataPath(opt.trainFilePath);
     builder.shortCSV = opt.shortCSV;
     builder.unit = opt.unit;
+    builder.alphaWeaken = opt.alphaWeaken;
     builder.beaconDataPath(opt.beaconFilePath);
     builder.mapDataPath(opt.mapFilePath);
+    builder.randomWalker = opt.randomWalker;
     
     std::shared_ptr<loc::StreamLocalizer> localizer = builder.build();
+    if(opt.trainedModelPath!=""){
+        builder.saveTrainedModel(opt.trainedModelPath);
+    }
     
     UserData userData;
     localizer->updateHandler(functionCalledWhenUpdated, &userData);
@@ -187,7 +219,7 @@ int main(int argc,char *argv[]){
     if (opt.oneDPDR) {
         loc::Pose pose;
         float orientation = atan2(opt.endy-opt.starty, 0);
-        pose.x(0).y(opt.starty*opt.unit).z(0).floor(0).orientation(orientation);
+        pose.x(0).y(opt.starty*0.3048).z(0).floor(0).orientation(orientation);
         loc::Pose stdevPose;
         stdevPose.x(0.25).y(0.25).orientation(1.0/180.0*M_PI);
         localizer->resetStatus(pose, stdevPose);
@@ -209,8 +241,17 @@ int main(int argc,char *argv[]){
     });
     logPlayer.functionCalledWhenReset([&](Pose poseReset){
         localizer->resetStatus(poseReset);
+        // TODO start error calcuration from when this is called
     });
-    logPlayer.run();
+    logPlayer.functionCalledWhenReached([&](long time_stamp, double pos){
+        // TODO update ground truth position
+        // std::cout << time_stamp << "," << pos*3*opt.unit << ",Reached" << std::endl;
+        reached = pos*3*0.3048;
+    });
+
+    if(opt.logFilePath!=""){
+        logPlayer.run();
+    }
     
     if(opt.outputFilePath!=""){
         std::ofstream ofs(opt.outputFilePath);

@@ -99,6 +99,13 @@ namespace loc{
             Pose poseReset = DataUtils::parseResetPoseCSV(strBuffer2);
             mFuncReset(poseReset);
         }
+        
+        if(DataUtils::csvCheckSensorType(strBuffer2, "Reached")){
+            double pos;
+            sscanf(strBuffer2.c_str(), "%ld,Reached,%lf", &time_stamp, &pos);
+            mFuncReached(time_stamp, pos);
+        }
+        
     }
     
     

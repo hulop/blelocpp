@@ -39,16 +39,19 @@ namespace loc{
             Samples samplesTmp;
             if (shortCSV) {
                 samplesTmp = DataUtils::shortCsvSamplesToSamples(istream);
+                
+                // assume it is in 3-feet unit
+                for(loc::Sample& sample: samplesTmp) {
+                    Location l = sample.location();
+                    l = Location(l.x()*3*0.3048, l.y()*3*0.3048, l.z()*3*0.3048, l.floor());
+                    sample.location(l);
+                }
             } else {
                 samplesTmp = DataUtils::csvSamplesToSamples(istream);
             }
             samples.insert(samples.end(), samplesTmp.begin(), samplesTmp.end());
         }
-        for(loc::Sample sample: samples) {
-            Location l = sample.location();
-            l = Location(l.x()*unit, l.y()*unit, l.z()*unit, l.floor());
-            sample.location(l);
-        }
+        
         dataStore->samples(samples);
         
         // BLE beacon locations
@@ -59,6 +62,10 @@ namespace loc{
             std::ifstream bleBeaconIStream(bleBeaconPath);
             BLEBeacons bleBeaconsTmp = DataUtils::csvBLEBeaconsToBLEBeacons(bleBeaconIStream);
             bleBeacons.insert(bleBeacons.end(), bleBeaconsTmp.begin(), bleBeaconsTmp.end());
+        }
+        for(loc::BLEBeacon& beacon: bleBeacons) {
+            beacon.Location::x(beacon.Location::x()*unit);
+            beacon.Location::y(beacon.Location::y()*unit);
         }
         dataStore->bleBeacons(bleBeacons);
         
@@ -93,7 +100,7 @@ namespace loc{
         
         int nStates = 1000;
         localizer->numStates(nStates);
-        double alphaWeaken = 0.3;
+        //double alphaWeaken = 0.3;
         localizer->alphaWeaken(alphaWeaken);
         // set stdev lower bound.
         Location locLB(0.0,0.0,0,0);
@@ -107,6 +114,9 @@ namespace loc{
         // Pedometer
         PedometerWalkingStateParameters pedometerWSParams;
         pedometerWSParams.updatePeriod(0.1);
+        if (randomWalker) {
+            pedometerWSParams.walkDetectSigmaThreshold(0);
+        }
         std::shared_ptr<Pedometer> pedometer(new PedometerWalkingState(pedometerWSParams));
         
         // Orientation
@@ -151,6 +161,16 @@ namespace loc{
         poseRandomWalkerProperty.orientationMeter(orientationMeter.get());
         poseRandomWalkerProperty.pedometer(pedometer.get());
         poseRandomWalkerProperty.angularVelocityLimit(30.0/180.0*M_PI);
+        
+        if (randomWalker) {
+            poseProperty.meanVelocity(1.5); // mean
+            poseProperty.stdVelocity(1.5); // standard deviation
+            poseProperty.diffusionVelocity(1.5); // standard deviation of a noise added to the velocity of a particle [m/s/s]
+            poseProperty.stdOrientation(2*M_PI); // standard deviation of a noise added to the orientation obtained from the smartphone sensor.
+            stateProperty.diffusionOrientationBias(2*M_PI); // standard deviation of a noise added to the orientation bias [rad/s]
+            poseRandomWalkerProperty.angularVelocityLimit(2*M_PI);
+        }
+        
         poseRandomWalker->setProperty(poseRandomWalkerProperty);
         poseRandomWalker->setPoseProperty(poseProperty);
         poseRandomWalker->setStateProperty(stateProperty);
@@ -188,6 +208,7 @@ namespace loc{
         
         std::shared_ptr<GaussianProcessLDPLMultiModel<State, Beacons>> obsModel;
         obsModel.reset(obsModelTrainer->train());
+        this->mObsModel = obsModel;
         
         // Set localizer
         localizer->observationModel(obsModel);

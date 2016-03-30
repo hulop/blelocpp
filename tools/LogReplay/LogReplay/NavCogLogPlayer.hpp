@@ -64,6 +64,10 @@ namespace loc{
         std::function<void (Pose)> mFuncReset = [](Pose poseReset){
             std::cout << "Reset=" << poseReset << std::endl;
         };
+        std::function<void (long, double)> mFuncReached = [](long time_stamp, double pos){
+            std::cout << "Reached=" << pos << std::endl;
+        };
+            
             
         public:
             void oneDPDR(bool oneDPDR, float starty, float endy) {
@@ -95,6 +99,10 @@ namespace loc{
             
             void functionCalledWhenReset(std::function<void(Pose)> func){
                 mFuncReset = func;
+            }
+        
+            void functionCalledWhenReached(std::function<void(long, double)> func){
+                mFuncReached = func;
             }
             
             void close(){

@@ -30,6 +30,7 @@
 #include "StreamParticleFilter.hpp"
 
 #include "PoseRandomWalker.hpp"
+#include "RandomWalker.hpp"
 
 #include "GridResampler.hpp"
 #include "StatusInitializerStub.hpp"
@@ -63,12 +64,16 @@ namespace loc {
         std::string mBeaconDataPath;
         std::string mMapDataPath;
         
+        std::shared_ptr<GaussianProcessLDPLMultiModel<State, Beacons>> mObsModel;
+        
     public:
         
         double mixProbability = 0.0;
         bool usesObservationDependentInitializer = false;
-        bool shortCSV;
+        bool shortCSV = false;
         float unit = 1.0;
+        float alphaWeaken = 0.3;
+        bool randomWalker = false;
         
         StreamParticleFilterBuilder& trainDataPath(std::string trainDataPath){
             mTrainDataPath = trainDataPath;
@@ -83,6 +88,13 @@ namespace loc {
         StreamParticleFilterBuilder& mapDataPath(std::string mapDataPath){
             mMapDataPath = mapDataPath;
             return *this;
+        }
+        
+        void saveTrainedModel(std::string trainedModelPath){
+            if(trainedModelPath!=""){
+                std::ofstream ofs(trainedModelPath);
+                mObsModel->save(ofs);
+            }
         }
         
         std::shared_ptr<DataStore> buildDataStore();
