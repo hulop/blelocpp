@@ -55,6 +55,7 @@ namespace loc{
         double mAlphaWeaken = 1.0;
         int resetWaitingTimeMS = 100; // milliseconds
         long previousTimestampMotion = 0;
+        long timestampIntervalLimit = 2000; // 2.0[s]
         Location mLocStdevLB;
         
         MixtureParameters mMixParams;
@@ -133,9 +134,14 @@ namespace loc{
             input.previousTimestamp(previousTimestampMotion);
 
             std::shared_ptr<States> states = status->states();
-            States* statesPredicted = new States(mRandomWalker->predict(*states.get(), input));
+            
+            if(input.timestamp() - input.previousTimestamp() < timestampIntervalLimit){
+                States* statesPredicted = new States(mRandomWalker->predict(*states.get(), input));
+                status->states(statesPredicted);
+            }else{
+                std::cout << "Interval between two timestamps is too large. The input at timestamp=" << timestamp << " was not used." << std::endl;
+            }
             status->timestamp(timestamp);
-            status->states(statesPredicted);
 
             if(mOptVerbose){
                 std::cout << "prediction at t=" << timestamp << std::endl;
