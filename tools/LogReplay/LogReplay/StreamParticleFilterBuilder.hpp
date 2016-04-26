@@ -71,9 +71,12 @@ namespace loc {
         double mixProbability = 0.0;
         bool usesObservationDependentInitializer = false;
         bool shortCSV = false;
+        bool jsonSample = false;
         float unit = 1.0;
         float alphaWeaken = 0.3;
         bool randomWalker = false;
+        bool considerBias = false;
+        std::string trainedModelPath;
         
         StreamParticleFilterBuilder& trainDataPath(std::string trainDataPath){
             mTrainDataPath = trainDataPath;

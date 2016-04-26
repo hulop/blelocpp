@@ -67,6 +67,9 @@ namespace loc{
         std::function<void (long, double)> mFuncReached = [](long time_stamp, double pos){
             std::cout << "Reached=" << pos << std::endl;
         };
+        std::function<void (long, double, double, double, double)> mFuncGroundTruth = [](long time_stamp, double x, double y, double z, double floor) {
+            std::cout << "GroundTruth=" << x << "," << y << "," << z << "," << floor << std::endl;
+        };
             
             
         public:
@@ -103,6 +106,10 @@ namespace loc{
         
             void functionCalledWhenReached(std::function<void(long, double)> func){
                 mFuncReached = func;
+            }
+            
+            void functionCalledWhenGroundTruth(std::function<void(long, double, double, double, double)> func) {
+                mFuncGroundTruth = func;
             }
             
             void close(){

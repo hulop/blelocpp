@@ -25,15 +25,22 @@
 namespace loc{
 
     void NavCogLogPlayer::run(){
-        std::ifstream ifs(mFilePath);
-        if(! ifs.is_open()){
-            std::cout << mFilePath << " is not open." << std::endl;
-        }
         std::string strBuffer;
         
         clock_t start = clock();
-        while(std::getline(ifs, strBuffer)){
-            processLine(strBuffer);
+        
+        if (mFilePath == "-") {
+            while(std::getline(std::cin, strBuffer)){
+                processLine(strBuffer);
+            }
+        } else {
+            std::ifstream ifs(mFilePath);
+            if(! ifs.is_open()){
+                std::cout << mFilePath << " is not open." << std::endl;
+            }
+            while(std::getline(ifs, strBuffer)){
+                processLine(strBuffer);
+            }
         }
         clock_t end = clock();
     }
@@ -104,6 +111,12 @@ namespace loc{
             double pos;
             sscanf(strBuffer2.c_str(), "%ld,Reached,%lf", &time_stamp, &pos);
             mFuncReached(time_stamp, pos);
+        }
+        
+        if(DataUtils::csvCheckSensorType(strBuffer2, "GroundTruth")){
+            double x, y, z, floor;
+            sscanf(strBuffer2.c_str(), "%ld,GroundTruth,%lf,%lf,%lf,%lf", &time_stamp, &x, &y, &z, &floor);
+            mFuncGroundTruth(time_stamp, x, y, z, floor);
         }
         
     }

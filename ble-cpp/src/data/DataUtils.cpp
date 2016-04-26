@@ -147,6 +147,7 @@ namespace loc{
         double majorDouble = jsonObject["major"].get<double>();
         double minorDouble = jsonObject["minor"].get<double>();
         double rssi = jsonObject["rssi"].get<double>();
+        if (rssi == 0) { rssi = -100; }
         Beacon beacon(majorDouble, minorDouble, rssi );
         return beacon;
     }

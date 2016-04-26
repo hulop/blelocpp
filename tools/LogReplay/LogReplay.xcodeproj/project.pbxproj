@@ -723,6 +723,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 79904DC52699C08C82BBFDFB /* Pods-LogReplay.debug.xcconfig */;
 			buildSettings = {
+				GCC_OPTIMIZATION_LEVEL = s;
 				HEADER_SEARCH_PATHS = (
 					"\"${PODS_ROOT}/boost\"",
 					"\"${PODS_ROOT}/cereal/include\"",
@@ -747,6 +748,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 65E12EC685C21A6161293BCD /* Pods-LogReplay.release.xcconfig */;
 			buildSettings = {
+				GCC_OPTIMIZATION_LEVEL = s;
 				HEADER_SEARCH_PATHS = (
 					"\"${PODS_ROOT}/boost\"",
 					"\"${PODS_ROOT}/cereal/include\"",

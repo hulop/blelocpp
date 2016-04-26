@@ -39,18 +39,22 @@ struct Option{
     std::string mapFilePath = "";
     std::string outputFilePath = "";
     bool shortCSV = false;
+    bool jsonSample = false;
     float unit = 1.0;
     bool oneDPDR = false;
     float starty = 0;
     float endy = 0;
     float alphaWeaken = 0.3;
     bool randomWalker = false;
+    bool oneshot = false;
+    bool considerBias = false;
     std::string trainedModelPath = "";
     
     void print(){
         std::cout << "------------------------------------" << std::endl;
         std::cout << " trainFilePath  =" << trainFilePath << std::endl;
         std::cout << " shortCSV       =" << (shortCSV?"true":"false") << std::endl;
+        std::cout << " jsonSample     =" << (jsonSample?"true":"false") << std::endl;
         std::cout << " unit scale     =" << unit << std::endl;
         std::cout << " beaconFilePath =" << beaconFilePath << std::endl;
         std::cout << " mapFilePath    =" << mapFilePath << std::endl;
@@ -58,7 +62,10 @@ struct Option{
         std::cout << " outputFilePath =" << outputFilePath << std::endl;
         std::cout << " oneDPDR        =" << (oneDPDR?"true":"false") << " (" << starty << "->" << endy << ")" << std::endl;
         std::cout << " alphaWeaken    =" << alphaWeaken << std::endl;
-        std::cout << " randomWalker   =" << randomWalker << std::endl;
+        std::cout << " randomWalker   =" << (randomWalker?"true":"false") << std::endl;
+        std::cout << " modelPath      =" << trainedModelPath << std::endl;
+        std::cout << " oneshot        =" << (oneshot?"true":"false") << std::endl;
+        std::cout << " considerBias   =" << (considerBias?"true":"false") << std::endl;
         std::cout << "------------------------------------" << std::endl;
     }
     
@@ -94,15 +101,18 @@ void printHelp(std::string command){
     std::cout << " -h                   show this help" << std::endl;
     std::cout << " -t trainingDataFile  set training data file (long csv format)" << std::endl;
     std::cout << " -s                   indicates <trainingDataFile> is in short csv format (3-feet unit)" << std::endl;
+    std::cout << " -j                   indicates <trainingDataFile> is in json sample format" << std::endl;
     std::cout << " -b beaconDataFile    set beacon data file" << std::endl;
     std::cout << " -f                   indicates <beaconDataFile> is in feet unit" << std::endl;
-    std::cout << " -m mapImageFile      set map image file (PNG). Map image is treated as 8 pixel per meter." << std::endl;
+    std::cout << " -m [#,#,#,#,#,]path  set map image file (PNG) for floor, ppmx, ppmy, originx, originy, and path respectively, if option is not provided 0,8,-8,1000,1000 are used." << std::endl;
     std::cout << " -l logFile           set NavCog log file" << std::endl;
     std::cout << " -1 starty,endy       set 1D-PDR mode and the start/end point. specify like -1 0,9 in feet" << std::endl;
     std::cout << " -o outputFile        set output file" << std::endl;
     std::cout << " -a <float>           set alphaWeaken value" << std::endl;
     std::cout << " -r                   use random walker instead pdr" << std::endl;
     std::cout << " -p modelFile         set the name of saved model file" << std::endl;
+    std::cout << " -n                   set oneshot mode" << std::endl;
+    std::cout << " -c                   consider bias for oneshot" << std::endl;
     std::cout << std::endl;
     std::cout << "Example" << std::endl;
     std::cout << "$ " << command << " -t train.txt -b beacon.csv -m map.png -l navcog.log -o out.txt" << std::endl;
@@ -113,7 +123,7 @@ Option parseArguments(int argc,char *argv[]){
     Option opt;
     
     int c = 0;
-    while ((c = getopt (argc, argv, "shft:b:l:o:m:1:a:rp:")) != -1)
+    while ((c = getopt (argc, argv, "shft:b:l:o:m:1:a:rp:njc")) != -1)
         switch (c)
     {
         case 'h':
@@ -128,6 +138,9 @@ Option parseArguments(int argc,char *argv[]){
             break;
         case 's':
             opt.shortCSV = true;
+            break;
+        case 'j':
+            opt.jsonSample = true;
             break;
         case 'f':
             opt.unit = 0.3048;
@@ -153,6 +166,12 @@ Option parseArguments(int argc,char *argv[]){
         case 'p':
             opt.trainedModelPath.assign(optarg);
             break;
+        case 'n':
+            opt.oneshot = true;
+            break;
+        case 'c':
+            opt.considerBias = true;
+            break;
         default:
             abort();
     }
@@ -164,7 +183,15 @@ struct UserData{
     std::stringstream ss;
 };
 
+struct Location{
+    double x;
+    double y;
+    double z;
+    int floor;
+};
+
 static double reached = NAN;
+static struct Location groundTruth = {NAN,NAN,NAN,INT_MAX};
 
 void functionCalledWhenUpdated(void *userData, loc::Status *pStatus){
     UserData* ud = (UserData*) userData;
@@ -174,6 +201,9 @@ void functionCalledWhenUpdated(void *userData, loc::Status *pStatus){
     if (!isnan(reached)) {
         std::cout << timestamp << "," << *meanPose << "," << reached << std::endl;
         ud->ss << timestamp << "," << *meanPose << "," << reached << std::endl;
+    } else if (!isnan(groundTruth.x) && !isnan(groundTruth.y) && !isnan(groundTruth.z) && groundTruth.floor != INT_MAX) {
+        std::cout << timestamp << "," << *meanPose << "," << groundTruth.x << "," << groundTruth.y << "," << groundTruth.z << "," << groundTruth.floor << std::endl;
+        ud->ss << timestamp << "," << *meanPose << "," << groundTruth.x << "," << groundTruth.y << "," << groundTruth.z << "," << groundTruth.floor << std::endl;
     } else {
         std::cout << timestamp << "," << *meanPose << std::endl;
         ud->ss << timestamp << "," << *meanPose << std::endl;
@@ -202,17 +232,16 @@ int main(int argc,char *argv[]){
     builder.mixProbability = 0.0;
     builder.trainDataPath(opt.trainFilePath);
     builder.shortCSV = opt.shortCSV;
+    builder.jsonSample = opt.jsonSample;
     builder.unit = opt.unit;
     builder.alphaWeaken = opt.alphaWeaken;
     builder.beaconDataPath(opt.beaconFilePath);
     builder.mapDataPath(opt.mapFilePath);
     builder.randomWalker = opt.randomWalker;
-    
+    builder.trainedModelPath = opt.trainedModelPath;
+    builder.considerBias = opt.considerBias;
     std::shared_ptr<loc::StreamLocalizer> localizer = builder.build();
-    if(opt.trainedModelPath!=""){
-        builder.saveTrainedModel(opt.trainedModelPath);
-    }
-    
+        
     UserData userData;
     localizer->updateHandler(functionCalledWhenUpdated, &userData);
     
@@ -231,7 +260,12 @@ int main(int argc,char *argv[]){
         if (opt.randomWalker) {
             localizer->resetStatus();
         }
-        localizer->putBeacons(beacons);
+        if (opt.oneshot) {
+            localizer->resetStatus(beacons);
+            functionCalledWhenUpdated((void*)&userData, localizer->getStatus());
+        } else {
+            localizer->putBeacons(beacons);
+        }
     });
     logPlayer.functionCalledWhenAccelerationUpdated([&](Acceleration acc){
         localizer->putAcceleration(acc);
@@ -243,13 +277,16 @@ int main(int argc,char *argv[]){
         localizer->putAttitude(att);
     });
     logPlayer.functionCalledWhenReset([&](Pose poseReset){
-        localizer->resetStatus(poseReset);
+        //localizer->resetStatus(poseReset);
         // TODO start error calcuration from when this is called
     });
     logPlayer.functionCalledWhenReached([&](long time_stamp, double pos){
         // TODO update ground truth position
         // std::cout << time_stamp << "," << pos*3*opt.unit << ",Reached" << std::endl;
         reached = pos*3*0.3048;
+    });
+    logPlayer.functionCalledWhenGroundTruth([&](long time_stamp, double x, double y, double z, double floor) {
+        groundTruth = {x,y,z,(int)floor};
     });
 
     if(opt.logFilePath!=""){
