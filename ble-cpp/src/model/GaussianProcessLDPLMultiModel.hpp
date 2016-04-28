@@ -117,6 +117,9 @@ namespace loc{
         }
         
         Tinput convertInput(const Tinput& input);
+        // predict mean and stdev given state for input beacon id
+        std::map<long, std::vector<double>> predict(const Tstate& state, const Tinput& input);
+        
         double computeLogLikelihood(const Tstate& state, const Tinput& input);
         std::vector<double> computeLogLikelihood(const std::vector<Tstate> & states, const Tinput& input) override;
         

@@ -472,21 +472,12 @@ namespace loc{
     }
     
     template<class Tstate, class Tinput>
-    double GaussianProcessLDPLMultiModel<Tstate, Tinput>::computeLogLikelihood(const Tstate& state, const Tinput& input){
-        std::vector<double> values = this->computeLogLikelihoodRelatedValues(state, input);
-        return values.at(0);
-    }
-    
-    template<class Tstate, class Tinput>
-    std::vector<double> GaussianProcessLDPLMultiModel<Tstate, Tinput>::computeLogLikelihoodRelatedValues(const Tstate& state, const Tinput& input){
+    std::map<long, std::vector<double>>  GaussianProcessLDPLMultiModel<Tstate, Tinput>::predict(const Tstate& state, const Tinput& input){
         //Assuming Tinput = Beacons
         
-        std::vector<double> returnValues(4); // logLikelihood, mahalanobisDistance, #knownBeacons, #unknownBeacons
+        std::map<long, std::vector<double>> beaconIdRssiStatsMap;
         
         std::vector<int> indices;
-        //indices.clear();
-        
-        int countKnown, countUnknown = 0;
         for(auto iter=input.begin(); iter!=input.end(); iter++){
             Beacon b = *iter;
             assert(BeaconConfig::checkInRssiRange(b));
@@ -495,26 +486,16 @@ namespace loc{
                 assert( mBeaconIdIndexMap.count(id)==1 );
                 int index = mBeaconIdIndexMap.at(id);
                 indices.push_back(index);
-            }else{
-                countUnknown++;
             }
-        }
-        countKnown = static_cast<int>(indices.size());
-        if(countKnown==0){
-            std::cout << "ObservationModel does not know the input data." << std::endl;
         }
         
         double xvec[4];
         MLAdapter::locationToVec(state, xvec);
         std::vector<double> dypreds = mGP.predict(xvec, indices);
         
-        double jointLogLL = 0;
-        double sumMahaDist = 0;
         int i=0;
         for(auto iter=input.begin(); iter!=input.end(); iter++){
             Beacon b = *iter;
-            double rssi = b.rssi();
-            rssi = rssi - state.rssiBias();
             long id = b.id();
             
             // RSSI of known beacons are predicted by a model.
@@ -527,8 +508,62 @@ namespace loc{
                 const double* params = mITUParameters.at(index).data();
                 double mean = mITUModel.predict(params, features);
                 double dypred = dypreds.at(i);
+                i++;
                 double ypred = mean + dypred;
                 double stdev = mRssiStandardDeviations[index];
+                
+                std::vector<double> rssiStats{ypred, stdev};
+                beaconIdRssiStatsMap[id] = rssiStats;
+            }
+        }
+        return beaconIdRssiStatsMap;
+    }
+    
+    
+    template<class Tstate, class Tinput>
+    double GaussianProcessLDPLMultiModel<Tstate, Tinput>::computeLogLikelihood(const Tstate& state, const Tinput& input){
+        std::vector<double> values = this->computeLogLikelihoodRelatedValues(state, input);
+        return values.at(0);
+    }
+    
+    template<class Tstate, class Tinput>
+    std::vector<double> GaussianProcessLDPLMultiModel<Tstate, Tinput>::computeLogLikelihoodRelatedValues(const Tstate& state, const Tinput& input){
+        //Assuming Tinput = Beacons
+        
+        std::vector<double> returnValues(4); // logLikelihood, mahalanobisDistance, #knownBeacons, #unknownBeacons
+        
+        auto beaconIdRssiStatsMap = this->predict(state, input);
+        
+        int countKnown, countUnknown = 0;
+        for(auto iter=input.begin(); iter!=input.end(); iter++){
+            Beacon b = *iter;
+            assert(BeaconConfig::checkInRssiRange(b));
+            long id = b.id();
+            if(beaconIdRssiStatsMap.count(id)==1){
+                countKnown++;
+            }else{
+                countUnknown++;
+            }
+        }
+        if(countKnown==0){
+            std::cout << "ObservationModel does not know the input data." << std::endl;
+        }
+        
+        double jointLogLL = 0;
+        double sumMahaDist = 0;
+        int i=0;
+        for(auto iter=input.begin(); iter!=input.end(); iter++){
+            Beacon b = *iter;
+            double rssi = b.rssi();
+            rssi = rssi - state.rssiBias();
+            long id = b.id();
+            
+            // RSSI of known beacons are predicted by a model.
+            if(mBeaconIdIndexMap.count(id)==1){
+
+                auto rssiStats = beaconIdRssiStatsMap[id];
+                double ypred = rssiStats.at(0);
+                double stdev = rssiStats.at(1);
                 
                 double logLL = MathUtils::logProbaNormal(rssi, ypred, stdev);
                 jointLogLL += logLL;
