@@ -78,6 +78,8 @@ namespace loc{
         static picojson::array statesToJSONArrayLight(std::vector<State> states);
         static picojson::object statusToJSONObject(Status status, bool optOutputStates);
         
+        static picojson::array beaconsToJSONArray(const Beacons& beacons);
+        
     };
     
 }

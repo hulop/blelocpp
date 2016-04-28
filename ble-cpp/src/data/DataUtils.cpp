@@ -506,4 +506,16 @@ namespace loc{
         return json;
     }
     
+    picojson::array DataUtils::beaconsToJSONArray(const Beacons& beacons){
+        picojson::array array;
+        for(const Beacon& b: beacons){
+            picojson::object obj;
+            obj.insert(std::make_pair("major", picojson::value((double)b.major())));
+            obj.insert(std::make_pair("minor", picojson::value((double)b.minor())));
+            obj.insert(std::make_pair("rssi", picojson::value(b.rssi())));
+            array.emplace_back(obj);
+        }
+        return array;
+    }
+    
 }

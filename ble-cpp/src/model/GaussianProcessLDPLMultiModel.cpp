@@ -480,7 +480,6 @@ namespace loc{
         std::vector<int> indices;
         for(auto iter=input.begin(); iter!=input.end(); iter++){
             Beacon b = *iter;
-            assert(BeaconConfig::checkInRssiRange(b));
             long id = b.id();
             if(mBeaconIdIndexMap.count(id)==1){
                 assert( mBeaconIdIndexMap.count(id)==1 );
@@ -493,7 +492,7 @@ namespace loc{
         MLAdapter::locationToVec(state, xvec);
         std::vector<double> dypreds = mGP.predict(xvec, indices);
         
-        int i=0;
+        int idx_local=0;
         for(auto iter=input.begin(); iter!=input.end(); iter++){
             Beacon b = *iter;
             long id = b.id();
@@ -507,8 +506,8 @@ namespace loc{
                 mITUModel.transformFeature(state, bleBeacon, features);
                 const double* params = mITUParameters.at(index).data();
                 double mean = mITUModel.predict(params, features);
-                double dypred = dypreds.at(i);
-                i++;
+                double dypred = dypreds.at(idx_local);
+                idx_local++;
                 double ypred = mean + dypred;
                 double stdev = mRssiStandardDeviations[index];
                 
