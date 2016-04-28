@@ -93,6 +93,9 @@ namespace loc{
     std::vector<std::vector<double>> GaussianProcessLDPLMultiModel<Tstate, Tinput>::fitITUModel(Samples samples){
         std::vector<Sample> samplesAveraged = Sample::mean(Sample::splitSamplesToConsecutiveSamples(samples)); // averaging consecutive samples
         std::cout << "#samplesAveraged = " << samplesAveraged.size() << std::endl;
+        if(samplesAveraged.size()==0){
+            throw std::runtime_error("No valid sample [samplesAveraged.size()==0]");
+        }
         
         // construct beacon id to index map
         mBeaconIdIndexMap = BLEBeacon::constructBeaconIdToIndexMap(mBLEBeacons);
@@ -186,7 +189,7 @@ namespace loc{
             Eigen::VectorXd b = Phi.transpose()*Ytmp;
             params0 = A.colPivHouseholderQr().solve(b);
         }
-        std::cout << "Initial value of ITU parameters = " << params0 <<std::endl;
+        std::cout << "Initial value of ITU parameters = " << params0.transpose() <<std::endl;
         
         // Fit parameters for each BLE beacon
         std::vector<std::vector<double>> ITUParameters(m);
@@ -270,8 +273,13 @@ namespace loc{
             if(!wasConverged){
                 std::cout << "ITU parameters were not converged." << std::endl;
             }
-            std::cout << "mean(paramseters) = " << params0 << std::endl;
-            std::cout << "parameters = " << paramsMatrix << std::endl;
+            std::cout << "mean(parameters) = " << params0.transpose() << std::endl;
+            //std::cout << "parameters = " << paramsMatrix << std::endl;
+            for(auto & ble: mBLEBeacons){
+                int index = mBeaconIdIndexMap.at(ble.id());
+                std::cout << "parameters(" << ble.major() << "," << ble.minor() << ") = " <<paramsMatrix.row(index) << std::endl;
+            }
+            
             // Update ITUParameters by optimized parameters
             {
                 for(int i=0; i<m; i++){
@@ -365,9 +373,12 @@ namespace loc{
         
         // Estimate variance parameter (sigma_n) by using raw (=not averaged) data
         mRssiStandardDeviations = computeRssiStandardDeviations(samples);
-        for(int i=0; i<mRssiStandardDeviations.size(); i++){
-            std::cout << "stdev(" << i<< ")=" << mRssiStandardDeviations.at(i) <<std::endl;
+        for(auto& ble: mBLEBeacons){
+            long id = ble.id();
+            int index = mBeaconIdIndexMap.at(id);
+            std::cout << "stdev(" <<ble.major() << "," << ble.minor() << ") = " << mRssiStandardDeviations.at(index) <<std::endl;
         }
+        
         if(mStdevRssiForUnknownBeacon==0){
             mStdevRssiForUnknownBeacon = computeNormalStandardDeviation(mRssiStandardDeviations);
         }
@@ -645,11 +656,15 @@ namespace loc{
         Samples samples = mDataStore->getSamples();
         BLEBeacons bleBeacons = mDataStore->getBLEBeacons();
         
-        Samples samplesFiltered = Sample::filterUnregisteredBeacons(samples, bleBeacons);
-        
-        assert(samplesFiltered.size()>0);
-        assert(bleBeacons.size()>0);
-        
+        Samples samplesFiltered;
+        try{
+            samplesFiltered = Sample::filterUnregisteredBeacons(samples, bleBeacons);
+            assert(samplesFiltered.size()>0);
+            assert(bleBeacons.size()>0);
+            
+        }catch(std::runtime_error e) {
+            e.what();
+        }
         GaussianProcessLDPLMultiModel<Tstate, Tinput>* obsModel = new GaussianProcessLDPLMultiModel<Tstate, Tinput>();
         obsModel->bleBeacons(bleBeacons);
         obsModel->train(samplesFiltered);

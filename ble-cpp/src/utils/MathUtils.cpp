@@ -28,3 +28,19 @@ double MathUtils::quantileChiSquaredDistribution(int degreeOfFreedom, double cum
     double x = boost::math::quantile(chi_sq, cumulativeDensity);
     return x;
 }
+
+DirectionalStatistics MathUtils::computeDirectionalStatistics(std::vector<double> orientations){
+    size_t n = orientations.size();
+    double x = 0, y = 0;
+    for(auto ori : orientations){
+        x += std::cos(ori);
+        y += std::sin(ori);
+    }
+    x /= n;
+    y /= n;
+    double meanOri = std::atan2(y,x);
+    double R = std::sqrt(x*x + y*y);
+    double v = 1.0 - R;
+    DirectionalStatistics oristat(meanOri, v);
+    return oristat;
+}

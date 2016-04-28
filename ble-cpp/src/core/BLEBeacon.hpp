@@ -89,6 +89,10 @@ namespace loc{
             return minor_;
         }
         
+        long id() const{
+            return Beacon::convertMajorMinorToId(major(), minor());
+        }
+        
         std::string toString() const{
             std::stringstream strstream;
             strstream << uuid_  << "," << major_ << "," << minor_ << "," << this->Location::toString();
