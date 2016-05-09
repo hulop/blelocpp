@@ -30,7 +30,9 @@
 #include <getopt.h>
 #include <boost/program_options.hpp>
 #include "NavCogLogPlayer.hpp"
-#include "StreamParticleFilterBUilder.hpp"
+#include "DataLogger.hpp"
+#include "ExtendedDataUtils.hpp"
+#include "StreamParticleFilterBuilder.hpp"
 
 struct Option{
     std::string trainFilePath = "";
@@ -49,6 +51,7 @@ struct Option{
     bool oneshot = false;
     bool considerBias = false;
     std::string trainedModelPath = "";
+    std::string directoryLog = "";
     
     void print(){
         std::cout << "------------------------------------" << std::endl;
@@ -66,6 +69,7 @@ struct Option{
         std::cout << " modelPath      =" << trainedModelPath << std::endl;
         std::cout << " oneshot        =" << (oneshot?"true":"false") << std::endl;
         std::cout << " considerBias   =" << (considerBias?"true":"false") << std::endl;
+        std::cout << " directoryLog   =" << directoryLog << std::endl;
         std::cout << "------------------------------------" << std::endl;
     }
     
@@ -113,6 +117,7 @@ void printHelp(std::string command){
     std::cout << " -p modelFile         set the name of saved model file" << std::endl;
     std::cout << " -n                   set oneshot mode" << std::endl;
     std::cout << " -c                   consider bias for oneshot" << std::endl;
+    std::cout << " -d                   set directory to log prediction details" <<std::endl;
     std::cout << std::endl;
     std::cout << "Example" << std::endl;
     std::cout << "$ " << command << " -t train.txt -b beacon.csv -m map.png -l navcog.log -o out.txt" << std::endl;
@@ -123,7 +128,7 @@ Option parseArguments(int argc,char *argv[]){
     Option opt;
     
     int c = 0;
-    while ((c = getopt (argc, argv, "shft:b:l:o:m:1:a:rp:njc")) != -1)
+    while ((c = getopt (argc, argv, "shft:b:l:o:m:1:a:rp:njcd:")) != -1)
         switch (c)
     {
         case 'h':
@@ -172,6 +177,9 @@ Option parseArguments(int argc,char *argv[]){
         case 'c':
             opt.considerBias = true;
             break;
+        case 'd':
+            opt.directoryLog.assign(optarg);
+            break;
         default:
             abort();
     }
@@ -213,6 +221,46 @@ void functionCalledWhenUpdated(void *userData, loc::Status *pStatus){
     // meanPose->y() is the y value.
 }
 
+loc::Beacons convertBLEBeaconsToDummyBeacons(const loc::BLEBeacons& bleBeacons){
+    loc::Beacons beacons;
+    for(const auto& ble: bleBeacons){
+        double rssi = -10;
+        loc::Beacon b(ble.major(), ble.minor(), rssi);
+        beacons.push_back(b);
+    }
+    return beacons;
+}
+
+std::vector<loc::Location> convertSamplesToGridLocations(const loc::Samples& samples){
+    double dx = 0.25, dy = 0.25;
+    std::vector<double> xvec, yvec, zvec, fvec;
+    for(const auto& s:samples){
+        const auto& loc = s.location();
+        xvec.push_back(loc.x());
+        yvec.push_back(loc.y());
+        zvec.push_back(loc.z());
+        fvec.push_back(loc.floor());
+    }
+    double xmin = *std::min_element(xvec.begin(),xvec.end());
+    double xmax = *std::max_element(xvec.begin(),xvec.end());
+    double ymin = *std::min_element(yvec.begin(),yvec.end());
+    double ymax = *std::max_element(yvec.begin(),yvec.end());
+    double zmin = *std::min_element(zvec.begin(),zvec.end());
+    double zmax = *std::max_element(zvec.begin(),zvec.end());
+    double fmin = *std::min_element(fvec.begin(),fvec.end());
+    double fmax = *std::max_element(fvec.begin(),fvec.end());
+    
+    double z=zmin, f=fmin;
+    std::vector<loc::Location> locs;
+    for(double x=std::floor(xmin); x<=xmax+1 ; x+=dx){
+        for(double y=std::floor(ymin); y<=ymax+1 ; y+=dy){
+            loc::Location loc(x,y,z,f);
+            locs.push_back(loc);
+        }
+    }
+    return locs;
+}
+
 int main(int argc,char *argv[]){
     
     if (argc <= 1) {
@@ -245,6 +293,32 @@ int main(int argc,char *argv[]){
     UserData userData;
     localizer->updateHandler(functionCalledWhenUpdated, &userData);
     
+    if(opt.directoryLog!=""){
+        DataLogger::createInstance(opt.directoryLog);
+    }
+    // Predict rssis at grid positions generated from sampling ploints.
+    if(opt.directoryLog!=""){
+        auto ds = builder.dataStore();
+        auto beacons = convertBLEBeaconsToDummyBeacons(ds->getBLEBeacons());
+        auto locs = convertSamplesToGridLocations(ds->getSamples());
+        
+        picojson::array jarray;
+        for(const loc::Location& loc : locs){
+            State s(loc);
+            auto obsModel = builder.obsModel();
+            std::map<long,std::vector<double>> idRssiStats = obsModel->predict(s, beacons);
+            auto jobj = ExtendedDataUtils::predictionDataToJSONObject(s, beacons, idRssiStats);
+            jarray.push_back(picojson::value(jobj));
+        }
+        picojson::object jobj;
+        jobj.insert(std::make_pair("data", picojson::value(jarray)));
+        if(DataLogger::getInstance()){
+            std::stringstream ss;
+            ss << "grid_predictions.json";
+            DataLogger::getInstance()->log(ss.str(), picojson::value(jobj).serialize());
+        }
+    }
+    
     if (opt.oneDPDR) {
         loc::Pose pose;
         float orientation = atan2(opt.endy-opt.starty, 0);
@@ -265,6 +339,26 @@ int main(int argc,char *argv[]){
             functionCalledWhenUpdated((void*)&userData, localizer->getStatus());
         } else {
             localizer->putBeacons(beacons);
+        }
+        
+        if(opt.directoryLog!=""){
+            long ts = beacons.timestamp();
+            auto states = localizer->getStatus()->states();
+            picojson::array jarray;
+            for(const State& s : *states){
+                auto obsModel = builder.obsModel();
+                std::map<long,std::vector<double>> idRssiStats = obsModel->predict(s, beacons);
+                auto jobj = ExtendedDataUtils::predictionDataToJSONObject(s, beacons, idRssiStats);
+                jarray.push_back(picojson::value(jobj));
+            }
+            picojson::object jobj;
+            jobj.insert(std::make_pair("timestamp", picojson::value((double)ts)));
+            jobj.insert(std::make_pair("data", picojson::value(jarray)));
+            if(DataLogger::getInstance()){
+                std::stringstream ss;
+                ss << "prediction_detail_t" << ts << ".json";
+                DataLogger::getInstance()->log(ss.str(), picojson::value(jobj).serialize());
+            }
         }
     });
     logPlayer.functionCalledWhenAccelerationUpdated([&](Acceleration acc){

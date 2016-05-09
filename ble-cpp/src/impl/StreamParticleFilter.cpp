@@ -154,11 +154,7 @@ namespace loc{
 
         void logStates(const States& states, const std::string& filename){
             if(DataLogger::getInstance()){
-                std::stringstream ss;
-                for(const auto& s: states){
-                    ss << s << std::endl;
-                }
-                DataLogger::getInstance()->log(filename, ss.str());
+                DataLogger::getInstance()->log(filename, DataUtils::statesToCSV(states));
             }
         }
 

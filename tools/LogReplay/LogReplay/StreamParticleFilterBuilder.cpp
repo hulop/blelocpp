@@ -133,7 +133,7 @@ namespace loc{
         
         // Create data store
         std::shared_ptr<DataStore> dataStore = buildDataStore();
-        
+        mDataStore = dataStore;
         
         // Instantiate sensor data processors
         // Pedometer

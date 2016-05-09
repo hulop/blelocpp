@@ -64,6 +64,7 @@ namespace loc {
         std::string mBeaconDataPath;
         std::string mMapDataPath;
         
+        std::shared_ptr<DataStore> mDataStore;
         std::shared_ptr<GaussianProcessLDPLMultiModel<State, Beacons>> mObsModel;
         
     public:
@@ -102,6 +103,14 @@ namespace loc {
         
         std::shared_ptr<DataStore> buildDataStore();
         std::shared_ptr<StreamLocalizer> build();
+        
+        const std::shared_ptr<DataStore>& dataStore(){
+            return mDataStore;
+        }
+        
+        const std::shared_ptr<GaussianProcessLDPLMultiModel<State, Beacons>>& obsModel(){
+            return mObsModel;
+        }
 
     };
 }

@@ -23,6 +23,8 @@
 #include "GaussianProcessLDPLMultiModel.hpp"
 #include "ArrayUtils.hpp"
 #include "SerializeUtils.hpp"
+#include "DataLogger.hpp"
+#include "ExtendedDataUtils.hpp"
 
 namespace loc{
     /**
@@ -386,12 +388,12 @@ namespace loc{
         return *this;
     }
     
+    // compute standard deviation of RSSI for each ble beacon
     template<class Tstate, class Tinput>
     std::vector<double> GaussianProcessLDPLMultiModel<Tstate, Tinput>::computeRssiStandardDeviations(Samples samples){
         
         std::map<int, int> indexCount;
         std::map<int, double> indexRssiSum;
-        
         for(auto iter=mBeaconIdIndexMap.begin(); iter!=mBeaconIdIndexMap.end(); iter++){
             int index = iter->second;
             indexCount[index] = 0;
@@ -405,17 +407,11 @@ namespace loc{
             double xvec[4];
             MLAdapter::locationToVec(loc, xvec);
             
-            std::vector<int> indices;
-            for(Beacon b: bs){
-                long id = b.id();
-                int index = mBeaconIdIndexMap.at(id);
-                indices.push_back(index);
-            }
-            
+            std::vector<int> indices = extractKnownBeaconIndices(bs);
             std::vector<double> dypreds = mGP.predict(xvec, indices);
             
             int i = 0;
-            for(Beacon b: bs){
+            for(const Beacon& b: bs){
                 long id = b.id();
                 int index = mBeaconIdIndexMap.at(id);
                 BLEBeacon ble = mBLEBeacons.at(index);
@@ -472,48 +468,54 @@ namespace loc{
     }
     
     template<class Tstate, class Tinput>
-    std::map<long, std::vector<double>>  GaussianProcessLDPLMultiModel<Tstate, Tinput>::predict(const Tstate& state, const Tinput& input){
-        //Assuming Tinput = Beacons
-        
-        std::map<long, std::vector<double>> beaconIdRssiStatsMap;
-        
+    std::vector<int> GaussianProcessLDPLMultiModel<Tstate, Tinput>::extractKnownBeaconIndices(const Tinput& input) const{
         std::vector<int> indices;
         for(auto iter=input.begin(); iter!=input.end(); iter++){
             Beacon b = *iter;
             long id = b.id();
             if(mBeaconIdIndexMap.count(id)==1){
-                assert( mBeaconIdIndexMap.count(id)==1 );
                 int index = mBeaconIdIndexMap.at(id);
                 indices.push_back(index);
             }
         }
+        return indices;
+    }
+    
+    template<class Tstate, class Tinput>
+    std::map<long, std::vector<double>>  GaussianProcessLDPLMultiModel<Tstate, Tinput>::predict(const Tstate& state, const Tinput& input) const{
+        //Assuming Tinput = Beacons
+        
+        std::map<long, std::vector<double>> beaconIdRssiStatsMap;
         
         double xvec[4];
         MLAdapter::locationToVec(state, xvec);
+        std::vector<int> indices = extractKnownBeaconIndices(input);
         std::vector<double> dypreds = mGP.predict(xvec, indices);
         
         int idx_local=0;
         for(auto iter=input.begin(); iter!=input.end(); iter++){
-            Beacon b = *iter;
+            auto b = *iter;
             long id = b.id();
-            
             // RSSI of known beacons are predicted by a model.
             if(mBeaconIdIndexMap.count(id)==1){
-                int index = mBeaconIdIndexMap.at(id);
-                BLEBeacon bleBeacon = mBLEBeacons.at(index);
+                int idx_global = mBeaconIdIndexMap.at(id);
+                BLEBeacon bleBeacon = mBLEBeacons.at(idx_global);
                 
                 double features[4];
                 mITUModel.transformFeature(state, bleBeacon, features);
-                const double* params = mITUParameters.at(index).data();
+                const double* params = mITUParameters.at(idx_global).data();
                 double mean = mITUModel.predict(params, features);
                 double dypred = dypreds.at(idx_local);
-                idx_local++;
+                
                 double ypred = mean + dypred;
-                double stdev = mRssiStandardDeviations[index];
+                double stdev = mRssiStandardDeviations[idx_global];
                 
                 std::vector<double> rssiStats{ypred, stdev};
                 beaconIdRssiStatsMap[id] = rssiStats;
+                
+                idx_local++;
             }
+            
         }
         return beaconIdRssiStatsMap;
     }
@@ -533,17 +535,11 @@ namespace loc{
         
         auto beaconIdRssiStatsMap = this->predict(state, input);
         
-        int countKnown, countUnknown = 0;
-        for(auto iter=input.begin(); iter!=input.end(); iter++){
-            Beacon b = *iter;
-            assert(BeaconConfig::checkInRssiRange(b));
-            long id = b.id();
-            if(beaconIdRssiStatsMap.count(id)==1){
-                countKnown++;
-            }else{
-                countUnknown++;
-            }
-        }
+        std::vector<int> indices = extractKnownBeaconIndices(input);
+        
+        size_t countKnown = indices.size();
+        size_t countUnknown = input.size() - indices.size();
+
         if(countKnown==0){
             std::cout << "ObservationModel does not know the input data." << std::endl;
         }
@@ -559,15 +555,14 @@ namespace loc{
             
             // RSSI of known beacons are predicted by a model.
             if(mBeaconIdIndexMap.count(id)==1){
-
                 auto rssiStats = beaconIdRssiStatsMap[id];
                 double ypred = rssiStats.at(0);
                 double stdev = rssiStats.at(1);
                 
                 double logLL = MathUtils::logProbaNormal(rssi, ypred, stdev);
-                jointLogLL += logLL;
-                
                 double mahaDist = MathUtils::mahalanobisDistance(rssi, ypred, stdev);
+                
+                jointLogLL += logLL;
                 sumMahaDist += mahaDist;
                 
                 i++;
@@ -576,10 +571,11 @@ namespace loc{
             else if(mFillsUnknownBeaconRssi){
                 double ypred = BeaconConfig::minRssi();
                 double stdev = mStdevRssiForUnknownBeacon;
-                double logLL = MathUtils::logProbaNormal(rssi, ypred, stdev);
-                jointLogLL += logLL;
                 
+                double logLL = MathUtils::logProbaNormal(rssi, ypred, stdev);
                 double mahaDist = MathUtils::mahalanobisDistance(rssi, ypred, stdev);
+                
+                jointLogLL += logLL;
                 sumMahaDist += mahaDist;
             }
         }

@@ -103,7 +103,8 @@ namespace loc{
         GaussianProcessLDPLMultiModel& train(Samples samples);
         std::vector<std::vector<double>> fitITUModel(Samples samples);
         std::vector<double> computeRssiStandardDeviations(Samples samples);
-
+        std::vector<int> extractKnownBeaconIndices(const Tinput& beacons) const;
+        
         friend class GaussianProcessLDPLMultiModelTrainer<Tstate, Tinput>;
         
     public:
@@ -118,7 +119,7 @@ namespace loc{
         
         Tinput convertInput(const Tinput& input);
         // predict mean and stdev given state for input beacon id
-        std::map<long, std::vector<double>> predict(const Tstate& state, const Tinput& input);
+        std::map<long, std::vector<double>> predict(const Tstate& state, const Tinput& input) const;
         
         double computeLogLikelihood(const Tstate& state, const Tinput& input);
         std::vector<double> computeLogLikelihood(const std::vector<Tstate> & states, const Tinput& input) override;

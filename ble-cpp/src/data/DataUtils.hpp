@@ -71,6 +71,9 @@ namespace loc{
         
         static Pose parseResetPoseCSV(const std::string& str);
         
+        template<class Tstate>
+        static std::string statesToCSV(const std::vector<Tstate>& states);
+        
         static picojson::object locationToJSONObject(Location location);
         static picojson::object poseToJSONObject(Pose pose);
         static picojson::object stateToJSONObject(State state);
@@ -81,6 +84,16 @@ namespace loc{
         static picojson::array beaconsToJSONArray(const Beacons& beacons);
         
     };
+    
+    // Implementation
+    template<class Tstate>
+    std::string DataUtils::statesToCSV(const std::vector<Tstate>& states){
+        std::stringstream ss;
+        for(const auto& s: states){
+            ss << s << std::endl;
+        }
+        return ss.str();
+    }
     
 }
 

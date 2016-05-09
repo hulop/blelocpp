@@ -65,6 +65,7 @@
 		7E77288F1C97D5D80013FC40 /* ArrayUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E7728411C97985D0013FC40 /* ArrayUtils.cpp */; };
 		7E7728901C97D5D80013FC40 /* MathUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E7728431C97985D0013FC40 /* MathUtils.cpp */; };
 		7E7728911C97D5D80013FC40 /* RandomGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E7728451C97985D0013FC40 /* RandomGenerator.cpp */; };
+		FB4EAEE51CD7207300FECA1B /* ExtendedDataUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB4EAEE31CD7207300FECA1B /* ExtendedDataUtils.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -120,9 +121,9 @@
 		7E7727FE1C97985D0013FC40 /* DataLogger.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DataLogger.hpp; sourceTree = "<group>"; };
 		7E7727FF1C97985D0013FC40 /* DataStore.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DataStore.hpp; sourceTree = "<group>"; };
 		7E7728001C97985D0013FC40 /* DataStoreImpl.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DataStoreImpl.cpp; sourceTree = "<group>"; };
-		7E7728011C97985D0013FC40 /* DataStoreImpl.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DataStoreImpl.hpp; sourceTree = "<group>"; };
+		7E7728011C97985D0013FC40 /* DataStoreImpl.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DataStoreImpl.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		7E7728021C97985D0013FC40 /* DataUtils.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DataUtils.cpp; sourceTree = "<group>"; };
-		7E7728031C97985D0013FC40 /* DataUtils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DataUtils.hpp; sourceTree = "<group>"; };
+		7E7728031C97985D0013FC40 /* DataUtils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DataUtils.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		7E7728041C97985D0013FC40 /* LazyDataStore.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LazyDataStore.cpp; sourceTree = "<group>"; };
 		7E7728051C97985D0013FC40 /* LazyDataStore.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LazyDataStore.hpp; sourceTree = "<group>"; };
 		7E7728061C97985D0013FC40 /* VirtualDevice.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VirtualDevice.cpp; sourceTree = "<group>"; };
@@ -200,6 +201,8 @@
 		7E77289B1C98BDE60013FC40 /* map.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = map.png; sourceTree = "<group>"; };
 		7E77289C1C98BE9F0013FC40 /* out.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = out.txt; sourceTree = "<group>"; };
 		E9F26190EDF40A0FFFE3B3E6 /* libPods-LogReplay.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-LogReplay.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		FB4EAEE31CD7207300FECA1B /* ExtendedDataUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ExtendedDataUtils.cpp; sourceTree = "<group>"; };
+		FB4EAEE41CD7207300FECA1B /* ExtendedDataUtils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ExtendedDataUtils.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -336,6 +339,8 @@
 		7E7727FC1C97985D0013FC40 /* data */ = {
 			isa = PBXGroup;
 			children = (
+				FB4EAEE31CD7207300FECA1B /* ExtendedDataUtils.cpp */,
+				FB4EAEE41CD7207300FECA1B /* ExtendedDataUtils.hpp */,
 				7E7727FD1C97985D0013FC40 /* DataLogger.cpp */,
 				7E7727FE1C97985D0013FC40 /* DataLogger.hpp */,
 				7E7727FF1C97985D0013FC40 /* DataStore.hpp */,
@@ -611,6 +616,7 @@
 				7E7728781C97D5D80013FC40 /* LazyDataStore.cpp in Sources */,
 				7E7728791C97D5D80013FC40 /* VirtualDevice.cpp in Sources */,
 				7E77287A1C97D5D80013FC40 /* GridResampler.cpp in Sources */,
+				FB4EAEE51CD7207300FECA1B /* ExtendedDataUtils.cpp in Sources */,
 				7E77287B1C97D5D80013FC40 /* StatusInitializerImpl.cpp in Sources */,
 				7E77287C1C97D5D80013FC40 /* StatusInitializerStub.cpp in Sources */,
 				7E77287D1C97D5D80013FC40 /* StreamLocalizerStub.cpp in Sources */,
@@ -676,7 +682,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
@@ -713,7 +719,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
 			};
@@ -734,10 +740,12 @@
 					"\"${PODS_ROOT}/Headers/Public/cereal\"",
 					"\"${PODS_ROOT}/Headers/Public/eigen\"",
 					"\"${PODS_ROOT}/Headers/Public/picojson\"",
+					"\"/usr/local/Cellar/opencv/2.4.12_2/include/\"",
 					"\"/usr/local/Cellar/opencv/2.4.12/include/\"",
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					/usr/local/Cellar/opencv/2.4.12_2/lib,
 					/usr/local/Cellar/opencv/2.4.12/lib,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -759,10 +767,12 @@
 					"\"${PODS_ROOT}/Headers/Public/cereal\"",
 					"\"${PODS_ROOT}/Headers/Public/eigen\"",
 					"\"${PODS_ROOT}/Headers/Public/picojson\"",
+					"\"/usr/local/Cellar/opencv/2.4.12_2/include/\"",
 					"\"/usr/local/Cellar/opencv/2.4.12/include/\"",
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					/usr/local/Cellar/opencv/2.4.12_2/lib,
 					/usr/local/Cellar/opencv/2.4.12/lib,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
