@@ -53,6 +53,8 @@ struct Option{
     std::string trainedModelPath = "";
     std::string directoryLog = "";
     double gridSize = 0.5;
+    double minRssiBias = -10;
+    double maxRssiBias = 10;
     
     void print(){
         std::cout << "------------------------------------" << std::endl;
@@ -72,6 +74,8 @@ struct Option{
         std::cout << " considerBias   =" << (considerBias?"true":"false") << std::endl;
         std::cout << " directoryLog   =" << directoryLog << std::endl;
         std::cout << " gridSize       =" << gridSize << std::endl;
+        std::cout << " minRssiBias    =" << minRssiBias << std::endl;
+        std::cout << " maxRssiBias    =" << maxRssiBias << std::endl;
         std::cout << "------------------------------------" << std::endl;
     }
     
@@ -119,8 +123,10 @@ void printHelp(std::string command){
     std::cout << " -p modelFile         set the name of saved model file" << std::endl;
     std::cout << " -n                   set oneshot mode" << std::endl;
     std::cout << " -c                   consider bias for oneshot" << std::endl;
-    std::cout << " -d                   set directory to log prediction details" <<std::endl;
+    std::cout << " -d                   set directory to output log play details" <<std::endl;
     std::cout << " -g                   set grid size to evaluate observation model" << std::endl;
+    std::cout << " --minRssi            set minimum value of rssi bias" << std::endl;
+    std::cout << " --maxRssi            set maximum value of rssi bias" << std::endl;
     std::cout << std::endl;
     std::cout << "Example" << std::endl;
     std::cout << "$ " << command << " -t train.txt -b beacon.csv -m map.png -l navcog.log -o out.txt" << std::endl;
@@ -131,9 +137,24 @@ Option parseArguments(int argc,char *argv[]){
     Option opt;
     
     int c = 0;
-    while ((c = getopt (argc, argv, "shft:b:l:o:m:1:a:rp:njcd:g:")) != -1)
+    int option_index = 0;
+    struct option long_options[] = {
+        {"minRssiBias",     required_argument, NULL,  0 },
+        {"maxRssiBias",     required_argument, NULL,  0 },
+        {0,         0,                 0,  0 }
+    };
+//while ((c = getopt (argc, argv, "shft:b:l:o:m:1:a:rp:njcd:g:")) != -1)
+    while ((c = getopt_long(argc, argv, "shft:b:l:o:m:1:a:rp:njcd:g:", long_options, &option_index )) != -1)
         switch (c)
     {
+        case 0:
+            if (strcmp(long_options[option_index].name, "minRssiBias") == 0){
+                opt.minRssiBias = atof(optarg);
+            }
+            if (strcmp(long_options[option_index].name, "maxRssiBias") == 0){
+                opt.maxRssiBias = atof(optarg);
+            }
+            break;
         case 'h':
             printHelp(lastComponent(argv[0]));
             abort();
@@ -230,7 +251,7 @@ void functionCalledWhenUpdated(void *userData, loc::Status *pStatus){
 loc::Beacons convertBLEBeaconsToDummyBeacons(const loc::BLEBeacons& bleBeacons){
     loc::Beacons beacons;
     for(const auto& ble: bleBeacons){
-        double rssi = -10;
+        double rssi = -10; //dummy value
         loc::Beacon b(ble.major(), ble.minor(), rssi);
         beacons.push_back(b);
     }
