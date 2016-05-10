@@ -314,6 +314,8 @@ int main(int argc,char *argv[]){
     builder.randomWalker = opt.randomWalker;
     builder.trainedModelPath = opt.trainedModelPath;
     builder.considerBias = opt.considerBias;
+    builder.minRssiBias = opt.minRssiBias;
+    builder.maxRssiBias = opt.maxRssiBias;
     std::shared_ptr<loc::StreamLocalizer> localizer = builder.build();
         
     UserData userData;
