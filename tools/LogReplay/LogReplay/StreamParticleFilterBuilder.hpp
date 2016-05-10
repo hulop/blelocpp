@@ -79,6 +79,9 @@ namespace loc {
         bool considerBias = false;
         std::string trainedModelPath;
         
+        double minRssiBias = -10;
+        double maxRssiBias = 10;
+        
         StreamParticleFilterBuilder& trainDataPath(std::string trainDataPath){
             mTrainDataPath = trainDataPath;
             return *this;

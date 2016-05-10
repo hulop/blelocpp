@@ -178,6 +178,8 @@ namespace loc{
         stateProperty.meanRssiBias(0.0); // mean
         stateProperty.stdRssiBias(2.0); // standard deviation
         stateProperty.diffusionRssiBias(0.2); // standard deviation of a noise added to the rssi bias [dBm/s]
+        stateProperty.minRssiBias(minRssiBias);
+        stateProperty.maxRssiBias(maxRssiBias);
         // The difference between the observed and the actual orientation is described by a orientation bias parameter.
         stateProperty.diffusionOrientationBias(10.0/180*M_PI); // standard deviation of a noise added to the orientation bias [rad/s]
         

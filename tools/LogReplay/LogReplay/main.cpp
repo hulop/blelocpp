@@ -52,6 +52,7 @@ struct Option{
     bool considerBias = false;
     std::string trainedModelPath = "";
     std::string directoryLog = "";
+    double gridSize = 0.5;
     
     void print(){
         std::cout << "------------------------------------" << std::endl;
@@ -70,6 +71,7 @@ struct Option{
         std::cout << " oneshot        =" << (oneshot?"true":"false") << std::endl;
         std::cout << " considerBias   =" << (considerBias?"true":"false") << std::endl;
         std::cout << " directoryLog   =" << directoryLog << std::endl;
+        std::cout << " gridSize       =" << gridSize << std::endl;
         std::cout << "------------------------------------" << std::endl;
     }
     
@@ -118,6 +120,7 @@ void printHelp(std::string command){
     std::cout << " -n                   set oneshot mode" << std::endl;
     std::cout << " -c                   consider bias for oneshot" << std::endl;
     std::cout << " -d                   set directory to log prediction details" <<std::endl;
+    std::cout << " -g                   set grid size to evaluate observation model" << std::endl;
     std::cout << std::endl;
     std::cout << "Example" << std::endl;
     std::cout << "$ " << command << " -t train.txt -b beacon.csv -m map.png -l navcog.log -o out.txt" << std::endl;
@@ -128,7 +131,7 @@ Option parseArguments(int argc,char *argv[]){
     Option opt;
     
     int c = 0;
-    while ((c = getopt (argc, argv, "shft:b:l:o:m:1:a:rp:njcd:")) != -1)
+    while ((c = getopt (argc, argv, "shft:b:l:o:m:1:a:rp:njcd:g:")) != -1)
         switch (c)
     {
         case 'h':
@@ -179,6 +182,9 @@ Option parseArguments(int argc,char *argv[]){
             break;
         case 'd':
             opt.directoryLog.assign(optarg);
+            break;
+        case 'g':
+            sscanf(optarg, "%lf", &(opt.gridSize));
             break;
         default:
             abort();
@@ -231,8 +237,7 @@ loc::Beacons convertBLEBeaconsToDummyBeacons(const loc::BLEBeacons& bleBeacons){
     return beacons;
 }
 
-std::vector<loc::Location> convertSamplesToGridLocations(const loc::Samples& samples){
-    double dx = 0.25, dy = 0.25;
+std::vector<loc::Location> convertSamplesToGridLocations(const loc::Samples& samples, double dx, double dy){
     std::vector<double> xvec, yvec, zvec, fvec;
     for(const auto& s:samples){
         const auto& loc = s.location();
@@ -300,7 +305,7 @@ int main(int argc,char *argv[]){
     if(opt.directoryLog!=""){
         auto ds = builder.dataStore();
         auto beacons = convertBLEBeaconsToDummyBeacons(ds->getBLEBeacons());
-        auto locs = convertSamplesToGridLocations(ds->getSamples());
+        auto locs = convertSamplesToGridLocations(ds->getSamples(), opt.gridSize, opt.gridSize);
         
         picojson::array jarray;
         for(const loc::Location& loc : locs){
