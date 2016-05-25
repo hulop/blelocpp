@@ -48,6 +48,8 @@ namespace loc{
 
         template<class Tstate>
         Tstate perturbLocation(const Tstate& location, const Building& building);
+        template<class Tstate>
+        Tstate perturbLocation(const Tstate& location, double stdx, double stdy, const Building& building);
         PoseProperty mPoseProperty;
         StateProperty mStateProperty;
         
@@ -62,6 +64,9 @@ namespace loc{
         
         template<class Tstate>
         Tstate perturbLocation(const Tstate& location);
+        
+        template<class Tstate>
+        Tstate perturbLocation(const Tstate& location, double stdx, double stdy);
         
         template<class Tstate>
         std::vector<Tstate> perturbLocations(const std::vector<Tstate>& locations);

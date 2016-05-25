@@ -81,6 +81,11 @@ namespace loc {
         
         double minRssiBias = -10;
         double maxRssiBias = 10;
+        double meanRssiBias = 0.0;
+        double stdRssiBias = 2.0;
+        double diffusionRssiBias = 0.2;
+        double poseProperty_stdX = 0.0;
+        double poseProperty_stdY = 2.0;
         
         StreamParticleFilterBuilder& trainDataPath(std::string trainDataPath){
             mTrainDataPath = trainDataPath;

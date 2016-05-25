@@ -53,8 +53,13 @@ struct Option{
     std::string trainedModelPath = "";
     std::string directoryLog = "";
     double gridSize = 0.5;
+    double meanRssiBias = 0.0;
+    double stdRssiBias = 2.0;
     double minRssiBias = -10;
     double maxRssiBias = 10;
+    double diffusionRssiBias = 0.2;
+    double stdX = 1.0;
+    double stdY = 1.0;
     
     void print(){
         std::cout << "------------------------------------" << std::endl;
@@ -76,28 +81,13 @@ struct Option{
         std::cout << " gridSize       =" << gridSize << std::endl;
         std::cout << " minRssiBias    =" << minRssiBias << std::endl;
         std::cout << " maxRssiBias    =" << maxRssiBias << std::endl;
+        std::cout << " meanRssiBias   =" << meanRssiBias << std::endl;
+        std::cout << " stdRssiBias    =" << stdRssiBias << std::endl;
+        std::cout << " diffusionRssiBias = " << diffusionRssiBias << std::endl;
+        std::cout << " stdX    =" << stdX << std::endl;
+        std::cout << " stdY    =" << stdY << std::endl;
         std::cout << "------------------------------------" << std::endl;
     }
-    
-    bool isFilled(){
-        if(trainFilePath==""){
-            return false;
-        }
-        if(logFilePath==""){
-            return false;
-        }
-        if(beaconFilePath==""){
-            return false;
-        }
-        if(mapFilePath==""){
-            return false;
-        }
-        if(outputFilePath==""){
-            return false;
-        }
-        return true;
-    }
-    
 };
 
 std::string lastComponent(char *cstr) {
@@ -125,8 +115,13 @@ void printHelp(std::string command){
     std::cout << " -c                   consider bias for oneshot" << std::endl;
     std::cout << " -d                   set directory to output log play details" <<std::endl;
     std::cout << " -g                   set grid size to evaluate observation model" << std::endl;
-    std::cout << " --minRssi            set minimum value of rssi bias" << std::endl;
-    std::cout << " --maxRssi            set maximum value of rssi bias" << std::endl;
+    std::cout << " --minRssiBias        set minimum value of rssi bias" << std::endl;
+    std::cout << " --maxRssiBias        set maximum value of rssi bias" << std::endl;
+    std::cout << " --meanRssiBias       set mean of rssi bias at initialization" << std::endl;
+    std::cout << " --stdRssiBias        set standard deviation of rssi bias at initialization" << std::endl;
+    std::cout << " --diffusionRssiBias  set diffusion rssi bias" << std::endl;
+    std::cout << " --stdX <float>       set standard deviation of x used in initialization and mcmc sampling" << std::endl;
+    std::cout << " --stdY <float>       set standard deviation of y used in initialization and mcmc sampling" << std::endl;
     std::cout << std::endl;
     std::cout << "Example" << std::endl;
     std::cout << "$ " << command << " -t train.txt -b beacon.csv -m map.png -l navcog.log -o out.txt" << std::endl;
@@ -141,6 +136,11 @@ Option parseArguments(int argc,char *argv[]){
     struct option long_options[] = {
         {"minRssiBias",     required_argument, NULL,  0 },
         {"maxRssiBias",     required_argument, NULL,  0 },
+        {"meanRssiBias",     required_argument, NULL,  0 },
+        {"stdRssiBias",     required_argument, NULL,  0 },
+        {"diffusionRssiBias",     required_argument, NULL,  0 },
+        {"stdX",            required_argument, NULL,  0 },
+        {"stdY",            required_argument, NULL,  0 },
         {0,         0,                 0,  0 }
     };
 //while ((c = getopt (argc, argv, "shft:b:l:o:m:1:a:rp:njcd:g:")) != -1)
@@ -153,6 +153,21 @@ Option parseArguments(int argc,char *argv[]){
             }
             if (strcmp(long_options[option_index].name, "maxRssiBias") == 0){
                 opt.maxRssiBias = atof(optarg);
+            }
+            if (strcmp(long_options[option_index].name, "meanRssiBias") == 0){
+                opt.meanRssiBias = atof(optarg);
+            }
+            if (strcmp(long_options[option_index].name, "stdRssiBias") == 0){
+                opt.stdRssiBias = atof(optarg);
+            }
+            if (strcmp(long_options[option_index].name, "diffusionRssiBias") == 0){
+                opt.diffusionRssiBias = atof(optarg);
+            }
+            if (strcmp(long_options[option_index].name, "stdX") == 0){
+                opt.stdX = atof(optarg);
+            }
+            if (strcmp(long_options[option_index].name, "stdY") == 0){
+                opt.stdY = atof(optarg);
             }
             break;
         case 'h':
@@ -316,6 +331,11 @@ int main(int argc,char *argv[]){
     builder.considerBias = opt.considerBias;
     builder.minRssiBias = opt.minRssiBias;
     builder.maxRssiBias = opt.maxRssiBias;
+    builder.meanRssiBias = opt.meanRssiBias;
+    builder.stdRssiBias = opt.stdRssiBias;
+    builder.diffusionRssiBias = opt.diffusionRssiBias;
+    builder.poseProperty_stdX = opt.stdX;
+    builder.poseProperty_stdY = opt.stdY;
     std::shared_ptr<loc::StreamLocalizer> localizer = builder.build();
         
     UserData userData;

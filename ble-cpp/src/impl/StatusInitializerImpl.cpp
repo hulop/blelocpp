@@ -48,6 +48,15 @@ namespace loc{
     }
     
     template <class Tstate>
+    Tstate StatusInitializerImpl::perturbLocation(const Tstate& location, double stdx, double stdy){
+        const Building& building = mDataStore->getBuilding();
+        return perturbLocation(location, stdx, stdy, building);
+    }
+    template Location StatusInitializerImpl::perturbLocation<Location>(const Location& location, double stdx, double stdy);
+    template Pose StatusInitializerImpl::perturbLocation<Pose>(const Pose& location, double stdx, double stdy);
+    template State StatusInitializerImpl::perturbLocation<State>(const State& location, double stdx, double stdy);
+    
+    template <class Tstate>
     Tstate StatusInitializerImpl::perturbLocation(const Tstate& location){
         const Building& building = mDataStore->getBuilding();
         return perturbLocation(location, building);
@@ -57,12 +66,12 @@ namespace loc{
     template State StatusInitializerImpl::perturbLocation<State>(const State& location);
     
     template <class Tstate>
-    Tstate StatusInitializerImpl::perturbLocation(const Tstate& location, const Building& building){
+    Tstate StatusInitializerImpl::perturbLocation(const Tstate& location, double stdx, double stdy, const Building& building){
         bool hasBuilding = building.nFloors()>0? true: false;
         for(int i=0; i<nPerturbationMax; i++){
             Tstate locNew(location);
-            double x = locNew.x() + mPoseProperty.stdX() * rand.nextGaussian();
-            double y = locNew.y() + mPoseProperty.stdY() * rand.nextGaussian();
+            double x = locNew.x() + stdx * rand.nextGaussian();
+            double y = locNew.y() + stdy * rand.nextGaussian();
             locNew.x(x);
             locNew.y(y);
             
@@ -75,6 +84,11 @@ namespace loc{
             }
         }
         return location;
+    }
+    
+    template <class Tstate>
+    Tstate StatusInitializerImpl::perturbLocation(const Tstate& location, const Building& building){
+        return perturbLocation(location, mPoseProperty.stdX(), mPoseProperty.stdY(), building);
     }
     
     Locations StatusInitializerImpl::extractMovableLocations(const Locations& locations){
