@@ -205,6 +205,8 @@
 		F52FFB961C08861800508330 /* libopencv_superres.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F52FFB861C08861800508330 /* libopencv_superres.dylib */; };
 		F52FFB971C08861800508330 /* libopencv_video.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F52FFB871C08861800508330 /* libopencv_video.dylib */; };
 		F52FFB981C08861800508330 /* libopencv_videostab.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F52FFB881C08861800508330 /* libopencv_videostab.dylib */; };
+		FB273EF51D22226B00F53CCB /* ExtendedDataUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB273EF31D22226B00F53CCB /* ExtendedDataUtils.cpp */; };
+		FB273EF61D22226B00F53CCB /* ExtendedDataUtils.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FB273EF41D22226B00F53CCB /* ExtendedDataUtils.hpp */; };
 		FB2E8B131C2404EA00C5C45C /* CoordinateSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB2E8B121C2404EA00C5C45C /* CoordinateSystem.cpp */; };
 		FB2E8B141C2404F600C5C45C /* CoordinateSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB2E8B121C2404EA00C5C45C /* CoordinateSystem.cpp */; };
 		FB5B4BF11C7C41B600D00E8E /* MetropolisSampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB5B4BEE1C7C41B600D00E8E /* MetropolisSampler.cpp */; };
@@ -361,6 +363,8 @@
 		F52FFB861C08861800508330 /* libopencv_superres.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_superres.dylib; path = ../../../../../../usr/local/Cellar/opencv/2.4.12/lib/libopencv_superres.dylib; sourceTree = "<group>"; };
 		F52FFB871C08861800508330 /* libopencv_video.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_video.dylib; path = ../../../../../../usr/local/Cellar/opencv/2.4.12/lib/libopencv_video.dylib; sourceTree = "<group>"; };
 		F52FFB881C08861800508330 /* libopencv_videostab.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_videostab.dylib; path = ../../../../../../usr/local/Cellar/opencv/2.4.12/lib/libopencv_videostab.dylib; sourceTree = "<group>"; };
+		FB273EF31D22226B00F53CCB /* ExtendedDataUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ExtendedDataUtils.cpp; sourceTree = "<group>"; };
+		FB273EF41D22226B00F53CCB /* ExtendedDataUtils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ExtendedDataUtils.hpp; sourceTree = "<group>"; };
 		FB2E8B121C2404EA00C5C45C /* CoordinateSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CoordinateSystem.cpp; sourceTree = "<group>"; };
 		FB5B4BEE1C7C41B600D00E8E /* MetropolisSampler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MetropolisSampler.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		FB5B4BEF1C7C41B600D00E8E /* MetropolisSampler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MetropolisSampler.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -452,6 +456,8 @@
 		7E6F24E91C0F1D76007A97A1 /* data */ = {
 			isa = PBXGroup;
 			children = (
+				FB273EF31D22226B00F53CCB /* ExtendedDataUtils.cpp */,
+				FB273EF41D22226B00F53CCB /* ExtendedDataUtils.hpp */,
 				7E6F24EA1C0F1D76007A97A1 /* DataLogger.cpp */,
 				7E6F24EB1C0F1D76007A97A1 /* DataLogger.hpp */,
 				7E6F24EC1C0F1D76007A97A1 /* DataStore.hpp */,
@@ -687,6 +693,7 @@
 			files = (
 				7E6F25451C0F1D76007A97A1 /* Acceleration.hpp in Headers */,
 				7E6F25771C0F1D76007A97A1 /* Status.hpp in Headers */,
+				FB273EF61D22226B00F53CCB /* ExtendedDataUtils.hpp in Headers */,
 				7E6F257F1C0F1D76007A97A1 /* DataStore.hpp in Headers */,
 				7E6F26051C0F1D79007A97A1 /* RandomGenerator.hpp in Headers */,
 				7E6F25E31C0F1D78007A97A1 /* OrientationMeter.hpp in Headers */,
@@ -996,6 +1003,7 @@
 				7E6F25851C0F1D76007A97A1 /* DataUtils.cpp in Sources */,
 				7E6F256D1C0F1D76007A97A1 /* Sample.cpp in Sources */,
 				7E6F25711C0F1D76007A97A1 /* State.cpp in Sources */,
+				FB273EF51D22226B00F53CCB /* ExtendedDataUtils.cpp in Sources */,
 				FB71CE4F1C46889F00A4DB67 /* MathUtils.cpp in Sources */,
 				7E6F254B1C0F1D76007A97A1 /* Beacon.cpp in Sources */,
 				7E6F25E51C0F1D78007A97A1 /* OrientationMeterAverage.cpp in Sources */,
