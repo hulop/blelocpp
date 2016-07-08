@@ -65,7 +65,7 @@ namespace loc{
         std::vector<double> allLogLLs;
         
         State findInitialMaxLikelihoodState();
-        State transitState(Tstate state);
+        State transitState(const Tstate& state);
         
     public:
         

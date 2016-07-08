@@ -423,6 +423,9 @@ namespace loc{
                 States states = mMetro->sampling(n);
                 std::vector<Location> locations(states.begin(), states.end());
                 statesNew = mStatusInitializer->initializeStatesFromLocations(locations);
+                for(int i=0; i<states.size(); i++){
+                    statesNew.at(i).rssiBias(states.at(i).rssiBias());
+                }
             }else{
                 statesNew = mStatusInitializer->resetStates(n, beaconsFiltered);
             }

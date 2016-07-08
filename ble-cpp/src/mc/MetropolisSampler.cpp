@@ -196,7 +196,7 @@ namespace loc{
     
     
     template <class Tstate, class Tinput>
-    State MetropolisSampler<Tstate, Tinput>::transitState(Tstate state){
+    State MetropolisSampler<Tstate, Tinput>::transitState(const Tstate& state){
         // update variables that affect mainly likelihood
         Tstate stateNew(state);
         auto locNew = mStatusInitializer->perturbLocation(stateNew);
