@@ -435,12 +435,14 @@ namespace loc{
         }
         
         std::vector<double> stdevs;
-        for(auto iter=mBeaconIdIndexMap.begin(); iter!=mBeaconIdIndexMap.end(); iter++){
-            int index = iter->second;
+        for(auto& ble: mBLEBeacons){
+            long id = ble.id();
+            int index = mBeaconIdIndexMap.at(id);
             double var = indexRssiSum[index] /(indexCount[index]);
             double stdev = sqrt(var);
             stdevs.push_back(stdev);
         }
+
         return stdevs;
     }
     
