@@ -516,7 +516,6 @@ namespace loc{
         poseRandomWalker->setStateProperty(stateProperty);
         
         // Combine poseRandomWalker and building
-        // TODO
         prwBuildingProperty = PoseRandomWalkerInBuildingProperty::Ptr(new PoseRandomWalkerInBuildingProperty);
         prwBuildingProperty->maxIncidenceAngle(maxIncidenceAngle/180.0*M_PI);
         //prwBuildingProperty.weightDecayRate(0.9);
@@ -524,7 +523,11 @@ namespace loc{
         //prwBuildingProperty.weightDecayRate(0.93303299153); // this^10 = 0.5
         prwBuildingProperty->weightDecayRate(pow(0.5, 1.0/weightDecayHalfLife)); // this^5 = 0.5
         
-        // END TODO
+        prwBuildingProperty->velocityRateFloor(velocityRateFloor);
+        prwBuildingProperty->velocityRateElevator(velocityRateElevator);
+        prwBuildingProperty->velocityRateStair(velocityRateStair);
+        
+        
         Building building = dataStore->getBuilding();
         Building::Ptr buildingPtr(new Building(building));
         poseRandomWalkerInBuilding = std::shared_ptr<PoseRandomWalkerInBuilding>(new PoseRandomWalkerInBuilding());
