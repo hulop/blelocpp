@@ -39,11 +39,15 @@ namespace loc{
     }
 
     Color FloorMap::getColor(const Location& location) const{
-        Location localCoord = mCoordSys.worldToLocalState(location);
-        int x = getX(localCoord);
-        int y = getY(localCoord);
-        Color pixelColor = mImage.get(y, x);
-        return pixelColor;
+        if(isValid(location)){
+            Location localCoord = mCoordSys.worldToLocalState(location);
+            int x = getX(localCoord);
+            int y = getY(localCoord);
+            Color pixelColor = mImage.get(y, x);
+            return pixelColor;
+        }else{
+            return color::colorFloor;
+        }
     }
     
     int FloorMap::getX(const loc::Location &location) const{
@@ -62,9 +66,6 @@ namespace loc{
     }
 
     bool FloorMap::isMovable(const Location& location) const{
-        if(! isValid(location)){
-            return false;
-        }
         if(isWall(location)){
             return false;
         }
@@ -134,9 +135,14 @@ namespace loc{
         while(count<=norm_int){
             int yInt = doubleToImageCoordinate(y);
             int xInt = doubleToImageCoordinate(x);
-            Color c = mImage.get(yInt, xInt);
+            Color c = color::colorFloor;
             bool pixelIsValid = mImage.checkValid(yInt, xInt);
-            if(c.equals(color::colorWall) || !pixelIsValid){
+            if(pixelIsValid){
+                c = mImage.get(yInt, xInt);
+            }else{
+                c = color::colorFloor;
+            }
+            if(c.equals(color::colorWall)){
                 return ((double)count-1)/norm_int;
             }
             x+=dx;
