@@ -109,6 +109,34 @@ namespace  loc {
         return meanState;
     }
     
+    State State::weightedMean(const std::vector<State>& states){
+        size_t n = states.size();
+        std::vector<double> weights(n);
+        double weightSum = 0;
+        for(int i=0; i<n; i++){
+            weights[i] = states.at(i).weight();
+            weightSum += weights[i];
+        }
+        
+        Pose meanPose = Pose::weightedMean<State>(states, weights);
+        State meanState(meanPose);
+        
+        double meanRssiBias = 0;
+        double xOri = 0;
+        double yOri = 0;
+        for(const State& s: states){
+            double w = s.weight() / weightSum;
+            meanRssiBias += s.rssiBias()*w;
+            xOri += std::cos(s.orientationBias()*w);
+            yOri += std::sin(s.orientationBias()*w);
+        }
+        //meanRssiBias/=(double)states.size();
+        double meanOriB = std::atan2(yOri, xOri);
+        meanState.rssiBias(meanRssiBias);
+        meanState.orientationBias(meanOriB);
+        return meanState;
+    }
+    
     
     // State Property
     StateProperty& StateProperty::meanRssiBias(double meanRssiBias){

@@ -32,6 +32,9 @@
 #include "bleloc.h"
 #include "BLEBeacon.hpp"
 #include "picojson.h"
+#ifdef ANDROID_STL_EXT
+#include "string_ext.hpp"
+#endif /* ANDROID_STL_EXT */
 
 namespace loc{
     class DataUtils{
@@ -48,7 +51,8 @@ namespace loc{
         template<class T> static T parseCSVSensorData(const std::string& str);
         static Acceleration parseAccelerationCSV(const std::string& str);
         static Attitude parseAttitudeCSV(const std::string& str);
-        static Beacons parseBeaconsCSV(const std::string& str);
+        static Beacons parseBeaconsCSV(const std::string& str); //timestamp, Beacon, x, y, height, floor, nBeacon, major, minor, rssi, ...
+        static Beacons parseLogBeaconsCSV(const std::string& str); // Beacon, nBeacon, major, minor, rssi, ...., timestamp
         
         static Beacon jsonBeaconObjectToBeacon(picojson::object& jsonObject);
         static Beacons jsonBeaconsObjectToBeacons(picojson::object& beaconsObj);
@@ -57,17 +61,24 @@ namespace loc{
         static Samples jsonSamplesStringToSamples(const std::string& str);
         
         static std::string fileToString(const std::string& filePath);
+        static std::string stringToFile(const std::string& dataStr, const std::string& dir, const std::string& file = "");
         
         static Location parseLocationCSV(const std::string& csvLine);
         static Sample parseSampleCSV(const std::string& csvLine)  throw (std::invalid_argument);
+        static Sample parseSampleCSV(const std::string& csvLine, bool noBeacons)  throw (std::invalid_argument);
+        
         static void csvSamplesToSamples(std::istream& istream, Samples &Samples);
+        static void csvSamplesToSamples(std::istream& istream, Samples &Samples, bool noBeacons);
         static Samples csvSamplesToSamples(std::istream& istream);
+        static Samples csvSamplesToSamples(std::istream& istream, bool noBeacons);
         static Sample parseShortSampleCSV(const std::string& csvLine)  throw (std::invalid_argument);
         static void shortCsvSamplesToSamples(std::istream& istream, Samples &Samples);
         static Samples shortCsvSamplesToSamples(std::istream& istream);
+        static std::string samplesToCsvSamples(const Samples& samples);
         
         static BLEBeacon parseBLEBeaconCSV(const std::string& csvLine) throw (std::invalid_argument);
         static BLEBeacons csvBLEBeaconsToBLEBeacons(std::istream&);
+        static std::string BLEBeaconsToCSV(const BLEBeacons& bleBeacons);
         
         static Pose parseResetPoseCSV(const std::string& str);
         

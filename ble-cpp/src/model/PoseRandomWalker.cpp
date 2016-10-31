@@ -25,7 +25,6 @@
 
 namespace loc{
     
-    
     PoseRandomWalker& PoseRandomWalker::setProperty(PoseRandomWalkerProperty property){
         mProperty = property;
         return *this;
@@ -41,7 +40,7 @@ namespace loc{
         return *this;
     }
     
-    std::vector<State> PoseRandomWalker::predict(std::vector<State> states, PoseRandomWalkerInput input){
+    std::vector<State> PoseRandomWalker::predict(std::vector<State> states, SystemModelInput input){
         std::vector<State> statesPredicted(states.size());
         for(int i=0; i<states.size(); i++){
             statesPredicted[i]= predict(states[i], input);
@@ -49,20 +48,22 @@ namespace loc{
         return statesPredicted;
     }
     
-    State PoseRandomWalker::predict(State state, PoseRandomWalkerInput input){
+    State PoseRandomWalker::predict(State state, SystemModelInput input){
         
         //long timestamp = input.timestamp;
         //long previousTimestamp = input.previousTimestamp;
         double dTime = (input.timestamp()-input.previousTimestamp())/(1000.0); //[s] Difference in time
         
-        double nSteps = mProperty.pedometer()->getNSteps();
+        double movLevel = movingLevel();
         double yaw = mProperty.orientationMeter()->getYaw();
         
+        //std::cout << "predict: dTime=" << dTime << ", nSteps=" << nSteps << std::endl;
+        
         // Perturb variables in State
-        if(nSteps>0 || mProperty.doesUpdateWhenStopping() ){
+        //if(nSteps>0 || mProperty.doesUpdateWhenStopping() ){
             state.orientationBias(state.orientationBias() + stateProperty.diffusionOrientationBias()*randomGenerator.nextGaussian()*dTime );
             state.rssiBias(randomGenerator.nextTruncatedGaussian(state.rssiBias(), stateProperty.diffusionRssiBias()*dTime , stateProperty.minRssiBias(), stateProperty.maxRssiBias()));
-        }
+        //}
         
         // Update orientation
         double previousOrientation = state.orientation();
@@ -80,14 +81,14 @@ namespace loc{
         // Perturb variables in Pose
         double v = 0.0;
         double nV = state.normalVelocity();
-        if(nSteps >0 || mProperty.doesUpdateWhenStopping()){
+        if(movLevel >0 || mProperty.doesUpdateWhenStopping()){
             nV = randomGenerator.nextTruncatedGaussian(state.normalVelocity(),
                                                           poseProperty.diffusionVelocity(),
                                                           poseProperty.minVelocity(),
                                                           poseProperty.maxVelocity());
             state.normalVelocity(nV);
         }
-        if(nSteps>0){
+        if(movLevel>0){
             v = nV * mVelocityRate * turningVelocityRate;
         }else{
             v = 0.0;
@@ -106,6 +107,12 @@ namespace loc{
     }
 
     
-    
+    double PoseRandomWalker::movingLevel(){
+        if(isUnderControll){
+            return mMovement;
+        }else{
+            return mProperty.pedometer()->getNSteps();
+        }
+    }
     
 }

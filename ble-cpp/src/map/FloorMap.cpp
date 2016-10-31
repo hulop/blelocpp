@@ -30,6 +30,7 @@ namespace loc{
         const Color colorWall = black;
         const Color colorStairs = blue;
         const Color colorElevator = yellow;
+        const Color colorEscalator = green;
     }
         
     FloorMap::FloorMap(ImageHolder image, CoordinateSystem coordSys){
@@ -39,10 +40,25 @@ namespace loc{
 
     Color FloorMap::getColor(const Location& location) const{
         Location localCoord = mCoordSys.worldToLocalState(location);
-        int x = static_cast<int>(localCoord.x());
-        int y = static_cast<int>(localCoord.y());
+        int x = getX(localCoord);
+        int y = getY(localCoord);
         Color pixelColor = mImage.get(y, x);
         return pixelColor;
+    }
+    
+    int FloorMap::getX(const loc::Location &location) const{
+        int x = doubleToImageCoordinate(location.x());
+        return x;
+    }
+    
+    int FloorMap::getY(const loc::Location &location) const{
+        int y = doubleToImageCoordinate(location.y());
+        return y;
+    }
+    
+    int FloorMap::doubleToImageCoordinate(double x) const{
+        int i = static_cast<int>(std::round(x));
+        return i;
     }
 
     bool FloorMap::isMovable(const Location& location) const{
@@ -61,9 +77,9 @@ namespace loc{
     
     bool FloorMap::isValid(const Location& location) const{
         Location localCoord = mCoordSys.worldToLocalState(location);
-        int x = static_cast<int>(localCoord.x());
-        int y = static_cast<int>(localCoord.y());
-
+        int x = getX(localCoord);
+        int y = getY(localCoord);
+        
         int cols = mImage.cols();
         int rows = mImage.rows();
 
@@ -91,6 +107,9 @@ namespace loc{
         return checkColor(location, color::colorElevator);
     }
 
+    bool FloorMap::isEscalator(const Location& location) const{
+        return checkColor(location, color::colorEscalator);
+    }
 
     double FloorMap::wallCrossingRatio(const Location& start, const Location& end) const{
         Location startLocal = mCoordSys.worldToLocalState(start);
@@ -113,8 +132,8 @@ namespace loc{
 
         int count=0;
         while(count<=norm_int){
-            int yInt = static_cast<int>(y);
-            int xInt = static_cast<int>(x);
+            int yInt = doubleToImageCoordinate(y);
+            int xInt = doubleToImageCoordinate(x);
             Color c = mImage.get(yInt, xInt);
             bool pixelIsValid = mImage.checkValid(yInt, xInt);
             if(c.equals(color::colorWall) || !pixelIsValid){
@@ -139,6 +158,7 @@ namespace loc{
         double dy = end.y() - start.y();
         double x = start.x() + dx * r;
         double y = start.y() + dy * r;
+        double norm = sqrt(dx*dx+dy*dy);
         double a = std::atan2(dy, dx);
         
         Location nearWall(start);
@@ -150,17 +170,25 @@ namespace loc{
         for(double angle = 1; angle<=90; angle++){
             for(int i=0; i<2; i++){
                 sign *= -1;
-                double newAngle = a * sign*(angle/180*M_PI);
-                double x2 = x + std::cos(newAngle) * dx;
-                double y2 = y + std::sin(newAngle) * dy;
+                double newAngle = a + sign*(angle/180*M_PI);
+                double x2 = x + std::cos(newAngle) * norm;
+                double y2 = y + std::sin(newAngle) * norm;
                 nearWall2.x(x2);
                 nearWall2.y(y2);
                 if(wallCrossingRatio(nearWall, nearWall2) >= 1.0){
+                    newAngle = Pose::normalizeOrientaion(newAngle);// Returns normalized angle.
+                    if(newAngle < -M_PI || M_PI < newAngle){
+                        BOOST_THROW_EXCEPTION(LocException("estimated wall angle is out of range."));
+                    }
                     return newAngle;
                 }
             }
         }
-        return 0;
+        return std::numeric_limits<float>::quiet_NaN();;
+    }
+    
+    const CoordinateSystem& FloorMap::coordinateSystem() const{
+        return mCoordSys;
     }
 
 }

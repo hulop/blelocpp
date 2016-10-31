@@ -24,6 +24,7 @@
 #define MathUtils_hpp
 
 #include <cmath>
+#include <boost/math/distributions/students_t.hpp>
 
 class DirectionalStatistics{
     double mCircularMean;
@@ -42,6 +43,18 @@ public:
     }
 };
 
+class WrappedNormalParameter{
+    double mMean;
+    double mStdev;
+public:
+    WrappedNormalParameter(double mean, double stdev){
+        this->mMean = mean;
+        this->mStdev = stdev;
+    }
+    double mean() const{return mMean;}
+    double stdev() const{return mStdev;}
+};
+
 class MathUtils{
     
 public:
@@ -54,12 +67,27 @@ public:
         -std::pow(x-mu, 2)/(2.0*sigma*sigma);
     }
     
+    static std::function<double(double,double,double)> logProbatDistFunc(double nu) {
+        boost::math::students_t dist(nu);
+        return [=] (double x, double mu, double sigma){
+            double z = (x - mu) / sigma;
+            return std::log(boost::math::pdf(dist, z));
+        };
+    }
+    
     static double mahalanobisDistance(double x, double mu, double sigma){
         return std::pow(x-mu, 2)/(sigma*sigma);
     }
     
     static double quantileChiSquaredDistribution(int degreeOfFreedom, double cumulativeDensity);
     
+    static double normalizeOrientaion(double orientation){
+        double x = std::cos(orientation);
+        double y = std::sin(orientation);
+        return std::atan2(y,x);
+    }
+    
     static DirectionalStatistics computeDirectionalStatistics(std::vector<double> orientations);
+    static WrappedNormalParameter computeWrappedNormalParameters(const std::vector<double>& orientations);
 };
 #endif /* MathUtils_hpp */

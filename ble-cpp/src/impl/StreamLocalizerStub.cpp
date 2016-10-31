@@ -51,6 +51,9 @@ namespace loc{
         callback(status);
         return *this;
     }
+    StreamLocalizer& StreamLocalizerStub::putHeading(const Heading heading) {
+        return *this;
+    }
     
     void StreamLocalizerStub::updateStateStub(){
         Status* statusNew = new Status();
@@ -93,6 +96,10 @@ namespace loc{
     }
     
     bool StreamLocalizerStub::resetStatus(const loc::Beacons &beacons){
+        resetStatus();
+        return true;
+    }
+    bool StreamLocalizerStub::resetStatus(const loc::Location &location, const loc::Beacons &beacons){
         resetStatus();
         return true;
     }

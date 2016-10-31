@@ -22,6 +22,7 @@
 
 
 #include "Pose.hpp"
+#include "LocException.hpp"
 #include <cmath>
 
 namespace loc{
@@ -31,6 +32,7 @@ namespace loc{
         return mLocation;
     }
     */
+    
     
     double Pose::x() const{
         return Location::x();
@@ -104,6 +106,9 @@ namespace loc{
         return *this;
     }
     
+    /*
+     Clip angle to -pi <= angle <= pi range.
+    */
     double Pose::normalizeOrientaion(double orientation){
         double x = std::cos(orientation);
         double y = std::sin(orientation);

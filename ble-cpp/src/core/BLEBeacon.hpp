@@ -33,6 +33,7 @@
 
 #include "Location.hpp"
 #include "Beacon.hpp"
+#include "LocException.hpp"
 
 namespace loc{
     class BLEBeacon;
@@ -125,7 +126,7 @@ namespace loc{
                 std::stringstream ss;
                 ss << "BLEBeacon(major=" << b.major() <<", minor=" << b.minor() << ") is duplicated";
                 flag = false;
-                throw std::runtime_error(ss.str());
+                BOOST_THROW_EXCEPTION(LocException(ss.str()));
             }
             ids.insert(id);
         }
@@ -134,8 +135,12 @@ namespace loc{
     
     template<class Tbeacon>
     std::map<long, int> BLEBeacon::constructBeaconIdToIndexMap(std::vector<Tbeacon> beacons){
-        assert(checkNoDuplication(beacons)==true);
-        
+        try{
+            checkNoDuplication(beacons);
+        }catch(LocException& ex){
+            ex << boost::error_info<struct err_info, std::string>("Found duplication of beacon identifiers.");
+            throw ex;
+        }
         std::map<long, int> beaconIdIndexMap;
         int i = 0;
         for(Tbeacon b: beacons){

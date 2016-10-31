@@ -57,6 +57,7 @@ namespace loc{
         State& negativeLogLikelihood(double negativeLogLikelihood);
         State& mahalanobisDistance(double mahalanobisDistance);
         static State mean(const std::vector<State>& states);
+        static State weightedMean(const std::vector<State>& states);
         
         // for string stream
         friend std::ostream& operator<<(std::ostream&os, const State& pose);
@@ -69,12 +70,14 @@ namespace loc{
         double meanRssiBias_ = 0.0; // [dBm/s]
         double stdRssiBias_ = 0.0; // [dBm/s]
         double diffusionRssiBias_ = 0.0; // [dBm/s]
-        double diffusionOrientationBias_ = 0.0/180*M_PI; // [radian/s]
+        double diffusionOrientationBias_ = 10.0/180.0*M_PI; // [radian/s]
         
         double minRssiBias_ = -10;
         double maxRssiBias_ = 10;
         
     public:
+        using Ptr = std::shared_ptr<StateProperty>;
+        
         StateProperty& meanRssiBias(double meanRssiBias);
         double meanRssiBias() const;
         StateProperty& stdRssiBias(double stdRssiBias);

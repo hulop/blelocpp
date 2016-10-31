@@ -28,6 +28,10 @@
 #include <fstream>
 #include <string>
 #include <sstream>
+#include <memory>
+#ifdef ANDROID_STL_EXT
+#include "string_ext.hpp"
+#endif /* ANDROID_STL_EXT */
 
 namespace loc{
     

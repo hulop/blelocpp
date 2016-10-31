@@ -27,7 +27,7 @@
 #define COORDINATE_SYSTEM_2D
 
 #include <stdio.h>
-#include <cassert>
+#include "LocException.hpp"
 
 namespace loc{
     // Parameters to define coordinate transformation

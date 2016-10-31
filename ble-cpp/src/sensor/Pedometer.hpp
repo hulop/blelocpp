@@ -30,6 +30,8 @@ namespace loc{
     
     class Pedometer{        
     public:
+        using Ptr = std::shared_ptr<Pedometer>;
+        
         virtual ~Pedometer(){}
 
         virtual Pedometer& putAcceleration(Acceleration acceleration) = 0;

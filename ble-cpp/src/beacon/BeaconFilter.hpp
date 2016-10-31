@@ -24,6 +24,7 @@
 #define BeaconFilter_hpp
 
 #include <stdio.h>
+#include <memory>
 #include "Beacon.hpp"
 
 namespace loc{

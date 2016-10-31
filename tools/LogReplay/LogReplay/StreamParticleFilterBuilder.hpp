@@ -87,6 +87,8 @@ namespace loc {
         double poseProperty_stdX = 0.0;
         double poseProperty_stdY = 2.0;
         
+        double tDistribution = -1;
+        
         StreamParticleFilterBuilder& trainDataPath(std::string trainDataPath){
             mTrainDataPath = trainDataPath;
             return *this;

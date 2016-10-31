@@ -29,8 +29,11 @@ namespace loc{
     DataStoreImpl& bleBeacons(BLEBeacons bleBeacons);
     DataStoreImpl& building(Building building);
     
-    void DataStoreImpl::readSamples(std::ifstream &ifs){        
-        DataUtils::csvSamplesToSamples(ifs, mSamples);
+    void DataStoreImpl::readSamples(std::istream &is){
+        DataUtils::csvSamplesToSamples(is, mSamples);
+    }
+    void DataStoreImpl::readSamples(std::istream &is, bool noBeacons){
+        DataUtils::csvSamplesToSamples(is, mSamples, noBeacons);
     }
     DataStoreImpl& DataStoreImpl::samples(Samples samples){
         mSamples = samples;

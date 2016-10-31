@@ -44,17 +44,33 @@ namespace loc{
     
     template <class Tstate, class Tinput>
     State MetropolisSampler<Tstate, Tinput>::findInitialMaxLikelihoodState(){
-        auto locations = mStatusInitializer->extractLocationsCloseToBeacons(mInput, mParams.radius2D);
+        Locations locations;
+        
+        if (mParams.initType == INIT_WITH_SAMPLE_LOCATIONS) {
+            locations = mStatusInitializer->extractLocationsCloseToBeacons(mInput, mParams.radius2D);
+        } else if (mParams.initType == INIT_WITH_BEACON_LOCATIONS){
+            locations = mStatusInitializer->extractLocationsCloseToBeaconsWithPerturbation(mInput, mParams.radius2D);
+        }
+        if(locations.size()==0){
+            BOOST_THROW_EXCEPTION(LocException("No location close to beacons was found in sampler."));
+        }
         locations = Location::filterLocationsOnFlatFloor(locations); // Remove locations with an unusual z value.
         if(locations.size()==0){
             std::cerr << "All locations were removed at filtering step in sampler.　Not filtered locations are used." << std::endl;
-            locations = mStatusInitializer->extractLocationsCloseToBeacons(mInput, mParams.radius2D);
+            if (mParams.initType == INIT_WITH_SAMPLE_LOCATIONS) {
+                locations = mStatusInitializer->extractLocationsCloseToBeacons(mInput, mParams.radius2D);
+            } else if (mParams.initType == INIT_WITH_BEACON_LOCATIONS){
+                locations = mStatusInitializer->extractLocationsCloseToBeaconsWithPerturbation(mInput, mParams.radius2D);
+            }
+
         }
         auto states = mStatusInitializer->initializeStatesFromLocations(locations);
         std::vector<double> logLLs = mObsModel->computeLogLikelihood(states, mInput);
         auto iterMax = std::max_element(logLLs.begin(), logLLs.end());
         size_t index = std::distance(logLLs.begin(), iterMax);
         Tstate locMaxLL = states.at(index);
+        
+        std::cout << "findInitialMaxLikelihoodState: states.size=" << states.size() << "max state=" << locMaxLL << std::endl;
         return locMaxLL;
     }
     
@@ -84,11 +100,15 @@ namespace loc{
         startBurnIn(mParams.burnIn);
     }
     
+    template <class Tstate, class Tinput>
+    bool MetropolisSampler<Tstate, Tinput>::sample(){
+        return sample(true, true);
+    }
     
     // This function returns the result whether a proposed sample was accepted or not.
     template <class Tstate, class Tinput>
-    bool MetropolisSampler<Tstate, Tinput>::sample(){
-        Tstate stateNew = transitState(currentState);
+    bool MetropolisSampler<Tstate, Tinput>::sample(bool transitLoc, bool transitRssiBias){
+        Tstate stateNew = transitState(currentState, transitLoc, transitRssiBias);
         
         std::vector<Tstate> ss = {stateNew};
         double logLLNew = mObsModel->computeLogLikelihood(ss, mInput).at(0);
@@ -194,15 +214,53 @@ namespace loc{
         return sampledStates;
     }
     
+    template <class Tstate, class Tinput>
+    std::vector<Tstate> MetropolisSampler<Tstate, Tinput>::sampling(int n, const Location &location){
+        Locations locs = {location};
+        auto states = mStatusInitializer->initializeStatesFromLocations(locs);
+        std::vector<Tstate> ss = {states};
+        currentState = ss.at(0);
+        currentLogLL = mObsModel->computeLogLikelihood(ss, mInput).at(0);
+        
+        std::vector<Tstate> sampledStates;
+        int count = 0;
+        int countAccepted = 0;
+        for(int i=1; ;i++){
+            bool isAccepted = sample(false, true);
+            count++;
+            if(isAccepted){
+                countAccepted++;
+            }
+            if(i%mParams.interval==0){
+                sampledStates.push_back(Tstate(currentState));
+            }
+            if(sampledStates.size()>=n){
+                break;
+            }
+        }
+        
+        std::cout << "M-H acceptance rate = " << (double)countAccepted / (double) count << " (" << countAccepted << "/" << count << ")" << std::endl;
+        
+        return sampledStates;
+    }
     
     template <class Tstate, class Tinput>
-    State MetropolisSampler<Tstate, Tinput>::transitState(const Tstate& state){
+    State MetropolisSampler<Tstate, Tinput>::transitState(Tstate state) {
+        return transitState(state, true, true);
+    }
+    
+    template <class Tstate, class Tinput>
+    State MetropolisSampler<Tstate, Tinput>::transitState(Tstate state, bool transitLoc, bool transitRssiBias){
         // update variables that affect mainly likelihood
         Tstate stateNew(state);
-        auto locNew = mStatusInitializer->perturbLocation(stateNew);
-        stateNew.x(locNew.x());
-        stateNew.y(locNew.y());
-        stateNew = mStatusInitializer->perturbRssiBias(stateNew);
+        if (transitLoc) {
+            auto locNew = mStatusInitializer->perturbLocation(stateNew);
+            stateNew.x(locNew.x());
+            stateNew.y(locNew.y());
+        }
+        if (transitRssiBias) {
+            stateNew = mStatusInitializer->perturbRssiBias(stateNew);
+        }
         
         return stateNew;
     }

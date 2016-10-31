@@ -49,7 +49,8 @@ namespace loc{
         DataStoreImpl& bleBeacons(BLEBeacons bleBeacons);
         DataStoreImpl& building(Building building);
         
-        void readSamples(std::ifstream &ifs);
+        void readSamples(std::istream &is);
+        void readSamples(std::istream &is, bool noBeacons);
         const Samples& getSamples() const override;
         const BLEBeacons& getBLEBeacons() const override;
         

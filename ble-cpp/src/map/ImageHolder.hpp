@@ -25,6 +25,7 @@
 
 #include <stdio.h>
 #include <iostream>
+#include <memory>
 #include <opencv2/opencv.hpp>
 
 namespace loc {

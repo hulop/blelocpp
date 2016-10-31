@@ -23,6 +23,9 @@
 #ifndef EigenSerializeUtils_h
 #define EigenSerializeUtils_h
 
+#ifdef ANDROID_STL_EXT
+#include "string_ext.hpp"
+#endif /* ANDROID_STL_EXT */
 #include <Eigen/Core>
 
 #include <cereal/archives/xml.hpp>

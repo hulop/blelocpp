@@ -23,6 +23,7 @@
 #include <Eigen/SparseCore>
 #include <boost/bimap.hpp>
 #include "ImageHolder.hpp"
+#include "LocException.hpp"
 
 namespace loc{
     
@@ -85,8 +86,10 @@ namespace loc{
         ImplHeavy(std::string filepath, const std::string name){
             name_ = name;
             mat_ = cv::imread(filepath);
-            assert(mat_.rows>0);
-            assert(mat_.cols>0);
+            if(mat_.empty()){
+                LocException ex("Failed to read the image file at " + filepath);
+                BOOST_THROW_EXCEPTION(ex);
+            }
         }
         ~ImplHeavy() = default;
         
@@ -140,8 +143,6 @@ namespace loc{
             }
             
             mat_.setFromTriplets(tripletList.begin(), tripletList.end());
-            assert(mat_.rows()==rows);
-            assert(mat_.cols()==cols);
         }
         ~ImplLight() = default;
         
@@ -183,7 +184,7 @@ namespace loc{
         }else if (mode_ == heavy){
             impl.reset(new ImplHeavy());
         }else{
-            assert(false);
+            BOOST_THROW_EXCEPTION(LocException("Unknown ImageHolderMode."));
         }
     }
     
@@ -195,7 +196,7 @@ namespace loc{
             std::cout << "ImageHolder::ImplHeavy is instantiated." << std::endl;
             impl.reset(new ImplHeavy(filepath, name));
         }else{
-            assert(false);
+            BOOST_THROW_EXCEPTION(LocException("Unknown ImageHolderMode."));
         }
     }
     

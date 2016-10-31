@@ -21,6 +21,7 @@
  *******************************************************************************/
 
 #include "StreamParticleFilterBuilder.hpp"
+#include "SystemModelInBuilding.hpp"
 
 namespace loc{
     
@@ -204,16 +205,17 @@ namespace loc{
         poseRandomWalker->setStateProperty(stateProperty);
         
         // Combine poseRandomWalker and building
-        PoseRandomWalkerInBuildingProperty prwBuildingProperty;
+        PoseRandomWalkerInBuildingProperty::Ptr prwBuildingProperty(new PoseRandomWalkerInBuildingProperty);
         // TODO
-        prwBuildingProperty.maxIncidenceAngle(45.0/180.0*M_PI);
-        prwBuildingProperty.weightDecayRate(0.9);
+        prwBuildingProperty->maxIncidenceAngle(45.0/180.0*M_PI);
+        prwBuildingProperty->weightDecayRate(0.9);
         // END TODO
         Building building = dataStore->getBuilding();
+        Building::Ptr buildingPtr(new Building(building));
         
         std::shared_ptr<PoseRandomWalkerInBuilding> poseRandomWalkerInBuilding(new PoseRandomWalkerInBuilding());
-        poseRandomWalkerInBuilding->poseRandomWalker(*poseRandomWalker);
-        poseRandomWalkerInBuilding->building(building);
+        poseRandomWalkerInBuilding->poseRandomWalker(poseRandomWalker);
+        poseRandomWalkerInBuilding->building(buildingPtr);
         poseRandomWalkerInBuilding->poseRandomWalkerInBuildingProperty(prwBuildingProperty);
         
         localizer->systemModel(poseRandomWalkerInBuilding);
@@ -251,6 +253,11 @@ namespace loc{
                 // Set localizer
                 localizer->observationModel(obsModel);                
             }
+        }
+        if (tDistribution >= 1) {
+            this->mObsModel->normFunc = MathUtils::logProbatDistFunc(tDistribution);
+        } else {
+            this->mObsModel->normFunc = MathUtils::logProbaNormal;
         }
 
         if (considerBias) {

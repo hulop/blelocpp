@@ -25,28 +25,91 @@
 
 #include <stdio.h>
 #include <vector>
+#include <memory>
 
 #include "Location.hpp"
 
 namespace loc{
-
-template<class Ts, class Tin> class SystemModel{
     
+class SystemModelInput{
+    long timestamp_;
+    long previousTimestamp_;
+    static constexpr double timeUnit_ = 0.001; // ms to s
+        
 public:
-    virtual ~SystemModel(){}
-    
-    //virtual SystemModel<Ts, Tin, Tproperty>* setProperty(Tproperty property) = 0;
-    virtual Ts predict(Ts state, Tin input) = 0;
-    virtual std::vector<Ts> predict(std::vector<Ts> states, Tin input) = 0;
-    //virtual std::vector<Ts>* predict(std::vector<Ts> states) = 0;
+    void timestamp(long timestamp){
+        timestamp_ = timestamp;
+    }
+        
+    void previousTimestamp(long previousTimestamp){
+        previousTimestamp_ = previousTimestamp;
+    }
+        
+    long timestamp() const{
+        return timestamp_;
+    }
+    long previousTimestamp() const{
+        return previousTimestamp_;
+    }
+    double timeUnit() const{
+        return timeUnit_;
+    }
 };
-
+    
+    template<class Ts, class Tin> class SystemModel{
+    public:
+        
+        using Ptr = std::shared_ptr<SystemModel<Ts, Tin>>;
+        
+        virtual ~SystemModel(){}
+        
+        //virtual SystemModel<Ts, Tin, Tproperty>* setProperty(Tproperty property) = 0;
+        virtual Ts predict(Ts state, Tin input) = 0;
+        virtual std::vector<Ts> predict(std::vector<Ts> states, Tin input)  = 0;
+        //virtual std::vector<Ts>* predict(std::vector<Ts> states) = 0;
+        
+        virtual void startPredictions(const std::vector<Ts>& states, const Tin& input){
+            // Do nothing in a default method
+        }
+        virtual void endPredictions(const std::vector<Ts>& states, const Tin& input){
+            // Do nothing in a default method
+        }
+        virtual void notifyObservationUpdated(){
+            // Do nothing in a default method
+        }
+    }; 
     /*
-template class SystemModel<Location, Input>;
-*/
-     
+     template class SystemModel<Location, Input>;
+     */
+    
+    class SystemModelVelocityAdjustable{
+    public:
+        using Ptr = std::shared_ptr<SystemModelVelocityAdjustable>;
+        virtual ~SystemModelVelocityAdjustable(){}
+        virtual void velocityRate(double) = 0;
+        virtual double velocityRate() const = 0;
+    };
+    
+    class SystemModelMovementControllable{
+    protected:
+        bool isUnderControll = false;
+        double mMovement = 0;
+    public:
+        virtual ~SystemModelMovementControllable() = default;
+        void forceMove(){
+            controlMovement(1.0);
+        }
+        void forceStop(){
+            controlMovement(0.0);
+        }
+        void controlMovement(double movement){
+            mMovement = movement;
+            isUnderControll = true;
+        }
+        void releaseControl(){
+            isUnderControll = false;
+        }        
+    };
 }
-
-
 
 #endif /* SystemModel_hpp */

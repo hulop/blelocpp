@@ -14,7 +14,6 @@
 				7E6002201C076D79007A9B2B /* ShellScript */,
 			);
 			dependencies = (
-				7E6002221C076D96007A9B2B /* PBXTargetDependency */,
 			);
 			name = framework;
 			productName = framework;
@@ -189,6 +188,14 @@
 		7E6F26061C0F1D79007A97A1 /* RandomGenerator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F25351C0F1D76007A97A1 /* RandomGenerator.hpp */; };
 		7E6F26071C0F1D79007A97A1 /* SerializeUtils.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F25361C0F1D76007A97A1 /* SerializeUtils.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E6F26081C0F1D79007A97A1 /* SerializeUtils.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F25361C0F1D76007A97A1 /* SerializeUtils.hpp */; };
+		7E92393D1D54764000875766 /* LatLngUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E92393B1D54764000875766 /* LatLngUtil.cpp */; };
+		7E92393E1D54764000875766 /* LatLngUtil.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E92393C1D54764000875766 /* LatLngUtil.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		7EDEDC0F1D1CB3B300AC111A /* ExtendedDataUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EDEDC0D1D1CB3B300AC111A /* ExtendedDataUtils.cpp */; };
+		7EDEDC111D1CCCBB00AC111A /* BasicLocalizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EDEDC0A1D1A5E1600AC111A /* BasicLocalizer.cpp */; };
+		7EDEDC121D1CCCD800AC111A /* BasicLocalizer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7EDEDC0B1D1A5E1600AC111A /* BasicLocalizer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		7EF5DB421D46F73300D22C02 /* LogUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EF5DB401D46F73300D22C02 /* LogUtil.cpp */; };
+		7EF5DB431D46F73300D22C02 /* LogUtil.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7EF5DB411D46F73300D22C02 /* LogUtil.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		EF712544F9413826E173FEC8 /* libPods-bleloc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5D651D528829A828244BD797 /* libPods-bleloc.a */; };
 		F52FFB891C08861800508330 /* libopencv_contrib.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F52FFB791C08861800508330 /* libopencv_contrib.dylib */; };
 		F52FFB8A1C08861800508330 /* libopencv_core.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F52FFB7A1C08861800508330 /* libopencv_core.dylib */; };
 		F52FFB8B1C08861800508330 /* libopencv_features2d.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F52FFB7B1C08861800508330 /* libopencv_features2d.dylib */; };
@@ -205,8 +212,14 @@
 		F52FFB961C08861800508330 /* libopencv_superres.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F52FFB861C08861800508330 /* libopencv_superres.dylib */; };
 		F52FFB971C08861800508330 /* libopencv_video.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F52FFB871C08861800508330 /* libopencv_video.dylib */; };
 		F52FFB981C08861800508330 /* libopencv_videostab.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F52FFB881C08861800508330 /* libopencv_videostab.dylib */; };
+		FB05F2731D8ADD0E003B472A /* PosteriorResampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB05F26D1D8ADD0E003B472A /* PosteriorResampler.cpp */; };
+		FB05F2741D8ADD0E003B472A /* PosteriorResampler.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FB05F26E1D8ADD0E003B472A /* PosteriorResampler.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		FB05F2771D8ADD0E003B472A /* WeakPoseRandomWalker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB05F2711D8ADD0E003B472A /* WeakPoseRandomWalker.cpp */; };
+		FB05F2781D8ADD0E003B472A /* WeakPoseRandomWalker.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FB05F2721D8ADD0E003B472A /* WeakPoseRandomWalker.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		FB176CB91D7823D1008C1745 /* LatLngConverter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB176CB71D7823D1008C1745 /* LatLngConverter.cpp */; };
+		FB176CBA1D7823D1008C1745 /* LatLngConverter.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FB176CB81D7823D1008C1745 /* LatLngConverter.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		FB176CBB1D7824A0008C1745 /* ExtendedDataUtils.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FB273EF41D22226B00F53CCB /* ExtendedDataUtils.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		FB273EF51D22226B00F53CCB /* ExtendedDataUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB273EF31D22226B00F53CCB /* ExtendedDataUtils.cpp */; };
-		FB273EF61D22226B00F53CCB /* ExtendedDataUtils.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FB273EF41D22226B00F53CCB /* ExtendedDataUtils.hpp */; };
 		FB2E8B131C2404EA00C5C45C /* CoordinateSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB2E8B121C2404EA00C5C45C /* CoordinateSystem.cpp */; };
 		FB2E8B141C2404F600C5C45C /* CoordinateSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB2E8B121C2404EA00C5C45C /* CoordinateSystem.cpp */; };
 		FB5B4BF11C7C41B600D00E8E /* MetropolisSampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB5B4BEE1C7C41B600D00E8E /* MetropolisSampler.cpp */; };
@@ -217,17 +230,14 @@
 		FB71CE571C475B4600A4DB67 /* BeaconFilterChain.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FB71CE551C475B4600A4DB67 /* BeaconFilterChain.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		FB71CE581C475F5C00A4DB67 /* BeaconFilterChain.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FB71CE551C475B4600A4DB67 /* BeaconFilterChain.hpp */; };
 		FB71CE591C475F6500A4DB67 /* BeaconFilterChain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB71CE541C475B4600A4DB67 /* BeaconFilterChain.cpp */; };
+		FBBA09F71DACB2DA00EB2553 /* Heading.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBBA09F51DACB2DA00EB2553 /* Heading.cpp */; };
+		FBBA09F81DACB2DA00EB2553 /* Heading.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FBBA09F61DACB2DA00EB2553 /* Heading.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		FBC2B5091D956CE400E09B16 /* LocException.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FBC2B5081D956CE400E09B16 /* LocException.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		FBEB01E71D756F1300CB808D /* RandomWalkerMotion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBEB01E31D756F1300CB808D /* RandomWalkerMotion.cpp */; };
+		FBEB01E81D756F1300CB808D /* RandomWalkerMotion.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FBEB01E41D756F1300CB808D /* RandomWalkerMotion.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		FBEB01E91D756F1300CB808D /* SystemModelInBuilding.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBEB01E51D756F1300CB808D /* SystemModelInBuilding.cpp */; };
+		FBEB01EA1D756F1300CB808D /* SystemModelInBuilding.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FBEB01E61D756F1300CB808D /* SystemModelInBuilding.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		7E6002211C076D96007A9B2B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 7E8A88781C071C2F00C32E70 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 7E8A887F1C071C2F00C32E70;
-			remoteInfo = bleloc;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		7E8A887E1C071C2F00C32E70 /* CopyFiles */ = {
@@ -266,7 +276,7 @@
 		7E6F24E11C0F1D76007A97A1 /* Pose.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Pose.hpp; sourceTree = "<group>"; };
 		7E6F24E21C0F1D76007A97A1 /* Sample.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Sample.cpp; sourceTree = "<group>"; };
 		7E6F24E31C0F1D76007A97A1 /* Sample.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Sample.hpp; sourceTree = "<group>"; };
-		7E6F24E41C0F1D76007A97A1 /* State.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = State.cpp; sourceTree = "<group>"; };
+		7E6F24E41C0F1D76007A97A1 /* State.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = State.cpp; path = ../core/State.cpp; sourceTree = "<group>"; };
 		7E6F24E51C0F1D76007A97A1 /* State.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = State.hpp; sourceTree = "<group>"; };
 		7E6F24E61C0F1D76007A97A1 /* Status.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Status.cpp; sourceTree = "<group>"; };
 		7E6F24E71C0F1D76007A97A1 /* Status.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Status.hpp; sourceTree = "<group>"; };
@@ -277,7 +287,7 @@
 		7E6F24ED1C0F1D76007A97A1 /* DataStoreImpl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DataStoreImpl.cpp; sourceTree = "<group>"; };
 		7E6F24EE1C0F1D76007A97A1 /* DataStoreImpl.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = DataStoreImpl.hpp; sourceTree = "<group>"; };
 		7E6F24EF1C0F1D76007A97A1 /* DataUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DataUtils.cpp; sourceTree = "<group>"; };
-		7E6F24F01C0F1D76007A97A1 /* DataUtils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = DataUtils.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		7E6F24F01C0F1D76007A97A1 /* DataUtils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = DataUtils.hpp; sourceTree = "<group>"; };
 		7E6F24F11C0F1D76007A97A1 /* LazyDataStore.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LazyDataStore.cpp; sourceTree = "<group>"; };
 		7E6F24F21C0F1D76007A97A1 /* LazyDataStore.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LazyDataStore.hpp; sourceTree = "<group>"; };
 		7E6F24F31C0F1D76007A97A1 /* VirtualDevice.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VirtualDevice.cpp; sourceTree = "<group>"; };
@@ -288,8 +298,8 @@
 		7E6F24FC1C0F1D76007A97A1 /* StatusInitializer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = StatusInitializer.hpp; sourceTree = "<group>"; };
 		7E6F24FD1C0F1D76007A97A1 /* StreamLocalizerStub.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StreamLocalizerStub.cpp; sourceTree = "<group>"; };
 		7E6F24FE1C0F1D76007A97A1 /* StreamLocalizerStub.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = StreamLocalizerStub.hpp; sourceTree = "<group>"; };
-		7E6F24FF1C0F1D76007A97A1 /* StreamParticleFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StreamParticleFilter.cpp; sourceTree = "<group>"; };
-		7E6F25001C0F1D76007A97A1 /* StreamParticleFilter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = StreamParticleFilter.hpp; sourceTree = "<group>"; };
+		7E6F24FF1C0F1D76007A97A1 /* StreamParticleFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = StreamParticleFilter.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		7E6F25001C0F1D76007A97A1 /* StreamParticleFilter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = StreamParticleFilter.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		7E6F25021C0F1D76007A97A1 /* Building.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Building.cpp; sourceTree = "<group>"; };
 		7E6F25031C0F1D76007A97A1 /* Building.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Building.hpp; sourceTree = "<group>"; };
 		7E6F25041C0F1D76007A97A1 /* CoordinateSystem.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CoordinateSystem.hpp; sourceTree = "<group>"; };
@@ -305,11 +315,11 @@
 		7E6F250F1C0F1D76007A97A1 /* KernelFunction.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = KernelFunction.hpp; sourceTree = "<group>"; };
 		7E6F25101C0F1D76007A97A1 /* ObservationModel.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ObservationModel.hpp; sourceTree = "<group>"; };
 		7E6F25131C0F1D76007A97A1 /* ObservationModelTrainer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ObservationModelTrainer.hpp; sourceTree = "<group>"; };
-		7E6F25161C0F1D76007A97A1 /* PoseRandomWalker.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PoseRandomWalker.cpp; sourceTree = "<group>"; };
+		7E6F25161C0F1D76007A97A1 /* PoseRandomWalker.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = PoseRandomWalker.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		7E6F25171C0F1D76007A97A1 /* PoseRandomWalker.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = PoseRandomWalker.hpp; sourceTree = "<group>"; };
-		7E6F25181C0F1D76007A97A1 /* PoseRandomWalkerInBuilding.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PoseRandomWalkerInBuilding.cpp; sourceTree = "<group>"; };
-		7E6F25191C0F1D76007A97A1 /* PoseRandomWalkerInBuilding.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = PoseRandomWalkerInBuilding.hpp; sourceTree = "<group>"; };
-		7E6F251A1C0F1D76007A97A1 /* RandomWalker.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RandomWalker.cpp; sourceTree = "<group>"; };
+		7E6F25181C0F1D76007A97A1 /* PoseRandomWalkerInBuilding.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = PoseRandomWalkerInBuilding.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		7E6F25191C0F1D76007A97A1 /* PoseRandomWalkerInBuilding.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = PoseRandomWalkerInBuilding.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		7E6F251A1C0F1D76007A97A1 /* RandomWalker.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = RandomWalker.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		7E6F251B1C0F1D76007A97A1 /* RandomWalker.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = RandomWalker.hpp; sourceTree = "<group>"; };
 		7E6F251C1C0F1D76007A97A1 /* StatusInitializerImpl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StatusInitializerImpl.cpp; sourceTree = "<group>"; };
 		7E6F251D1C0F1D76007A97A1 /* StatusInitializerImpl.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = StatusInitializerImpl.hpp; sourceTree = "<group>"; };
@@ -321,7 +331,7 @@
 		7E6F25251C0F1D76007A97A1 /* OrientationMeterAverage.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = OrientationMeterAverage.hpp; sourceTree = "<group>"; };
 		7E6F25281C0F1D76007A97A1 /* Pedometer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Pedometer.hpp; sourceTree = "<group>"; };
 		7E6F252B1C0F1D76007A97A1 /* PedometerWalkingState.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PedometerWalkingState.cpp; sourceTree = "<group>"; };
-		7E6F252C1C0F1D76007A97A1 /* PedometerWalkingState.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = PedometerWalkingState.hpp; sourceTree = "<group>"; };
+		7E6F252C1C0F1D76007A97A1 /* PedometerWalkingState.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = PedometerWalkingState.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		7E6F252E1C0F1D76007A97A1 /* ArrayUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ArrayUtils.cpp; sourceTree = "<group>"; };
 		7E6F252F1C0F1D76007A97A1 /* ArrayUtils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ArrayUtils.hpp; sourceTree = "<group>"; };
 		7E6F25331C0F1D76007A97A1 /* MathUtils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MathUtils.hpp; sourceTree = "<group>"; };
@@ -331,6 +341,14 @@
 		7E8A88801C071C2F00C32E70 /* libbleloc.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libbleloc.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		7E8A89901C073EAB00C32E70 /* blelocframework.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = blelocframework.h; sourceTree = "<group>"; };
 		7E8A89921C073EAB00C32E70 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7E92393B1D54764000875766 /* LatLngUtil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LatLngUtil.cpp; sourceTree = "<group>"; };
+		7E92393C1D54764000875766 /* LatLngUtil.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LatLngUtil.hpp; sourceTree = "<group>"; };
+		7EDEDC0A1D1A5E1600AC111A /* BasicLocalizer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BasicLocalizer.cpp; sourceTree = "<group>"; };
+		7EDEDC0B1D1A5E1600AC111A /* BasicLocalizer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BasicLocalizer.hpp; sourceTree = "<group>"; };
+		7EDEDC0D1D1CB3B300AC111A /* ExtendedDataUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ExtendedDataUtils.cpp; sourceTree = "<group>"; };
+		7EDEDC0E1D1CB3B300AC111A /* ExtendedDataUtils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ExtendedDataUtils.hpp; sourceTree = "<group>"; };
+		7EF5DB401D46F73300D22C02 /* LogUtil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LogUtil.cpp; sourceTree = "<group>"; };
+		7EF5DB411D46F73300D22C02 /* LogUtil.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LogUtil.hpp; sourceTree = "<group>"; };
 		A03FCA3CDC596C0179526256 /* Pods-blelocjni.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-blelocjni.debug.xcconfig"; path = "Pods/Target Support Files/Pods-blelocjni/Pods-blelocjni.debug.xcconfig"; sourceTree = "<group>"; };
 		BC1A73BB7CF5381110A675C3 /* libPods-blelocjni.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-blelocjni.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BD7721527FBC1489894D04B9 /* Pods-bleloc.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bleloc.debug.xcconfig"; path = "Pods/Target Support Files/Pods-bleloc/Pods-bleloc.debug.xcconfig"; sourceTree = "<group>"; };
@@ -363,6 +381,12 @@
 		F52FFB861C08861800508330 /* libopencv_superres.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_superres.dylib; path = ../../../../../../usr/local/Cellar/opencv/2.4.12/lib/libopencv_superres.dylib; sourceTree = "<group>"; };
 		F52FFB871C08861800508330 /* libopencv_video.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_video.dylib; path = ../../../../../../usr/local/Cellar/opencv/2.4.12/lib/libopencv_video.dylib; sourceTree = "<group>"; };
 		F52FFB881C08861800508330 /* libopencv_videostab.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_videostab.dylib; path = ../../../../../../usr/local/Cellar/opencv/2.4.12/lib/libopencv_videostab.dylib; sourceTree = "<group>"; };
+		FB05F26D1D8ADD0E003B472A /* PosteriorResampler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PosteriorResampler.cpp; sourceTree = "<group>"; };
+		FB05F26E1D8ADD0E003B472A /* PosteriorResampler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = PosteriorResampler.hpp; sourceTree = "<group>"; };
+		FB05F2711D8ADD0E003B472A /* WeakPoseRandomWalker.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WeakPoseRandomWalker.cpp; sourceTree = "<group>"; };
+		FB05F2721D8ADD0E003B472A /* WeakPoseRandomWalker.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WeakPoseRandomWalker.hpp; sourceTree = "<group>"; };
+		FB176CB71D7823D1008C1745 /* LatLngConverter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LatLngConverter.cpp; sourceTree = "<group>"; };
+		FB176CB81D7823D1008C1745 /* LatLngConverter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LatLngConverter.hpp; sourceTree = "<group>"; };
 		FB273EF31D22226B00F53CCB /* ExtendedDataUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ExtendedDataUtils.cpp; sourceTree = "<group>"; };
 		FB273EF41D22226B00F53CCB /* ExtendedDataUtils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ExtendedDataUtils.hpp; sourceTree = "<group>"; };
 		FB2E8B121C2404EA00C5C45C /* CoordinateSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CoordinateSystem.cpp; sourceTree = "<group>"; };
@@ -372,6 +396,13 @@
 		FB71CE4E1C46889F00A4DB67 /* MathUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MathUtils.cpp; sourceTree = "<group>"; };
 		FB71CE541C475B4600A4DB67 /* BeaconFilterChain.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BeaconFilterChain.cpp; sourceTree = "<group>"; };
 		FB71CE551C475B4600A4DB67 /* BeaconFilterChain.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BeaconFilterChain.hpp; sourceTree = "<group>"; };
+		FBBA09F51DACB2DA00EB2553 /* Heading.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Heading.cpp; sourceTree = "<group>"; };
+		FBBA09F61DACB2DA00EB2553 /* Heading.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Heading.hpp; sourceTree = "<group>"; };
+		FBC2B5081D956CE400E09B16 /* LocException.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LocException.hpp; sourceTree = "<group>"; };
+		FBEB01E31D756F1300CB808D /* RandomWalkerMotion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RandomWalkerMotion.cpp; sourceTree = "<group>"; };
+		FBEB01E41D756F1300CB808D /* RandomWalkerMotion.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = RandomWalkerMotion.hpp; sourceTree = "<group>"; };
+		FBEB01E51D756F1300CB808D /* SystemModelInBuilding.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SystemModelInBuilding.cpp; sourceTree = "<group>"; };
+		FBEB01E61D756F1300CB808D /* SystemModelInBuilding.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SystemModelInBuilding.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -379,6 +410,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EF712544F9413826E173FEC8 /* libPods-bleloc.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -428,6 +460,7 @@
 		7E6F24CC1C0F1D76007A97A1 /* core */ = {
 			isa = PBXGroup;
 			children = (
+				FBC2B5081D956CE400E09B16 /* LocException.hpp */,
 				7E6F24CD1C0F1D76007A97A1 /* Acceleration.cpp */,
 				7E6F24CE1C0F1D76007A97A1 /* Acceleration.hpp */,
 				7E6F24CF1C0F1D76007A97A1 /* Attitude.cpp */,
@@ -443,11 +476,16 @@
 				7E6F24E11C0F1D76007A97A1 /* Pose.hpp */,
 				7E6F24E21C0F1D76007A97A1 /* Sample.cpp */,
 				7E6F24E31C0F1D76007A97A1 /* Sample.hpp */,
-				7E6F24E41C0F1D76007A97A1 /* State.cpp */,
 				7E6F24E51C0F1D76007A97A1 /* State.hpp */,
 				7E6F24E61C0F1D76007A97A1 /* Status.cpp */,
 				7E6F24E71C0F1D76007A97A1 /* Status.hpp */,
 				7E6F24E81C0F1D76007A97A1 /* StreamLocalizer.hpp */,
+				7E92393B1D54764000875766 /* LatLngUtil.cpp */,
+				7E92393C1D54764000875766 /* LatLngUtil.hpp */,
+				FB176CB71D7823D1008C1745 /* LatLngConverter.cpp */,
+				FB176CB81D7823D1008C1745 /* LatLngConverter.hpp */,
+				FBBA09F51DACB2DA00EB2553 /* Heading.cpp */,
+				FBBA09F61DACB2DA00EB2553 /* Heading.hpp */,
 			);
 			name = core;
 			path = "../../ble-cpp/src/core";
@@ -465,6 +503,8 @@
 				7E6F24EE1C0F1D76007A97A1 /* DataStoreImpl.hpp */,
 				7E6F24EF1C0F1D76007A97A1 /* DataUtils.cpp */,
 				7E6F24F01C0F1D76007A97A1 /* DataUtils.hpp */,
+				7EDEDC0D1D1CB3B300AC111A /* ExtendedDataUtils.cpp */,
+				7EDEDC0E1D1CB3B300AC111A /* ExtendedDataUtils.hpp */,
 				7E6F24F11C0F1D76007A97A1 /* LazyDataStore.cpp */,
 				7E6F24F21C0F1D76007A97A1 /* LazyDataStore.hpp */,
 				7E6F24F31C0F1D76007A97A1 /* VirtualDevice.cpp */,
@@ -505,6 +545,7 @@
 		7E6F25011C0F1D76007A97A1 /* map */ = {
 			isa = PBXGroup;
 			children = (
+				7E6F24E41C0F1D76007A97A1 /* State.cpp */,
 				7E6F25021C0F1D76007A97A1 /* Building.cpp */,
 				7E6F25031C0F1D76007A97A1 /* Building.hpp */,
 				7E6F25041C0F1D76007A97A1 /* CoordinateSystem.hpp */,
@@ -521,6 +562,14 @@
 		7E6F25091C0F1D76007A97A1 /* model */ = {
 			isa = PBXGroup;
 			children = (
+				FB05F26D1D8ADD0E003B472A /* PosteriorResampler.cpp */,
+				FB05F26E1D8ADD0E003B472A /* PosteriorResampler.hpp */,
+				FB05F2711D8ADD0E003B472A /* WeakPoseRandomWalker.cpp */,
+				FB05F2721D8ADD0E003B472A /* WeakPoseRandomWalker.hpp */,
+				FBEB01E31D756F1300CB808D /* RandomWalkerMotion.cpp */,
+				FBEB01E41D756F1300CB808D /* RandomWalkerMotion.hpp */,
+				FBEB01E51D756F1300CB808D /* SystemModelInBuilding.cpp */,
+				FBEB01E61D756F1300CB808D /* SystemModelInBuilding.hpp */,
 				7E6F250A1C0F1D76007A97A1 /* GaussianProcess.cpp */,
 				7E6F250B1C0F1D76007A97A1 /* GaussianProcess.hpp */,
 				7E6F250C1C0F1D76007A97A1 /* GaussianProcessLDPLMultiModel.cpp */,
@@ -565,6 +614,8 @@
 				7E6F25341C0F1D76007A97A1 /* RandomGenerator.cpp */,
 				7E6F25351C0F1D76007A97A1 /* RandomGenerator.hpp */,
 				7E6F25361C0F1D76007A97A1 /* SerializeUtils.hpp */,
+				7EF5DB401D46F73300D22C02 /* LogUtil.cpp */,
+				7EF5DB411D46F73300D22C02 /* LogUtil.hpp */,
 			);
 			name = utils;
 			path = "../../ble-cpp/src/utils";
@@ -594,6 +645,7 @@
 		7E8A88821C071C2F00C32E70 /* bleloc */ = {
 			isa = PBXGroup;
 			children = (
+				7EDEDC091D1A5E1600AC111A /* localizer */,
 				7E6F24C51C0F1D76007A97A1 /* beacon */,
 				7E6F24CC1C0F1D76007A97A1 /* core */,
 				7E6F24E91C0F1D76007A97A1 /* data */,
@@ -616,6 +668,16 @@
 			);
 			path = blelocframework;
 			sourceTree = "<group>";
+		};
+		7EDEDC091D1A5E1600AC111A /* localizer */ = {
+			isa = PBXGroup;
+			children = (
+				7EDEDC0A1D1A5E1600AC111A /* BasicLocalizer.cpp */,
+				7EDEDC0B1D1A5E1600AC111A /* BasicLocalizer.hpp */,
+			);
+			name = localizer;
+			path = "../../ble-cpp/src/localizer";
+			sourceTree = SOURCE_ROOT;
 		};
 		B6011AE2A8926495FA664FC2 /* Pods */ = {
 			isa = PBXGroup;
@@ -693,11 +755,11 @@
 			files = (
 				7E6F25451C0F1D76007A97A1 /* Acceleration.hpp in Headers */,
 				7E6F25771C0F1D76007A97A1 /* Status.hpp in Headers */,
-				FB273EF61D22226B00F53CCB /* ExtendedDataUtils.hpp in Headers */,
 				7E6F257F1C0F1D76007A97A1 /* DataStore.hpp in Headers */,
 				7E6F26051C0F1D79007A97A1 /* RandomGenerator.hpp in Headers */,
 				7E6F25E31C0F1D78007A97A1 /* OrientationMeter.hpp in Headers */,
 				7E6F25511C0F1D76007A97A1 /* BLEBeacon.hpp in Headers */,
+				FB176CBB1D7824A0008C1745 /* ExtendedDataUtils.hpp in Headers */,
 				7E6F25531C0F1D76007A97A1 /* bleloc.h in Headers */,
 				7E6F25BF1C0F1D77007A97A1 /* ObservationModel.hpp in Headers */,
 				7E6F25A91C0F1D77007A97A1 /* CoordinateSystem.hpp in Headers */,
@@ -743,7 +805,17 @@
 				FB5B4BF21C7C41B600D00E8E /* MetropolisSampler.hpp in Headers */,
 				FB71CE571C475B4600A4DB67 /* BeaconFilterChain.hpp in Headers */,
 				FB5B4BF31C7C41B600D00E8E /* ObservationDependentInitializer.hpp in Headers */,
+				FB176CBA1D7823D1008C1745 /* LatLngConverter.hpp in Headers */,
+				FBEB01EA1D756F1300CB808D /* SystemModelInBuilding.hpp in Headers */,
+				FBC2B5091D956CE400E09B16 /* LocException.hpp in Headers */,
+				FBEB01E81D756F1300CB808D /* RandomWalkerMotion.hpp in Headers */,
+				7EF5DB431D46F73300D22C02 /* LogUtil.hpp in Headers */,
 				7E6F25831C0F1D76007A97A1 /* DataStoreImpl.hpp in Headers */,
+				FB05F2781D8ADD0E003B472A /* WeakPoseRandomWalker.hpp in Headers */,
+				FB05F2741D8ADD0E003B472A /* PosteriorResampler.hpp in Headers */,
+				FBBA09F81DACB2DA00EB2553 /* Heading.hpp in Headers */,
+				7E92393E1D54764000875766 /* LatLngUtil.hpp in Headers */,
+				7EDEDC121D1CCCD800AC111A /* BasicLocalizer.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -899,7 +971,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "set -e\nset +u\n# Avoid recursively calling this script.\nif [[ $SF_MASTER_SCRIPT_RUNNING ]]\nthen\nexit 0\nfi\nset -u\nexport SF_MASTER_SCRIPT_RUNNING=1\n\nSF_TARGET_NAME=${PROJECT_NAME}\nSF_EXECUTABLE_PATH=\"lib${SF_TARGET_NAME}.a\"\nSF_WRAPPER_NAME=\"${SF_TARGET_NAME}.framework\"\n\n# The following conditionals come from\n# https://github.com/kstenerud/iOS-Universal-Framework\n\nif [[ \"$SDK_NAME\" =~ ([A-Za-z]+) ]]\nthen\nSF_SDK_PLATFORM=${BASH_REMATCH[1]}\nelse\necho \"Could not find platform name from SDK_NAME: $SDK_NAME\"\nexit 1\nfi\n\nif [[ \"$SDK_NAME\" =~ ([0-9]+.*$) ]]\nthen\nSF_SDK_VERSION=${BASH_REMATCH[1]}\nelse\necho \"Could not find sdk version from SDK_NAME: $SDK_NAME\"\nexit 1\nfi\n\nif [[ \"$SF_SDK_PLATFORM\" = \"iphoneos\" ]]\nthen\nSF_OTHER_PLATFORM=iphonesimulator\nelse\nSF_OTHER_PLATFORM=iphoneos\nfi\n\nif [[ \"$BUILT_PRODUCTS_DIR\" =~ (.*)$SF_SDK_PLATFORM$ ]]\nthen\nSF_OTHER_BUILT_PRODUCTS_DIR=\"${BASH_REMATCH[1]}${SF_OTHER_PLATFORM}\"\nelse\necho \"Could not find platform name from build products directory: $BUILT_PRODUCTS_DIR\"\nexit 1\nfi\n\n# Build the other platform.\nxcodebuild -project \"${PROJECT_FILE_PATH}\" -target \"${TARGET_NAME}\" -configuration \"${CONFIGURATION}\" -sdk ${SF_OTHER_PLATFORM}${SF_SDK_VERSION} BUILD_DIR=\"${BUILD_DIR}\" OBJROOT=\"${OBJROOT}\" BUILD_ROOT=\"${BUILD_ROOT}\" SYMROOT=\"${SYMROOT}\" $ACTION\n\n# Smash the two static libraries into one fat binary and store it in the .framework\nlipo -create \"${BUILT_PRODUCTS_DIR}/${SF_EXECUTABLE_PATH}\" \"${SF_OTHER_BUILT_PRODUCTS_DIR}/${SF_EXECUTABLE_PATH}\" -output \"${BUILT_PRODUCTS_DIR}/${SF_WRAPPER_NAME}/Versions/A/${SF_TARGET_NAME}\"\n\n# Copy the binary to the other architecture folder to have a complete framework in both.\ncp -a \"${BUILT_PRODUCTS_DIR}/${SF_WRAPPER_NAME}/Versions/A/${SF_TARGET_NAME}\" \"${SF_OTHER_BUILT_PRODUCTS_DIR}/${SF_WRAPPER_NAME}/Versions/A/${SF_TARGET_NAME}\"\n\necho done\n";
+			shellScript = "set -e\nset +u\n# Avoid recursively calling this script.\nif [[ $SF_MASTER_SCRIPT_RUNNING ]]\nthen\nexit 0\nfi\nset -u\nexport SF_MASTER_SCRIPT_RUNNING=1\n\nSF_TARGET_NAME=${PROJECT_NAME}\nSF_EXECUTABLE_PATH=\"lib${SF_TARGET_NAME}.a\"\nSF_WRAPPER_NAME=\"${SF_TARGET_NAME}.framework\"\n\n# The following conditionals come from\n# https://github.com/kstenerud/iOS-Universal-Framework\n\nif [[ \"$SDK_NAME\" =~ ([A-Za-z]+) ]]\nthen\nSF_SDK_PLATFORM=${BASH_REMATCH[1]}\nelse\necho \"Could not find platform name from SDK_NAME: $SDK_NAME\"\nexit 1\nfi\n\nif [[ \"$SDK_NAME\" =~ ([0-9]+.*$) ]]\nthen\nSF_SDK_VERSION=${BASH_REMATCH[1]}\nelse\necho \"Could not find sdk version from SDK_NAME: $SDK_NAME\"\nexit 1\nfi\n\nif [[ \"$SF_SDK_PLATFORM\" = \"iphoneos\" ]]\nthen\nSF_OTHER_PLATFORM=iphonesimulator\nelse\nSF_OTHER_PLATFORM=iphoneos\nfi\n\nif [[ \"$BUILT_PRODUCTS_DIR\" =~ (.*)$SF_SDK_PLATFORM$ ]]\nthen\nSF_OTHER_BUILT_PRODUCTS_DIR=\"${BASH_REMATCH[1]}${SF_OTHER_PLATFORM}\"\nelse\necho \"Could not find platform name from build products directory: $BUILT_PRODUCTS_DIR\"\nexit 1\nfi\n\n# Build the other platform.\nxcodebuild -project \"${PROJECT_FILE_PATH}\" -target \"${TARGET_NAME}\" -configuration \"${CONFIGURATION}\" -sdk ${SF_OTHER_PLATFORM}${SF_SDK_VERSION} BUILD_DIR=\"${BUILD_DIR}\" OBJROOT=\"${OBJROOT}\" BUILD_ROOT=\"${BUILD_ROOT}\" SYMROOT=\"${SYMROOT}\" $ACTION\n\n# Smash the two static libraries into one fat binary and store it in the .framework\nlipo -create \"${BUILT_PRODUCTS_DIR}/${SF_EXECUTABLE_PATH}\" \"${SF_OTHER_BUILT_PRODUCTS_DIR}/${SF_EXECUTABLE_PATH}\" -output \"${BUILT_PRODUCTS_DIR}/${SF_WRAPPER_NAME}/Versions/A/${SF_TARGET_NAME}\"\n\n# Copy the binary to the other architecture folder to have a complete framework in both.\ncp -a \"${BUILT_PRODUCTS_DIR}/${SF_WRAPPER_NAME}/Versions/A/${SF_TARGET_NAME}\" \"${SF_OTHER_BUILT_PRODUCTS_DIR}/${SF_WRAPPER_NAME}/Versions/A/${SF_TARGET_NAME}\"\n\n\n\necho done\n";
 		};
 		7E8A89881C073E8400C32E70 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -912,7 +984,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "set -e\n\nmkdir -p \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/A/Headers\"\n\n# Link the \"Current\" version to \"A\"\n/bin/ln -sfh A \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/Current\"\n/bin/ln -sfh Versions/Current/Headers \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Headers\"\n/bin/ln -sfh \"Versions/Current/${PRODUCT_NAME}\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/${PRODUCT_NAME}\"\n\n# The -a ensures that the headers maintain the source modification date so that we don't constantly\n# cause propagating rebuilds of files that import these headers.\necho \"${TARGET_BUILD_DIR}/${PUBLIC_HEADERS_FOLDER_PATH}/\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/\" > ~/watsonsdklocation.txt\necho \"${TARGET_BUILD_DIR}/${PUBLIC_HEADERS_FOLDER_PATH}/\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/A/Headers\"\n\n\n/bin/cp -a \"${TARGET_BUILD_DIR}/${PUBLIC_HEADERS_FOLDER_PATH}/\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/A/Headers\"\n\n# create a zip of the framework and add it to the project root\ncd ${SRCROOT}\nrm -rf ${PRODUCT_NAME}.framework ${PRODUCT_NAME}.framework.zip\n\ncd ${BUILT_PRODUCTS_DIR}\nzip -r ${SRCROOT}/${PRODUCT_NAME}.framework.zip ${PRODUCT_NAME}.framework\ncd ${SRCROOT}\nunzip -o ${PRODUCT_NAME}.framework.zip\n\n# [Rob] we need to copy the other headers keeping their folder structure\n#echo 'SRCROOT:'${SRCROOT}\n#cd ${SRCROOT}/watsonsdk\n\n# I have to move up a directory due to my layout.\n#echo 'Copying Headers into Framework..'\n#for H in `find ./ -name \"*.h\"`;  do\n#echo ${H}\n#ditto ${H} ${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/A/Headers/${H}\n#done\n";
+			shellScript = "set -e\n\nmkdir -p \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/A/Headers\"\n\n# Link the \"Current\" version to \"A\"\n/bin/ln -sfh A \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/Current\"\n/bin/ln -sfh Versions/Current/Headers \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Headers\"\n/bin/ln -sfh \"Versions/Current/${PRODUCT_NAME}\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/${PRODUCT_NAME}\"\n\n# The -a ensures that the headers maintain the source modification date so that we don't constantly\n# cause propagating rebuilds of files that import these headers.\necho \"${TARGET_BUILD_DIR}/${PUBLIC_HEADERS_FOLDER_PATH}/\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/\" > ~/watsonsdklocation.txt\necho \"${TARGET_BUILD_DIR}/${PUBLIC_HEADERS_FOLDER_PATH}/\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/A/Headers\"\n\n\n/bin/cp -a \"${TARGET_BUILD_DIR}/${PUBLIC_HEADERS_FOLDER_PATH}/\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/A/Headers\"\n\n# create a zip of the framework and add it to the project root\ncd ${SRCROOT}\nrm -rf ${PRODUCT_NAME}.framework ${PRODUCT_NAME}.framework.zip\n\ncd ${BUILT_PRODUCTS_DIR}\nzip -r ${SRCROOT}/${PRODUCT_NAME}.framework.zip ${PRODUCT_NAME}.framework\ncd ${SRCROOT}\nunzip -o ${PRODUCT_NAME}.framework.zip\n\n# [Rob] we need to copy the other headers keeping their folder structure\n#echo 'SRCROOT:'${SRCROOT}\n#cd ${SRCROOT}/watsonsdk\n\n# I have to move up a directory due to my layout.\n#echo 'Copying Headers into Framework..'\n#for H in `find ./ -name \"*.h\"`;  do\n#echo ${H}\n#ditto ${H} ${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/A/Headers/${H}\n#done\n\n";
 		};
 		8C086403DFA5BDC14D48FAF6 /* Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -994,6 +1066,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7EDEDC111D1CCCBB00AC111A /* BasicLocalizer.cpp in Sources */,
 				7E6F25DB1C0F1D78007A97A1 /* StatusInitializerStub.cpp in Sources */,
 				7E6F25B71C0F1D77007A97A1 /* GaussianProcessLDPLMultiModel.cpp in Sources */,
 				7E6F253B1C0F1D76007A97A1 /* CleansingBeaconFilter.cpp in Sources */,
@@ -1003,26 +1076,34 @@
 				7E6F25851C0F1D76007A97A1 /* DataUtils.cpp in Sources */,
 				7E6F256D1C0F1D76007A97A1 /* Sample.cpp in Sources */,
 				7E6F25711C0F1D76007A97A1 /* State.cpp in Sources */,
+				7EDEDC0F1D1CB3B300AC111A /* ExtendedDataUtils.cpp in Sources */,
 				FB273EF51D22226B00F53CCB /* ExtendedDataUtils.cpp in Sources */,
 				FB71CE4F1C46889F00A4DB67 /* MathUtils.cpp in Sources */,
 				7E6F254B1C0F1D76007A97A1 /* Beacon.cpp in Sources */,
+				FBEB01E71D756F1300CB808D /* RandomWalkerMotion.cpp in Sources */,
 				7E6F25E51C0F1D78007A97A1 /* OrientationMeterAverage.cpp in Sources */,
+				FB176CB91D7823D1008C1745 /* LatLngConverter.cpp in Sources */,
 				7E6F25D71C0F1D78007A97A1 /* StatusInitializerImpl.cpp in Sources */,
 				7E6F25CB1C0F1D77007A97A1 /* PoseRandomWalker.cpp in Sources */,
 				7E6F25471C0F1D76007A97A1 /* Attitude.cpp in Sources */,
 				FB5B4BF11C7C41B600D00E8E /* MetropolisSampler.cpp in Sources */,
 				7E6F255D1C0F1D76007A97A1 /* Location.cpp in Sources */,
+				7E92393D1D54764000875766 /* LatLngUtil.cpp in Sources */,
+				FB05F2771D8ADD0E003B472A /* WeakPoseRandomWalker.cpp in Sources */,
 				7E6F25811C0F1D76007A97A1 /* DataStoreImpl.cpp in Sources */,
 				7E6F258D1C0F1D76007A97A1 /* VirtualDevice.cpp in Sources */,
+				FB05F2731D8ADD0E003B472A /* PosteriorResampler.cpp in Sources */,
 				7E6F257B1C0F1D76007A97A1 /* DataLogger.cpp in Sources */,
 				7E6F25B31C0F1D77007A97A1 /* GaussianProcess.cpp in Sources */,
 				7E6F259D1C0F1D77007A97A1 /* StreamLocalizerStub.cpp in Sources */,
 				7E6F253F1C0F1D76007A97A1 /* StrongestBeaconFilter.cpp in Sources */,
 				7E6F25691C0F1D76007A97A1 /* Pose.cpp in Sources */,
+				7EF5DB421D46F73300D22C02 /* LogUtil.cpp in Sources */,
 				FB2E8B131C2404EA00C5C45C /* CoordinateSystem.cpp in Sources */,
 				7E6F25D31C0F1D78007A97A1 /* RandomWalker.cpp in Sources */,
 				7E6F254F1C0F1D76007A97A1 /* BLEBeacon.cpp in Sources */,
 				7E6F25F71C0F1D79007A97A1 /* ArrayUtils.cpp in Sources */,
+				FBBA09F71DACB2DA00EB2553 /* Heading.cpp in Sources */,
 				7E6F25A51C0F1D77007A97A1 /* Building.cpp in Sources */,
 				7E6F25BB1C0F1D77007A97A1 /* KernelFunction.cpp in Sources */,
 				7E6F25F31C0F1D78007A97A1 /* PedometerWalkingState.cpp in Sources */,
@@ -1030,6 +1111,7 @@
 				7E6F25891C0F1D76007A97A1 /* LazyDataStore.cpp in Sources */,
 				FB71CE561C475B4600A4DB67 /* BeaconFilterChain.cpp in Sources */,
 				7E6F25AF1C0F1D77007A97A1 /* ImageHolder.cpp in Sources */,
+				FBEB01E91D756F1300CB808D /* SystemModelInBuilding.cpp in Sources */,
 				7E6F25CF1C0F1D77007A97A1 /* PoseRandomWalkerInBuilding.cpp in Sources */,
 				7E6F25751C0F1D76007A97A1 /* Status.cpp in Sources */,
 				7E6F25A11C0F1D77007A97A1 /* StreamParticleFilter.cpp in Sources */,
@@ -1080,14 +1162,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		7E6002221C076D96007A9B2B /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 7E8A887F1C071C2F00C32E70 /* bleloc */;
-			targetProxy = 7E6002211C076D96007A9B2B /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		7E60021E1C076D71007A9B2B /* Debug */ = {
@@ -1143,7 +1217,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				MTL_ENABLE_DEBUG_INFO = YES;
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "$(inherited)";
 				SDKROOT = iphoneos;
 			};
@@ -1183,6 +1257,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "$(inherited)";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
@@ -1193,7 +1268,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = BD7721527FBC1489894D04B9 /* Pods-bleloc.debug.xcconfig */;
 			buildSettings = {
-				GCC_OPTIMIZATION_LEVEL = 2;
+				GCC_OPTIMIZATION_LEVEL = 3;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1206,6 +1281,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 308D6E89343F046D8CCC70C3 /* Pods-bleloc.release.xcconfig */;
 			buildSettings = {
+				GCC_OPTIMIZATION_LEVEL = 3;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

@@ -27,12 +27,13 @@
 #include <vector>
 #include <cmath>
 
+#include "LatLngUtil.hpp"
+
 namespace loc{
     
     class Location;
     typedef std::vector<Location> Locations;
-    
-    
+        
     class Location{
     protected:
         double x_ = 0;
@@ -78,6 +79,13 @@ namespace loc{
         template <class Tlocation>
         static std::vector<Tlocation> filterLocationsOnFlatFloor(const std::vector<Tlocation>& locations);
         
+        template <class Tlocation>
+        static int findKNNDensestLocationIndex(const std::vector<Tlocation>& locs, int knn=-1, double floorCoeff=1000);
+        template <class Tlocation, class Tstate>
+        static int findClosestLocationIndex(const Tlocation& queryLocation, const std::vector<Tstate>& locs, double floorCoeff=1000);
+        template <class Tlocation>
+        static int findKDEDensestLocationIndex(const std::vector<Tlocation>& locs, double bandwidth=0.5, double floorCoeff=1000);
+        
         // for container
         bool operator<(const Location &right) const;
         bool operator==(const Location &right) const;
@@ -88,6 +96,7 @@ namespace loc{
         
     };
     
+        
     // LocationProperty
     class LocationProperty{
         double stdX_ = 0.0; //[m]

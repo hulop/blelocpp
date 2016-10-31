@@ -31,8 +31,13 @@ namespace loc{
         this->y_origin = y_origin;
         this->z_origin = z_origin;
         
-        assert(this->punit_x != 0);
-        assert(this->punit_y != 0);
+        if(this->punit_x == 0){
+            BOOST_THROW_EXCEPTION(LocException("punit_x == 0"));
+        }
+        if(this->punit_y == 0){
+            BOOST_THROW_EXCEPTION(LocException("punit_x == 0"));
+        }
+        
     }
 
 }

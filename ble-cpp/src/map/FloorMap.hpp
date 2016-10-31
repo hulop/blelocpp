@@ -36,6 +36,9 @@ namespace loc{
 
         Color getColor(const Location& location) const;
         bool checkColor(const Location& location, const Color& color) const;
+        int getX(const Location& location) const;
+        int getY(const Location& location) const;
+        int doubleToImageCoordinate(double x) const;
 
     public:
         FloorMap() = default;
@@ -48,6 +51,7 @@ namespace loc{
         bool isWall(const Location& location) const;
         bool isStairs(const Location& location) const;
         bool isElevator(const Location& location) const;
+        bool isEscalator(const Location& location) const;
 
         bool checkMovable(const Location& start, const Location& end) const;
 
@@ -55,6 +59,8 @@ namespace loc{
         bool checkCrossingWall(const Location& start, const Location& end) const;
 
         double estimateWallAngle(const Location&start, const Location& end) const;
+        
+        const CoordinateSystem& coordinateSystem() const;
     };
 }
 #endif /* Floor_hpp */

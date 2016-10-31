@@ -24,7 +24,7 @@
 #include "ArrayUtils.hpp"
 #include "SerializeUtils.hpp"
 #include "DataLogger.hpp"
-#include "ExtendedDataUtils.hpp"
+//#include "ExtendedDataUtils.hpp"
 
 namespace loc{
     /**
@@ -304,7 +304,9 @@ namespace loc{
         std::cout << "#samplesAveraged = " << samplesAveraged.size() << std::endl;
         
         // construct beacon id to index map
-        assert(mBLEBeacons.size()>0);
+        if(mBLEBeacons.size() <= 0){
+            BOOST_THROW_EXCEPTION(LocException("BLEBeacons have not been set to this instance."));
+        }
         mBeaconIdIndexMap = BLEBeacon::constructBeaconIdToIndexMap(mBLEBeacons);
         
         // convert samples to X, Y matrices
@@ -439,6 +441,9 @@ namespace loc{
             long id = ble.id();
             int index = mBeaconIdIndexMap.at(id);
             double var = indexRssiSum[index] /(indexCount[index]);
+            if (isnan(var)) {
+                std::cerr << "Stdev is NaN for beacon(" << ble.major() << ", " << ble.minor() << ")" << std::endl;
+            }
             double stdev = sqrt(var);
             stdevs.push_back(stdev);
         }
@@ -561,7 +566,8 @@ namespace loc{
                 double ypred = rssiStats.at(0);
                 double stdev = rssiStats.at(1);
                 
-                double logLL = MathUtils::logProbaNormal(rssi, ypred, stdev);
+                //double logLL = MathUtils::logProbaNormal(rssi, ypred, stdev);
+                double logLL = normFunc(rssi, ypred, stdev);
                 double mahaDist = MathUtils::mahalanobisDistance(rssi, ypred, stdev);
                 
                 jointLogLL += logLL;
@@ -574,7 +580,8 @@ namespace loc{
                 double ypred = BeaconConfig::minRssi();
                 double stdev = mStdevRssiForUnknownBeacon;
                 
-                double logLL = MathUtils::logProbaNormal(rssi, ypred, stdev);
+                //double logLL = MathUtils::logProbaNormal(rssi, ypred, stdev);
+                double logLL = normFunc(rssi, ypred, stdev);
                 double mahaDist = MathUtils::mahalanobisDistance(rssi, ypred, stdev);
                 
                 jointLogLL += logLL;
@@ -673,8 +680,20 @@ namespace loc{
     }
     
     template<class Tstate, class Tinput>
+    void GaussianProcessLDPLMultiModel<Tstate, Tinput>::save(std::ostringstream& oss) const{
+        cereal::JSONOutputArchive oarchive(oss);
+        oarchive(*this);
+    }
+    
+    template<class Tstate, class Tinput>
     void GaussianProcessLDPLMultiModel<Tstate, Tinput>::load(std::ifstream& ifs){
         cereal::JSONInputArchive iarchive(ifs);
+        iarchive(*this);
+    }
+
+    template<class Tstate, class Tinput>
+    void GaussianProcessLDPLMultiModel<Tstate, Tinput>::load(std::istringstream& iss){
+        cereal::JSONInputArchive iarchive(iss);
         iarchive(*this);
     }
     
@@ -687,15 +706,14 @@ namespace loc{
         
         Samples samples = mDataStore->getSamples();
         BLEBeacons bleBeacons = mDataStore->getBLEBeacons();
-        
+        if(bleBeacons.size()<=0){
+            BOOST_THROW_EXCEPTION(LocException("BLEBeacons have not been set to dataStore."));
+        }
         Samples samplesFiltered;
         try{
             samplesFiltered = Sample::filterUnregisteredBeacons(samples, bleBeacons);
-            assert(samplesFiltered.size()>0);
-            assert(bleBeacons.size()>0);
-            
-        }catch(std::runtime_error e) {
-            e.what();
+        }catch(LocException& ex) {
+            throw ex;
         }
         GaussianProcessLDPLMultiModel<Tstate, Tinput>* obsModel = new GaussianProcessLDPLMultiModel<Tstate, Tinput>();
         obsModel->bleBeacons(bleBeacons);

@@ -32,6 +32,7 @@
 #include "ObservationModel.hpp"
 #include "Resampler.hpp"
 #include "ObservationDependentInitializer.hpp"
+#include "PosteriorResampler.hpp"
 
 #include "BeaconFilter.hpp"
 
@@ -41,10 +42,14 @@ namespace loc {
     class StreamParticleFilter : public StreamLocalizer{
     public:
         class MixtureParameters{
+            double mRejectFloorDifference=0.5; // Threshold of the probability that the floor of the states and a state to be mixed is different.
         public:
             double mixtureProbability=0;
-            double rejectDistance=5;
+            double rejectDistance=5; // Threshold of the distance between the states and a state to be mixed
             int burnInQuick = 50;
+            
+            double rejectFloorDifference() const{return mRejectFloorDifference;}
+            void rejectFloorDifference(double rejFloorDiff){mRejectFloorDifference = rejFloorDiff;}
         };
         
         StreamParticleFilter();
@@ -54,6 +59,7 @@ namespace loc {
         StreamParticleFilter& optVerbose(bool);
         StreamParticleFilter& numStates(int);
         StreamParticleFilter& alphaWeaken(double);
+        StreamParticleFilter& effectiveSampleSizeThreshold(double);
         StreamParticleFilter& mixtureParameters(MixtureParameters);
         
         StreamParticleFilter& locationStandardDeviationLowerBound(Location loc);
@@ -61,13 +67,14 @@ namespace loc {
         StreamParticleFilter& pedometer(std::shared_ptr<Pedometer> pedometer);
         StreamParticleFilter& orientationMeter(std::shared_ptr<OrientationMeter>  orientationMeter);
         StreamParticleFilter& statusInitializer(std::shared_ptr<StatusInitializer> statusInitializer);
-        StreamParticleFilter& systemModel(std::shared_ptr<SystemModel<State, PoseRandomWalkerInput>> poseRandomWalker);
+        StreamParticleFilter& systemModel(std::shared_ptr<SystemModel<State, SystemModelInput>> poseRandomWalker);
         StreamParticleFilter& observationModel(std::shared_ptr<ObservationModel<State, Beacons>> observationModel);
         StreamParticleFilter& resampler(std::shared_ptr<Resampler<State>> resampler);
         
         StreamParticleFilter& beaconFilter(std::shared_ptr<BeaconFilter> beaconFilter);
         
         StreamParticleFilter& observationDependentInitializer(std::shared_ptr<ObservationDependentInitializer<State, Beacons>> metro);
+        StreamParticleFilter& posteriorResampler(PosteriorResampler<State>::Ptr);
         
         // callback function setter
         StreamParticleFilter& updateHandler(void (*functionCalledAfterUpdate)(Status*)) override;
@@ -77,6 +84,7 @@ namespace loc {
         StreamParticleFilter& putAcceleration(const Acceleration acceleration) override;
         StreamParticleFilter& putAttitude(const Attitude attitude) override;
         StreamParticleFilter& putBeacons(const Beacons beacons) override;
+        StreamParticleFilter& putHeading(const Heading heading) override;
         Status* getStatus() override;
         
         // optional methods
@@ -84,6 +92,7 @@ namespace loc {
         bool resetStatus(Pose pose) override;
         bool resetStatus(Pose meanPose, Pose stdevPose) override;
         bool resetStatus(const Beacons& beacons) override;
+        bool resetStatus(const Location& location, const Beacons& beacons) override;
         
         // (unstable functions)
         // Call this function to search initial location

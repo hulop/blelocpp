@@ -31,6 +31,8 @@ namespace loc{
     class OrientationMeter{
         
     public:
+        using Ptr = std::shared_ptr<OrientationMeter>;
+        
         virtual ~OrientationMeter(){}
         
         virtual OrientationMeter& putAttitude(Attitude attitude) = 0;

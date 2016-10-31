@@ -21,6 +21,7 @@
  *******************************************************************************/
 
 #include "StreamParticleFilterBuilder.hpp"
+#include "SystemModelInBuilding.hpp"
 
 namespace loc{
     
@@ -145,15 +146,17 @@ namespace loc{
         poseRandomWalker->setStateProperty(stateProperty);
         
         // Combine poseRandomWalker and building
-        PoseRandomWalkerInBuildingProperty prwBuildingProperty;
+        PoseRandomWalkerInBuildingProperty::Ptr prwBuildingProperty(new PoseRandomWalkerInBuildingProperty);
         // TODO
-        prwBuildingProperty.maxIncidenceAngle(45.0/180.0*M_PI);
-        prwBuildingProperty.weightDecayRate(0.9);
+        prwBuildingProperty->maxIncidenceAngle(45.0/180.0*M_PI);
+        prwBuildingProperty->weightDecayRate(0.9);
+        PoseRandomWalkerInBuildingProperty::Ptr sysModBldgProperty(new SystemModelInBuildingProperty(*prwBuildingProperty));
         // END TODO
-        Building building = dataStore->getBuilding();
+        //Building building = dataStore->getBuilding();
+        Building::Ptr building(new Building(dataStore->getBuilding()));
         
         std::shared_ptr<PoseRandomWalkerInBuilding> poseRandomWalkerInBuilding(new PoseRandomWalkerInBuilding());
-        poseRandomWalkerInBuilding->poseRandomWalker(*poseRandomWalker);
+        poseRandomWalkerInBuilding->poseRandomWalker(poseRandomWalker);
         poseRandomWalkerInBuilding->building(building);
         poseRandomWalkerInBuilding->poseRandomWalkerInBuildingProperty(prwBuildingProperty);
         

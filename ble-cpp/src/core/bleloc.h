@@ -34,6 +34,7 @@
 #import "Acceleration.hpp"
 #import "Attitude.hpp"
 #import "Beacon.hpp"
+#import "Heading.hpp"
 
 #import "Location.hpp"
 #import "Pose.hpp"

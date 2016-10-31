@@ -21,6 +21,7 @@
  *******************************************************************************/
 
 #include "ArrayUtils.hpp"
+#include "LocException.hpp"
 
 void ArrayUtils::normalize(double outArray[], const double inArray[], int n){
     double sum = 0;
@@ -54,13 +55,17 @@ std::vector<double> ArrayUtils::computeWeightsFromLogLikelihood(std::vector<doub
 }
 
 Eigen::VectorXd ArrayUtils::vectorToEigenVector(std::vector<double> v){
-    assert(v.size() <= std::numeric_limits<int>::max());
+    if(std::numeric_limits<int>::max() < v.size()){
+        BOOST_THROW_EXCEPTION(LocException("v.size() is larger than numeric_limits."));
+    }
     const int n = static_cast<int>(v.size());
     Eigen::VectorXd V = Eigen::Map<Eigen::VectorXd>(&v[0], n, 1 );
     return V;
 }
 std::vector<double> ArrayUtils::eigenVectorToEigen(Eigen::VectorXd V){
-    assert(V.size() <= std::numeric_limits<int>::max());
+    if(std::numeric_limits<int>::max() < V.size()){
+        BOOST_THROW_EXCEPTION(LocException("V.size() is larger than numeric_limits."));
+    }
     const int n = static_cast<int>(V.size());
     std::vector<double> v(n);
     Eigen::Map<Eigen::VectorXd>(&v[0], n, 1 ) = V;

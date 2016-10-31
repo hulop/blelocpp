@@ -21,6 +21,7 @@
  *******************************************************************************/
 
 #include "Building.hpp"
+#include "LocException.hpp"
 #include <cmath>
 
 #include <boost/tuple/tuple_io.hpp>
@@ -46,9 +47,22 @@ namespace loc{
     }
     
     const FloorMap& Building::getFloorAt(int floor_num) const{
-        assert(this->nFloors()>0);
-        assert(minFloor()<=floor_num && floor_num<=maxFloor());
+        if(this->nFloors() <= 0){
+            BOOST_THROW_EXCEPTION(LocException("The number of floors is less than 1."));
+        }
+        if( floor_num < minFloor()){
+            BOOST_THROW_EXCEPTION(LocException("floor_num < minFloor"));
+        }
+        if( maxFloor() < floor_num){
+            BOOST_THROW_EXCEPTION(LocException("maxFloor < floor_num"));
+        }
         return floors.at(floor_num);
+    }
+    
+    const FloorMap& Building::getFloorAt(const Location& location) const{
+        int floor_int = static_cast<int>(location.floor());
+        const FloorMap& floorMap = getFloorAt(floor_int);
+        return floorMap;
     }
 
     bool Building::isMovable(const Location& location) const{
@@ -88,6 +102,11 @@ namespace loc{
         int floor_int = static_cast<int>(location.floor());
         const FloorMap& floorMap = getFloorAt(floor_int);
         return floorMap.isElevator(location);
+    }
+    
+    bool Building::isEscalator(const Location& location) const{
+        const FloorMap& floorMap = getFloorAt(location);
+        return floorMap.isEscalator(location);
     }
 
     bool Building::checkCrossingWall(const Location& start, const Location& end) const{
@@ -133,13 +152,13 @@ namespace loc{
     double Building::estimateWallAngle(const Location& start, const Location& end) const{
         double floor0 = start.floor();
         double floor1 = end.floor();
-        assert(floor0 == floor1);
+        if(floor0 != floor1){
+            BOOST_THROW_EXCEPTION(LocException("start_location.floor != end_location.floor"));
+        }
         int floor_int = static_cast<int>(floor0);
         const FloorMap& floorMap = getFloorAt(floor_int);
         return floorMap.estimateWallAngle(start, end);
     }
-    
-    
     
     /**
      Implementation of building builder

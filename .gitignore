@@ -3,5 +3,7 @@ UserInterfaceState.xcuserstate
 Pods
 Podfile.lock
 xcuserdata
+bleloc.framework
 bleloc.framework.zip
 /.project
+*.xcworkspace

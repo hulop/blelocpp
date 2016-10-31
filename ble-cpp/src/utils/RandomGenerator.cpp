@@ -22,6 +22,9 @@
 
 #include <iostream>
 #include "RandomGenerator.hpp"
+#include "LocException.hpp"
+#include "MathUtils.hpp"
+#include "sstream"
 
 namespace loc{
     
@@ -39,10 +42,15 @@ namespace loc{
     }
     
     double RandomGenerator::nextTruncatedGaussian(double mean, double std, double min, double max){
-        if(!(min<=mean && mean<= max)){
-            std::cout << "mean=" << mean << ", min=" << min << ", max=" << max << std::endl;
-            assert(min<=mean);
-            assert(mean<= max);
+        if(mean < min){
+            std::stringstream ss;
+            ss << "mean < min (" << "mean=" << mean << ", min=" << min << ", max=" << ")";
+            BOOST_THROW_EXCEPTION(LocException(ss.str()));
+        }
+        if(max < mean){
+            std::stringstream ss;
+            ss << "max < mean (" << "mean=" << mean << ", min=" << min << ", max=" << ")";
+            BOOST_THROW_EXCEPTION(LocException(ss.str()));
         }
         double value = mean;
         for(int i=0;i<max_iteration; i++){
@@ -54,9 +62,18 @@ namespace loc{
         return value;
     }
     
+    double RandomGenerator::nextWrappedNormal(double mean, double std){
+        double val = mean + std * nextGaussian();
+        return MathUtils::normalizeOrientaion(val);
+    }
+    
+    
     std::vector<int> RandomGenerator::randomSet(int n, int k){
-        assert(n>0);
-        assert(k>0);
+        if(n<0 || k<0){
+            std::stringstream ss;
+            ss << "n<0 || k<0 (n=" << n << ",k=" << k << ")" << std::endl;
+            BOOST_THROW_EXCEPTION(LocException(ss.str()));
+        }
         
         std::vector<int> indices(n);
         for(int i=0; i<n; i++){

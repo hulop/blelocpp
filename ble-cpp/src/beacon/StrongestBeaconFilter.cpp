@@ -33,7 +33,7 @@ namespace loc{
         int nFiltered = std::min(n, nStrongest_);
         for(int i=0; i<nFiltered; i++){
             int idx = n-i-1;
-            if(beaconsSorted.at(i).rssi() > cutoffRssi_){
+            if(beaconsSorted.at(idx).rssi() > cutoffRssi_){
                 beaconsFiltered.push_back(beaconsSorted.at(idx));
             }
         }

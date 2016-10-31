@@ -27,6 +27,9 @@
 #include <map>
 #include "Location.hpp"
 #include "FloorMap.hpp"
+#ifdef ANDROID_STL_EXT
+#include "string_ext.hpp"
+#endif /* ANDROID_STL_EXT */
 
 namespace loc {
 
@@ -36,11 +39,14 @@ namespace loc {
         std::map<int, FloorMap> floors;
         
     public:
+        using Ptr = std::shared_ptr<Building>;
+        
         Building() = default;
         ~Building() = default;
         Building(std::map<int, FloorMap> _floors);
         
         const FloorMap& getFloorAt(int floor_num) const;
+        const FloorMap& getFloorAt(const Location& location) const;
         size_t nFloors() const { return this->floors.size(); }
 
         bool isMovable(const Location& location) const;
@@ -49,6 +55,7 @@ namespace loc {
         bool isWall(const Location& location) const;
         bool isStair(const Location& location) const;
         bool isElevator(const Location& location) const;
+        bool isEscalator(const Location& location) const;
 
         bool checkCrossingWall(const Location& start, const Location& end) const;
         bool checkMovableRoute(const Location& start, const Location& end) const;

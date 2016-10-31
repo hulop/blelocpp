@@ -112,11 +112,12 @@ namespace loc{
     Locations StatusInitializerImpl::randomSampleLocationsWithPerturbation(int n, const Locations& locations){
         Locations locs;
         int nSamples = (int) locations.size();
-        assert(nSamples>0);
+        if(nSamples==0){
+            BOOST_THROW_EXCEPTION(LocException("nSamples==0"));
+        }
         std::vector<int> indices = rand.randomSet(nSamples, n);
         for(int i=0; i<n; i++){
             int idx = indices.at(i);
-            //std::cout << "idx=" << idx << std::endl;
             Location loc = locations.at(idx);
             loc = perturbLocation(loc);
             locs.push_back(Location(loc));
@@ -125,7 +126,9 @@ namespace loc{
     }
     
     Locations StatusInitializerImpl::initializeLocations(int n){
-        assert(n>0);
+        if(n<=0){
+            BOOST_THROW_EXCEPTION(LocException("n==0"));
+        }
         
         const Samples& samples = mDataStore->getSamples();
         
@@ -139,14 +142,17 @@ namespace loc{
         
         // Random sampling
         Locations locs = randomSampleLocationsWithPerturbation(n, movableLocations);
-        assert(locs.size()==n);
         
         // Check if all locations are valid.
         const Building& building = mDataStore->getBuilding();
         bool hasBuilding = building.nFloors()>0? true : false;
         if(hasBuilding){
             for(Location loc: locs){
-                assert(building.isMovable(loc));
+                if(!building.isMovable(loc)){
+                    std::stringstream ss;
+                    ss << "Location(" << loc.toString() << ") is not movable.";
+                    BOOST_THROW_EXCEPTION(LocException(ss.str()));
+                }
             }
         }else{
             // pass
@@ -210,20 +216,15 @@ namespace loc{
     }
     
     States StatusInitializerImpl::resetStates(int n, Pose pose, double orientationMeasured){
-        
-        double xReset = pose.x();
-        double yReset = pose.y();
-        double zReset = pose.z();
-        double floorReset = pose.floor();
         double orientationReset = pose.orientation();
         double orientationBiasReset = orientationMeasured - orientationReset;
-
         //std::cout << "Reset status(PoseReset="<<pose<<", yaw="<<orientationMeasured<< ",orientationBias=" << orientationBiasReset << std::endl;
         
         States states = initializeStates(n);
         for(int i=0; i<n; i++){
             State state = states.at(i);
-            state.x(xReset).y(yReset).z(zReset).floor(floorReset).orientation(orientationReset);
+            state.copyLocation(pose);
+            state.orientation(orientationReset);
             state.orientationBias(orientationBiasReset);
             state.weight(1.0/n);
             states[i] = state;
@@ -244,9 +245,13 @@ namespace loc{
         Building building = mDataStore->getBuilding();
         
         if(building.nFloors()>0){
-            assert(building.isValid(meanPose));
-            assert(!building.isWall(meanPose));
-            assert(building.isMovable(meanPose));
+            if(! building.isValid(meanPose)){
+                BOOST_THROW_EXCEPTION(LocException("meanPose is not valid location."));
+            }else if(building.isWall(meanPose)){
+                BOOST_THROW_EXCEPTION(LocException("meanPose is in a wall."));
+            }else if(!building.isMovable(meanPose)){
+                BOOST_THROW_EXCEPTION(LocException("meanPose is not movable location."));
+            }
         }
         
         States statesTmp = resetStates(n, meanPose, orientationMeasured);
@@ -312,7 +317,7 @@ namespace loc{
         
         std::map<long, int> idToIndexMap = BLEBeacon::constructBeaconIdToIndexMap(bleBeacons);
         std::vector<Location> selectedLocations;
-
+        
         std::vector<BLEBeacon> observedBLEBeacons;
         for(auto& b: beacons){
             long id = b.id();
@@ -332,6 +337,47 @@ namespace loc{
                 }
             }
         }
+        
+        return selectedLocations;
+    }
+    
+    
+    Locations StatusInitializerImpl::extractLocationsCloseToBeaconsWithPerturbation(const std::vector<Beacon> &beacons, double radius2D) {
+        
+        auto& samples = mDataStore->getSamples();
+        auto& bleBeacons = mDataStore->getBLEBeacons();
+        
+        std::map<long, int> idToIndexMap = BLEBeacon::constructBeaconIdToIndexMap(bleBeacons);
+        std::vector<Location> selectedLocations;
+
+        std::vector<BLEBeacon> observedBLEBeacons;
+        for(auto& b: beacons){
+            long id = b.id();
+            if(idToIndexMap.count(id)>0){
+                observedBLEBeacons.push_back(bleBeacons.at(idToIndexMap.at(id)));
+            }
+        }
+        
+        for (auto& ble: observedBLEBeacons) {
+            const Location loc(ble.x(), ble.y(), 0, ble.floor());
+            for(int i = 0; i < nPerturbationMax; i++) {
+                Location newLoc = perturbLocation(loc, radius2D, radius2D);
+                selectedLocations.push_back(newLoc);
+            }
+        }
+        
+        /*
+        auto locations = Sample::extractUniqueLocations(samples);
+        for(auto& loc: locations){
+            for(auto& bloc: observedBLEBeacons){
+                double dist = Location::distance2D(loc, bloc);
+                double floorDiff = Location::floorDifference(loc, bloc);
+                if(dist <= radius2D && floorDiff==0){
+                    selectedLocations.push_back(loc);
+                    continue;
+                }
+            }
+        }*/
         
         return selectedLocations;
     }

@@ -56,7 +56,6 @@ namespace loc{
         void serialize(Archive& ar);
     };
     
-    
     /**
       GaussianProcess based model
      **/
@@ -67,6 +66,7 @@ namespace loc{
         
         std::vector<double> lambdas{1000.0, 0.001, 1000, 1000};
         std::vector<double> rhos{0, 0, 100, 100};
+        
     };
     
     
@@ -111,6 +111,8 @@ namespace loc{
         GaussianProcessLDPLMultiModel() = default;
         ~GaussianProcessLDPLMultiModel() = default;
         
+        std::function<double(double, double, double)> normFunc = MathUtils::logProbaNormal;
+        
         std::vector<Tstate>* update(const std::vector<Tstate> & states, const Tinput & input) override {
             std::cout << "GaussianProcessLDPLMultiModel::update is not supported." << std::endl;
             std::vector<Tstate>* statesCopy = new std::vector<Tstate>(states);
@@ -139,7 +141,9 @@ namespace loc{
         void load(Archive& ar);
         
         void save(std::ofstream& ofs) const;
+        void save(std::ostringstream& oss) const;
         void load(std::ifstream& ifs);
+        void load(std::istringstream& iss);
 
     };
     

@@ -44,3 +44,22 @@ DirectionalStatistics MathUtils::computeDirectionalStatistics(std::vector<double
     DirectionalStatistics oristat(meanOri, v);
     return oristat;
 }
+
+WrappedNormalParameter MathUtils::computeWrappedNormalParameters(const std::vector<double>& orientations){
+
+    size_t n = orientations.size();
+    
+    DirectionalStatistics dstats = MathUtils::computeDirectionalStatistics(orientations);
+    
+    double mu = dstats.circularMean();
+    double R = 1.0 - dstats.circularVariance();
+    
+    double R2 = R*R>1.0/n? R*R : 1.0/n;
+    double Re2 = (double)n/(n-1)*(R2 - 1.0/n);
+    
+    double sigma2 = std::log(1.0/Re2);
+    double sigma =  sigma2>0? std::sqrt(sigma2) : 0.0;
+    
+    WrappedNormalParameter param(mu, sigma);
+    return param;
+}

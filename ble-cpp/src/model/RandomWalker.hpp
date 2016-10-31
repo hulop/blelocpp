@@ -30,25 +30,39 @@
 #include "Location.hpp"
 #include "RandomGenerator.hpp"
 #include "SystemModel.hpp"
+#include "State.hpp"
 
 namespace loc{
     
+    using RandomWalkerInput = SystemModelInput;
+    
     struct RandomWalkerProperty{
+    public:
+        using Ptr = std::shared_ptr<RandomWalkerProperty>;
         double sigma = 1.0;
     };
     
-    template<class Ts, class Tin> class RandomWalker : public SystemModel<Ts, Tin>{
+    template<class Ts=State, class Tin=SystemModelInput>
+    class RandomWalker : public SystemModel<Ts, Tin>{
     
     public:
-        ~RandomWalker(){}
+        RandomWalker(){
+            mRWProperty.reset(new RandomWalkerProperty);
+            mRandGen.reset(new RandomGenerator);
+        }
         
-        RandomWalker<Ts, Tin>& setProperty(RandomWalkerProperty property);
-        Ts predict(Ts state, Tin input) override;
-        std::vector<Ts> predict(std::vector<Ts> states, Tin input) override;
+        virtual ~RandomWalker(){}
         
-    private:
-        RandomWalkerProperty mRWProperty;
-        RandomGenerator mRandGen;
+        [[deprecated("please use setProperty(RandomWalkerProperty::Ptr) function")]]
+        virtual RandomWalker<Ts, Tin>& setProperty(RandomWalkerProperty property);
+        
+        virtual RandomWalker<Ts, Tin>& setProperty(RandomWalkerProperty::Ptr property);
+        virtual Ts predict(Ts state, Tin input) override;
+        virtual std::vector<Ts> predict(std::vector<Ts> states, Tin input) override;
+        
+    protected:
+        RandomWalkerProperty::Ptr mRWProperty;
+        std::shared_ptr<RandomGenerator> mRandGen;
     };
     
 }

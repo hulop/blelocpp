@@ -60,6 +60,7 @@ struct Option{
     double diffusionRssiBias = 0.2;
     double stdX = 1.0;
     double stdY = 1.0;
+    double tDistribution = 0;
     
     void print(){
         std::cout << "------------------------------------" << std::endl;
@@ -84,6 +85,7 @@ struct Option{
         std::cout << " meanRssiBias   =" << meanRssiBias << std::endl;
         std::cout << " stdRssiBias    =" << stdRssiBias << std::endl;
         std::cout << " diffusionRssiBias = " << diffusionRssiBias << std::endl;
+        std::cout << " tDistribution  =" << tDistribution << std::endl;
         std::cout << " stdX    =" << stdX << std::endl;
         std::cout << " stdY    =" << stdY << std::endl;
         std::cout << "------------------------------------" << std::endl;
@@ -122,6 +124,7 @@ void printHelp(std::string command){
     std::cout << " --diffusionRssiBias  set diffusion rssi bias" << std::endl;
     std::cout << " --stdX <float>       set standard deviation of x used in initialization and mcmc sampling" << std::endl;
     std::cout << " --stdY <float>       set standard deviation of y used in initialization and mcmc sampling" << std::endl;
+    std::cout << " --students-t <float> set beacon rssi distribution as student's t distribution" << std::endl;
     std::cout << std::endl;
     std::cout << "Example" << std::endl;
     std::cout << "$ " << command << " -t train.txt -b beacon.csv -m map.png -l navcog.log -o out.txt" << std::endl;
@@ -141,6 +144,7 @@ Option parseArguments(int argc,char *argv[]){
         {"diffusionRssiBias",     required_argument, NULL,  0 },
         {"stdX",            required_argument, NULL,  0 },
         {"stdY",            required_argument, NULL,  0 },
+        {"tDistribution",   required_argument, NULL,  0 },
         {0,         0,                 0,  0 }
     };
 //while ((c = getopt (argc, argv, "shft:b:l:o:m:1:a:rp:njcd:g:")) != -1)
@@ -168,6 +172,9 @@ Option parseArguments(int argc,char *argv[]){
             }
             if (strcmp(long_options[option_index].name, "stdY") == 0){
                 opt.stdY = atof(optarg);
+            }
+            if (strcmp(long_options[option_index].name, "tDistribution") == 0) {
+                opt.tDistribution = atof(optarg);
             }
             break;
         case 'h':
@@ -336,6 +343,7 @@ int main(int argc,char *argv[]){
     builder.diffusionRssiBias = opt.diffusionRssiBias;
     builder.poseProperty_stdX = opt.stdX;
     builder.poseProperty_stdY = opt.stdY;
+    builder.tDistribution = opt.tDistribution;
     std::shared_ptr<loc::StreamLocalizer> localizer = builder.build();
         
     UserData userData;

@@ -33,6 +33,11 @@
 
 namespace loc{
     
+    typedef enum {
+        INIT_WITH_SAMPLE_LOCATIONS,
+        INIT_WITH_BEACON_LOCATIONS
+    } InitType;
+    
     // This class generates samples following p(state|observation) by using the Metropolis algorithm.
     // When withOrdering is set to true, sampling(int n) function returns n largest log-likelihood states from the all generated samples. When withOrdering is false, the latest n samples with the defined interval are returned.
     template<class Tstate, class Tinput>
@@ -44,6 +49,7 @@ namespace loc{
             int interval = 1;
             double radius2D = 10;
             bool withOrdering = false;
+            InitType initType = INIT_WITH_SAMPLE_LOCATIONS;
         };
         
     private:
@@ -65,7 +71,8 @@ namespace loc{
         std::vector<double> allLogLLs;
         
         State findInitialMaxLikelihoodState();
-        State transitState(const Tstate& state);
+        State transitState(Tstate state);
+        State transitState(Tstate state, bool transitLoc, bool transitRssiBias);
         
     public:
         
@@ -83,8 +90,10 @@ namespace loc{
         void startBurnIn(int burnIn);
         
         bool sample();
+        bool sample(bool transitLoc, bool transitRssiBias);
         std::vector<Tstate> sampling(int n);
         std::vector<Tstate> sampling(int n, bool withOrdering);
+        std::vector<Tstate> sampling(int n, const Location &location);
         
         void clear();
         

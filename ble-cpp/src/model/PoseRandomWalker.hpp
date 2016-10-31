@@ -46,6 +46,8 @@ namespace loc{
         bool mDoesUpdateWhenStopping = false;
         
     public:
+        using Ptr = std::shared_ptr<PoseRandomWalkerProperty>;
+        
         void pedometer(Pedometer* pedometer){
             pPedomter = pedometer;
         }
@@ -72,55 +74,32 @@ namespace loc{
         }
     };
     
-    class PoseRandomWalkerInput{
-        long timestamp_;
-        long previousTimestamp_;
-        
-    public:
-        void timestamp(long timestamp){
-            timestamp_ = timestamp;
-        }
-        
-        void previousTimestamp(long previousTimestamp){
-            previousTimestamp_ = previousTimestamp;
-        }
-        
-        long timestamp() const{
-            return timestamp_;
-        }
-        long previousTimestamp() const{
-            return previousTimestamp_;
-        }
-        
-    };
-    
-    class PoseRandomWalker: public SystemModel<State, PoseRandomWalkerInput>{
-    private:
+    class PoseRandomWalker: public SystemModel<State, SystemModelInput>, public SystemModelVelocityAdjustable, public SystemModelMovementControllable{
+
+    protected:
         
         RandomGenerator randomGenerator;
-        
         PoseProperty poseProperty;
         StateProperty stateProperty;
         PoseRandomWalkerProperty mProperty;
-        
         double mVelocityRate = 1.0;
         
     public:
         
         PoseRandomWalker() = default;
-        ~PoseRandomWalker() = default;
+        virtual ~PoseRandomWalker() = default;
         
-        double velocityRate(){ return mVelocityRate; }
-        void velocityRate(double velocityRate) { mVelocityRate = velocityRate; }
+        virtual double velocityRate() const override{ return mVelocityRate; }
+        virtual void velocityRate (double velocityRate) override{ mVelocityRate = velocityRate; }
         
-        PoseRandomWalker& setProperty(PoseRandomWalkerProperty property);
-        PoseRandomWalker& setPoseProperty(PoseProperty poseProperty);
-        PoseRandomWalker& setStateProperty(StateProperty stateProperty);
+        virtual PoseRandomWalker& setProperty(PoseRandomWalkerProperty property);
+        virtual PoseRandomWalker& setPoseProperty(PoseProperty poseProperty);
+        virtual PoseRandomWalker& setStateProperty(StateProperty stateProperty);
         
-        std::vector<State> predict(std::vector<State> poses, PoseRandomWalkerInput input) override;
+        virtual std::vector<State> predict(std::vector<State> poses, SystemModelInput input) override;
+        virtual State predict(State state, SystemModelInput input) override;
         
-        State predict(State state, PoseRandomWalkerInput input) override;
-    
+        virtual double movingLevel();
     };
     
 }

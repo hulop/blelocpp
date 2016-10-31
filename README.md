@@ -5,7 +5,7 @@ It is necessary to build this library as an iOS Framework before building NavCog
 ## Prerequisites
 - [cereal version 1.1.2](http://uscilab.github.io/cereal/) (BSD License)
 - [picojson version 1.3.0](https://github.com/kazuho/picojson) (BSD License)
-- [Boost version 1.57.0](http://www.boost.org) (Boost Software License)
+- [Boost version 1.61.0](http://www.boost.org) (Boost Software License)
 - [Eigen version 3.2.5](http://eigen.tuxfamily.org) (Mozilla Public License Version 2.0)
 - [OpenCV version 2.4.9](http://opencv.org/) (BSD License)
 

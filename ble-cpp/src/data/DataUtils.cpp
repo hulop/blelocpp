@@ -23,6 +23,7 @@
 #include <iostream>
 #include <string>
 #include <algorithm>
+#include <regex>
 
 #include "Location.hpp"
 #include "Beacon.hpp"
@@ -31,6 +32,17 @@
 #include "Acceleration.hpp"
 
 #include "DataUtils.hpp"
+#include <boost/uuid/uuid.hpp>
+#include <boost/uuid/uuid_generators.hpp>
+#include <boost/uuid/uuid_io.hpp>
+#include <boost/archive/iterators/binary_from_base64.hpp>
+#include <boost/archive/iterators/transform_width.hpp>
+
+//http://stackoverflow.com/questions/10521581/base64-encode-using-boost-throw-exception
+using namespace boost::archive::iterators;
+typedef
+transform_width< binary_from_base64<std::string::const_iterator>, 8, 6 > it_binary_t;
+//
 
 namespace loc{
     
@@ -111,7 +123,7 @@ namespace loc{
     }
     
     Beacons DataUtils::parseBeaconsCSV(const std::string& str){
-        // timestamp, Beacon, x, y, height, floor, nBeacon, major, minor, rssi
+        // timestamp, Beacon, x, y, height, floor, nBeacon, major, minor, rssi, ...
         Beacons beacons;
         
         std::list<std::string> stringList = splitAndTrimCSV(str);
@@ -132,6 +144,42 @@ namespace loc{
                 if(i%3==1) major = std::stoi(*iter);
                 if(i%3==2) minor = std::stoi(*iter);
                 if(i%3==0){
+                    rssi = std::stod(*iter);
+                    Beacon b(major, minor, rssi);
+                    beacons.push_back(b);
+                }
+            }
+            i++;
+        }
+        return beacons;
+    }
+    
+    Beacons DataUtils::parseLogBeaconsCSV(const std::string& str){
+        // Beacon, nBeacon, major, minor, rssi, ...., timestamp
+        Beacons beacons;
+        
+        std::list<std::string> stringList = splitAndTrimCSV(str);
+        std::list<std::string>::iterator iter;
+        int i=0;
+        
+        long timestamp = std::stol(stringList.back());
+        beacons.timestamp(timestamp);
+        int nBeacons = 0;
+        int major=0;
+        int minor=0;
+        double rssi = -100;
+        
+        for( iter= stringList.begin(); iter!=stringList.end(); iter++){
+            if(i==0){
+                if(iter->compare("Beacon") != 0){
+                    BOOST_THROW_EXCEPTION(LocException("Log beacon is not correctly formatted. string="+str));
+                }
+            }
+            if(i==1) nBeacons = std::stoi(*iter);
+            if(i>1 && (i-1)/3 < nBeacons){
+                if(i%3==2) major = std::stoi(*iter);
+                if(i%3==0) minor = std::stoi(*iter);
+                if(i%3==1){
                     rssi = std::stod(*iter);
                     Beacon b(major, minor, rssi);
                     beacons.push_back(b);
@@ -225,6 +273,44 @@ namespace loc{
         return stringstream.str();
     }
     
+    std::string DataUtils::stringToFile(const std::string& dataStr, const std::string& dir, const std::string& file)
+    {
+        
+        std::string tempPath = dir+"/"+file;
+        if (file.empty()) {
+            boost::uuids::random_generator gen;
+            boost::uuids::uuid u = gen();
+            tempPath = dir+"/"+boost::uuids::to_string(u);
+        }
+        
+        std::regex regex( "^(data:([a-z]+/[a-z]+);base64,).+$" );
+        std::smatch match;
+        
+        std::string type;
+        std::string data;
+        if( regex_match(dataStr, match, regex) ) {
+            type = match[2];
+            type = std::regex_replace( type, std::regex("^[^/]+/(x-)?"), "" );
+            long begin = match[1].length();
+            
+            tempPath += "."+type;
+            std::ofstream ofs(tempPath);
+            
+            unsigned long paddChars = count(dataStr.end()-10, dataStr.end(), '=');
+            //std::replace(data.begin(),data.end(),'=','A');
+            copy(it_binary_t(dataStr.begin()+begin), it_binary_t(dataStr.end()-paddChars), std::ostream_iterator<char>(ofs));
+
+        } else {
+            tempPath += ".txt";
+            std::ofstream ofs(tempPath);
+            //copy(dataStr.begin(), dataStr.end(), std::ostream_iterator<char>(ofs));
+            ofs << dataStr;
+            ofs.close();
+        }
+        
+        return tempPath;
+    }
+    
     Location DataUtils::parseLocationCSV(const std::string& csvLine){
         
         std::list<std::string> stringList = splitAndTrimCSV(csvLine);
@@ -243,8 +329,10 @@ namespace loc{
         Location location(x,y,z,floor);
         return location;
     }
-    
     Sample DataUtils::parseSampleCSV(const std::string& csvLine) throw(std::invalid_argument) {
+        return DataUtils::parseSampleCSV(csvLine, false);
+    }
+    Sample DataUtils::parseSampleCSV(const std::string& csvLine, bool noBeacons) throw(std::invalid_argument) {
         //Location location = parseLocationCSV(csvLine);
         //Beacons beacons = parseBeaconsCSV(csvLine);
         
@@ -260,27 +348,32 @@ namespace loc{
         
         buffer += n;
         Location location(x,y,z,floor);
-        
-        int major, minor;
-        double rssi;
-        Beacons beacons;
-        beacons.timestamp(timestamp);
-        for(int i = 0; i < num; i++) {
-            sscanf(buffer, "%d,%d,%lf,%n", &major, &minor, &rssi, &n);
-            buffer += n;
-            beacons.push_back(Beacon(major, minor, rssi));
-        }
-        
         Sample sample;
-        sample.timestamp(timestamp)->location(location)->beacons(beacons);
+        sample.location(location)->timestamp(timestamp);
+        
+        if (!noBeacons) {
+            int major, minor;
+            double rssi;
+            Beacons beacons;
+            beacons.timestamp(timestamp);
+            for(int i = 0; i < num; i++) {
+                sscanf(buffer, "%d,%d,%lf,%n", &major, &minor, &rssi, &n);
+                buffer += n;
+                beacons.push_back(Beacon(major, minor, rssi));
+            }
+            sample.beacons(beacons);
+        }
         return sample;
     }
     
     void DataUtils::csvSamplesToSamples(std::istream& istream, Samples &samples){
+        DataUtils::csvSamplesToSamples(istream, samples, false);
+    }
+    void DataUtils::csvSamplesToSamples(std::istream& istream, Samples &samples, bool noBeacons){
         std::string strBuffer;
         while(std::getline(istream, strBuffer)){
             try{
-                Sample sample = parseSampleCSV(strBuffer);
+                Sample sample = parseSampleCSV(strBuffer, noBeacons);
                 samples.push_back(sample);
             } catch (std::invalid_argument e){
                 std::cout << "Invalid csv line was found. line=" <<strBuffer << std::endl;
@@ -290,11 +383,15 @@ namespace loc{
     }
     
     Samples DataUtils::csvSamplesToSamples(std::istream& istream){
+        return DataUtils::csvSamplesToSamples(istream, false);
+    }
+    
+    Samples DataUtils::csvSamplesToSamples(std::istream& istream, bool noBeacons){
         Samples samples;
         std::string strBuffer;
         while(std::getline(istream, strBuffer)){
             try{
-                Sample sample = parseSampleCSV(strBuffer);
+                Sample sample = parseSampleCSV(strBuffer, noBeacons);
                 samples.push_back(sample);
             } catch (std::invalid_argument e){
                 std::cout << "Invalid csv line was found. line=" <<strBuffer << std::endl;
@@ -368,8 +465,24 @@ namespace loc{
         return std::move(samples);
     }
     
-    
-    
+    std::string DataUtils::samplesToCsvSamples(const Samples &samples){
+        // csv format of sample
+        // timestamp,"Beacon",x,y,z,floor,#beacons,major,minor,rssi,...
+        std::stringstream ss;
+        for(auto& s: samples){
+            auto ts = s.timestamp();
+            auto loc = s.location();
+            auto bs = s.beacons();
+            ss << ts <<",Beacon," << loc << "," << bs.size();
+            for(auto& b: bs){
+                ss << ",";
+                ss << b;
+            }
+            ss << std::endl;
+        }
+        return ss.str();
+    }
+
     BLEBeacon DataUtils::parseBLEBeaconCSV(const std::string& csvLine) throw (std::invalid_argument){
         std::list<std::string> stringList = splitAndTrimCSV(csvLine);
         std::list<std::string>::iterator iter;
@@ -413,6 +526,16 @@ namespace loc{
         return bleBeacons;
     }
     
+    std::string DataUtils::BLEBeaconsToCSV(const BLEBeacons &bleBeacons){
+        // UUID, major, minor, x,y,z,floor
+        std::stringstream ss;
+        for(auto& b: bleBeacons){
+            ss << b.uuid() << "," << b.major() << "," << b.minor()
+            << "," << b.x() << "," << b.y() << "," << b.z() << "," << b.floor();
+            ss << std::endl;
+        }
+        return ss.str();
+    }
     
     
     Pose DataUtils::parseResetPoseCSV(const std::string& csvLine){

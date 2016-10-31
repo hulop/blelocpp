@@ -41,12 +41,16 @@ namespace loc{
         double velocityRateFloor_ = 1.0;
         double velocityRateStair_ = 0.5;
         double velocityRateElevator_ = 0.5;
+        //double velocityRateEscalator_ = 0.5; //0.5 is too small.
+        double velocityRateEscalator_ = 1.0;
         
         double weightDecayRate_ = 0.9;
         
         int maxTrial_ = 1; // fixed value
         
     public:
+        
+        using Ptr = std::shared_ptr<PoseRandomWalkerInBuildingProperty>;
         
         PoseRandomWalkerInBuildingProperty& probabilityUp(double probabilityUp);
         PoseRandomWalkerInBuildingProperty& probabilityDown(double probabilityDown);
@@ -57,6 +61,7 @@ namespace loc{
         PoseRandomWalkerInBuildingProperty& velocityRateFloor(double velocityRateFloor);
         PoseRandomWalkerInBuildingProperty& velocityRateStair(double velocityRateStair);
         PoseRandomWalkerInBuildingProperty& velocityRateElevator(double velocityRateElevator);
+        PoseRandomWalkerInBuildingProperty& velocityRateEscalator(double velocityRateEscalator);
         
         PoseRandomWalkerInBuildingProperty& weightDecayRate(double weightDecayRate);
         double probabilityUp() const;
@@ -67,37 +72,10 @@ namespace loc{
         double velocityRateFloor() const;
         double velocityRateStair() const;
         double velocityRateElevator() const;
+        double velocityRateEscalator() const;
         double weightDecayRate() const;
         int maxTrial() const;
         
-    };
-    
-    class PoseRandomWalkerInBuilding : public SystemModel<State, PoseRandomWalkerInput>{
-        
-    private:
-        RandomGenerator mRandomGenerator;
-        PoseRandomWalker mPoseRandomWalker;
-        Building mBuilding;
-        PoseRandomWalkerInBuildingProperty mProperty;
-        
-        State moveOnElevator(const State& state, PoseRandomWalkerInput input);
-        State moveOnStair(const State& state, PoseRandomWalkerInput input);
-        State moveOnFloor(const State& state, PoseRandomWalkerInput input);
-        State moveOnFloorRetry(const State& state, const State& stateNew,  PoseRandomWalkerInput input);
-        
-    public:
-        PoseRandomWalkerInBuilding() = default;
-        ~PoseRandomWalkerInBuilding() = default;
-        
-        PoseRandomWalkerInBuilding(PoseRandomWalker poseRandomWalker, Building building, PoseRandomWalkerInBuildingProperty property);
-        
-        PoseRandomWalkerInBuilding& poseRandomWalker(PoseRandomWalker poseRandomWalker);
-        PoseRandomWalkerInBuilding& building(Building building);
-        PoseRandomWalkerInBuilding& poseRandomWalkerInBuildingProperty(PoseRandomWalkerInBuildingProperty prperty);
-        
-        State predict(State state, PoseRandomWalkerInput input) override;
-        std::vector<State> predict(std::vector<State> poses, PoseRandomWalkerInput input) override;
- 
     };
 }
 

@@ -28,22 +28,27 @@ namespace loc{
     
     template<class Ts, class Tin>
     RandomWalker<Ts, Tin>& RandomWalker<Ts, Tin>::setProperty(RandomWalkerProperty property){
+        mRWProperty.reset(new RandomWalkerProperty(property));
+        return *this;
+    }
+    
+    template<class Ts, class Tin>
+    RandomWalker<Ts, Tin>& RandomWalker<Ts, Tin>::setProperty(RandomWalkerProperty::Ptr property){
         mRWProperty = property;
         return *this;
     }
     
     template<class Ts, class Tin>
     Ts RandomWalker<Ts, Tin>::predict(Ts loc, Tin input){
-        
         double x = loc.x();
         double y = loc.y();
         double z = loc.z();
         double floor = loc.floor();
         
-        x += mRWProperty.sigma * mRandGen.nextGaussian();
-        y += mRWProperty.sigma * mRandGen.nextGaussian();
+        x += mRWProperty->sigma * mRandGen->nextGaussian();
+        y += mRWProperty->sigma * mRandGen->nextGaussian();
         
-        Ts locNew;
+        State locNew;
         locNew.x(x).y(y).z(z).floor(floor);
         return locNew;
     }
@@ -51,16 +56,15 @@ namespace loc{
     template<class Ts, class Tin>
     std::vector<Ts> RandomWalker<Ts, Tin>::predict(std::vector<Ts> locations, Tin input){
         std::vector<Ts> locsNew;
-        
+        this->startPredictions(locations, input);
         for(Ts loc: locations){
             Ts locNew = predict(loc, input);
             locsNew.push_back(locNew);
         }
-        
+        this->endPredictions(locations, input);
         return locsNew;
     }
     
     // Explicit instantiation
-    template class RandomWalker<State, PoseRandomWalkerInput>;
-    
+    template class RandomWalker<State, RandomWalkerInput>;
 }

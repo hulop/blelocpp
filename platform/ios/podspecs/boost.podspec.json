@@ -1,6 +1,6 @@
 {
   "name": "boost",
- "version": "1.57.0",
+ "version": "1.61.0",
  "summary": "Boost provides free peer-reviewed portable C++ source libraries.",
  "homepage": "http://www.boost.org",
  "license": {
@@ -9,7 +9,7 @@
             },
  "authors": "Rene Rivera",
  "source": {
-             "http": "http://sourceforge.net/projects/boost/files/boost/1.57.0/boost_1_57_0.tar.gz"
+             "http": "http://sourceforge.net/projects/boost/files/boost/1.61.0/boost_1_61_0.tar.gz"
            },
  "platforms": {
                 "ios": "4.0",

@@ -54,7 +54,6 @@ namespace loc {
         double y() const;
         double floor() const;
         double z() const;
-        
          
         double orientation() const;
         double velocity() const;
@@ -159,6 +158,7 @@ namespace loc {
         double stdOrientation_ = 3.0/180*M_PI; // [radian/s]
         
     public:
+        using Ptr = std::shared_ptr<PoseProperty>;
         
         PoseProperty& meanVelocity(double meanVelocity);
         double meanVelocity() const;

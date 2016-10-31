@@ -26,9 +26,7 @@
 
 #include "StreamParticleFilter.hpp"
 #include "StreamLocalizer.hpp"
-
 #include "ObservationModel.hpp"
-
 #include "SystemModel.hpp"
 
 #include "Resampler.hpp"
@@ -39,11 +37,12 @@
 #include "PoseRandomWalker.hpp"
 
 #include "ArrayUtils.hpp"
-
 #include "DataStore.hpp"
 #include "DataLogger.hpp"
 #include "BaseBeaconFilter.hpp"
 #include "CleansingBeaconFilter.hpp"
+
+#include "LocException.hpp"
 
 namespace loc{
 
@@ -56,6 +55,8 @@ namespace loc{
         int resetWaitingTimeMS = 100; // milliseconds
         long previousTimestampMotion = 0;
         long timestampIntervalLimit = 2000; // 2.0[s]
+        
+        double mEssThreshold = 10000; //effective sampling size (typically nNumStates/2. nNumState<=essThreshold for frequent resampling.)
         Location mLocStdevLB;
         
         MixtureParameters mMixParams;
@@ -68,7 +69,7 @@ namespace loc{
         std::shared_ptr<Pedometer> mPedometer;
         std::shared_ptr<OrientationMeter> mOrientationmeter;
 
-        std::shared_ptr<SystemModel<State, PoseRandomWalkerInput>> mRandomWalker;
+        std::shared_ptr<SystemModel<State, SystemModelInput>> mRandomWalker;
 
         std::shared_ptr<ObservationModel<State, Beacons>> mObservationModel;
         std::shared_ptr<Resampler<State>> mResampler;
@@ -76,6 +77,7 @@ namespace loc{
         std::shared_ptr<BeaconFilter> mBeaconFilter;
 
         std::shared_ptr<ObservationDependentInitializer<State, Beacons>> mMetro;
+        std::shared_ptr<PosteriorResampler<State>> mPostResampler;
         std::shared_ptr<RandomGenerator> mRand;
         
         void (*mFunctionCalledAfterUpdate)(Status*) = NULL;
@@ -127,9 +129,12 @@ namespace loc{
         void predictMotionState(long timestamp){
             initializeStatusIfZero();
 
-            if(previousTimestampMotion==0) previousTimestampMotion = timestamp;
+            if(previousTimestampMotion==0){
+                previousTimestampMotion = timestamp;
+                return;
+            }
 
-            PoseRandomWalkerInput input;
+            SystemModelInput input;
             input.timestamp(timestamp);
             input.previousTimestamp(previousTimestampMotion);
 
@@ -187,7 +192,9 @@ namespace loc{
             // Copy location of generated states to the existing states.
             for(int i=0; i<nGen; i++){
                 auto& st = statesGen.at(i);
-                if(mRand->nextDouble() <  computeStateAcceptProbability(locMean, st)){
+                //double p = computeStateAcceptProbability(locMean, st); //compate mean state and new state.
+                double p = computeStateAcceptProbability(states, st); //compare all states and new state.
+                if(mRand->nextDouble() < p ){
                     int idx = indices.at(i);
                     states.at(idx).copyLocation(st);
                 }
@@ -195,20 +202,39 @@ namespace loc{
         }
         
         double computeStateAcceptProbability(const Location& locMean, const Location& locNew){
-            double rejectDist = mMixParams.rejectDistance;
             double floorDiff = Location::floorDifference(locMean, locNew);
             double dist = Location::distance(locMean, locNew);
-            
-            if(floorDiff>0.5){
+            if(mMixParams.rejectFloorDifference() < floorDiff){
                 return 1;
             }
-            if(dist>rejectDist){
+            if(mMixParams.rejectDistance < dist){
                 return 1;
             }
             return 0;
         }
         
-
+        double computeStateAcceptProbability(const States& states, const Location& locNew){
+            size_t n = states.size();
+            double sumDist = 0;
+            double sumIsFloorDifferent = 0;
+            for(const auto& s: states){
+                sumDist += Location::distance(s, locNew);
+                double isFloorDifferent = Location::floorDifference(s, locNew)>0.5 ? 1 : 0;
+                sumIsFloorDifferent += isFloorDifferent;
+            }
+            double meanDist = sumDist/n;
+            double meanIsFloorDifferent = sumIsFloorDifferent/n;
+            
+            if(mMixParams.rejectFloorDifference() < meanIsFloorDifferent){
+                return 1;
+            }
+            if(mMixParams.rejectDistance < meanDist){
+                return 1;
+            }
+            return 0;
+        }
+        
+        
         void doFiltering(const Beacons& beacons){
 
             if(beacons.size()==0){
@@ -222,6 +248,7 @@ namespace loc{
             // Logging before likelihood computation
             logStates(*states, "before_likelihood_states_"+std::to_string(timestamp)+".csv");
 
+            // Mix new states generated from observations into particles
             mixStates(*states, beacons, mMixParams.mixtureProbability);
             
             // Compute log likelihood
@@ -232,8 +259,10 @@ namespace loc{
                 vLogLLs[i] = vLogLLsAndMDists.at(i).at(0);
                 mDists[i] = vLogLLsAndMDists.at(i).at(1);
             }
-
+            
+            // Apply alpha-weaken
             vLogLLs = weakenLogLikelihoods(vLogLLs, mAlphaWeaken);
+            
             // Set negative log-likelihoods
             for(int i=0; i<vLogLLs.size(); i++){
                 State& s = states->at(i);
@@ -248,31 +277,68 @@ namespace loc{
                 weights[i] = weights[i] * (states->at(i).weight());
                 sumWeights += weights[i];
             }
-            assert(sumWeights>0);
+            if(sumWeights<=0){
+                LocException ex("sum(weights) <= 0");
+                for(auto logLL: vLogLLs){
+                    if(logLL == 0){
+                        ex << boost::error_info<struct error_info, std::string>("logLikelihood == 0. (Probably, input beacons are unknown.)");
+                        break;
+                    }
+                }
+                BOOST_THROW_EXCEPTION(ex);
+            }
             // Renormalized
             for(int i=0; i<weights.size(); i++){
                 weights[i] = weights[i]/sumWeights;
                 states->at(i).weight(weights[i]);
             }
-
+            
             // Logging after likelihood computation
             logStates(*states, "after_likelihood_states_"+std::to_string(timestamp)+".csv");
 
-            States* statesNew = mResampler->resample(*states, &weights[0]);
-            // Assign equal weights after resampling
-            for(int i=0; i<weights.size(); i++){
-                double weight = 1.0/(weights.size());
-                statesNew->at(i).weight(weight);
+            // Resampling step
+            double ess = computeESS(weights);
+            States* statesNew;
+            if(ess<=mEssThreshold){
+                statesNew = mResampler->resample(*states, &weights[0]);
+                // Assign equal weights after resampling
+                for(int i=0; i<weights.size(); i++){
+                    double weight = 1.0/(weights.size());
+                    statesNew->at(i).weight(weight);
+                }
+            }else{
+                statesNew = new States(*states);
             }
+            
+            // Posterior-resampling
+            if(mPostResampler){
+                *statesNew = mPostResampler->resample(*statesNew);
+            }
+            
             status->states(statesNew);
             if(mOptVerbose){
                 std::cout << "resampling at t=" << beacons.timestamp() << std::endl;
             }
-
             // Logging after resampling
             logStates(*statesNew, "resampled_states_"+std::to_string(timestamp)+".csv");
+            
+            // Notify registered instances of the update of particle fiter
+            this->notifyObservationUpdated();
         }
 
+        void notifyObservationUpdated(){
+            mRandomWalker->notifyObservationUpdated();
+        }
+        
+        double computeESS(std::vector<double> weights){
+            double val = 0;
+            for(double w : weights){
+                val += w*w;
+            }
+            double ess = 1.0/val;
+            return ess;
+        }
+        
         Beacons filterBeacons(const Beacons& beacons){
             size_t nBefore = beacons.size();
             const Beacons& beaconsCleansed = cleansingBeaconFilter.filter(beacons);
@@ -400,6 +466,9 @@ namespace loc{
             const Beacons& beaconsFiltered = filterBeacons(beacons);
             std::stringstream ss;
             ss << "Status was initialized by ";
+            if(beaconsFiltered.size() == 0){
+                BOOST_THROW_EXCEPTION(LocException("beaconsFiltered.size==0 in resetStatus(beacons)."));
+            }
             States statesTmp = sampleStatesByObservation(mNumStates, beaconsFiltered);
             States* statesNew = new States(statesTmp);
             status->states(statesNew);
@@ -412,8 +481,7 @@ namespace loc{
             std::cout << ss.str() << std::endl;
             return false;
         }
-
-
+        
         States sampleStatesByObservation(int n, const Beacons& beacons){
             const Beacons& beaconsFiltered = filterBeacons(beacons);
             States statesNew;
@@ -426,6 +494,40 @@ namespace loc{
                 for(int i=0; i<states.size(); i++){
                     statesNew.at(i).rssiBias(states.at(i).rssiBias());
                 }
+            }else{
+                statesNew = mStatusInitializer->resetStates(n, beaconsFiltered);
+            }
+            return statesNew;
+        }
+        
+        bool resetStatus(const Location& location, const Beacons& beacons){
+            initializeStatusIfZero();
+            const Beacons& beaconsFiltered = filterBeacons(beacons);
+            std::stringstream ss;
+            ss << "Status was initialized by ";
+            States statesTmp = sampleStatesByLocationAndObservation(mNumStates, location, beaconsFiltered);
+            States* statesNew = new States(statesTmp);
+            status->states(statesNew);
+            status->timestamp(beacons.timestamp());
+            if(mMetro){
+                ss << "an ObservationDependentInitializer.";
+            }else{
+                ss << "a StatusInitializer.";
+            }
+            std::cout << ss.str() << std::endl;
+            return false;
+        }
+
+        
+        States sampleStatesByLocationAndObservation(int n, const Location& location, const Beacons& beacons){
+            const Beacons& beaconsFiltered = filterBeacons(beacons);
+            States statesNew;
+            if(mMetro){
+                mMetro->input(beaconsFiltered);
+                statesNew = mMetro->sampling(n, location);
+                //States states = mMetro->sampling(n);
+                //std::vector<Location> locations(states.begin(), states.end());
+                //statesNew = mStatusInitializer->initializeStatesFromLocations(locations);
             }else{
                 statesNew = mStatusInitializer->resetStates(n, beaconsFiltered);
             }
@@ -464,13 +566,23 @@ namespace loc{
         }
 
         bool checkIfDoFiltering() const{
-            auto states = status->states();
-            double variance2D = computeStates2DVariance(*states);
             double variance2DLowerBound = std::pow(mLocStdevLB.x(), 2)*std::pow(mLocStdevLB.y(),2);
+            double stdZLB = mLocStdevLB.z();
+            double stdFloorLB = mLocStdevLB.floor();
+            
+            std::shared_ptr<States> states = status->states();
+            double variance2D = computeStates2DVariance(*states);
+            Location stdevLoc = Location::standardDeviation(*states);
+            
             if(mOptVerbose){
-                std::cout<<"variance2D="<<variance2D<<", "<<"variance2DLowerBound="<<variance2DLowerBound<<std::endl;
+                std::cout<<"var2D="<<variance2D<<","<<"var2DLB="<<variance2DLowerBound
+                << ",stdZ=" << stdevLoc.z() << ",stdZLB=" << stdZLB
+                << ",stdFloor=" << stdevLoc.floor() << ",stdFloorLB=" << stdFloorLB
+                << std::endl;
             }
-            if(variance2D<variance2DLowerBound){
+            if(variance2D <= variance2DLowerBound
+               && stdevLoc.z() <= stdZLB
+               && stdevLoc.floor() <= stdFloorLB){
                 return false;
             }else{
                 return true;
@@ -508,6 +620,10 @@ namespace loc{
             mAlphaWeaken = alphaWeaken;
         }
         
+        void essThreshold(double essThreshold){
+            mEssThreshold = essThreshold;
+        }
+        
         void mixtureParameters(MixtureParameters mixParams){
             mMixParams = mixParams;
         }
@@ -524,7 +640,7 @@ namespace loc{
             mOrientationmeter = orientationMeter;
         }
 
-        void systemModel(std::shared_ptr<SystemModel<State, PoseRandomWalkerInput>> randomWalker){
+        void systemModel(std::shared_ptr<SystemModel<State, SystemModelInput>> randomWalker){
             mRandomWalker = randomWalker;
         }
 
@@ -547,7 +663,11 @@ namespace loc{
         void observationDependentInitializer(std::shared_ptr<ObservationDependentInitializer<State, Beacons>> metro){
             mMetro = metro;
         }
-
+        
+        void posteriorResampler(std::shared_ptr<PosteriorResampler<State>> postRes){
+            mPostResampler = postRes;
+        }
+        
     };
 
 
@@ -569,6 +689,11 @@ namespace loc{
 
     StreamParticleFilter& StreamParticleFilter::putBeacons(const Beacons beacons) {
         impl->putBeacon(beacons);
+        return *this;
+    }
+    
+    StreamParticleFilter& StreamParticleFilter::putHeading(const Heading heading) {
+        // Pass
         return *this;
     }
 
@@ -603,6 +728,11 @@ namespace loc{
     bool StreamParticleFilter::resetStatus(const Beacons &beacons){
         return impl->resetStatus(beacons);
     }
+    
+    bool StreamParticleFilter::resetStatus(const Location &location, const Beacons &beacons){
+        return impl->resetStatus(location, beacons);
+    }
+
 
     bool StreamParticleFilter::refineStatus(const Beacons& beacons){
         return impl->refineStatus(beacons);
@@ -620,6 +750,11 @@ namespace loc{
 
     StreamParticleFilter& StreamParticleFilter::alphaWeaken(double alphaWeaken){
         impl->alphaWeaken(alphaWeaken);
+        return *this;
+    }
+    
+    StreamParticleFilter& StreamParticleFilter::effectiveSampleSizeThreshold(double essThreshold){
+        impl->essThreshold(essThreshold);
         return *this;
     }
 
@@ -643,7 +778,7 @@ namespace loc{
         return *this;
     }
 
-    StreamParticleFilter& StreamParticleFilter::systemModel(std::shared_ptr<SystemModel<State, PoseRandomWalkerInput>> randomWalker){
+    StreamParticleFilter& StreamParticleFilter::systemModel(std::shared_ptr<SystemModel<State, SystemModelInput>> randomWalker){
         impl->systemModel(randomWalker);
         return *this;
     }
@@ -670,6 +805,11 @@ namespace loc{
 
     StreamParticleFilter& StreamParticleFilter::observationDependentInitializer(std::shared_ptr<ObservationDependentInitializer<State, Beacons>> metro){
         impl->observationDependentInitializer(metro);
+        return * this;
+    }
+    
+    StreamParticleFilter& StreamParticleFilter::posteriorResampler(PosteriorResampler<State>::Ptr posRes){
+        impl->posteriorResampler(posRes);
         return * this;
     }
 

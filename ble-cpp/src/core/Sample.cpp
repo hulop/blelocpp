@@ -172,7 +172,7 @@ namespace loc{
             for(const BLEBeacon& ble: bleBeacons){
                 ss1 << "(" << ble.major() << "," << ble.minor() <<"),";
             }
-            throw new std::runtime_error("No sample contains beacon signals from the registered beacons");
+            BOOST_THROW_EXCEPTION(LocException("No sample contains beacon signals from the registered beacons"));
         }
         return smps;
     }

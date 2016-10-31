@@ -23,7 +23,6 @@
 #ifndef RandomGenerator_hpp
 #define RandomGenerator_hpp
 
-#include <assert.h>
 #include <stdio.h>
 #include <random>
 #include <algorithm>
@@ -38,6 +37,7 @@ namespace loc{
         std::normal_distribution<> normalDistribution;
         
     public:
+        
         RandomGenerator() = default;
         ~RandomGenerator() = default;
         
@@ -45,6 +45,7 @@ namespace loc{
         double nextDouble();
         double nextGaussian();
         double nextTruncatedGaussian(double mean, double std, double min, double max);
+        double nextWrappedNormal(double mean, double std);
         std::vector<int> randomSet(int n, int k);
     };
     

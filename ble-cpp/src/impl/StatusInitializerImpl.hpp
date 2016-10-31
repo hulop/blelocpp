@@ -24,7 +24,6 @@
 #define StatusInitializerImpl_hpp
 
 #include <stdio.h>
-#include <assert.h>
 #include <cmath>
 #include <memory>
 
@@ -43,9 +42,6 @@ namespace loc{
         RandomGenerator rand;
         std::shared_ptr<DataStore> mDataStore;
         
-        int nPerturbationMax = 100;
-        double mRadius2D = 10; //[m]
-
         template<class Tstate>
         Tstate perturbLocation(const Tstate& location, const Building& building);
         template<class Tstate>
@@ -57,6 +53,9 @@ namespace loc{
         States initializeStatesFromPoses(Poses poses);
         
     public:
+        int nPerturbationMax = 100;
+        double mRadius2D = 10; //[m]
+
         void beaconEffectiveRadius2D(double);
         StatusInitializerImpl& dataStore(std::shared_ptr<DataStore> dataStore);
         StatusInitializerImpl& poseProperty(PoseProperty poseProperty);
@@ -87,6 +86,7 @@ namespace loc{
         
         States initializeStatesFromLocations(const std::vector<Location>& locations);
         Locations extractLocationsCloseToBeacons(const std::vector<Beacon>& beacons, double radius2D) const;
+        Locations extractLocationsCloseToBeaconsWithPerturbation(const std::vector<Beacon> &beacons, double radius2D);
     };
     
     // Implementation

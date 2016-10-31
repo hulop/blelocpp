@@ -21,8 +21,13 @@
  *******************************************************************************/
 
 #include "Location.hpp"
+#include "Pose.hpp"
+#include "State.hpp"
 #include <sstream>
 #include <cmath>
+
+#include <opencv2/core/core.hpp>
+#include <opencv2/flann/flann.hpp>
 
 namespace loc{
     
@@ -71,7 +76,7 @@ namespace loc{
     
     std::string Location::toString() const{
         std::stringstream stream;
-        stream << x_ << ","<< y_ << "," << z_ << "," << floor_ ;
+        stream << x() << ","<< y() << "," << z() << "," << floor();
         std::string str = stream.str();
         return str;
     }
@@ -183,10 +188,9 @@ namespace loc{
     
     // for string stream
     std::ostream& operator<<(std::ostream&os, const Location& location){
-        os << location.x() <<"," << location.y() <<"," <<location.z() <<"," <<location.floor();
+        os << location.toString();
         return os;
     }
-    
     
     // LocationProperty
     LocationProperty& LocationProperty::stdX(double stdX){
@@ -206,5 +210,92 @@ namespace loc{
     double LocationProperty::stdY() const{
         return stdY_;
     }
+    
+    
+    template <class Tlocation>
+    int Location::findKNNDensestLocationIndex(const std::vector<Tlocation>& locs, int knn, double floorCoeff){
+        int n = (int) locs.size();
+        if(knn<=0){
+            knn = (int) n/10;
+        }
+        cv::Mat data = cv::Mat::zeros(n, 4, CV_32FC1);
+        for(int i=0; i<n; i++){
+            data.at<float>(i,0) = locs.at(i).x();
+            data.at<float>(i,1) = locs.at(i).y();
+            data.at<float>(i,2) = locs.at(i).z();
+            data.at<float>(i,3) = floorCoeff*locs.at(i).floor();
+        }
+        cv::flann::Index idx(data, cv::flann::KDTreeIndexParams(), cvflann::FLANN_DIST_EUCLIDEAN);
+        
+        std::vector<double> knn_dists;
+        for(int i=0; i<n; i++){
+            auto query = data.row(i);
+            std::vector<int> indices;
+            std::vector<float> dists;
+            idx.knnSearch(query, indices, dists, knn);
+            double dist =  dists.back();
+            knn_dists.push_back(dist);
+        }
+        
+        auto result = std::min_element(knn_dists.begin(), knn_dists.end());
+        auto index = std::distance(knn_dists.begin(), result);
+        return index;
+    }
+    
+    template <class Tlocation, class Tstate>
+    int Location::findClosestLocationIndex(const Tlocation& queryLocation, const std::vector<Tstate>& locs, double floorCoeff){
+        int n = (int) locs.size();
+        cv::Mat data = cv::Mat::zeros(n, 4, CV_32FC1);
+        for(int i=0; i<n; i++){
+            data.at<float>(i,0) = locs.at(i).x();
+            data.at<float>(i,1) = locs.at(i).y();
+            data.at<float>(i,2) = locs.at(i).z();
+            data.at<float>(i,3) = floorCoeff*locs.at(i).floor();
+        }
+        cv::flann::Index idx(data, cv::flann::KDTreeIndexParams(), cvflann::FLANN_DIST_EUCLIDEAN);
+        
+        std::vector<double> knn_dists;
+        
+        cv::Mat query = data.row(0).clone();
+        query.at<float>(0) = queryLocation.x();
+        query.at<float>(1) = queryLocation.y();
+        query.at<float>(2) = queryLocation.z();
+        query.at<float>(3) = floorCoeff * queryLocation.floor();
+
+        std::vector<int> indices;
+        std::vector<float> dists;
+        idx.knnSearch(query, indices, dists, 1);
+        int index = indices.at(0);
+        return index;
+    }
+    
+    template <class Tlocation>
+    int Location::findKDEDensestLocationIndex(const std::vector<Tlocation>& locs, double bandwidth, double floorCoeff){
+        int n = (int) locs.size();
+        std::vector<double> knn_dists;
+        for(int i=0; i<n; i++){
+            auto loc = locs.at(i);
+            double dist = 0;
+            for(int j=0; j<n; j++){
+                double d = Location::distance(loc, locs.at(j)) + floorCoeff*Location::floorDifference(loc, locs.at(j));
+                dist += std::exp(-d*d/(bandwidth*bandwidth));
+            }
+            knn_dists.push_back(dist);
+        }
+        
+        auto result = std::max_element(knn_dists.begin(), knn_dists.end());
+        auto index = std::distance(knn_dists.begin(), result);
+        return index;
+    }
+    
+    template int Location::findKNNDensestLocationIndex<Location>(const std::vector<Location>& locs, int knn, double floorCoeff);
+    template int Location::findKNNDensestLocationIndex<State>(const std::vector<State>& locs, int knn, double floorCoeff);
+    template int Location::findKNNDensestLocationIndex<Pose>(const std::vector<Pose>& locs, int knn, double floorCoeff);
+    
+    template int Location::findClosestLocationIndex<Location, State>(const Location& queryLocation, const std::vector<State>& locs, double floorCoeff);
+    template int Location::findClosestLocationIndex<Pose, State>(const Pose& queryLocation, const std::vector<State>& locs, double floorCoeff);
+    template int Location::findClosestLocationIndex<State, State>(const State& queryLocation, const std::vector<State>& locs, double floorCoeff);
+    
+    template int Location::findKDEDensestLocationIndex<State>(const std::vector<State>& locs, double bandwidth, double floorCoeff);
     
 }
