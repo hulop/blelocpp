@@ -146,10 +146,6 @@
 		7E6F25CC1C0F1D77007A97A1 /* PoseRandomWalker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F25161C0F1D76007A97A1 /* PoseRandomWalker.cpp */; };
 		7E6F25CD1C0F1D77007A97A1 /* PoseRandomWalker.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F25171C0F1D76007A97A1 /* PoseRandomWalker.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E6F25CE1C0F1D77007A97A1 /* PoseRandomWalker.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F25171C0F1D76007A97A1 /* PoseRandomWalker.hpp */; };
-		7E6F25CF1C0F1D77007A97A1 /* PoseRandomWalkerInBuilding.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F25181C0F1D76007A97A1 /* PoseRandomWalkerInBuilding.cpp */; };
-		7E6F25D01C0F1D77007A97A1 /* PoseRandomWalkerInBuilding.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F25181C0F1D76007A97A1 /* PoseRandomWalkerInBuilding.cpp */; };
-		7E6F25D11C0F1D77007A97A1 /* PoseRandomWalkerInBuilding.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F25191C0F1D76007A97A1 /* PoseRandomWalkerInBuilding.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		7E6F25D21C0F1D78007A97A1 /* PoseRandomWalkerInBuilding.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F25191C0F1D76007A97A1 /* PoseRandomWalkerInBuilding.hpp */; };
 		7E6F25D31C0F1D78007A97A1 /* RandomWalker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F251A1C0F1D76007A97A1 /* RandomWalker.cpp */; };
 		7E6F25D41C0F1D78007A97A1 /* RandomWalker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F251A1C0F1D76007A97A1 /* RandomWalker.cpp */; };
 		7E6F25D51C0F1D78007A97A1 /* RandomWalker.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F251B1C0F1D76007A97A1 /* RandomWalker.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -195,7 +191,6 @@
 		7EDEDC121D1CCCD800AC111A /* BasicLocalizer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7EDEDC0B1D1A5E1600AC111A /* BasicLocalizer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7EF5DB421D46F73300D22C02 /* LogUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EF5DB401D46F73300D22C02 /* LogUtil.cpp */; };
 		7EF5DB431D46F73300D22C02 /* LogUtil.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7EF5DB411D46F73300D22C02 /* LogUtil.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		EF712544F9413826E173FEC8 /* libPods-bleloc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5D651D528829A828244BD797 /* libPods-bleloc.a */; };
 		F52FFB891C08861800508330 /* libopencv_contrib.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F52FFB791C08861800508330 /* libopencv_contrib.dylib */; };
 		F52FFB8A1C08861800508330 /* libopencv_core.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F52FFB7A1C08861800508330 /* libopencv_core.dylib */; };
 		F52FFB8B1C08861800508330 /* libopencv_features2d.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F52FFB7B1C08861800508330 /* libopencv_features2d.dylib */; };
@@ -317,8 +312,6 @@
 		7E6F25131C0F1D76007A97A1 /* ObservationModelTrainer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ObservationModelTrainer.hpp; sourceTree = "<group>"; };
 		7E6F25161C0F1D76007A97A1 /* PoseRandomWalker.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = PoseRandomWalker.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		7E6F25171C0F1D76007A97A1 /* PoseRandomWalker.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = PoseRandomWalker.hpp; sourceTree = "<group>"; };
-		7E6F25181C0F1D76007A97A1 /* PoseRandomWalkerInBuilding.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = PoseRandomWalkerInBuilding.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		7E6F25191C0F1D76007A97A1 /* PoseRandomWalkerInBuilding.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = PoseRandomWalkerInBuilding.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		7E6F251A1C0F1D76007A97A1 /* RandomWalker.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = RandomWalker.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		7E6F251B1C0F1D76007A97A1 /* RandomWalker.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = RandomWalker.hpp; sourceTree = "<group>"; };
 		7E6F251C1C0F1D76007A97A1 /* StatusInitializerImpl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StatusInitializerImpl.cpp; sourceTree = "<group>"; };
@@ -410,7 +403,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EF712544F9413826E173FEC8 /* libPods-bleloc.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -580,8 +572,6 @@
 				7E6F25131C0F1D76007A97A1 /* ObservationModelTrainer.hpp */,
 				7E6F25161C0F1D76007A97A1 /* PoseRandomWalker.cpp */,
 				7E6F25171C0F1D76007A97A1 /* PoseRandomWalker.hpp */,
-				7E6F25181C0F1D76007A97A1 /* PoseRandomWalkerInBuilding.cpp */,
-				7E6F25191C0F1D76007A97A1 /* PoseRandomWalkerInBuilding.hpp */,
 				7E6F251A1C0F1D76007A97A1 /* RandomWalker.cpp */,
 				7E6F251B1C0F1D76007A97A1 /* RandomWalker.hpp */,
 				7E6F25201C0F1D76007A97A1 /* SystemModel.hpp */,
@@ -777,7 +767,6 @@
 				7E6F25C51C0F1D77007A97A1 /* ObservationModelTrainer.hpp in Headers */,
 				7E6F25491C0F1D76007A97A1 /* Attitude.hpp in Headers */,
 				7E6F25F91C0F1D79007A97A1 /* ArrayUtils.hpp in Headers */,
-				7E6F25D11C0F1D77007A97A1 /* PoseRandomWalkerInBuilding.hpp in Headers */,
 				7E6F25A31C0F1D77007A97A1 /* StreamParticleFilter.hpp in Headers */,
 				7E6F25B51C0F1D77007A97A1 /* GaussianProcess.hpp in Headers */,
 				7E6F25871C0F1D76007A97A1 /* DataUtils.hpp in Headers */,
@@ -868,7 +857,6 @@
 				7E6F25541C0F1D76007A97A1 /* bleloc.h in Headers */,
 				7E6F25601C0F1D76007A97A1 /* Location.hpp in Headers */,
 				7E6F25381C0F1D76007A97A1 /* BaseBeaconFilter.hpp in Headers */,
-				7E6F25D21C0F1D78007A97A1 /* PoseRandomWalkerInBuilding.hpp in Headers */,
 				7E6F25701C0F1D76007A97A1 /* Sample.hpp in Headers */,
 				7E6F259C1C0F1D77007A97A1 /* StatusInitializer.hpp in Headers */,
 				7E6F257E1C0F1D76007A97A1 /* DataLogger.hpp in Headers */,
@@ -1112,7 +1100,6 @@
 				FB71CE561C475B4600A4DB67 /* BeaconFilterChain.cpp in Sources */,
 				7E6F25AF1C0F1D77007A97A1 /* ImageHolder.cpp in Sources */,
 				FBEB01E91D756F1300CB808D /* SystemModelInBuilding.cpp in Sources */,
-				7E6F25CF1C0F1D77007A97A1 /* PoseRandomWalkerInBuilding.cpp in Sources */,
 				7E6F25751C0F1D76007A97A1 /* Status.cpp in Sources */,
 				7E6F25A11C0F1D77007A97A1 /* StreamParticleFilter.cpp in Sources */,
 			);
@@ -1153,7 +1140,6 @@
 				7E6F25721C0F1D76007A97A1 /* State.cpp in Sources */,
 				7E6F25D81C0F1D78007A97A1 /* StatusInitializerImpl.cpp in Sources */,
 				7E6F25761C0F1D76007A97A1 /* Status.cpp in Sources */,
-				7E6F25D01C0F1D77007A97A1 /* PoseRandomWalkerInBuilding.cpp in Sources */,
 				7E6F25B81C0F1D77007A97A1 /* GaussianProcessLDPLMultiModel.cpp in Sources */,
 				7E6F25A21C0F1D77007A97A1 /* StreamParticleFilter.cpp in Sources */,
 				7E6F25481C0F1D76007A97A1 /* Attitude.cpp in Sources */,

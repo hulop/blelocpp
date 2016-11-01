@@ -42,6 +42,7 @@ namespace loc{
         }
         
         if(mPedometer && mOrientationMeter){
+            double nSteps = mPedometer->getNSteps();
             double movLevel = RandomWalkerMotion<Ts,Tin>::movingLevel();
             double yaw = mOrientationMeter->getYaw();
             
@@ -81,8 +82,8 @@ namespace loc{
             
             // Add noise to (actually) static parameters just after resampling
             if(wasResampled){
-                // Update only if a device is moving
-                if(movLevel > 0){
+                // Update only if a device is moving by walking
+                if(nSteps > 0){
                     double dt_long = (t_cur - previousTimestampResample) * input.timeUnit(); // time interval between resampling steps
                     double sqdt_long = std::sqrt(dt_long);
                     // Perturb variables in State (orientationBias, rssiBias)

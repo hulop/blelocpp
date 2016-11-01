@@ -60,10 +60,10 @@ namespace loc{
         //std::cout << "predict: dTime=" << dTime << ", nSteps=" << nSteps << std::endl;
         
         // Perturb variables in State
-        //if(nSteps>0 || mProperty.doesUpdateWhenStopping() ){
+        if(movLevel>0 || mProperty.doesUpdateWhenStopping() ){
             state.orientationBias(state.orientationBias() + stateProperty.diffusionOrientationBias()*randomGenerator.nextGaussian()*dTime );
             state.rssiBias(randomGenerator.nextTruncatedGaussian(state.rssiBias(), stateProperty.diffusionRssiBias()*dTime , stateProperty.minRssiBias(), stateProperty.maxRssiBias()));
-        //}
+        }
         
         // Update orientation
         double previousOrientation = state.orientation();

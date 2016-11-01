@@ -24,6 +24,111 @@
 
 namespace loc{
     
+    // Property
+    SystemModelInBuildingProperty& SystemModelInBuildingProperty::probabilityUp(double probabilityUp){
+        probabilityUp_ = probabilityUp;
+        return *this;
+    }
+    
+    SystemModelInBuildingProperty& SystemModelInBuildingProperty::probabilityDown(double probabilityDown){
+        probabilityDown_ = probabilityDown;
+        return *this;
+    }
+    
+    SystemModelInBuildingProperty& SystemModelInBuildingProperty::probabilityStay(double probabilityStay){
+        probabilityStay_ = probabilityStay;
+        return *this;
+    }
+    
+    SystemModelInBuildingProperty& SystemModelInBuildingProperty::wallCrossingAliveRate(double wallCrossingAliveRate){
+        wallCrossingAliveRate_ = wallCrossingAliveRate;
+        return *this;
+    }
+    
+    SystemModelInBuildingProperty& SystemModelInBuildingProperty::maxIncidenceAngle(double maxIncidenceAngle){
+        maxIncidenceAngle_ = maxIncidenceAngle;
+        return *this;
+    }
+    
+    SystemModelInBuildingProperty& SystemModelInBuildingProperty::velocityRateFloor(double velocityRateFloor){
+        velocityRateFloor_ = velocityRateFloor;
+        return *this;
+    }
+    
+    SystemModelInBuildingProperty& SystemModelInBuildingProperty::velocityRateStair(double velocityRateStair){
+        velocityRateStair_ = velocityRateStair;
+        return *this;
+    }
+    
+    SystemModelInBuildingProperty& SystemModelInBuildingProperty::velocityRateElevator(double velocityRateElevator){
+        velocityRateElevator_ = velocityRateElevator;
+        return *this;
+    }
+    
+    SystemModelInBuildingProperty& SystemModelInBuildingProperty::velocityRateEscalator(double velocityRateEscalator){
+        velocityRateEscalator_ = velocityRateEscalator;
+        return *this;
+    }
+    
+    SystemModelInBuildingProperty& SystemModelInBuildingProperty::weightDecayRate(double weightDecayRate){
+        weightDecayRate_ = weightDecayRate;
+        return *this;
+    }
+    
+    SystemModelInBuildingProperty& SystemModelInBuildingProperty::probabilityFloorJump(double probabilityFloorJump){
+        probabilityFloorJump_ = probabilityFloorJump;
+        return *this;
+    }
+    
+    double SystemModelInBuildingProperty::probabilityUp() const{
+        return probabilityUp_;
+    }
+    
+    double SystemModelInBuildingProperty::probabilityDown() const{
+        return probabilityDown_;
+    }
+    
+    double SystemModelInBuildingProperty::probabilityStay() const{
+        return probabilityStay_;
+    }
+    
+    double SystemModelInBuildingProperty::wallCrossingAliveRate() const{
+        return wallCrossingAliveRate_;
+    }
+    
+    double SystemModelInBuildingProperty::maxIncidenceAngle() const{
+        return maxIncidenceAngle_;
+    }
+    
+    double SystemModelInBuildingProperty::velocityRateFloor() const{
+        return velocityRateFloor_;
+    }
+    
+    double SystemModelInBuildingProperty::velocityRateStair() const{
+        return velocityRateStair_;
+    }
+    
+    double SystemModelInBuildingProperty::velocityRateElevator() const{
+        return velocityRateElevator_;
+    }
+    
+    double SystemModelInBuildingProperty::velocityRateEscalator() const{
+        return velocityRateEscalator_;
+    }
+    
+    double SystemModelInBuildingProperty::weightDecayRate() const{
+        return weightDecayRate_;
+    }
+    
+    int SystemModelInBuildingProperty::maxTrial() const{
+        return maxTrial_;
+    }
+    
+    double SystemModelInBuildingProperty::probabilityFloorJump() const{
+        return probabilityFloorJump_;
+    }
+    
+    
     // Function definitions
     
     template<class Tstate, class Tinput>
@@ -234,7 +339,7 @@ namespace loc{
             double orientation = atan2(stateNew.y() - state.y(), stateNew.x() - state.x());
             double angle = mBuilding->estimateWallAngle(state, stateNew);
             double orientationDiff = Pose::computeOrientationDifference(orientation, angle);
-            if(2*M_PI < std::abs(orientationDiff)){
+            if(2.0*M_PI < std::abs(orientationDiff)){
                 BOOST_THROW_EXCEPTION(LocException("orientationDifference is out of range."));
             }
             if(std::abs(orientationDiff) < mProperty->maxIncidenceAngle()){
@@ -278,7 +383,7 @@ namespace loc{
         }
         try{
             // Jumping move
-            if(mRandomGenerator.nextDouble() < mProperty->probabilityJump()){
+            if(mRandomGenerator.nextDouble() < mProperty->probabilityFloorJump()){
                 Tstate stateTmp = moveFloorJump(state, input);
                 return moveOnFloor(stateTmp, input);
             }

@@ -26,29 +26,61 @@
 #include <stdio.h>
 #include "RandomWalker.hpp"
 #include "RandomWalkerMotion.hpp"
-#include "PoseRandomWalkerInBuilding.hpp"
 #include "Building.hpp"
 
 namespace loc{
     
-    class SystemModelInBuildingProperty: public PoseRandomWalkerInBuildingProperty{
+    class SystemModelInBuildingProperty{
+        double probabilityUp_ = 0.25;
+        double probabilityDown_ = 0.25;
+        double probabilityStay_ = 0.5;
+        
+        double probabilityFloorJump_ = 0.0;
+        
+        double wallCrossingAliveRate_ = 1.0; // fixed value
+        double maxIncidenceAngle_ = 45/180*M_PI;
+        
+        // Field velocity rate
+        double velocityRateFloor_ = 1.0;
+        double velocityRateStair_ = 0.5;
+        double velocityRateElevator_ = 0.5;
+        //double velocityRateEscalator_ = 0.5; //0.5 is too small.
+        double velocityRateEscalator_ = 1.0;
+        
+        double weightDecayRate_ = 0.9;
+        
+        int maxTrial_ = 1; // fixed value
+        
     public:
+        
         using Ptr = std::shared_ptr<SystemModelInBuildingProperty>;
         
-        SystemModelInBuildingProperty(const PoseRandomWalkerInBuildingProperty& property):
-        PoseRandomWalkerInBuildingProperty(property){}
+        SystemModelInBuildingProperty& probabilityUp(double probabilityUp);
+        SystemModelInBuildingProperty& probabilityDown(double probabilityDown);
+        SystemModelInBuildingProperty& probabilityStay(double probabilityStay);
+        SystemModelInBuildingProperty& wallCrossingAliveRate(double wallCrossingAliveRate);
+        SystemModelInBuildingProperty& maxIncidenceAngle(double maxIncidenceAngle);
         
-    private:
-        double probabilityJump_ = 0.0;
+        SystemModelInBuildingProperty& velocityRateFloor(double velocityRateFloor);
+        SystemModelInBuildingProperty& velocityRateStair(double velocityRateStair);
+        SystemModelInBuildingProperty& velocityRateElevator(double velocityRateElevator);
+        SystemModelInBuildingProperty& velocityRateEscalator(double velocityRateEscalator);
         
-    public:
-        void probabilityJump(double probability){
-            probabilityJump_ = probability;
-        }
-
-        double probabilityJump() const{
-            return probabilityJump_;
-        }
+        SystemModelInBuildingProperty& weightDecayRate(double weightDecayRate);
+        double probabilityUp() const;
+        double probabilityDown() const;
+        double probabilityStay() const;
+        double wallCrossingAliveRate() const;
+        double maxIncidenceAngle() const;
+        double velocityRateFloor() const;
+        double velocityRateStair() const;
+        double velocityRateElevator() const;
+        double velocityRateEscalator() const;
+        double weightDecayRate() const;
+        int maxTrial() const;
+        
+        SystemModelInBuildingProperty& probabilityFloorJump(double probability);
+        double probabilityFloorJump() const;
     };
     
     template<class Tstate, class Tinput>
@@ -90,6 +122,8 @@ namespace loc{
     };
     
     // This class is retained for compatibility.
+    using PoseRandomWalkerInBuildingProperty = SystemModelInBuildingProperty;
+    
     class PoseRandomWalkerInBuilding: public SystemModelInBuilding<State, SystemModelInput>{
         
     public:
@@ -97,9 +131,8 @@ namespace loc{
         
         virtual ~PoseRandomWalkerInBuilding() = default;
         
-        virtual void poseRandomWalkerInBuildingProperty(PoseRandomWalkerInBuildingProperty::Ptr property){
-            SystemModelInBuildingProperty::Ptr sProperty(new SystemModelInBuildingProperty(*property));
-            SystemModelInBuilding<State, SystemModelInput>::property(sProperty);
+        virtual void poseRandomWalkerInBuildingProperty(SystemModelInBuildingProperty::Ptr property){
+            SystemModelInBuilding<State, SystemModelInput>::property(property);
         }
         
         virtual void poseRandomWalker(typename SystemModel<State, SystemModelInput>::Ptr sysModel){

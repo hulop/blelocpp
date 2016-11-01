@@ -516,7 +516,7 @@ namespace loc{
         poseRandomWalker->setStateProperty(stateProperty);
         
         // Combine poseRandomWalker and building
-        prwBuildingProperty = PoseRandomWalkerInBuildingProperty::Ptr(new PoseRandomWalkerInBuildingProperty);
+        prwBuildingProperty = SystemModelInBuildingProperty::Ptr(new SystemModelInBuildingProperty);
         prwBuildingProperty->maxIncidenceAngle(maxIncidenceAngle/180.0*M_PI);
         //prwBuildingProperty.weightDecayRate(0.9);
         //prwBuildingProperty.weightDecayRate(0.96593632892); // this^20 = 0.5
@@ -550,12 +550,6 @@ namespace loc{
         randomWalkerMotionProperty->sigmaStop = sigmaStop;
         randomWalkerMotionProperty->sigmaMove = sigmaMove;
         
-        // Copy instances used in PoseRandomWalkerInBuilding
-        SystemModelInBuildingProperty::Ptr sysModBldgProperty(new SystemModelInBuildingProperty(*prwBuildingProperty));
-        sysModBldgProperty->velocityRateFloor(velocityRateFloor);
-        sysModBldgProperty->velocityRateElevator(velocityRateElevator);
-        sysModBldgProperty->velocityRateStair(velocityRateStair);
-
         if (localizeMode == RANDOM_WALK_ACC_ATT) {
             mLocalizer->systemModel(poseRandomWalkerInBuilding);
         }else if(localizeMode == RANDOM_WALK_ACC){
@@ -563,7 +557,7 @@ namespace loc{
             randomWalkerMotion->setProperty(randomWalkerMotionProperty);
             // Setup SystemModelInBuilding
             SystemModelInBuilding<State, SystemModelInput>::Ptr rwMotionBldg(new SystemModelInBuilding<State, SystemModelInput>(
-                                                                            randomWalkerMotion, buildingPtr, sysModBldgProperty) );
+                                                                            randomWalkerMotion, buildingPtr, prwBuildingProperty) );
             mLocalizer->systemModel(rwMotionBldg);
         }
         else if (localizeMode == RANDOM_WALK) {
@@ -578,7 +572,7 @@ namespace loc{
             wPRW->setPoseProperty(posePropertyTmp);
             wPRW->setStateProperty(statePropertyTmp);
             SystemModelInBuilding<State, SystemModelInput>::Ptr wPRWBldg(new SystemModelInBuilding<State, SystemModelInput>(
-                                                                            wPRW, buildingPtr, sysModBldgProperty) );
+                                                                            wPRW, buildingPtr, prwBuildingProperty) );
             mLocalizer->systemModel(wPRWBldg);
         }
         
