@@ -57,7 +57,6 @@
 		7E12B5071D34767500614DBB /* GaussianProcessLDPLMultiModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E12B4A41D3474B900614DBB /* GaussianProcessLDPLMultiModel.cpp */; };
 		7E12B5081D34767500614DBB /* KernelFunction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E12B4A61D3474B900614DBB /* KernelFunction.cpp */; };
 		7E12B5091D34767500614DBB /* PoseRandomWalker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E12B4AA1D3474B900614DBB /* PoseRandomWalker.cpp */; };
-		7E12B50A1D34767500614DBB /* PoseRandomWalkerInBuilding.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E12B4AC1D3474B900614DBB /* PoseRandomWalkerInBuilding.cpp */; };
 		7E12B50B1D34767500614DBB /* RandomWalker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E12B4AE1D3474B900614DBB /* RandomWalker.cpp */; };
 		7E12B50C1D34767500614DBB /* OrientationMeterAverage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E12B4B31D3474B900614DBB /* OrientationMeterAverage.cpp */; };
 		7E12B50D1D34767500614DBB /* PedometerWalkingState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E12B4B61D3474B900614DBB /* PedometerWalkingState.cpp */; };
@@ -185,8 +184,6 @@
 		7E12B4A91D3474B900614DBB /* ObservationModelTrainer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ObservationModelTrainer.hpp; sourceTree = "<group>"; };
 		7E12B4AA1D3474B900614DBB /* PoseRandomWalker.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = PoseRandomWalker.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		7E12B4AB1D3474B900614DBB /* PoseRandomWalker.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PoseRandomWalker.hpp; sourceTree = "<group>"; };
-		7E12B4AC1D3474B900614DBB /* PoseRandomWalkerInBuilding.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = PoseRandomWalkerInBuilding.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		7E12B4AD1D3474B900614DBB /* PoseRandomWalkerInBuilding.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = PoseRandomWalkerInBuilding.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		7E12B4AE1D3474B900614DBB /* RandomWalker.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = RandomWalker.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		7E12B4AF1D3474B900614DBB /* RandomWalker.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = RandomWalker.hpp; sourceTree = "<group>"; };
 		7E12B4B01D3474B900614DBB /* SystemModel.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SystemModel.hpp; sourceTree = "<group>"; };
@@ -507,8 +504,6 @@
 				7E12B4A91D3474B900614DBB /* ObservationModelTrainer.hpp */,
 				7E12B4AA1D3474B900614DBB /* PoseRandomWalker.cpp */,
 				7E12B4AB1D3474B900614DBB /* PoseRandomWalker.hpp */,
-				7E12B4AC1D3474B900614DBB /* PoseRandomWalkerInBuilding.cpp */,
-				7E12B4AD1D3474B900614DBB /* PoseRandomWalkerInBuilding.hpp */,
 				7E12B4AE1D3474B900614DBB /* RandomWalker.cpp */,
 				7E12B4AF1D3474B900614DBB /* RandomWalker.hpp */,
 				7E12B4B01D3474B900614DBB /* SystemModel.hpp */,
@@ -793,7 +788,6 @@
 				7E12B5071D34767500614DBB /* GaussianProcessLDPLMultiModel.cpp in Sources */,
 				7E12B5081D34767500614DBB /* KernelFunction.cpp in Sources */,
 				7E12B5091D34767500614DBB /* PoseRandomWalker.cpp in Sources */,
-				7E12B50A1D34767500614DBB /* PoseRandomWalkerInBuilding.cpp in Sources */,
 				7E12B50B1D34767500614DBB /* RandomWalker.cpp in Sources */,
 				7E12B50C1D34767500614DBB /* OrientationMeterAverage.cpp in Sources */,
 				7E12B50D1D34767500614DBB /* PedometerWalkingState.cpp in Sources */,

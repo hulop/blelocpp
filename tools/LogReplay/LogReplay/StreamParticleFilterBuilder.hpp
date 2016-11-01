@@ -46,7 +46,7 @@
 
 // for pose random walker in building
 #include "Building.hpp"
-#include "PoseRandomWalkerInBuilding.hpp"
+#include "SystemModelInBuilding.hpp"
 
 #include "BeaconFilterChain.hpp"
 #include "CleansingBeaconFilter.hpp"
