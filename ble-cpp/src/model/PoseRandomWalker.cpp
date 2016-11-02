@@ -25,17 +25,17 @@
 
 namespace loc{
     
-    PoseRandomWalker& PoseRandomWalker::setProperty(PoseRandomWalkerProperty property){
+    PoseRandomWalker& PoseRandomWalker::setProperty(PoseRandomWalkerProperty::Ptr property){
         mProperty = property;
         return *this;
     }
     
-    PoseRandomWalker& PoseRandomWalker::setPoseProperty(loc::PoseProperty poseProperty){
+    PoseRandomWalker& PoseRandomWalker::setPoseProperty(loc::PoseProperty::Ptr poseProperty){
         this->poseProperty = poseProperty;
         return *this;
     }
     
-    PoseRandomWalker& PoseRandomWalker::setStateProperty(loc::StateProperty stateProperty){
+    PoseRandomWalker& PoseRandomWalker::setStateProperty(StateProperty::Ptr stateProperty){
         this->stateProperty = stateProperty;
         return *this;
     }
@@ -55,37 +55,37 @@ namespace loc{
         double dTime = (input.timestamp()-input.previousTimestamp())/(1000.0); //[s] Difference in time
         
         double movLevel = movingLevel();
-        double yaw = mProperty.orientationMeter()->getYaw();
+        double yaw = mProperty->orientationMeter()->getYaw();
         
         //std::cout << "predict: dTime=" << dTime << ", nSteps=" << nSteps << std::endl;
         
         // Perturb variables in State
-        if(movLevel>0 || mProperty.doesUpdateWhenStopping() ){
-            state.orientationBias(state.orientationBias() + stateProperty.diffusionOrientationBias()*randomGenerator.nextGaussian()*dTime );
-            state.rssiBias(randomGenerator.nextTruncatedGaussian(state.rssiBias(), stateProperty.diffusionRssiBias()*dTime , stateProperty.minRssiBias(), stateProperty.maxRssiBias()));
+        if(movLevel>0 || mProperty->doesUpdateWhenStopping() ){
+            state.orientationBias(state.orientationBias() + stateProperty->diffusionOrientationBias()*randomGenerator.nextGaussian()*dTime );
+            state.rssiBias(randomGenerator.nextTruncatedGaussian(state.rssiBias(), stateProperty->diffusionRssiBias()*dTime , stateProperty->minRssiBias(), stateProperty->maxRssiBias()));
         }
         
         // Update orientation
         double previousOrientation = state.orientation();
         double orientationActual = yaw - state.orientationBias();
-        orientationActual += poseProperty.stdOrientation()*randomGenerator.nextGaussian()*dTime;
+        orientationActual += poseProperty->stdOrientation()*randomGenerator.nextGaussian()*dTime;
         orientationActual = Pose::normalizeOrientaion(orientationActual);
         state.orientation(orientationActual);
         
         // Reduce velocity when turning
         double oriDiff = Pose::computeOrientationDifference(previousOrientation, orientationActual);
-        double angularVelocityLimit = mProperty.angularVelocityLimit();
+        double angularVelocityLimit = mProperty->angularVelocityLimit();
         double turningVelocityRate = std::sqrt(1.0 - std::min(1.0, std::pow(oriDiff/angularVelocityLimit,2)));
         
         
         // Perturb variables in Pose
         double v = 0.0;
         double nV = state.normalVelocity();
-        if(movLevel >0 || mProperty.doesUpdateWhenStopping()){
+        if(movLevel >0 || mProperty->doesUpdateWhenStopping()){
             nV = randomGenerator.nextTruncatedGaussian(state.normalVelocity(),
-                                                          poseProperty.diffusionVelocity(),
-                                                          poseProperty.minVelocity(),
-                                                          poseProperty.maxVelocity());
+                                                          poseProperty->diffusionVelocity(),
+                                                          poseProperty->minVelocity(),
+                                                          poseProperty->maxVelocity());
             state.normalVelocity(nV);
         }
         if(movLevel>0){
@@ -111,7 +111,7 @@ namespace loc{
         if(isUnderControll){
             return mMovement;
         }else{
-            return mProperty.pedometer()->getNSteps();
+            return mProperty->pedometer()->getNSteps();
         }
     }
     

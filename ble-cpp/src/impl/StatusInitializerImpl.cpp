@@ -29,12 +29,12 @@ namespace loc{
         return *this;
     }
     
-    StatusInitializerImpl& StatusInitializerImpl::poseProperty(PoseProperty poseProperty){
+    StatusInitializerImpl& StatusInitializerImpl::poseProperty(PoseProperty::Ptr poseProperty){
         mPoseProperty = poseProperty;
         return *this;
     }
     
-    StatusInitializerImpl& StatusInitializerImpl::stateProperty(StateProperty stateProperty){
+    StatusInitializerImpl& StatusInitializerImpl::stateProperty(StateProperty::Ptr stateProperty){
         mStateProperty = stateProperty;
         return *this;
     }
@@ -42,7 +42,7 @@ namespace loc{
     
     State StatusInitializerImpl::perturbRssiBias(const State &state){
         State stateNew(state);
-        double rssiBias = rand.nextTruncatedGaussian(state.rssiBias(), mStateProperty.diffusionRssiBias(), mStateProperty.minRssiBias(), mStateProperty.maxRssiBias());
+        double rssiBias = rand.nextTruncatedGaussian(state.rssiBias(), mStateProperty->diffusionRssiBias(), mStateProperty->minRssiBias(), mStateProperty->maxRssiBias());
         stateNew.rssiBias(rssiBias);
         return stateNew;
     }
@@ -88,7 +88,7 @@ namespace loc{
     
     template <class Tstate>
     Tstate StatusInitializerImpl::perturbLocation(const Tstate& location, const Building& building){
-        return perturbLocation(location, mPoseProperty.stdX(), mPoseProperty.stdY(), building);
+        return perturbLocation(location, mPoseProperty->stdX(), mPoseProperty->stdY(), building);
     }
     
     Locations StatusInitializerImpl::extractMovableLocations(const Locations& locations){
@@ -169,7 +169,7 @@ namespace loc{
             
             double orientation = 2.0*M_PI*rand.nextDouble();
             double velocity = 0.0;
-            double normalVelocity = rand.nextTruncatedGaussian(mPoseProperty.meanVelocity(), mPoseProperty.stdVelocity(), mPoseProperty.minVelocity(), mPoseProperty.maxVelocity());
+            double normalVelocity = rand.nextTruncatedGaussian(mPoseProperty->meanVelocity(), mPoseProperty->stdVelocity(), mPoseProperty->minVelocity(), mPoseProperty->maxVelocity());
             
             pose.orientation(orientation)
             .velocity(velocity)
@@ -194,7 +194,7 @@ namespace loc{
             State state(pose);
             
             double orientationBias = 2.0*M_PI*rand.nextDouble();
-            double rssiBias = rand.nextTruncatedGaussian(mStateProperty.meanRssiBias(), mStateProperty.stdRssiBias(), mStateProperty.minRssiBias(), mStateProperty.maxRssiBias());
+            double rssiBias = rand.nextTruncatedGaussian(mStateProperty->meanRssiBias(), mStateProperty->stdRssiBias(), mStateProperty->minRssiBias(), mStateProperty->maxRssiBias());
             
             state.orientationBias(orientationBias).rssiBias(rssiBias);
             state.weight(1.0/n);
@@ -274,9 +274,9 @@ namespace loc{
                 s.orientationBias(orientationBias);
                 
                 // only if meanPose.normalVelocity is valid, normalVelocity is updated.
-                if(mPoseProperty.minVelocity() < meanPose.normalVelocity()
-                   && meanPose.normalVelocity() < mPoseProperty.maxVelocity()){
-                    double normalVelocity = rand.nextTruncatedGaussian(meanPose.normalVelocity(), stdevState.normalVelocity(), mPoseProperty.minVelocity(), mPoseProperty.maxVelocity());
+                if(mPoseProperty->minVelocity() < meanPose.normalVelocity()
+                   && meanPose.normalVelocity() < mPoseProperty->maxVelocity()){
+                    double normalVelocity = rand.nextTruncatedGaussian(meanPose.normalVelocity(), stdevState.normalVelocity(), mPoseProperty->minVelocity(), mPoseProperty->maxVelocity());
                     s.normalVelocity(normalVelocity);
                 }
                 

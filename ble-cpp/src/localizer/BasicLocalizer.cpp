@@ -489,28 +489,28 @@ namespace loc{
         
         // Build System Model
         // TODO (PoseProperty and StateProperty)
-        poseProperty.meanVelocity(meanVelocity);
-        poseProperty.stdVelocity(stdVelocity);
-        poseProperty.diffusionVelocity(diffusionVelocity);
-        poseProperty.minVelocity(minVelocity);
-        poseProperty.maxVelocity(maxVelocity);
-        poseProperty.stdOrientation(stdOrientation/180.0*M_PI);
-        poseProperty.stdX(1.0);
-        poseProperty.stdY(1.0);
+        poseProperty->meanVelocity(meanVelocity);
+        poseProperty->stdVelocity(stdVelocity);
+        poseProperty->diffusionVelocity(diffusionVelocity);
+        poseProperty->minVelocity(minVelocity);
+        poseProperty->maxVelocity(maxVelocity);
+        poseProperty->stdOrientation(stdOrientation/180.0*M_PI);
+        poseProperty->stdX(1.0);
+        poseProperty->stdY(1.0);
         
         //    stateProperty.meanRssiBias(0.0);
-        stateProperty.meanRssiBias(0.0);
-        stateProperty.stdRssiBias(stdRssiBias);
-        stateProperty.diffusionRssiBias(diffusionRssiBias);
-        stateProperty.diffusionOrientationBias(diffusionOrientationBias/180.0*M_PI);
+        stateProperty->meanRssiBias(0.0);
+        stateProperty->stdRssiBias(stdRssiBias);
+        stateProperty->diffusionRssiBias(diffusionRssiBias);
+        stateProperty->diffusionOrientationBias(diffusionOrientationBias/180.0*M_PI);
         
         // END TODO
         
         // Build poseRandomWalker
         poseRandomWalker = std::shared_ptr<PoseRandomWalker>(new PoseRandomWalker());
-        poseRandomWalkerProperty.orientationMeter(orientationMeter.get());
-        poseRandomWalkerProperty.pedometer(pedometer.get());
-        poseRandomWalkerProperty.angularVelocityLimit(angularVelocityLimit/180.0*M_PI);
+        poseRandomWalkerProperty->orientationMeter(orientationMeter.get());
+        poseRandomWalkerProperty->pedometer(pedometer.get());
+        poseRandomWalkerProperty->angularVelocityLimit(angularVelocityLimit/180.0*M_PI);
         poseRandomWalker->setProperty(poseRandomWalkerProperty);
         poseRandomWalker->setPoseProperty(poseProperty);
         poseRandomWalker->setStateProperty(stateProperty);
@@ -556,8 +556,7 @@ namespace loc{
             RandomWalkerMotion<State, SystemModelInput>::Ptr randomWalkerMotion(new RandomWalkerMotion<State, SystemModelInput>);
             randomWalkerMotion->setProperty(randomWalkerMotionProperty);
             // Setup SystemModelInBuilding
-            SystemModelInBuilding<State, SystemModelInput>::Ptr rwMotionBldg(new SystemModelInBuilding<State, SystemModelInput>(
-                                                                            randomWalkerMotion, buildingPtr, prwBuildingProperty) );
+            SystemModelInBuilding<State, SystemModelInput>::Ptr rwMotionBldg(new SystemModelInBuilding<State, SystemModelInput>(randomWalkerMotion, buildingPtr, prwBuildingProperty) );
             mLocalizer->systemModel(rwMotionBldg);
         }
         else if (localizeMode == RANDOM_WALK) {
@@ -566,13 +565,16 @@ namespace loc{
         else if (localizeMode == WEAK_POSE_RANDOM_WALKER){
             WeakPoseRandomWalker<State, SystemModelInput>::Ptr wPRW(new WeakPoseRandomWalker<State, SystemModelInput>);
             wPRW->setProperty(randomWalkerMotionProperty);
-            wPRW->setWeakPoseRandomWalkerProperty(WeakPoseRandomWalkerProperty::Ptr(new WeakPoseRandomWalkerProperty));
-            auto posePropertyTmp = PoseProperty::Ptr(new PoseProperty(poseProperty));
-            auto statePropertyTmp = StateProperty::Ptr(new StateProperty(stateProperty));
-            wPRW->setPoseProperty(posePropertyTmp);
-            wPRW->setStateProperty(statePropertyTmp);
-            SystemModelInBuilding<State, SystemModelInput>::Ptr wPRWBldg(new SystemModelInBuilding<State, SystemModelInput>(
-                                                                            wPRW, buildingPtr, prwBuildingProperty) );
+            wPRW->setPoseProperty(poseProperty);
+            wPRW->setStateProperty(stateProperty);
+            
+            WeakPoseRandomWalkerProperty::Ptr wPRWproperty(new WeakPoseRandomWalkerProperty);
+            wPRWproperty->probabilityOrientationBiasJump(probabilityOrientationBiasJump);
+            wPRWproperty->probabilityOrientationJump(0.0);
+            wPRWproperty->poseRandomWalkRate(poseRandomWalkRate);
+            wPRWproperty->randomWalkRate(randomWalkRate);
+            wPRW->setWeakPoseRandomWalkerProperty(wPRWproperty);
+            SystemModelInBuilding<State, SystemModelInput>::Ptr wPRWBldg(new SystemModelInBuilding<State, SystemModelInput>(wPRW, buildingPtr, prwBuildingProperty) );
             mLocalizer->systemModel(wPRWBldg);
         }
         
@@ -647,16 +649,16 @@ namespace loc{
     }
     
     void BasicLocalizer::meanRssiBias(double b) {
-        stateProperty.meanRssiBias(b);
+        stateProperty->meanRssiBias(b);
         updateStateProperty();
     }
 
     void BasicLocalizer::minRssiBias(double b) {
-        stateProperty.minRssiBias(b);
+        stateProperty->minRssiBias(b);
         updateStateProperty();
     }
     void BasicLocalizer::maxRssiBias(double b) {
-        stateProperty.maxRssiBias(b);
+        stateProperty->maxRssiBias(b);
         updateStateProperty();
     }
     /*

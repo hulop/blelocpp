@@ -79,9 +79,9 @@ namespace loc{
     protected:
         
         RandomGenerator randomGenerator;
-        PoseProperty poseProperty;
-        StateProperty stateProperty;
-        PoseRandomWalkerProperty mProperty;
+        PoseProperty::Ptr poseProperty = PoseProperty::Ptr(new PoseProperty);
+        StateProperty::Ptr stateProperty = StateProperty::Ptr(new StateProperty);
+        PoseRandomWalkerProperty::Ptr mProperty = PoseRandomWalkerProperty::Ptr(new PoseRandomWalkerProperty);
         double mVelocityRate = 1.0;
         
     public:
@@ -92,9 +92,9 @@ namespace loc{
         virtual double velocityRate() const override{ return mVelocityRate; }
         virtual void velocityRate (double velocityRate) override{ mVelocityRate = velocityRate; }
         
-        virtual PoseRandomWalker& setProperty(PoseRandomWalkerProperty property);
-        virtual PoseRandomWalker& setPoseProperty(PoseProperty poseProperty);
-        virtual PoseRandomWalker& setStateProperty(StateProperty stateProperty);
+        virtual PoseRandomWalker& setProperty(PoseRandomWalkerProperty::Ptr property);
+        virtual PoseRandomWalker& setPoseProperty(PoseProperty::Ptr poseProperty);
+        virtual PoseRandomWalker& setStateProperty(StateProperty::Ptr stateProperty);
         
         virtual std::vector<State> predict(std::vector<State> poses, SystemModelInput input) override;
         virtual State predict(State state, SystemModelInput input) override;

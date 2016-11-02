@@ -160,12 +160,19 @@ namespace loc {
         double maxIncidenceAngle = 45;
         double weightDecayHalfLife = 5; // 0.87055056329; // this^5 = 0.5
         
+        // Parameters for RandomWalkerMotion and WeakPoseRandomWalker
         double sigmaStop = 0.1;
         double sigmaMove = 1.0;
         
+        // Parameters for SystemModelInBuilding
         double velocityRateFloor = 1.0;
         double velocityRateElevator = 0.5;
         double velocityRateStair = 0.5;
+        
+        // Parameters for WeakPoseRandomWalker
+        double probabilityOrientationBiasJump = 0.0;
+        double poseRandomWalkRate = 1.0;
+        double randomWalkRate = 0.2;
         
         int nBurnIn = 1000;
         int burnInRadius2D = 10;
@@ -198,9 +205,11 @@ namespace loc {
         PedometerWalkingStateParameters pedometerWSParams;
         std::shared_ptr<Pedometer> pedometer;
         
-        PoseProperty poseProperty;
-        StateProperty stateProperty;
-        PoseRandomWalkerProperty poseRandomWalkerProperty;
+        //PoseProperty poseProperty;
+        //StateProperty stateProperty;
+        PoseProperty::Ptr poseProperty = PoseProperty::Ptr(new PoseProperty);
+        StateProperty::Ptr stateProperty = StateProperty::Ptr(new StateProperty);
+        PoseRandomWalkerProperty::Ptr poseRandomWalkerProperty = PoseRandomWalkerProperty::Ptr(new PoseRandomWalkerProperty);
         std::shared_ptr<PoseRandomWalker>poseRandomWalker;
         std::shared_ptr<RandomWalker<State, SystemModelInput>>randomWalker;
         

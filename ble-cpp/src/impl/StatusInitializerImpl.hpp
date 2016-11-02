@@ -46,8 +46,8 @@ namespace loc{
         Tstate perturbLocation(const Tstate& location, const Building& building);
         template<class Tstate>
         Tstate perturbLocation(const Tstate& location, double stdx, double stdy, const Building& building);
-        PoseProperty mPoseProperty;
-        StateProperty mStateProperty;
+        PoseProperty::Ptr mPoseProperty = PoseProperty::Ptr(new PoseProperty);
+        StateProperty::Ptr mStateProperty = StateProperty::Ptr(new StateProperty);
         
         Poses initializePosesFromLocations(Locations locations);
         States initializeStatesFromPoses(Poses poses);
@@ -58,8 +58,8 @@ namespace loc{
 
         void beaconEffectiveRadius2D(double);
         StatusInitializerImpl& dataStore(std::shared_ptr<DataStore> dataStore);
-        StatusInitializerImpl& poseProperty(PoseProperty poseProperty);
-        StatusInitializerImpl& stateProperty(StateProperty stateProperty);
+        StatusInitializerImpl& poseProperty(PoseProperty::Ptr poseProperty);
+        StatusInitializerImpl& stateProperty(StateProperty::Ptr stateProperty);
         
         template<class Tstate>
         Tstate perturbLocation(const Tstate& location);
