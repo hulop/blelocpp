@@ -140,6 +140,7 @@ namespace loc {
         int nSmoothTracking = 3;
         SmoothType smoothType = SMOOTH_LOCATION;
         LocalizeMode localizeMode = ONESHOT;
+        double effectiveSampleSizeThreshold = 1000;
         
         double walkDetectSigmaThreshold = 0.6;
         double meanVelocity = 1.0;
