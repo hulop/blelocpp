@@ -35,7 +35,8 @@ namespace loc {
     class WeakPoseRandomWalkerProperty{
         double pOrientationBiasJump = 0.1; // defines probability of contamination of uniformly-distributed noise to orientation bias
         double pOrientationJump = 0.0; // defines probability of contamination of uniformly-distributed noise to orientation
-        double mRandomWalkRate = 0.5; // defines mixture rate between orientation-based prediction and random walk
+        double mPoseRandomWalkRate = 0.5; // defines mixture rate of orientation-based prediction
+        double mRandomWalkRate = 0.5; // defines mixture rate of random-walk-based prediction
         
     public:
         using Ptr = std::shared_ptr<WeakPoseRandomWalkerProperty>;
@@ -52,6 +53,14 @@ namespace loc {
         }
         double probabilityOrientationJump() const{
             return pOrientationJump;
+        }
+        
+        void poseRandomWalkRate(double poseRandomWalkRate_){
+            mPoseRandomWalkRate = poseRandomWalkRate_;
+        }
+        
+        double poseRandomWalkRate() const{
+            return mPoseRandomWalkRate;
         }
         
         void randomWalkRate(double randomWalkRate_){

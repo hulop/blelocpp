@@ -126,12 +126,13 @@ namespace loc{
             double dx_v = state.vx() * dt;
             double dy_v = state.vy() * dt;
             
-            double dx_rand = sigma * mRandGen->nextGaussian() * sqdt;
-            double dy_rand = sigma * mRandGen->nextGaussian() * sqdt;
+            double dx_noise = sigma * mRandGen->nextGaussian() * sqdt;
+            double dy_noise = sigma * mRandGen->nextGaussian() * sqdt;
             
+            double poseRwr = wPRWProperty->poseRandomWalkRate();
             double rwr = wPRWProperty->randomWalkRate();
-            double x = state.x() + (1.0 - rwr ) * dx_v + rwr * dx_rand;
-            double y = state.y() + (1.0 - rwr ) * dy_v + rwr * dy_rand;
+            double x = state.x() + poseRwr * dx_v + rwr * dx_noise;
+            double y = state.y() + poseRwr * dy_v + rwr * dy_noise;
             
             State statePred(state);
             statePred.x(x);
