@@ -298,6 +298,9 @@ namespace loc{
 
             // Resampling step
             double ess = computeESS(weights);
+            if(mOptVerbose){
+                std::cout << "ESS=" << ess << std::endl;
+            }
             States* statesNew;
             if(ess<=mEssThreshold){
                 statesNew = mResampler->resample(*states, &weights[0]);

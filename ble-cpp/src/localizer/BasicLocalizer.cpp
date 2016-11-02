@@ -370,7 +370,7 @@ namespace loc{
         mLocalizer->alphaWeaken(alphaWeaken);
         mLocalizer->locationStandardDeviationLowerBound(locLB);
         mLocalizer->optVerbose(isVerboseLocalizer);
-        
+        mLocalizer->effectiveSampleSizeThreshold(effectiveSampleSizeThreshold);
         
         std::cout << "Create data store" << std::endl << std::endl;
         // Create data store
