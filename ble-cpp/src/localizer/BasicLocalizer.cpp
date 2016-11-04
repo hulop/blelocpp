@@ -375,6 +375,7 @@ namespace loc{
         std::cout << "Create data store" << std::endl << std::endl;
         // Create data store
         dataStore = std::shared_ptr<DataStoreImpl> (new DataStoreImpl());
+        mLocalizer->dataStore(dataStore);
         
         // Building - change read order to reduce memory usage peak
         //ImageHolder::setMode(ImageHolderMode(heavy));

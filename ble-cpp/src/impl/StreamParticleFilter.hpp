@@ -61,6 +61,8 @@ namespace loc {
         StreamParticleFilter& alphaWeaken(double);
         StreamParticleFilter& effectiveSampleSizeThreshold(double);
         StreamParticleFilter& mixtureParameters(MixtureParameters);
+        StreamParticleFilter& enablesFloorUpdate(bool);
+        
         
         StreamParticleFilter& locationStandardDeviationLowerBound(Location loc);
         
@@ -75,6 +77,7 @@ namespace loc {
         
         StreamParticleFilter& observationDependentInitializer(std::shared_ptr<ObservationDependentInitializer<State, Beacons>> metro);
         StreamParticleFilter& posteriorResampler(PosteriorResampler<State>::Ptr);
+        StreamParticleFilter& dataStore(DataStore::Ptr);
         
         // callback function setter
         StreamParticleFilter& updateHandler(void (*functionCalledAfterUpdate)(Status*)) override;

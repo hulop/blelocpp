@@ -38,6 +38,8 @@ namespace loc{
 class DataStore{
     
 public:
+    using Ptr = std::shared_ptr<DataStore>;
+    
     virtual ~DataStore() = default;
     virtual const Samples& getSamples() const = 0;
     virtual const BLEBeacons& getBLEBeacons() const = 0;

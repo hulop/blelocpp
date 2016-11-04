@@ -42,6 +42,8 @@ namespace loc{
         Building mBuilding;
         
     public:
+        using Ptr = std::shared_ptr<DataStoreImpl>;
+        
         DataStoreImpl() = default;
         ~DataStoreImpl() = default;
         

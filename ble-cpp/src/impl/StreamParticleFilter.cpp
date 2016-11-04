@@ -59,6 +59,8 @@ namespace loc{
         double mEssThreshold = 10000; //effective sampling size (typically nNumStates/2. nNumState<=essThreshold for frequent resampling.)
         Location mLocStdevLB;
         
+        bool mEnablesFloorUpdate = true;
+        
         MixtureParameters mMixParams;
 
         //std::queue<Pose> posesForReset;
@@ -79,6 +81,8 @@ namespace loc{
         std::shared_ptr<ObservationDependentInitializer<State, Beacons>> mMetro;
         std::shared_ptr<PosteriorResampler<State>> mPostResampler;
         std::shared_ptr<RandomGenerator> mRand;
+        
+        DataStore::Ptr mDataStore;
         
         void (*mFunctionCalledAfterUpdate)(Status*) = NULL;
         void (*mFunctionCalledAfterUpdate2)(void*, Status*) = NULL;
@@ -234,6 +238,55 @@ namespace loc{
             return 0;
         }
         
+        void floorUpdate(States& states, const Beacons&beacons){
+            if(beacons.size()==0){
+                return;
+            }
+            if(!mDataStore){
+                return;
+            }
+
+            const BLEBeacons& bleBeacons = mDataStore->getBLEBeacons();
+            const Building& building = mDataStore->getBuilding();
+            
+            std::map<double, int> obsFloors;
+            // Add floors
+            for(const auto& b: beacons){
+                for(const auto& ble: bleBeacons){
+                    if(b.id() == ble.id()){
+                        double floor = ble.floor();
+                        if(obsFloors.count(floor) == 0){
+                            obsFloors[floor] = 1;
+                        }else{
+                            obsFloors[floor] +=1 ;
+                        }
+                        break;
+                    }
+                }
+            }
+            // Find floor from observed beacons.
+            double repFloor = 0;
+            int maxcount = -1;
+            for(auto iter = obsFloors.begin(); iter!=obsFloors.end(); iter++){
+                double floor = (*iter).first;
+                int count = (*iter).second;
+                if(count > maxcount){
+                    repFloor = floor;
+                    maxcount = count;
+                }
+            }
+            // Update floor when repFloor is different from state.floor
+            for(auto& s: states){
+                double floor = s.floor();
+                if(obsFloors.count(floor) == 0){
+                    State sTmp(s);
+                    sTmp.floor(repFloor);
+                    if(building.isMovable(sTmp)){
+                        s.floor(repFloor);
+                    }
+                }
+            }
+        }
         
         void doFiltering(const Beacons& beacons){
 
@@ -248,6 +301,11 @@ namespace loc{
             // Logging before likelihood computation
             logStates(*states, "before_likelihood_states_"+std::to_string(timestamp)+".csv");
 
+            // Observation dependent floor update
+            if(mEnablesFloorUpdate){
+                floorUpdate(*states, beacons);
+            }
+            
             // Mix new states generated from observations into particles
             mixStates(*states, beacons, mMixParams.mixtureProbability);
             
@@ -406,6 +464,10 @@ namespace loc{
         void updateHandler(void (*functionCalledAfterUpdate)(void*, Status*), void* inUserData){
             mFunctionCalledAfterUpdate2 = functionCalledAfterUpdate;
             mUserData = inUserData;
+        }
+        
+        void dataStore(DataStore::Ptr dataStore){
+            mDataStore = dataStore;
         }
 
         Status* getStatus(){
@@ -634,6 +696,10 @@ namespace loc{
         void locationStandardDeviationLowerBound(Location loc){
             mLocStdevLB = loc;
         }
+        
+        void enablesFloorUpdate(bool enablesFloorUpdate){
+            mEnablesFloorUpdate = enablesFloorUpdate;
+        }
 
         void pedometer(std::shared_ptr<Pedometer> pedometer){
             mPedometer=pedometer;
@@ -816,4 +882,14 @@ namespace loc{
         return * this;
     }
 
+    StreamParticleFilter& StreamParticleFilter::dataStore(DataStore::Ptr dataStore){
+        impl->dataStore(dataStore);
+        return * this;
+    }
+    
+    StreamParticleFilter& StreamParticleFilter::enablesFloorUpdate(bool enablesFloorUpdate){
+        impl->enablesFloorUpdate(enablesFloorUpdate);
+        return * this;
+    }
+    
 }
