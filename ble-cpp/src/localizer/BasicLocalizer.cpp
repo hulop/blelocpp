@@ -201,18 +201,20 @@ namespace loc{
             mFunctionCalledAfterUpdate2(mUserData, mResult.get());
         }
         
-        if (smooth_count == nSmooth && isTrackingMode()) {
-            //loc::State mean = mResult->states()->at(0);
-            loc::State mean = loc::State::weightedMean(*mResult->states());
+        if (isTrackingMode() && smooth_count >= nSmooth && mState != TRACKING) {
+                Pose refPose = *mResult->meanPose();
+            std::vector<State> states = *mResult->states();
+            int idx = Location::findClosestLocationIndex(refPose, states);
+            Location locClosest = states.at(idx);
+            refPose.copyLocation(locClosest);
+
             auto std = loc::Location::standardDeviation(*mResult->states());
-            mean.floor(roundf(mean.floor()));
-            //double stdevX = std;
-            //double stdevY = std;
+            refPose.floor(roundf(refPose.floor()));
             loc::Pose stdevPose;
             stdevPose.x(std.x()).y(std.y()).orientation(10*M_PI);
-            mLocalizer->resetStatus(mean, stdevPose);
+            mLocalizer->resetStatus(refPose, stdevPose);
             
-            std::cout << "Reset=" << mean << ", STD=" << std << std::endl;
+            std::cout << "Reset=" << refPose << ", STD=" << std << std::endl;
             
             mState = TRACKING;
         }
