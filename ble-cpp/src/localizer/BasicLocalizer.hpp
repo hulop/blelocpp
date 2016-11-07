@@ -157,6 +157,8 @@ namespace loc {
         double stdOrientation = 3.0;
         double diffusionOrientationBias = 10;
         double angularVelocityLimit = 30;
+        // Parametes for PoseRandomWalker
+        bool doesUpdateWhenStopping = false;
         
         double maxIncidenceAngle = 45;
         double weightDecayHalfLife = 5; // 0.87055056329; // this^5 = 0.5

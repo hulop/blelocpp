@@ -514,6 +514,7 @@ namespace loc{
         poseRandomWalkerProperty->orientationMeter(orientationMeter.get());
         poseRandomWalkerProperty->pedometer(pedometer.get());
         poseRandomWalkerProperty->angularVelocityLimit(angularVelocityLimit/180.0*M_PI);
+        poseRandomWalkerProperty->doesUpdateWhenStopping(doesUpdateWhenStopping);
         poseRandomWalker->setProperty(poseRandomWalkerProperty);
         poseRandomWalker->setPoseProperty(poseProperty);
         poseRandomWalker->setStateProperty(stateProperty);
