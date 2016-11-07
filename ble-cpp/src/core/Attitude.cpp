@@ -66,6 +66,6 @@ namespace loc{
     }
     
     std::ostream& operator<<(std::ostream&os, const loc::Attitude& att){
-        return os<<att.roll() << "," << att.pitch() << "," << att.yaw();
+        return os<<att.pitch() << "," << att.roll() << "," <<  att.yaw();
     }
 }

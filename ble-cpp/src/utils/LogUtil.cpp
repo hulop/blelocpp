@@ -80,11 +80,11 @@ Attitude LogUtil::toAttitude(std::string str){
     if(values.at(0).compare("Motion")!=0){
         BOOST_THROW_EXCEPTION(LocException("Log Motion is not correct. string="+str));
     }
+    // "Motion", pitch, roll, yaw
+    double pitch = stod(values.at(1));
+    double roll = stod(values.at(2));
+    double yaw = stod(values.at(3));
     long timestamp = stol(values.at(4));
-    Attitude att(timestamp,
-                     stod(values.at(1)),
-                     stod(values.at(2)),
-                     stod(values.at(3))
-                     );
+    Attitude att(timestamp, pitch, roll, yaw);// Attitude(timestamp, pitch, roll, yaw)
     return att;
 }
