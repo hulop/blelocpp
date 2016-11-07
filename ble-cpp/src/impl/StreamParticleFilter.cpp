@@ -300,11 +300,6 @@ namespace loc{
 
             // Logging before likelihood computation
             logStates(*states, "before_likelihood_states_"+std::to_string(timestamp)+".csv");
-
-            // Observation dependent floor update
-            if(mEnablesFloorUpdate){
-                floorUpdate(*states, beacons);
-            }
             
             // Mix new states generated from observations into particles
             mixStates(*states, beacons, mMixParams.mixtureProbability);
@@ -418,7 +413,13 @@ namespace loc{
 
             const Beacons& beaconsFiltered = filterBeacons(beacons);
             if(beaconsFiltered.size()>0){
-                if(checkIfDoFiltering()){
+                // Observation dependent floor update
+                std::shared_ptr<States> states = status->states();
+                if(mEnablesFloorUpdate){
+                    floorUpdate(*states, beacons);
+                }
+                // filtering
+                if(checkIfDoFiltering(*states)){
                     doFiltering(beaconsFiltered);
                 }else{
                     if(mOptVerbose){
@@ -630,14 +631,13 @@ namespace loc{
             }
         }
 
-        bool checkIfDoFiltering() const{
+        bool checkIfDoFiltering(const States& states) const{
             double variance2DLowerBound = std::pow(mLocStdevLB.x(), 2)*std::pow(mLocStdevLB.y(),2);
             double stdZLB = mLocStdevLB.z();
             double stdFloorLB = mLocStdevLB.floor();
             
-            std::shared_ptr<States> states = status->states();
-            double variance2D = computeStates2DVariance(*states);
-            Location stdevLoc = Location::standardDeviation(*states);
+            double variance2D = computeStates2DVariance(states);
+            Location stdevLoc = Location::standardDeviation(states);
             
             if(mOptVerbose){
                 std::cout<<"var2D="<<variance2D<<","<<"var2DLB="<<variance2DLowerBound
@@ -652,6 +652,11 @@ namespace loc{
             }else{
                 return true;
             }
+        }
+        
+        bool checkIfDoFiltering() const{
+            std::shared_ptr<States> states = status->states();
+            return checkIfDoFiltering(*states);
         }
 
         double computeStates2DVariance(const States& states) const{
