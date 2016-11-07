@@ -176,7 +176,7 @@ namespace loc{
                 }
             }
             if(i==1) nBeacons = std::stoi(*iter);
-            if(i>1 && (i-1)/3 < nBeacons){
+            if(i>1 && (i-2)/3 < nBeacons){
                 if(i%3==2) major = std::stoi(*iter);
                 if(i%3==0) minor = std::stoi(*iter);
                 if(i%3==1){
