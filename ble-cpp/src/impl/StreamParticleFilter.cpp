@@ -112,6 +112,7 @@ namespace loc{
         void putAcceleration(const Acceleration acceleration){
             initializeStatusIfZero();
 
+            status->step(Status::OTHER);
             mPedometer->putAcceleration(acceleration);
             accelerationIsUpdated = mPedometer->isUpdated();
 
@@ -124,6 +125,8 @@ namespace loc{
 
         void putAttitude(const Attitude attitude){
             initializeStatusIfZero();
+            status->step(Status::OTHER);
+            
             mOrientationmeter->putAttitude(attitude);
             attitudeIsUpdated = mOrientationmeter->isUpdated();
 
@@ -156,6 +159,7 @@ namespace loc{
                 std::cout << "prediction at t=" << timestamp << std::endl;
             }
 
+            status->step(Status::PREDICTION);
             callback(status.get());
 
             previousTimestampMotion = timestamp;
@@ -249,12 +253,12 @@ namespace loc{
             const BLEBeacons& bleBeacons = mDataStore->getBLEBeacons();
             const Building& building = mDataStore->getBuilding();
             
-            std::map<double, int> obsFloors;
+            std::map<int, int> obsFloors;
             // Add floors
             for(const auto& b: beacons){
                 for(const auto& ble: bleBeacons){
                     if(b.id() == ble.id()){
-                        double floor = ble.floor();
+                        int floor = std::round(ble.floor());
                         if(obsFloors.count(floor) == 0){
                             obsFloors[floor] = 1;
                         }else{
@@ -265,10 +269,10 @@ namespace loc{
                 }
             }
             // Find floor from observed beacons.
-            double repFloor = 0;
+            int repFloor = 0;
             int maxcount = -1;
             for(auto iter = obsFloors.begin(); iter!=obsFloors.end(); iter++){
-                double floor = (*iter).first;
+                int floor = (*iter).first;
                 int count = (*iter).second;
                 if(count > maxcount){
                     repFloor = floor;
@@ -277,7 +281,7 @@ namespace loc{
             }
             // Update floor when repFloor is different from state.floor
             for(auto& s: states){
-                double floor = s.floor();
+                int floor = std::round(s.floor());
                 if(obsFloors.count(floor) == 0){
                     State sTmp(s);
                     sTmp.floor(repFloor);
@@ -362,8 +366,10 @@ namespace loc{
                     double weight = 1.0/(weights.size());
                     statesNew->at(i).weight(weight);
                 }
+                status->step(Status::FILTERING_WITH_RESAMPLING);
             }else{
                 statesNew = new States(*states);
+                status->step(Status::FILTERING_WITHOUT_RESAMPLING);
             }
             
             // Posterior-resampling
@@ -411,6 +417,8 @@ namespace loc{
         void putBeacon(const Beacons & beacons){
             initializeStatusIfZero();
 
+            status->step(Status::OTHER);
+            
             const Beacons& beaconsFiltered = filterBeacons(beacons);
             if(beaconsFiltered.size()>0){
                 // Observation dependent floor update
@@ -421,12 +429,18 @@ namespace loc{
                 // filtering
                 if(checkIfDoFiltering(*states)){
                     doFiltering(beaconsFiltered);
+                    assert( status->step()==Status::FILTERING_WITH_RESAMPLING
+                           || status->step()==Status::FILTERING_WITHOUT_RESAMPLING );
                 }else{
                     if(mOptVerbose){
-                        std::cout<<"resampling step was not applied."<<std::endl;
+                        std::cout<<"filtering step was not applied."<<std::endl;
                     }
+                    status->step(Status::OBSERVATION_WITHOUT_FILTERING);
                 }
+            }else{
+                status->step(Status::OBSERVATION_WITHOUT_FILTERING);
             }
+                
             status->timestamp(beacons.timestamp());
             callback(status.get());
         };
@@ -496,6 +510,7 @@ namespace loc{
                 double orientationMeasured = mOrientationmeter->getYaw();
                 States* states = new States(mStatusInitializer->resetStates(mNumStates, pose, orientationMeasured));
                 status->states(states);
+                status->step(Status::RESET);
                 callback(status.get());
                 return true;
             }else{
@@ -515,6 +530,7 @@ namespace loc{
                 double orientationMeasured = mOrientationmeter->getYaw();
                 States* states = new States(mStatusInitializer->resetStates(mNumStates, meanPose, stdevPose, orientationMeasured));
                 status->states(states);
+                status->step(Status::RESET);
                 callback(status.get());
                 return true;
             }else{
@@ -538,6 +554,7 @@ namespace loc{
             States statesTmp = sampleStatesByObservation(mNumStates, beaconsFiltered);
             States* statesNew = new States(statesTmp);
             status->states(statesNew);
+            status->step(Status::RESET);
             status->timestamp(beacons.timestamp());
             if(mMetro){
                 ss << "an ObservationDependentInitializer.";
@@ -574,6 +591,7 @@ namespace loc{
             States statesTmp = sampleStatesByLocationAndObservation(mNumStates, location, beaconsFiltered);
             States* statesNew = new States(statesTmp);
             status->states(statesNew);
+            status->step(Status::RESET);
             status->timestamp(beacons.timestamp());
             if(mMetro){
                 ss << "an ObservationDependentInitializer.";
@@ -615,6 +633,7 @@ namespace loc{
             States* statesNew = new States(mStatusInitializer->initializeStatesFromLocations(locations));
             status->states(statesNew);
             status->timestamp(beacons.timestamp());
+            status->step(Status::RESET);
             callback(status.get());
             return false;
         }

@@ -40,10 +40,20 @@ namespace loc{
         Status();
         ~Status();
         
+        enum Step{
+            PREDICTION,
+            RESET,
+            FILTERING_WITH_RESAMPLING,
+            FILTERING_WITHOUT_RESAMPLING,
+            OBSERVATION_WITHOUT_FILTERING,
+            OTHER
+        };
+        
         std::shared_ptr<Location> meanLocation() const;
         std::shared_ptr<Pose> meanPose() const;
         long timestamp() const;
         std::shared_ptr<std::vector<State>> states() const;
+        Step step() const;
         
         Status& meanLocation(Location* loc);
         Status& meanLocation(std::shared_ptr<Location> location);
@@ -51,9 +61,11 @@ namespace loc{
         Status& meanPose(std::shared_ptr<Pose> pose);
         Status& timestamp(long timestamp);
         Status& states(std::vector<State>* states);
+        Status& step(Step step);
         
     private:
         long timestamp_;
+        Step step_ = Step::OTHER;
         std::shared_ptr<Location> meanLocation_;
         std::shared_ptr<Pose> meanPose_;
         std::shared_ptr<std::vector<State>> states_;

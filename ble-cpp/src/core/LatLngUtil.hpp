@@ -40,7 +40,7 @@ namespace loc {
     
     typedef struct {
         LatLng latlng;
-        double rotate = 0;
+        double rotate = 0; //Degree
     } Anchor;
 
     class LatLngUtil {

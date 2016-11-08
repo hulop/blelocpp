@@ -46,6 +46,7 @@ typedef struct {
     bool findRssiBias = false;
     LocalizeMode localizeMode = ONESHOT;
     double walkDetectSigmaThreshold = 0.6;
+    bool usesReset = false;
 } Option;
 
 void printHelp() {
@@ -62,8 +63,9 @@ void printHelp() {
     std::cout << " -r                  set beacon rssi smooth (default location smooth)" << std::endl;
     std::cout << " -s <double>         use student's t distribution and set nu value" << std::endl;
     std::cout << " -f                  find rssiBias" << std::endl;
-    std::cout << " --lm <string>       set localization mode [ONESHOT,RANDOM_WALK_ACC,RANDOM_WALK_ACC_ATT]" << std::endl;
+    std::cout << " --lm <string>       set localization mode [ONESHOT,RANDOM_WALK_ACC,RANDOM_WALK_ACC_ATT,WEAK_POSE_RANDOM_WALKER]" << std::endl;
     std::cout << " --wc                use wheelchair mode set" << std::endl;
+    std::cout << " --reset             use reset in log" << std::endl;
 }
 
 Option parseArguments(int argc, char *argv[]){
@@ -78,6 +80,7 @@ Option parseArguments(int argc, char *argv[]){
         {"nSmooth",    required_argument, NULL,  0 },
         {"lm",         required_argument, NULL,  0 },
         {"wc",         no_argument, NULL, 0},
+        {"reset",      no_argument, NULL, 0},
         //{"stdY",            required_argument, NULL,  0 },
         {0,         0,                 0,  0 }
     };
@@ -118,6 +121,9 @@ Option parseArguments(int argc, char *argv[]){
             if (strcmp(long_options[option_index].name, "wc") == 0){
                 opt.walkDetectSigmaThreshold = 0.1;
             }
+            if (strcmp(long_options[option_index].name, "reset") == 0){
+                opt.usesReset = true;
+            }
             break;
         case 'h':
             printHelp();
@@ -152,9 +158,10 @@ Option parseArguments(int argc, char *argv[]){
 
 typedef struct {
     Option *opt;
-    std::ostream　*out;
+    std::ostream *out;
     std::vector<loc::Status*> status_list;
     LatLngConverter::Ptr latLngConverter;
+    Pose recentPose;
 } MyData;
 
 void functionCalledWhenUpdated(void *userData, loc::Status *pStatus){
@@ -162,9 +169,11 @@ void functionCalledWhenUpdated(void *userData, loc::Status *pStatus){
     if (ud->opt->findRssiBias) {
         ud->status_list.insert(ud->status_list.end(), pStatus);
     } else {
-        auto meanLoc = ud->latLngConverter->localToGlobal(*pStatus->meanLocation());
-        //*ud->out << *pStatus->meanLocation() << std::endl;
-        *ud->out << meanLoc << std::endl;
+        if(pStatus->step()==Status::FILTERING_WITH_RESAMPLING){
+            auto meanLoc = ud->latLngConverter->localToGlobal(*pStatus->meanLocation());
+            *ud->out << meanLoc << std::endl;
+            ud->recentPose = *pStatus->meanPose();
+        }
         int i=0;
         for(const State& s: *pStatus->states()) {
             auto gs = ud->latLngConverter->localToGlobal(s);
@@ -270,20 +279,83 @@ int main(int argc, char * argv[]) {
                 std::vector<std::string> v;
                 boost::split(v, str, boost::is_any_of(" "));
                 if(v.size() > 3){
+                    std::string logString = v.at(3);
                     // Parsing beacons values
-                    if (v.at(3).compare(0, 6, "Beacon") == 0) {
-                        Beacons beacons = LogUtil::toBeacons(v.at(3));
+                    if (logString.compare(0, 6, "Beacon") == 0) {
+                        Beacons beacons = LogUtil::toBeacons(logString);
                         localizer.putBeacons(beacons);
                     }
                     // Parsing acceleration values
-                    if (v.at(3).compare(0, 3, "Acc") == 0) {
-                        Acceleration acc = LogUtil::toAcceleration(v.at(3));
+                    if (logString.compare(0, 3, "Acc") == 0) {
+                        Acceleration acc = LogUtil::toAcceleration(logString);
                         localizer.putAcceleration(acc);
                     }
                     // Parsing motion values
-                    if (v.at(3).compare(0, 6, "Motion") == 0) {
-                        Attitude att = LogUtil::toAttitude(v.at(3));
+                    if (logString.compare(0, 6, "Motion") == 0) {
+                        Attitude att = LogUtil::toAttitude(logString);
                         localizer.putAttitude(att);
+                    }
+                    if (opt.usesReset && logString.compare(0, 5, "Reset") == 0) {
+                        // "Reset",lat,lng,floor,heading,timestamp
+                        std::vector<std::string> values;
+                        boost::split(values, logString, boost::is_any_of(","));
+                        long timestamp = stol(values.at(5));
+                        double lat = stod(values.at(1));
+                        double lng = stod(values.at(2));
+                        double floor = stod(values.at(3));
+                        double heading = stod(values.at(4));
+                        std::cout << "LogReplay:" << timestamp << ",Reset,";
+                        std::cout << std::setprecision(10) << lat <<"," <<lng;
+                        std::cout <<"," <<floor <<"," << heading << std::endl;
+                        
+                        Location loc;
+                        GlobalState<Location> global(loc);
+                        global.lat(lat);
+                        global.lng(lng);
+                        loc = ud.latLngConverter->globalToLocal(global);
+                        loc.floor(floor);
+                        
+                        auto anchor = ud.latLngConverter->anchor();
+                        double localHeading = ( heading - anchor.rotate )/180*M_PI;
+                        double xH = sin(localHeading);
+                        double yH = cos(localHeading);
+                        double orientation = atan2(yH,xH);
+                        
+                        loc::Pose newPose(loc);
+                        newPose.orientation(orientation);
+                        
+                        localizer.resetStatus(newPose);
+                    }
+                    if (logString.compare(0, 6, "Marker") == 0){
+                        // "Marker",lat,lng,floor,timestamp
+                        std::vector<std::string> values;
+                        boost::split(values, logString, boost::is_any_of(","));
+                        double lat = stod(values.at(1));
+                        double lng = stod(values.at(2));
+                        double floor = stod(values.at(3));
+                        long timestamp = stol(values.at(4));
+
+                        Location markerLoc;
+                        GlobalState<Location> global(markerLoc);
+                        global.lat(lat);
+                        global.lng(lng);
+                        global.floor(floor);
+                        markerLoc = ud.latLngConverter->globalToLocal(global);
+                        
+                        auto recentPose = ud.recentPose;
+                        
+                        std::cout << "LogReplay:" << timestamp << ",Marker,";
+                        std::cout << std::setprecision(10) << lat << "," << lng;
+                        std::cout << "," << floor;
+                        std::cout << ",d2D=" << Location::distance2D(markerLoc, recentPose)
+                        << ",dFloor=" << Location::floorDifference(markerLoc, recentPose)
+                        << std::endl;
+                    }
+                    if (logString.compare(0, 9,"Altimeter") == 0){
+                        // pass
+                    }
+                    if (logString.compare(0, 7,"Heading") == 0){
+                        // pass
                     }
                 }
             } catch (std::invalid_argument e){

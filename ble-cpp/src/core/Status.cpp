@@ -92,4 +92,12 @@ namespace loc{
         return *this;
     }
     
+    Status::Step Status::step() const{
+        return step_;
+    }
+    
+    Status& Status::step(Status::Step step){
+        step_ = step;
+        return *this;
+    }
 }
