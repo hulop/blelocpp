@@ -666,6 +666,8 @@ namespace loc{
     template<class Archive>
     void GaussianProcessLDPLMultiModel<Tstate, Tinput>::save(Archive& ar) const{
         //ar(CEREAL_NVP(mKernel));
+        ar(CEREAL_NVP(version));
+        
         ar(CEREAL_NVP(mBLEBeacons));
         ar(CEREAL_NVP(mITUModelMap));
         ar(CEREAL_NVP(mITUParameters));
@@ -679,9 +681,24 @@ namespace loc{
     void GaussianProcessLDPLMultiModel<Tstate, Tinput>::load(Archive& ar){
         //ar(CEREAL_NVP(mKernel));
         ar(CEREAL_NVP(mBLEBeacons));
-        ar(CEREAL_NVP(mITUModelMap));
-        ar(CEREAL_NVP(mITUParameters));
         
+        try{
+            ar(CEREAL_NVP(version));
+        }catch(cereal::Exception& e){
+            version = 0;
+        }
+        if(version==0){
+            ITUModelFunction mITUModel;
+            ar(CEREAL_NVP(mITUModel));
+            for(const auto& bleBeacon:mBLEBeacons){
+                long id = bleBeacon.id();
+                mITUModelMap[id] = mITUModel;
+            }
+        }else{
+            ar(CEREAL_NVP(mITUModelMap));
+        }
+            
+        ar(CEREAL_NVP(mITUParameters));
         ar(CEREAL_NVP(mGP));
         ar(CEREAL_NVP(mRssiStandardDeviations));
         mBeaconIdIndexMap = BLEBeacon::constructBeaconIdToIndexMap(mBLEBeacons);

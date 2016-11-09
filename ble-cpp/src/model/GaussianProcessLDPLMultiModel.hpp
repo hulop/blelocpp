@@ -110,6 +110,7 @@ namespace loc{
         std::vector<int> extractKnownBeaconIndices(const Tinput& beacons) const;
         
         friend class GaussianProcessLDPLMultiModelTrainer<Tstate, Tinput>;
+        int version = 1;
         
     public:
         GaussianProcessLDPLMultiModel() = default;
