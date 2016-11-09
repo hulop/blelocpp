@@ -35,6 +35,7 @@ namespace loc{
         return *this;
     }
     
+    /*
     void ITUModelFunction::transformFeature(const Location& stateReceiver, const Location& stateTransmitter, double feats[ndim_]) const{
         
         double distOffsetTmp = distanceOffset_;
@@ -52,14 +53,37 @@ namespace loc{
             feats[3] = -1.0;
         }
     }
+    */
     
-    double ITUModelFunction::predict(const double parameters[4], const double features[4]) const{
+    std::vector<double> ITUModelFunction::transformFeature(const Location& stateReceiver, const Location& stateTransmitter) const{
+        std::vector<double> feats(ndim_);
+        double distOffsetTmp = distanceOffset_;
+        double dist = Location::distance(stateReceiver, stateTransmitter, distOffsetTmp);
+        double floorDiff = Location::floorDifference(stateReceiver, stateTransmitter);
+        
+        feats[0] = -10.0*log10(dist);
+        feats[1] = 1.0;
+        if(floorDiff<1){
+            feats[2] = 0.0;
+            feats[3] = 0.0;
+        }else{
+            feats[2] = -floorDiff;
+            feats[3] = -1.0;
+        }
+        return feats;
+    }
+    
+    double ITUModelFunction::predict(const double *parameters, const double *features) const{
         double ypred = 0;
         for(int i=0; i<ndim_; i++){
             ypred += parameters[i]*features[i];
         }
         ypred = ypred<BeaconConfig::minRssi() ? BeaconConfig::minRssi() : ypred;
         return ypred;
+    }
+    
+    double ITUModelFunction::predict(const std::vector<double>& parameters, const std::vector<double>& features) const{
+        return predict(parameters.data(), features.data());
     }
     
     
@@ -80,6 +104,13 @@ namespace loc{
     GaussianProcessLDPLMultiModel<Tstate, Tinput>& GaussianProcessLDPLMultiModel<Tstate, Tinput>::
     bleBeacons(BLEBeacons bleBeacons){
         mBLEBeacons = bleBeacons;
+        // construct beacon id to index map
+        mBeaconIdIndexMap = BLEBeacon::constructBeaconIdToIndexMap(mBLEBeacons);
+        
+        for(const auto& bleBeacon:mBLEBeacons){
+            long id = bleBeacon.id();
+            mITUModelMap[id] = ITUModelFunction();
+        }
         return *this;
     }
     
@@ -99,13 +130,10 @@ namespace loc{
             throw std::runtime_error("No valid sample [samplesAveraged.size()==0]");
         }
         
-        // construct beacon id to index map
-        mBeaconIdIndexMap = BLEBeacon::constructBeaconIdToIndexMap(mBLEBeacons);
-        
         // convert samples to X, Y matrices
         size_t n = samplesAveraged.size();
         size_t m = mBeaconIdIndexMap.size();
-        static const int ndim = mITUModel.ndim_;
+        static const int ndim = ITUModelFunction::ndim_;
         Eigen::MatrixXd X(n, ndim);
         Eigen::MatrixXd Y(n, m);
         Eigen::MatrixXd Actives(n,m);
@@ -173,11 +201,10 @@ namespace loc{
                         bIsActive = true;
                     }
                     if(bIsActive){
-                        double features[ndim];
                         long id = b.id();
                         int index = mBeaconIdIndexMap.at(id);
                         BLEBeacon bleBeacon = mBLEBeacons.at(index);
-                        mITUModel.transformFeature(loc, bleBeacon, features);
+                        auto features = mITUModelMap[id].transformFeature(loc, bleBeacon);
                         
                         for(int j= 0; j<ndim;j++){
                             Phi(nActive, j) = features[j];
@@ -207,13 +234,13 @@ namespace loc{
             
             // convert to feature
             for(int j=0; j<m; j++){
-                Eigen::MatrixXd Xmat(n, 4);
+                Eigen::MatrixXd Xmat(n, ndim);
                 Eigen::VectorXd Ymat(n);
                 BLEBeacon bleBeacon = mBLEBeacons.at(j);
                 for(int i=0; i<n; i++){
-                    double features[ndim];
+                    long id = bleBeacon.id();
                     Location loc(X(i,0), X(i,1), X(i,2), X(i,3));
-                    mITUModel.transformFeature(loc, bleBeacon, features);
+                    auto features = mITUModelMap[id].transformFeature(loc, bleBeacon);
                     for(int k = 0; k<ndim;k++){
                         Xmat(i, k) = features[k];
                     }
@@ -307,12 +334,11 @@ namespace loc{
         if(mBLEBeacons.size() <= 0){
             BOOST_THROW_EXCEPTION(LocException("BLEBeacons have not been set to this instance."));
         }
-        mBeaconIdIndexMap = BLEBeacon::constructBeaconIdToIndexMap(mBLEBeacons);
         
         // convert samples to X, Y matrices
         size_t n = samplesAveraged.size();
         size_t m = mBeaconIdIndexMap.size();
-        static const int ndim = mITUModel.ndim_;
+        static const int ndim = ITUModelFunction::ndim_;
         Eigen::MatrixXd X(n, ndim);
         Eigen::MatrixXd Y(n, m);
         Eigen::MatrixXd Actives(n,m);
@@ -358,19 +384,13 @@ namespace loc{
             Location loc = smp.location();
             for(int j=0; j<m; j++){
                 BLEBeacon bleBeacon = mBLEBeacons.at(j);
-                double features[ndim];
-                mITUModel.transformFeature(loc, bleBeacon, features);
+                long id = bleBeacon.id();
+                auto features = mITUModelMap[id].transformFeature(loc, bleBeacon);
                 std::vector<double> params = mITUParameters.at(j);
-                double ymean = mITUModel.predict(params.data(), features);
+                double ymean = mITUModelMap[id].predict(params, features);
                 dY(i, j)=Y(i,j)-ymean;
             }
         }
-        
-        //for(int j=0; j<m; j++){
-//            for(int i=0; i<n; i++){
-//                std::cout <<  "(Y, dY)=" << Y(i,0) <<"," << dY(i,0)  << std::endl;
-//            }
-        //}
         
         // Training with selection of kernel parameters
         mGP.fitCV(X, dY, Actives);
@@ -406,22 +426,18 @@ namespace loc{
             Location loc = smp.location();
             Beacons bs = smp.beacons();
             
-            double xvec[4];
-            MLAdapter::locationToVec(loc, xvec);
-            
+            std::vector<double> xvec = MLAdapter::locationToVec(loc);
             std::vector<int> indices = extractKnownBeaconIndices(bs);
-            std::vector<double> dypreds = mGP.predict(xvec, indices);
+            std::vector<double> dypreds = mGP.predict(xvec.data(), indices);
             
             int i = 0;
             for(const Beacon& b: bs){
                 long id = b.id();
                 int index = mBeaconIdIndexMap.at(id);
                 BLEBeacon ble = mBLEBeacons.at(index);
-                double features[4];
-                mITUModel.transformFeature(loc, ble, features);
-                
-                const double* params = mITUParameters.at(index).data();
-                double mean = mITUModel.predict(params, features);
+                std::vector<double> features = mITUModelMap[id].transformFeature(loc, ble);
+                std::vector<double> params = mITUParameters.at(index);
+                double mean = mITUModelMap[id].predict(params, features);
                 
                 double dypred = dypreds.at(i);
                 double ypred = mean + dypred;
@@ -494,10 +510,9 @@ namespace loc{
         
         std::map<long, std::vector<double>> beaconIdRssiStatsMap;
         
-        double xvec[4];
-        MLAdapter::locationToVec(state, xvec);
+        std::vector<double> xvec = MLAdapter::locationToVec(state);
         std::vector<int> indices = extractKnownBeaconIndices(input);
-        std::vector<double> dypreds = mGP.predict(xvec, indices);
+        std::vector<double> dypreds = mGP.predict(xvec.data(), indices);
         
         int idx_local=0;
         for(auto iter=input.begin(); iter!=input.end(); iter++){
@@ -506,12 +521,12 @@ namespace loc{
             // RSSI of known beacons are predicted by a model.
             if(mBeaconIdIndexMap.count(id)==1){
                 int idx_global = mBeaconIdIndexMap.at(id);
-                BLEBeacon bleBeacon = mBLEBeacons.at(idx_global);
+                const BLEBeacon& bleBeacon = mBLEBeacons.at(idx_global);
                 
-                double features[4];
-                mITUModel.transformFeature(state, bleBeacon, features);
-                const double* params = mITUParameters.at(idx_global).data();
-                double mean = mITUModel.predict(params, features);
+                const auto& ituModel = mITUModelMap.at(id);
+                const auto& features = ituModel.transformFeature(state, bleBeacon);
+                const auto& params = mITUParameters.at(idx_global);
+                double mean = ituModel.predict(params, features);
                 double dypred = dypreds.at(idx_local);
                 
                 double ypred = mean + dypred;
@@ -555,9 +570,14 @@ namespace loc{
         double sumMahaDist = 0;
         int i=0;
         for(auto iter=input.begin(); iter!=input.end(); iter++){
-            Beacon b = *iter;
+            const Beacon& b = *iter;
             double rssi = b.rssi();
-            rssi = rssi - state.rssiBias();
+            
+            const State* pState = dynamic_cast<const State*>(&state);
+            if(pState){
+                double rssiBias = pState->rssiBias();
+                rssi = rssi - rssiBias;
+            }
             long id = b.id();
             
             // RSSI of known beacons are predicted by a model.
@@ -647,7 +667,7 @@ namespace loc{
     void GaussianProcessLDPLMultiModel<Tstate, Tinput>::save(Archive& ar) const{
         //ar(CEREAL_NVP(mKernel));
         ar(CEREAL_NVP(mBLEBeacons));
-        ar(CEREAL_NVP(mITUModel));
+        ar(CEREAL_NVP(mITUModelMap));
         ar(CEREAL_NVP(mITUParameters));
         
         ar(CEREAL_NVP(mGP));
@@ -659,7 +679,7 @@ namespace loc{
     void GaussianProcessLDPLMultiModel<Tstate, Tinput>::load(Archive& ar){
         //ar(CEREAL_NVP(mKernel));
         ar(CEREAL_NVP(mBLEBeacons));
-        ar(CEREAL_NVP(mITUModel));
+        ar(CEREAL_NVP(mITUModelMap));
         ar(CEREAL_NVP(mITUParameters));
         
         ar(CEREAL_NVP(mGP));

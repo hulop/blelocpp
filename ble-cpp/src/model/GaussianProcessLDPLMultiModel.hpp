@@ -45,12 +45,16 @@ namespace loc{
     private:
         double distanceOffset_=1.0;
     public:
+        using Ptr = std::shared_ptr<ITUModelFunction>;
+        
         static const int ndim_ = 4;
         int ndim(){return ndim_;}
         
         ITUModelFunction& distanceOffset(double distanceOffset);
-        void transformFeature(const Location& stateReceiver, const Location& stateTransmitter, double features[]) const;
+        //void transformFeature(const Location& stateReceiver, const Location& stateTransmitter, double features[]) const;
+        std::vector<double> transformFeature(const Location& stateReceiver, const Location& stateTransmitter) const;
         double predict(const double parameters[], const double features[]) const;
+        double predict(const std::vector<double>& parameters, const std::vector<double>& features) const;
         
         template<class Archive>
         void serialize(Archive& ar);
@@ -69,8 +73,6 @@ namespace loc{
         
     };
     
-    
-    
     template<class Tstate, class Tinput>
     class GaussianProcessLDPLMultiModel;
     
@@ -86,7 +88,9 @@ namespace loc{
         //std::shared_ptr<KernelFunction> mKernel;
         BLEBeacons mBLEBeacons;
         
-        ITUModelFunction mITUModel;
+        //ITUModelFunction mITUModel;
+        std::map<long, ITUModelFunction> mITUModelMap;
+        
         std::vector<std::vector<double>> mITUParameters;
         
         GaussianProcess mGP;
@@ -150,11 +154,9 @@ namespace loc{
     
     class MLAdapter{
     public:
-        static void locationToVec(const Location& location, double x[]){
-            x[0] = location.x();
-            x[1] = location.y();
-            x[2] = location.z();
-            x[3] = location.floor();
+        static std::vector<double> locationToVec(const Location& loc){
+            std::vector<double> vec{loc.x(), loc.y(), loc.z(), loc.floor()};
+            return vec;
         }
     };
     
