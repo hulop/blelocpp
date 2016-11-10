@@ -35,6 +35,9 @@ struct Option{
     std::string to;
     std::string samples_path;
     std::string beacons_path;
+    
+    std::string samples_out_path;
+    std::string beacons_out_path;
 };
 
 std::string lastComponent(char *cstr) {
@@ -49,7 +52,9 @@ void printHelp(std::string command){
     std::cout << " -f anchorFile        set anchor file used to convert coordinate from local to global coordinate" << std::endl;
     std::cout << " -t anchorFile        set anchor file used to convert coordinate from global to local coordinate" << std::endl;
     std::cout << " -s samplesFile       set samples file to be converted" << std::endl;
-    std::cout << " -b beaconsFile    set beacons file to be converted" << std::endl;
+    std::cout << " -b beaconsFile       set beacons file to be converted" << std::endl;
+    std::cout << " --so samplesOutputFile" << std::endl;
+    std::cout << " --bo beaconsOutputFile" << std::endl;
     std::cout << std::endl;
     std::cout << "Example" << std::endl;
     std::cout << "$ " << command << " -f anchor_from.json -t anchor_to.json -s samples.csv -b beacons.csv" << std::endl;
@@ -83,17 +88,28 @@ Anchor parseJsonAnchor(std::string& filepath){
     return anchor;
 }
 
+#define SAMPLES_OUT "so"
+#define BEACONS_OUT "bo"
+
 Option parseArguments(int argc, char *argv[]){
     Option opt;
     int c = 0;
     int option_index = 0;
     struct option long_options[] = {
+        {SAMPLES_OUT, required_argument, NULL,  0 },
+        {BEACONS_OUT, required_argument, NULL,  0 },
         {0,         0,                 0,  0 }
     };
     while ((c = getopt_long(argc, argv, "hf:t:s:b:", long_options, &option_index )) != -1)
         switch (c)
     {
         case 0:
+            if (strcmp(long_options[option_index].name, SAMPLES_OUT) == 0){
+                opt.samples_out_path.assign(optarg);
+            }
+            if (strcmp(long_options[option_index].name, BEACONS_OUT) == 0){
+                opt.beacons_out_path.assign(optarg);
+            }
             break;
         case 'h':
             printHelp(lastComponent(argv[0]));
@@ -183,7 +199,16 @@ int main(int argc, char * argv[]){
         if(ifs.is_open()){
             auto samples = DataUtils::csvSamplesToSamples(ifs);
             auto samplesNew = convertSamples(samples, fromAnchor, toAnchor);
-            std::cout << DataUtils::samplesToCsvSamples(samplesNew);
+            
+            if(strcmp(opt.samples_out_path.c_str(),"") !=0){
+                std::cout << "samples_out_path=" << opt.samples_out_path << std::endl;
+            }
+            std::ofstream ofs(opt.samples_out_path);
+            if(ofs.is_open()){
+                ofs << DataUtils::samplesToCsvSamples(samplesNew);
+            }else{
+                std::cout << DataUtils::samplesToCsvSamples(samplesNew);
+            }
         }else{
             std::cerr << "File not found: " << opt.samples_path << std::endl;
         }
@@ -195,7 +220,16 @@ int main(int argc, char * argv[]){
         if(ifs.is_open()){
             auto bleBeacons = DataUtils::csvBLEBeaconsToBLEBeacons(ifs);
             auto bleBeaconsNew = convertBLEBeacons(bleBeacons, fromAnchor, toAnchor);
-            std::cout << DataUtils::BLEBeaconsToCSV(bleBeaconsNew);
+            
+            if(strcmp(opt.beacons_out_path.c_str(),"") !=0){
+                std::cout << "beacons_out_path=" << opt.beacons_out_path << std::endl;
+            }
+            std::ofstream ofs(opt.beacons_out_path);
+            if(ofs.is_open()){
+                ofs << DataUtils::BLEBeaconsToCSV(bleBeaconsNew);
+            }else{
+                std::cout << DataUtils::BLEBeaconsToCSV(bleBeaconsNew);
+            }
         }else{
             std::cerr << "File not found: " << opt.beacons_path << std::endl;
         }
