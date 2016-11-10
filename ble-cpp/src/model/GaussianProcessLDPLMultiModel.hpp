@@ -89,7 +89,7 @@ namespace loc{
         BLEBeacons mBLEBeacons;
         
         //ITUModelFunction mITUModel;
-        std::map<long, ITUModelFunction> mITUModelMap;
+        std::map<int64_t, ITUModelFunction> mITUModelMap;
         
         std::vector<std::vector<double>> mITUParameters;
         
