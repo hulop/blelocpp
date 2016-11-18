@@ -424,7 +424,7 @@ namespace loc{
                 // Observation dependent floor update
                 std::shared_ptr<States> states = status->states();
                 if(mEnablesFloorUpdate){
-                    floorUpdate(*states, beacons);
+                    floorUpdate(*states, beaconsFiltered);
                 }
                 // filtering
                 if(checkIfDoFiltering(*states)){
