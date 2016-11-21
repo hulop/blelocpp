@@ -40,13 +40,15 @@ typedef struct {
     double maxRssiBias = 10;
     NormalFunction normFunc = NORMAL;
     double tDistNu = 3;
-    int nSmooth = 3;
+    int nSmooth = 10;
     int nStates = 1000;
     SmoothType smoothType = SMOOTH_LOCATION;
     bool findRssiBias = false;
     LocalizeMode localizeMode = ONESHOT;
     double walkDetectSigmaThreshold = 0.6;
     bool usesReset = false;
+    bool usesRestart = false;
+    std::string restartLogPath = "";
 } Option;
 
 void printHelp() {
@@ -66,6 +68,7 @@ void printHelp() {
     std::cout << " --lm <string>       set localization mode [ONESHOT,RANDOM_WALK_ACC,RANDOM_WALK_ACC_ATT,WEAK_POSE_RANDOM_WALKER]" << std::endl;
     std::cout << " --wc                use wheelchair mode set" << std::endl;
     std::cout << " --reset             use reset in log" << std::endl;
+    std::cout << " --restart=<outputpath>  use restart in log (outputpath is optional argument)" << std::endl;
 }
 
 Option parseArguments(int argc, char *argv[]){
@@ -81,6 +84,7 @@ Option parseArguments(int argc, char *argv[]){
         {"lm",         required_argument, NULL,  0 },
         {"wc",         no_argument, NULL, 0},
         {"reset",      no_argument, NULL, 0},
+        {"restart",    optional_argument , NULL, 0},
         //{"stdY",            required_argument, NULL,  0 },
         {0,         0,                 0,  0 }
     };
@@ -124,6 +128,14 @@ Option parseArguments(int argc, char *argv[]){
             if (strcmp(long_options[option_index].name, "reset") == 0){
                 opt.usesReset = true;
             }
+            if (strcmp(long_options[option_index].name, "restart") == 0){
+                opt.usesRestart = true;
+                if(optarg!=NULL){
+                    opt.restartLogPath.assign(optarg);
+                }else{
+                    std::cout << "restart log path is null" << std::endl;
+                }
+            }
             break;
         case 'h':
             printHelp();
@@ -162,6 +174,7 @@ typedef struct {
     std::vector<loc::Status*> status_list;
     LatLngConverter::Ptr latLngConverter;
     Pose recentPose;
+    std::function<void(Status&)> func;
 } MyData;
 
 void functionCalledWhenUpdated(void *userData, loc::Status *pStatus){
@@ -169,10 +182,16 @@ void functionCalledWhenUpdated(void *userData, loc::Status *pStatus){
     if (ud->opt->findRssiBias) {
         ud->status_list.insert(ud->status_list.end(), pStatus);
     } else {
-        if(pStatus->step()==Status::FILTERING_WITH_RESAMPLING){
+        if(pStatus->step()==Status::FILTERING_WITH_RESAMPLING ||
+           pStatus->step()==Status::FILTERING_WITHOUT_RESAMPLING ||
+            pStatus->step()==Status::RESET){
             auto meanLoc = ud->latLngConverter->localToGlobal(*pStatus->meanLocation());
             *ud->out << meanLoc << std::endl;
             ud->recentPose = *pStatus->meanPose();
+            if(ud->func != NULL){
+                ud->func(*pStatus);
+                ud->func = NULL;
+            }
         }
         int i=0;
         for(const State& s: *pStatus->states()) {
@@ -184,7 +203,6 @@ void functionCalledWhenUpdated(void *userData, loc::Status *pStatus){
 }
 
 int main(int argc, char * argv[]) {
-    // insert code here...
     if (argc <= 1) {
         printHelp();
         return 0;
@@ -204,25 +222,32 @@ int main(int argc, char * argv[]) {
         ud.out = &std::cout;
     }
 
-    BasicLocalizer localizer;
-    localizer.localizeMode = opt.localizeMode;
+    auto resetBasicLocalizer = [](Option& opt, MyData& ud){
+        BasicLocalizer localizer;
+        localizer.localizeMode = opt.localizeMode;
+        
+        localizer.nSmooth = opt.nSmooth;
+        localizer.smoothType = opt.smoothType;
+        localizer.nStates = opt.nStates;
+        
+        localizer.updateHandler(functionCalledWhenUpdated, &ud);
+        localizer.walkDetectSigmaThreshold = opt.walkDetectSigmaThreshold;
+        
+        // Some parameters must be set before calling setModel function.
+        localizer.setModel(opt.mapPath, "./");
+        
+        localizer.meanRssiBias(opt.meanRssiBias);
+        localizer.minRssiBias(opt.minRssiBias);
+        localizer.maxRssiBias(opt.maxRssiBias);
+        localizer.normalFunction(opt.normFunc, opt.tDistNu);
+        
+        ud.latLngConverter = localizer.latLngConverter();
+        
+        return localizer;
+    };
     
-    localizer.nSmooth = opt.nSmooth;
-    localizer.smoothType = opt.smoothType;
-    localizer.nStates = opt.nStates;
+    BasicLocalizer localizer = resetBasicLocalizer(opt, ud);
     
-    localizer.updateHandler(functionCalledWhenUpdated, &ud);
-    localizer.walkDetectSigmaThreshold = opt.walkDetectSigmaThreshold;
-    // Some parameters must be set before calling setModel function. 
-    localizer.setModel(opt.mapPath, "./");
-
-    localizer.normalFunction(opt.normFunc, opt.tDistNu);
-    localizer.meanRssiBias(opt.meanRssiBias);
-    localizer.minRssiBias(opt.minRssiBias);
-    localizer.maxRssiBias(opt.maxRssiBias);
-    
-    ud.latLngConverter = localizer.latLngConverter();
-
     if (opt.findRssiBias) {
         double step = (opt.maxRssiBias - opt.minRssiBias)/20;
         for(double rssiBias = opt.minRssiBias; rssiBias < opt.maxRssiBias; rssiBias += step) {
@@ -265,6 +290,7 @@ int main(int argc, char * argv[]) {
         }
         
     } else {
+        // Sequential Log Replay
         std::ifstream ifs(opt.testPath);
         std::string str;
         if (ifs.fail())
@@ -272,6 +298,38 @@ int main(int argc, char * argv[]) {
             std::cerr << "test file is unable to read: " << opt.testPath << std::endl;
             return -1;
         }
+        
+        std::unique_ptr<std::ostream> restartLogOut;
+        if (opt.restartLogPath.length()>0){
+            restartLogOut.reset(new std::ofstream(opt.restartLogPath));
+            if(restartLogOut->fail()){
+                std::cerr << "restart log output file is unable to write: " << opt.outputPath << std::endl;
+                return -1;
+            }else{
+                *restartLogOut << "timestamp,marker_type,x_t,y_t,z_t,floor_t,ori_t,x_e,y_e,z_e,floor_e,orientation_e,...,orientation_e_stdev" << std::endl;
+            }
+        }
+        
+        class Restarter{
+        public:
+            int counter=0;
+            long tsStart;
+            long tsEnd;
+            std::shared_ptr<Location> markerLocStart;
+            std::shared_ptr<Location> markerLocEnd;
+            std::shared_ptr<Pose> repPoseStart;
+            std::shared_ptr<Pose> repPoseEnd;
+            States statesStart;
+            States statesEnd;
+            
+            void reset(){
+                markerLocStart.reset();
+                markerLocEnd.reset();
+                repPoseStart.reset();
+                repPoseEnd.reset();
+                counter=0;
+            }
+        } restarter;
         
         while (getline(ifs, str))
         {
@@ -326,6 +384,16 @@ int main(int argc, char * argv[]) {
                         
                         localizer.resetStatus(newPose);
                     }
+                    if (opt.usesRestart && logString.compare(0, 7, "Restart") == 0){
+                        // "Restart",timestamp
+                        std::vector<std::string> values;
+                        boost::split(values, logString, boost::is_any_of(","));
+                        long timestamp = stol(values.at(1));
+                        std::cout << "LogReplay: " << timestamp << ",Restart," << std::endl;
+                        localizer = resetBasicLocalizer(opt, ud);
+                        restarter.reset();
+                        restarter.counter=1;
+                    }
                     if (logString.compare(0, 6, "Marker") == 0){
                         // "Marker",lat,lng,floor,timestamp
                         std::vector<std::string> values;
@@ -342,20 +410,99 @@ int main(int argc, char * argv[]) {
                         global.floor(floor);
                         markerLoc = ud.latLngConverter->globalToLocal(global);
                         
-                        auto recentPose = ud.recentPose;
-                        
                         std::cout << "LogReplay:" << timestamp << ",Marker,";
                         std::cout << std::setprecision(10) << lat << "," << lng;
                         std::cout << "," << floor;
-                        std::cout << ",d2D=" << Location::distance2D(markerLoc, recentPose)
-                        << ",dFloor=" << Location::floorDifference(markerLoc, recentPose)
-                        << std::endl;
+                        
+                        if(restarter.counter==0){
+                            auto recentPose = ud.recentPose;
+                            std::cout << ",d2D=" << Location::distance2D(markerLoc, recentPose)
+                            << ",dFloor=" << Location::floorDifference(markerLoc, recentPose) ;
+                        }else if(restarter.counter==1){
+                            restarter.markerLocStart.reset(new Location(markerLoc));
+                            //ud.func = [&](long ts, Pose pose, States states){
+                            ud.func = [&](Status& status){
+                                restarter.tsStart = status.timestamp();
+                                restarter.repPoseStart.reset(new Pose(*status.meanPose()));
+                                restarter.statesStart = *status.states();
+                            };
+                            restarter.counter=2;
+                        }else if(restarter.counter==2){
+                            if(restarter.markerLocStart && !restarter.repPoseStart){
+                                std::cout << "Marker duplication was found. Marker=" << markerLoc << " was not used.";
+                            }else{
+                                restarter.markerLocEnd.reset(new Location(markerLoc));
+                                //ud.func = [&](long ts, Pose pose, States states){
+                                ud.func = [&](Status& status){
+                                    restarter.tsEnd = status.timestamp();
+                                    restarter.repPoseEnd.reset(new Pose(*status.meanPose()));
+                                    restarter.statesEnd = *status.states();
+                                    restarter.counter=3;
+                                };
+                            }
+                        }
+                        std::cout << std::endl;
+                    }
+                    if (logString.compare(0, 4, "Note") == 0){
+                        // "Note", note_string
+                        // When "Note" is detected after restarting, the error must not be evaluated at the step.
+                        std::cout << "LogReplay: Note is detected. Markers before the Note will not be evaluated." << std::endl;
+                        if(1<=restarter.counter){
+                            restarter.reset();
+                        }
                     }
                     if (logString.compare(0, 9,"Altimeter") == 0){
                         // pass
                     }
                     if (logString.compare(0, 7,"Heading") == 0){
                         // pass
+                    }
+                    
+                    if(restarter.counter==3){
+                        if(restarter.repPoseStart && restarter.repPoseEnd){
+                            std::cout << "LogReplay: Evaluate restart: "
+                            << "marker0=" << *restarter.markerLocStart << ","
+                            << "marker1=" << *restarter.markerLocEnd << ","
+                            << "repPoseStart=" << *restarter.repPoseStart << ","
+                            << "repPoseEnd=" << *restarter.repPoseEnd << std::endl;
+                            
+                            Pose markerPose0(*restarter.markerLocStart);
+                            Pose markerPose1(*restarter.markerLocEnd);
+                            double dy = restarter.markerLocEnd->y() - restarter.markerLocStart->y();
+                            double dx = restarter.markerLocEnd->x() - restarter.markerLocStart->x();
+                            double oriPath = std::atan2(dy, dx);
+                            markerPose0.orientation(oriPath);
+                            markerPose1.orientation(oriPath);
+                            
+                            double d2D = Location::distance2D(*restarter.markerLocStart, *restarter.repPoseStart);
+                            double dFloor = Location::floorDifference(*restarter.markerLocStart, *restarter.repPoseStart);
+                            std::cout << "  Initial location: dist2D=" << d2D <<  ", floorDiff=" << dFloor << std::endl;
+                            
+                            d2D = Location::distance2D(*restarter.markerLocEnd, *restarter.repPoseEnd);
+                            dFloor = Location::floorDifference(*restarter.markerLocEnd, *restarter.repPoseEnd);
+                            std::cout << "  Reached location: dist2D=" << d2D <<  ", floorDiff=" << dFloor << std::endl;
+                            
+                            double oriRep = restarter.repPoseEnd->orientation();
+                            std::cout << "  Orientation: theta_true=" << oriPath << ", theta_est=" << oriRep << std::endl;
+                            
+                            auto wnParamStart = Pose::computeWrappedNormalParameter(restarter.statesStart);
+                            double oriStdStart = wnParamStart.stdev();
+                            auto wnParamEnd = Pose::computeWrappedNormalParameter(restarter.statesEnd);
+                            double oriStdEnd = wnParamEnd.stdev();
+                            
+                            if(restartLogOut){
+                                *restartLogOut << restarter.tsStart << ",Restart," << *restarter.markerLocStart
+                                    << "," << oriPath
+                                    << "," << *restarter.repPoseStart
+                                    << "," << oriStdStart <<  std::endl;
+                                *restartLogOut << restarter.tsEnd << ",Stop," << *restarter.markerLocEnd
+                                    << "," << oriPath
+                                    << "," << *restarter.repPoseEnd
+                                    << "," << oriStdEnd << std::endl;
+                            }
+                            
+                            restarter.reset();
+                        }
                     }
                 }
             } catch (std::invalid_argument e){
