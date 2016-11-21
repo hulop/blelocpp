@@ -45,6 +45,162 @@
 #include "LocException.hpp"
 
 namespace loc{
+    
+    class FloorUpdater{
+        
+    public:
+        FloorUpdateMode mode;
+        ObservationModel<State, Beacons>::Ptr mObsModel;
+        DataStore::Ptr mDataStore;
+        RandomGenerator::Ptr randomGenerator;
+        bool mVerbose = false;
+        
+        void floorUpdate(States& states, const Beacons& beacons){
+            if(mode==COUNT){
+                floorUpdateSimple(states, beacons);
+            }else if(mode==WEIGHT){
+                floorUpdateUsingObservationModel(states,beacons);
+            }else{
+                BOOST_THROW_EXCEPTION(LocException("Unknown floor update mode."));
+            }
+        }
+        
+        /**
+         * param beacons a vector of input beacons
+         * param bleBeacons a vector of BLE beacons
+         * return Map of (floor, count)
+         **/
+        std::map<int, int> countFloors(const Beacons& beacons, const BLEBeacons& bleBeacons){
+            std::map<int, int> obsFloors;
+            // Add floors
+            for(const auto& b: beacons){
+                auto ble = BLEBeacon::find(b, bleBeacons);
+                int floor = std::round(ble.floor());
+                if(obsFloors.count(floor) == 0){
+                    obsFloors[floor] = 1;
+                }else{
+                    obsFloors[floor] +=1 ;
+                }
+            }
+            return obsFloors;
+        }
+        
+        void floorUpdateSimple(States& states, const Beacons& beacons){
+            if(beacons.size()==0){
+                return;
+            }
+            if(!mDataStore){
+                return;
+            }
+            const BLEBeacons& bleBeacons = mDataStore->getBLEBeacons();
+            const Building& building = mDataStore->getBuilding();
+            // Add floors
+            std::map<int, int> obsFloors = countFloors(beacons, bleBeacons);
+
+            // Find floor from observed beacons.
+            int repFloor = 0;
+            int maxcount = -1;
+            for(auto iter = obsFloors.begin(); iter!=obsFloors.end(); iter++){
+                int floor = (*iter).first;
+                int count = (*iter).second;
+                if(count > maxcount){
+                    repFloor = floor;
+                    maxcount = count;
+                }
+            }
+            // Update floor when repFloor is different from state.floor
+            for(auto& s: states){
+                int floor = std::round(s.floor());
+                if(obsFloors.count(floor) == 0){
+                    State sTmp(s);
+                    sTmp.floor(repFloor);
+                    if(building.isMovable(sTmp)){
+                        s.floor(repFloor);
+                    }
+                }
+            }
+        }
+        
+        void floorUpdateUsingObservationModel(States& states, const Beacons& beacons){
+            if(beacons.size()==0){
+                return;
+            }
+            if(!mDataStore){
+                return;
+            }
+            
+            const BLEBeacons& bleBeacons = mDataStore->getBLEBeacons();
+            const Building& building = mDataStore->getBuilding();
+            
+            // Add floors
+            std::map<int, int> obsFloors = countFloors(beacons, bleBeacons);
+
+            State meanState = State::weightedMean(states);
+            std::vector<int> floors;
+            States statesTmp;
+            for(auto iter = obsFloors.begin(); iter!=obsFloors.end(); iter++){
+                int floor = (*iter).first;
+                State sTmp(meanState);
+                sTmp.floor(floor);
+                floors.push_back(floor);
+                statesTmp.push_back(sTmp);
+            }
+            assert(statesTmp.size() == floors.size());
+            auto logLLs = mObsModel->computeLogLikelihood(statesTmp, beacons);
+            std::vector<double> weights = ArrayUtils::computeWeightsFromLogLikelihood(logLLs);
+            
+            // generate floors using weights and random numbers
+            std::vector<int> floorsGenerated;
+            for(int i = 0; i<states.size(); i++){
+                double d = randomGenerator->nextDouble();
+                double sumw = 0;
+                int floorGen = std::numeric_limits<int>::max();
+                for(int i=0; i<weights.size(); i++){
+                    sumw+=weights.at(i);
+                    if(d<=sumw){
+                        floorGen = floors.at(i);
+                        break;
+                    }
+                    if(i==weights.size()-1){
+                        floorGen = floors.at(i);
+                    }
+                }
+                assert(floorGen != std::numeric_limits<int>::max());
+                floorsGenerated.push_back(floorGen);
+            }
+            
+            // update floors
+            for(int i=0; i<states.size(); i++){
+                auto&s = states.at(i);
+                int floor = std::round(s.floor());
+                int floorGen = floorsGenerated.at(i);
+                if(floor!=floorGen){
+                    State sTmp(s);
+                    sTmp.floor(floorGen);
+                    if(building.isMovable(sTmp)){
+                        s.floor(floorGen);
+                    }
+                }
+            }
+            
+            size_t fsize = 0;
+            if(mVerbose){
+                std::stringstream ss;
+                ss << "(floor,weights,count)=";
+                for(int i=0; i<weights.size(); i++){
+                    int floor = floors.at(i);
+                    auto count = std::count(floorsGenerated.begin(), floorsGenerated.end(), floor);
+                    ss << "("<<floor<<","<<weights.at(i)<<","<<count <<")," ;
+                }
+                std::cout << ss.str() << std::endl;
+                
+                if(floors.size()>=2){
+                    fsize = floors.size();
+                }
+            }
+        }
+    };
+    
 
     class StreamParticleFilter::Impl{
 
@@ -83,6 +239,9 @@ namespace loc{
         std::shared_ptr<RandomGenerator> mRand;
         
         DataStore::Ptr mDataStore;
+        
+        std::shared_ptr<FloorUpdater> mFloorUpdater;
+        FloorUpdateMode mFloorUpdateMode = WEIGHT;
         
         void (*mFunctionCalledAfterUpdate)(Status*) = NULL;
         void (*mFunctionCalledAfterUpdate2)(void*, Status*) = NULL;
@@ -242,56 +401,6 @@ namespace loc{
             return 0;
         }
         
-        void floorUpdate(States& states, const Beacons&beacons){
-            if(beacons.size()==0){
-                return;
-            }
-            if(!mDataStore){
-                return;
-            }
-
-            const BLEBeacons& bleBeacons = mDataStore->getBLEBeacons();
-            const Building& building = mDataStore->getBuilding();
-            
-            std::map<int, int> obsFloors;
-            // Add floors
-            for(const auto& b: beacons){
-                for(const auto& ble: bleBeacons){
-                    if(b.id() == ble.id()){
-                        int floor = std::round(ble.floor());
-                        if(obsFloors.count(floor) == 0){
-                            obsFloors[floor] = 1;
-                        }else{
-                            obsFloors[floor] +=1 ;
-                        }
-                        break;
-                    }
-                }
-            }
-            // Find floor from observed beacons.
-            int repFloor = 0;
-            int maxcount = -1;
-            for(auto iter = obsFloors.begin(); iter!=obsFloors.end(); iter++){
-                int floor = (*iter).first;
-                int count = (*iter).second;
-                if(count > maxcount){
-                    repFloor = floor;
-                    maxcount = count;
-                }
-            }
-            // Update floor when repFloor is different from state.floor
-            for(auto& s: states){
-                int floor = std::round(s.floor());
-                if(obsFloors.count(floor) == 0){
-                    State sTmp(s);
-                    sTmp.floor(repFloor);
-                    if(building.isMovable(sTmp)){
-                        s.floor(repFloor);
-                    }
-                }
-            }
-        }
-        
         void doFiltering(const Beacons& beacons){
 
             if(beacons.size()==0){
@@ -424,7 +533,14 @@ namespace loc{
                 // Observation dependent floor update
                 std::shared_ptr<States> states = status->states();
                 if(mEnablesFloorUpdate){
-                    floorUpdate(*states, beaconsFiltered);
+                    if(!mFloorUpdater){
+                        mFloorUpdater.reset(new FloorUpdater);
+                        mFloorUpdater->mode = mFloorUpdateMode;
+                        mFloorUpdater->mDataStore = mDataStore;
+                        mFloorUpdater->mObsModel = mObservationModel;
+                        mFloorUpdater->randomGenerator = mRand;
+                    }
+                    mFloorUpdater->floorUpdate(*states, beaconsFiltered);
                 }
                 // filtering
                 if(checkIfDoFiltering(*states)){
@@ -761,6 +877,10 @@ namespace loc{
             mPostResampler = postRes;
         }
         
+        void floorUpdateMode(FloorUpdateMode mode){
+            mFloorUpdateMode = mode;
+        }
+        
     };
 
 
@@ -913,6 +1033,11 @@ namespace loc{
     
     StreamParticleFilter& StreamParticleFilter::enablesFloorUpdate(bool enablesFloorUpdate){
         impl->enablesFloorUpdate(enablesFloorUpdate);
+        return * this;
+    }
+    
+    StreamParticleFilter& StreamParticleFilter::floorUpdateMode(FloorUpdateMode mode){
+        impl->floorUpdateMode(mode);
         return * this;
     }
     

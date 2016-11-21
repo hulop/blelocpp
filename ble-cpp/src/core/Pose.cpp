@@ -58,11 +58,11 @@ namespace loc{
     }
 
     double Pose::vx() const{
-        return velocity()*cos(orientation());
+        return velocity()*std::cos(orientation());
     }
     
     double Pose::vy() const{
-        return velocity()*sin(orientation());
+        return velocity()*std::sin(orientation());
     }
     
     /*

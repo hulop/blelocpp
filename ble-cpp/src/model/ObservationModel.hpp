@@ -34,6 +34,8 @@ namespace loc{
 
 template<class Tstate, class Tinput> class ObservationModel{
 public:
+    using Ptr=std::shared_ptr<ObservationModel<Tstate, Tinput>>;
+    
     virtual ~ObservationModel(){}
     
     virtual std::vector<Tstate>* update(const std::vector<Tstate> & states, const Tinput & input) = 0;

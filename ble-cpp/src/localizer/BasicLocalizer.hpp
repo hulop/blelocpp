@@ -137,7 +137,7 @@ namespace loc {
         int nStates = 1000;
         double alphaWeaken = 0.3;
         int nSmooth = 10;
-        int nSmoothTracking = 3;
+        int nSmoothTracking = 1;
         SmoothType smoothType = SMOOTH_LOCATION;
         LocalizeMode localizeMode = ONESHOT;
         double effectiveSampleSizeThreshold = 1000;

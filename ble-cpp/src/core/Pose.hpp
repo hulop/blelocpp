@@ -79,6 +79,8 @@ namespace loc {
         static Pose weightedMean(const std::vector<Tpose>& poses, const std::vector<double>& weights);
         template<class Tpose>
         static DirectionalStatistics computeDirectionalStatistics(const std::vector<Tpose>& poses);
+        template<class Tpose>
+        static WrappedNormalParameter computeWrappedNormalParameter(const std::vector<Tpose>& poses);
         
         static double normalizeOrientaion(double orientation);
         static double computeOrientationDifference(double o1, double o2);
@@ -143,6 +145,14 @@ namespace loc {
         return MathUtils::computeDirectionalStatistics(oris);
     }
     
+    template <class Tpose>
+    WrappedNormalParameter Pose::computeWrappedNormalParameter(const std::vector<Tpose>& poses){
+        std::vector<double> oris;
+        for(const auto& p: poses){
+            oris.push_back(p.orientation());
+        }
+        return MathUtils::computeWrappedNormalParameters(oris);
+    }
     
     // Pose property //
     

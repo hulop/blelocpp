@@ -109,8 +109,10 @@ namespace loc{
         template<class Tbeacon>
         static boost::bimaps::bimap<long, int> constructBeaconIdToIndexBimap(std::vector<Tbeacon> beacons);
         
-        friend std::ostream& operator<<(std::ostream& os, const BLEBeacon& bleBeacon);
+        template<class Tin, class Tout>
+        static Tout find(const Tin& beacon, const std::vector<Tout>& beacons);
         
+        friend std::ostream& operator<<(std::ostream& os, const BLEBeacon& bleBeacon);
     };
     
     
@@ -170,6 +172,17 @@ namespace loc{
             i++;
         }
         return beaconIdIndexMap;
+    }
+    
+    template<class Tin, class Tout>
+    Tout BLEBeacon::find(const Tin& beacon, const std::vector<Tout>& beacons){
+        long id = beacon.id();
+        for(const Tout& b: beacons){
+            if(id == b.id()){
+                return b;
+            }
+        }
+        BOOST_THROW_EXCEPTION(LocException("input beacon was not found in beacon list."));
     }
 }
 

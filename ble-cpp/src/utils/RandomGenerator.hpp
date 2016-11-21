@@ -26,6 +26,7 @@
 #include <stdio.h>
 #include <random>
 #include <algorithm>
+#include <memory>
 
 namespace loc{
     class RandomGenerator{
@@ -37,6 +38,7 @@ namespace loc{
         std::normal_distribution<> normalDistribution;
         
     public:
+        using Ptr = std::shared_ptr<RandomGenerator>;
         
         RandomGenerator() = default;
         ~RandomGenerator() = default;

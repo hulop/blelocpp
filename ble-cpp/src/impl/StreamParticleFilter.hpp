@@ -38,6 +38,11 @@
 
 namespace loc {
     
+    enum FloorUpdateMode{
+        COUNT,
+        WEIGHT
+    };
+    
     //template<class Tsys, class Tobs>
     class StreamParticleFilter : public StreamLocalizer{
     public:
@@ -62,7 +67,7 @@ namespace loc {
         StreamParticleFilter& effectiveSampleSizeThreshold(double);
         StreamParticleFilter& mixtureParameters(MixtureParameters);
         StreamParticleFilter& enablesFloorUpdate(bool);
-        
+        StreamParticleFilter& floorUpdateMode(FloorUpdateMode);
         
         StreamParticleFilter& locationStandardDeviationLowerBound(Location loc);
         

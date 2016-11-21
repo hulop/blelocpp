@@ -150,8 +150,7 @@ namespace loc{
                     mLocalizer->putBeacons(newBeacons);
                     break;
             }
-        } else {
-            
+        } else {//smoothType==SMOOTH_LOCATION
             switch(mState) {
                 case UNKNOWN:
                     mLocalizer->resetStatus(beacons);
@@ -202,7 +201,7 @@ namespace loc{
         }
         
         if (isTrackingMode() && smooth_count >= nSmooth && mState != TRACKING) {
-                Pose refPose = *mResult->meanPose();
+            Pose refPose = *mResult->meanPose();
             std::vector<State> states = *mResult->states();
             int idx = Location::findClosestLocationIndex(refPose, states);
             Location locClosest = states.at(idx);
@@ -585,7 +584,6 @@ namespace loc{
         // set resampler
         resampler = std::shared_ptr<Resampler<State>>(new GridResampler<State>());
         mLocalizer->resampler(resampler);
-        
         // Set status initializer
         ////PoseProperty poseProperty;
         ////StateProperty stateProperty;

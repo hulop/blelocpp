@@ -22,6 +22,7 @@
 
 #include <boost/math/distributions/chi_squared.hpp>
 #include "MathUtils.hpp"
+#include "LocException.hpp"
 
 double MathUtils::quantileChiSquaredDistribution(int degreeOfFreedom, double cumulativeDensity){
     boost::math::chi_squared chi_sq(degreeOfFreedom);
@@ -31,6 +32,9 @@ double MathUtils::quantileChiSquaredDistribution(int degreeOfFreedom, double cum
 
 DirectionalStatistics MathUtils::computeDirectionalStatistics(std::vector<double> orientations){
     size_t n = orientations.size();
+    if(n==0){
+        BOOST_THROW_EXCEPTION(LocException("The size of input orientation vector is zero."));
+    }
     double x = 0, y = 0;
     for(auto ori : orientations){
         x += std::cos(ori);
