@@ -242,6 +242,7 @@ namespace loc{
         
         std::shared_ptr<FloorUpdater> mFloorUpdater;
         FloorUpdateMode mFloorUpdateMode = WEIGHT;
+        bool mFiltersBeaconFloorAtReset = false;
         
         void (*mFunctionCalledAfterUpdate)(Status*) = NULL;
         void (*mFunctionCalledAfterUpdate2)(void*, Status*) = NULL;
@@ -523,6 +524,30 @@ namespace loc{
             return beaconsFiltered;
         }
 
+        Beacons filterBeaconsByStrongestBeaconFloor(const Beacons& beacons, const BLEBeacons& blebeacons){
+            auto beaconsSorted = Beacon::sortByRssi(beacons);
+            const auto& strongestBeacon = beaconsSorted.back();
+            for(int i = 0; i<beaconsSorted.size(); i++){
+                auto r1 = beaconsSorted.at(i).rssi();
+                assert(r1<=strongestBeacon.rssi());
+            }
+            BLEBeacon strongestLoc = BLEBeacon::find(strongestBeacon, blebeacons);
+            double floor_est = strongestLoc.floor();
+            Beacons beaconsFloorEst(beacons);
+            beaconsFloorEst.clear();
+            assert(beaconsFloorEst.size()==0);
+            for(const Beacon& b: beaconsSorted){
+                BLEBeacon ble =  BLEBeacon::find(b, blebeacons);
+                assert(b.major() == ble.major());
+                assert(b.minor() == ble.minor());
+                if(ble.floor() == floor_est){
+                    beaconsFloorEst.push_back(b);
+                }
+            }
+            std::cout << "floor_est=" << floor_est << ", #beacons " << beacons.size() << " -> " << beaconsFloorEst.size() << std::endl;
+            return beaconsFloorEst;
+        }
+        
         void putBeacon(const Beacons & beacons){
             initializeStatusIfZero();
 
@@ -661,7 +686,11 @@ namespace loc{
 
         bool resetStatus(const Beacons& beacons){
             initializeStatusIfZero();
-            const Beacons& beaconsFiltered = filterBeacons(beacons);
+            Beacons beaconsFiltered = filterBeacons(beacons);
+            if(mDataStore && mFiltersBeaconFloorAtReset){
+                const auto& blebeacons = mDataStore->getBLEBeacons();
+                beaconsFiltered = filterBeaconsByStrongestBeaconFloor(beaconsFiltered, blebeacons);
+            }
             std::stringstream ss;
             ss << "Status was initialized by ";
             if(beaconsFiltered.size() == 0){
