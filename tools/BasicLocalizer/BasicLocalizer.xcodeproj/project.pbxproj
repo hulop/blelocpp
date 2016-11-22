@@ -82,6 +82,7 @@
 		FB05F26C1D8ADCCC003B472A /* WeakPoseRandomWalker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB05F2681D8ADCCC003B472A /* WeakPoseRandomWalker.cpp */; };
 		FB176CB51D78128B008C1745 /* LatLngConverter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB176CB31D78128B008C1745 /* LatLngConverter.cpp */; };
 		FB176CB61D78128B008C1745 /* LatLngConverter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB176CB31D78128B008C1745 /* LatLngConverter.cpp */; };
+		FB7B22901DE484E200FF8BF3 /* SystemModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB7B228F1DE484E200FF8BF3 /* SystemModel.cpp */; };
 		FBBA09FB1DACB89000EB2553 /* Heading.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBBA09F91DACB89000EB2553 /* Heading.cpp */; };
 		FBEB01EF1D7588F200CB808D /* RandomWalkerMotion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBEB01EB1D7588F200CB808D /* RandomWalkerMotion.cpp */; };
 		FBEB01F01D7588F200CB808D /* RandomWalkerMotion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBEB01EB1D7588F200CB808D /* RandomWalkerMotion.cpp */; };
@@ -233,6 +234,7 @@
 		FB05F2691D8ADCCC003B472A /* WeakPoseRandomWalker.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WeakPoseRandomWalker.hpp; sourceTree = "<group>"; };
 		FB176CB31D78128B008C1745 /* LatLngConverter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LatLngConverter.cpp; sourceTree = "<group>"; };
 		FB176CB41D78128B008C1745 /* LatLngConverter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LatLngConverter.hpp; sourceTree = "<group>"; };
+		FB7B228F1DE484E200FF8BF3 /* SystemModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SystemModel.cpp; sourceTree = "<group>"; };
 		FBA5E62F1D9E90930027E06F /* LocException.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LocException.hpp; sourceTree = "<group>"; };
 		FBBA09F91DACB89000EB2553 /* Heading.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Heading.cpp; sourceTree = "<group>"; };
 		FBBA09FA1DACB89000EB2553 /* Heading.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Heading.hpp; sourceTree = "<group>"; };
@@ -488,8 +490,6 @@
 			children = (
 				FB05F2641D8ADCCC003B472A /* PosteriorResampler.cpp */,
 				FB05F2651D8ADCCC003B472A /* PosteriorResampler.hpp */,
-				FB05F2681D8ADCCC003B472A /* WeakPoseRandomWalker.cpp */,
-				FB05F2691D8ADCCC003B472A /* WeakPoseRandomWalker.hpp */,
 				FBEB01EB1D7588F200CB808D /* RandomWalkerMotion.cpp */,
 				FBEB01EC1D7588F200CB808D /* RandomWalkerMotion.hpp */,
 				FBEB01ED1D7588F200CB808D /* SystemModelInBuilding.cpp */,
@@ -504,9 +504,12 @@
 				7E12B4A91D3474B900614DBB /* ObservationModelTrainer.hpp */,
 				7E12B4AA1D3474B900614DBB /* PoseRandomWalker.cpp */,
 				7E12B4AB1D3474B900614DBB /* PoseRandomWalker.hpp */,
+				FB05F2681D8ADCCC003B472A /* WeakPoseRandomWalker.cpp */,
+				FB05F2691D8ADCCC003B472A /* WeakPoseRandomWalker.hpp */,
 				7E12B4AE1D3474B900614DBB /* RandomWalker.cpp */,
 				7E12B4AF1D3474B900614DBB /* RandomWalker.hpp */,
 				7E12B4B01D3474B900614DBB /* SystemModel.hpp */,
+				FB7B228F1DE484E200FF8BF3 /* SystemModel.cpp */,
 			);
 			name = model;
 			path = "../../ble-cpp/src/model";
@@ -767,6 +770,7 @@
 				FB176CB51D78128B008C1745 /* LatLngConverter.cpp in Sources */,
 				7E12B4F31D34767500614DBB /* DataUtils.cpp in Sources */,
 				7E12B4F41D34767500614DBB /* ExtendedDataUtils.cpp in Sources */,
+				FB7B22901DE484E200FF8BF3 /* SystemModel.cpp in Sources */,
 				7E12B4F51D34767500614DBB /* LazyDataStore.cpp in Sources */,
 				7E12B4F61D34767500614DBB /* VirtualDevice.cpp in Sources */,
 				7E12B4F71D34767500614DBB /* GridResampler.cpp in Sources */,

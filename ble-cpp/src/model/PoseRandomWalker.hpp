@@ -76,22 +76,17 @@ namespace loc{
     
     class PoseRandomWalker: public SystemModel<State, SystemModelInput>, public SystemModelVelocityAdjustable, public SystemModelMovementControllable{
 
-    protected:
-        
+    protected:        
         RandomGenerator randomGenerator;
         PoseProperty::Ptr poseProperty = PoseProperty::Ptr(new PoseProperty);
         StateProperty::Ptr stateProperty = StateProperty::Ptr(new StateProperty);
         PoseRandomWalkerProperty::Ptr mProperty = PoseRandomWalkerProperty::Ptr(new PoseRandomWalkerProperty);
-        double mVelocityRate = 1.0;
         
     public:
         
         PoseRandomWalker() = default;
         virtual ~PoseRandomWalker() = default;
-        
-        virtual double velocityRate() const override{ return mVelocityRate; }
-        virtual void velocityRate (double velocityRate) override{ mVelocityRate = velocityRate; }
-        
+                
         virtual PoseRandomWalker& setProperty(PoseRandomWalkerProperty::Ptr property);
         virtual PoseRandomWalker& setPoseProperty(PoseProperty::Ptr poseProperty);
         virtual PoseRandomWalker& setStateProperty(StateProperty::Ptr stateProperty);

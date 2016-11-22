@@ -86,13 +86,9 @@ namespace loc{
         
         virtual Ts predict(Ts state, Tin input) override;
         virtual RandomWalkerMotion& setProperty(RandomWalkerMotionProperty::Ptr);
-        
-        virtual void velocityRate(double) override;
-        virtual double velocityRate() const override;
 
     protected:
         RandomWalkerMotionProperty::Ptr mRWMotionProperty;
-        double velocityRate_ = 1.0;
         double turningVelocityRate = 1.0;
         long currentTimestamp;
         double currentYaw;

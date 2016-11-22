@@ -95,6 +95,7 @@ namespace loc {
         using RandomWalkerMotion<Ts, Tin>::predict;
         using RandomWalkerMotion<Ts, Tin>::velocityRate;
         using RandomWalkerMotion<Ts, Tin>::setProperty;
+        using RandomWalkerMotion<Ts, Tin>::relativeVelocity;
         
         WeakPoseRandomWalker() : wPRWProperty(new WeakPoseRandomWalkerProperty) {
             // pass

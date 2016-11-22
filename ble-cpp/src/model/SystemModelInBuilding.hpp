@@ -44,8 +44,9 @@ namespace loc{
         double velocityRateFloor_ = 1.0;
         double velocityRateStair_ = 0.5;
         double velocityRateElevator_ = 0.5;
-        //double velocityRateEscalator_ = 0.5; //0.5 is too small.
-        double velocityRateEscalator_ = 1.0;
+        double velocityRateEscalator_ = 0.5;
+        
+        double relativeVelocityEscalator_ = 0.3;
         
         double weightDecayRate_ = 0.9;
         
@@ -65,6 +66,7 @@ namespace loc{
         SystemModelInBuildingProperty& velocityRateStair(double velocityRateStair);
         SystemModelInBuildingProperty& velocityRateElevator(double velocityRateElevator);
         SystemModelInBuildingProperty& velocityRateEscalator(double velocityRateEscalator);
+        SystemModelInBuildingProperty& relativeVelocityEscalator(double relativeVelocityEscalator);
         
         SystemModelInBuildingProperty& weightDecayRate(double weightDecayRate);
         double probabilityUp() const;
@@ -76,6 +78,7 @@ namespace loc{
         double velocityRateStair() const;
         double velocityRateElevator() const;
         double velocityRateEscalator() const;
+        double relativeVelocityEscalator() const;
         double weightDecayRate() const;
         int maxTrial() const;
         

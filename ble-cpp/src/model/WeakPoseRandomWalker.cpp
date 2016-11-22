@@ -109,17 +109,26 @@ namespace loc{
             
             double orientationActual = yaw - state.orientationBias();
             double v = 0.0;
-            if(movLevel >0 ){
+            if(movLevel>0 ){
                 // Add noise to orientation
                 orientationActual = mRandGen->nextWrappedNormal(orientationActual, mPoseProperty->stdOrientation() * sqdt);
                 if( mRandGen->nextDouble() < wPRWProperty->probabilityOrientationJump() ){
                     orientationActual = Pose::normalizeOrientaion( 2.0 * M_PI * (mRandGen->nextDouble() - 0.5));
                 }
-                // Update velocity
+            }
+            state.orientation(orientationActual);
+            
+            // Update velocity
+            if(nSteps > 0){
                 double nV = state.normalVelocity();
                 v = nV * velocityRate() * turningVelocityRate;
             }
-            state.orientation(orientationActual);
+            if(relativeVelocity() > 0){
+                v += mRandGen->nextTruncatedGaussian(relativeVelocity(),
+                                                     mPoseProperty->diffusionVelocity()*sqdt,
+                                                     mPoseProperty->minVelocity(),
+                                                     mPoseProperty->maxVelocity());
+            }
             state.velocity(v);
             
             // Update in-plane coordinate.

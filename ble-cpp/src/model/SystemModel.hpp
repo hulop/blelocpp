@@ -83,11 +83,16 @@ public:
      */
     
     class SystemModelVelocityAdjustable{
+    protected:
+        double velocityRate_ = 1.0;
+        double relativeVelocity_ = 0.0;
     public:
         using Ptr = std::shared_ptr<SystemModelVelocityAdjustable>;
         virtual ~SystemModelVelocityAdjustable(){}
-        virtual void velocityRate(double) = 0;
-        virtual double velocityRate() const = 0;
+        virtual void velocityRate(double velocityRate);
+        virtual double velocityRate() const;
+        virtual void relativeVelocity(double relVel);
+        virtual double relativeVelocity() const;
     };
     
     class SystemModelMovementControllable{
@@ -96,19 +101,10 @@ public:
         double mMovement = 0;
     public:
         virtual ~SystemModelMovementControllable() = default;
-        void forceMove(){
-            controlMovement(1.0);
-        }
-        void forceStop(){
-            controlMovement(0.0);
-        }
-        void controlMovement(double movement){
-            mMovement = movement;
-            isUnderControll = true;
-        }
-        void releaseControl(){
-            isUnderControll = false;
-        }        
+        void forceMove();
+        void forceStop();
+        void controlMovement(double movement);
+        void releaseControl();
     };
 }
 

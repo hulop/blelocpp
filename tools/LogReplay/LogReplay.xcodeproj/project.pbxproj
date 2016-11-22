@@ -65,6 +65,7 @@
 		7E7728901C97D5D80013FC40 /* MathUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E7728431C97985D0013FC40 /* MathUtils.cpp */; };
 		7E7728911C97D5D80013FC40 /* RandomGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E7728451C97985D0013FC40 /* RandomGenerator.cpp */; };
 		FB4EAEE51CD7207300FECA1B /* ExtendedDataUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB4EAEE31CD7207300FECA1B /* ExtendedDataUtils.cpp */; };
+		FB7B22941DE4963000FF8BF3 /* SystemModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB7B22931DE4963000FF8BF3 /* SystemModel.cpp */; };
 		FBB76B211DB64E70003E6294 /* PosteriorResampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBB76B191DB64E70003E6294 /* PosteriorResampler.cpp */; };
 		FBB76B221DB64E70003E6294 /* RandomWalkerMotion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBB76B1B1DB64E70003E6294 /* RandomWalkerMotion.cpp */; };
 		FBB76B231DB64E70003E6294 /* SystemModelInBuilding.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBB76B1D1DB64E70003E6294 /* SystemModelInBuilding.cpp */; };
@@ -205,6 +206,7 @@
 		E9F26190EDF40A0FFFE3B3E6 /* libPods-LogReplay.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-LogReplay.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		FB4EAEE31CD7207300FECA1B /* ExtendedDataUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ExtendedDataUtils.cpp; sourceTree = "<group>"; };
 		FB4EAEE41CD7207300FECA1B /* ExtendedDataUtils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ExtendedDataUtils.hpp; sourceTree = "<group>"; };
+		FB7B22931DE4963000FF8BF3 /* SystemModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SystemModel.cpp; sourceTree = "<group>"; };
 		FBA5E62E1D9E8FE80027E06F /* LocException.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LocException.hpp; sourceTree = "<group>"; };
 		FBB76B191DB64E70003E6294 /* PosteriorResampler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PosteriorResampler.cpp; sourceTree = "<group>"; };
 		FBB76B1A1DB64E70003E6294 /* PosteriorResampler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = PosteriorResampler.hpp; sourceTree = "<group>"; };
@@ -452,6 +454,7 @@
 				7E7728361C97985D0013FC40 /* RandomWalker.cpp */,
 				7E7728371C97985D0013FC40 /* RandomWalker.hpp */,
 				7E7728381C97985D0013FC40 /* SystemModel.hpp */,
+				FB7B22931DE4963000FF8BF3 /* SystemModel.cpp */,
 			);
 			name = model;
 			path = "../../ble-cpp/src/model";
@@ -639,6 +642,7 @@
 				7E7728751C97D5D80013FC40 /* DataLogger.cpp in Sources */,
 				7E7728761C97D5D80013FC40 /* DataStoreImpl.cpp in Sources */,
 				7E7728771C97D5D80013FC40 /* DataUtils.cpp in Sources */,
+				FB7B22941DE4963000FF8BF3 /* SystemModel.cpp in Sources */,
 				7E7728781C97D5D80013FC40 /* LazyDataStore.cpp in Sources */,
 				7E7728791C97D5D80013FC40 /* VirtualDevice.cpp in Sources */,
 				7E77287A1C97D5D80013FC40 /* GridResampler.cpp in Sources */,

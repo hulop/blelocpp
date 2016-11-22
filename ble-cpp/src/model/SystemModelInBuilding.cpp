@@ -70,6 +70,11 @@ namespace loc{
         return *this;
     }
     
+    SystemModelInBuildingProperty& SystemModelInBuildingProperty::relativeVelocityEscalator(double relativeVelocityEscalator){
+        relativeVelocityEscalator_ = relativeVelocityEscalator;
+        return *this;
+    }
+    
     SystemModelInBuildingProperty& SystemModelInBuildingProperty::weightDecayRate(double weightDecayRate){
         weightDecayRate_ = weightDecayRate;
         return *this;
@@ -114,6 +119,10 @@ namespace loc{
     
     double SystemModelInBuildingProperty::velocityRateEscalator() const{
         return velocityRateEscalator_;
+    }
+    
+    double SystemModelInBuildingProperty::relativeVelocityEscalator() const{
+        return relativeVelocityEscalator_;
     }
     
     double SystemModelInBuildingProperty::weightDecayRate() const{
@@ -285,18 +294,19 @@ namespace loc{
         }
         Tstate stateNew(state);
         
-        SystemModelVelocityAdjustable* prw = dynamic_cast<SystemModelVelocityAdjustable*>(mSysModel.get());
-        auto* sysCtrl = dynamic_cast<SystemModelMovementControllable*>(mSysModel.get());
-        if(prw!=NULL){
-             // Change field velocity rate
+        auto sysVelAdj = std::dynamic_pointer_cast<SystemModelVelocityAdjustable>(mSysModel);
+        auto sysCtrl = std::dynamic_pointer_cast<SystemModelMovementControllable>(mSysModel);
+        if(sysVelAdj!=NULL){
+             // Change field velocity
              if(mBuilding->isElevator(state)){
-                 prw->velocityRate(mProperty->velocityRateElevator());
+                 sysVelAdj->velocityRate(mProperty->velocityRateElevator());
              }else if(mBuilding->isStair(state)){
-                 prw->velocityRate(mProperty->velocityRateStair());
+                 sysVelAdj->velocityRate(mProperty->velocityRateStair());
              }else if(mBuilding->isEscalator(state)){
-                 prw->velocityRate(mProperty->velocityRateEscalator());
+                 sysVelAdj->velocityRate(mProperty->velocityRateEscalator());
+                 sysVelAdj->relativeVelocity(mProperty->relativeVelocityEscalator());
              }else{
-                 prw->velocityRate(mProperty->velocityRateFloor());
+                 sysVelAdj->velocityRate(mProperty->velocityRateFloor());
              }
         }
         if(sysCtrl!=NULL){
@@ -317,9 +327,10 @@ namespace loc{
                 }
             }
         }
-        if(prw!=NULL){
-            // Revert field velocity rate
-            prw->velocityRate(mProperty->velocityRateFloor());
+        if(sysVelAdj!=NULL){
+            // Revert field velocity
+            sysVelAdj->velocityRate(mProperty->velocityRateFloor());
+            sysVelAdj->relativeVelocity(0.0);
         }
         if(sysCtrl!=NULL){
             sysCtrl->releaseControl();

@@ -55,12 +55,13 @@ namespace loc{
         double dTime = (input.timestamp()-input.previousTimestamp())/(1000.0); //[s] Difference in time
         
         double movLevel = movingLevel();
+        double nSteps = mProperty->pedometer()->getNSteps();
         double yaw = mProperty->orientationMeter()->getYaw();
         
         //std::cout << "predict: dTime=" << dTime << ", nSteps=" << nSteps << std::endl;
         
         // Perturb variables in State
-        if(movLevel>0 || mProperty->doesUpdateWhenStopping() ){
+        if(nSteps>0 || mProperty->doesUpdateWhenStopping() ){
             state.orientationBias(state.orientationBias() + stateProperty->diffusionOrientationBias()*randomGenerator.nextGaussian()*dTime );
             state.rssiBias(randomGenerator.nextTruncatedGaussian(state.rssiBias(), stateProperty->diffusionRssiBias()*dTime , stateProperty->minRssiBias(), stateProperty->maxRssiBias()));
         }
@@ -77,21 +78,26 @@ namespace loc{
         double angularVelocityLimit = mProperty->angularVelocityLimit();
         double turningVelocityRate = std::sqrt(1.0 - std::min(1.0, std::pow(oriDiff/angularVelocityLimit,2)));
         
-        
         // Perturb variables in Pose
         double v = 0.0;
         double nV = state.normalVelocity();
-        if(movLevel >0 || mProperty->doesUpdateWhenStopping()){
+        if(nSteps >0 || mProperty->doesUpdateWhenStopping()){
             nV = randomGenerator.nextTruncatedGaussian(state.normalVelocity(),
                                                           poseProperty->diffusionVelocity(),
                                                           poseProperty->minVelocity(),
                                                           poseProperty->maxVelocity());
             state.normalVelocity(nV);
         }
-        if(movLevel>0){
-            v = nV * mVelocityRate * turningVelocityRate;
-        }else{
-            v = 0.0;
+        
+        // Update velocity at the moment
+        if(nSteps > 0){
+            v = nV * velocityRate() * turningVelocityRate;
+        }
+        if(relativeVelocity()>0){
+            v += randomGenerator.nextTruncatedGaussian(relativeVelocity(),
+                                                 poseProperty->diffusionVelocity()*dTime,
+                                                 poseProperty->minVelocity(),
+                                                 poseProperty->maxVelocity());
         }
         state.velocity(v);
         

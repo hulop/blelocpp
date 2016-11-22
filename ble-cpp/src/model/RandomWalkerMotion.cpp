@@ -26,16 +26,6 @@
 namespace loc{
     
     template<class Ts, class Tin>
-    void RandomWalkerMotion<Ts, Tin>::velocityRate(double velocityRate){
-        velocityRate_ = velocityRate;
-    }
-    
-    template<class Ts, class Tin>
-    double RandomWalkerMotion<Ts, Tin>::velocityRate() const{
-        return velocityRate_;
-    }
-    
-    template<class Ts, class Tin>
     Ts RandomWalkerMotion<Ts, Tin>::predict(Ts state, Tin input){
         auto& mRandGen = RandomWalker<Ts, Tin>::mRandGen;
         const auto& mPedometer = mRWMotionProperty->pedometer();
