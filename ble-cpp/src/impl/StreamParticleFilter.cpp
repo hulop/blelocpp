@@ -683,6 +683,38 @@ namespace loc{
                 return false;
             }
         }
+        
+        bool resetStatus(Pose meanPose, Pose stdevPose, double rateContami){
+            bool orientationWasUpdated = mOrientationmeter->isUpdated();
+            if(orientationWasUpdated){
+                std::cout << "Orientation is updated. Reset(meanPose, stdevPose, rateContami) succeeded." << std::endl;
+                double orientationMeasured = mOrientationmeter->getYaw();
+                auto statesTmp = mStatusInitializer->resetStates(mNumStates, meanPose, stdevPose, orientationMeasured);
+                for(auto& s: statesTmp){
+                    double d = mRand->nextDouble();
+                    if(d<rateContami){
+                        double orientationBias = 2.0*M_PI*mRand->nextDouble();
+                        double orientation = orientationMeasured - orientationBias;
+                        s.orientationBias(orientationBias);
+                        s.orientation(orientation);
+                    }
+                }
+                States* states = new States(statesTmp);
+                status->states(states);
+                status->step(Status::RESET);
+                callback(status.get());
+                return true;
+            }else{
+                std::cout << "Orientation has not been updated. Reset input is cached to be processed later." << std::endl;
+                std::function<void()> func = [this,meanPose,stdevPose, rateContami](){
+                    return resetStatus(meanPose, stdevPose, rateContami);
+                };
+                functionsForReset.push(func);
+                return false;
+            }
+        }
+        
+        
 
         bool resetStatus(const Beacons& beacons){
             initializeStatusIfZero();
@@ -965,6 +997,10 @@ namespace loc{
 
     bool StreamParticleFilter::resetStatus(Pose meanPose, Pose stdevPose){
         return impl->resetStatus(meanPose, stdevPose);
+    }
+    
+    bool StreamParticleFilter::resetStatus(Pose meanPose, Pose stdevPose, double rateContami){
+        return impl->resetStatus(meanPose, stdevPose, rateContami);
     }
 
     bool StreamParticleFilter::resetStatus(const Beacons &beacons){

@@ -248,6 +248,7 @@ namespace loc {
         bool resetStatus() override;
         bool resetStatus(Pose pose) override;
         bool resetStatus(Pose meanPose, Pose stdevPose) override;
+        bool resetStatus(Pose meanPose, Pose stdevPose, double rateContami) override;
         bool resetStatus(const Beacons& beacons) override;
         bool resetStatus(const Location& location, const Beacons& beacons) override;
 

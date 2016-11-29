@@ -46,6 +46,7 @@ namespace loc {
         virtual bool resetStatus(const Beacons& beacons) = 0;
         virtual bool resetStatus(const Location& location, const Beacons& beacons) = 0;
         
+        virtual bool resetStatus(Pose meanPose, Pose stdevPose, double rateContami) = 0;
     };
 }
 
