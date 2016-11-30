@@ -376,6 +376,7 @@ namespace loc{
         mLocalizer->locationStandardDeviationLowerBound(locLB);
         mLocalizer->optVerbose(isVerboseLocalizer);
         mLocalizer->effectiveSampleSizeThreshold(effectiveSampleSizeThreshold);
+        mLocalizer->enablesFloorUpdate(enablesFloorUpdate);
         
         std::cout << "Create data store" << std::endl << std::endl;
         // Create data store
@@ -602,7 +603,7 @@ namespace loc{
         
         // Beacon filter
         beaconFilter = std::shared_ptr<StrongestBeaconFilter>(new StrongestBeaconFilter());
-        beaconFilter->nStrongest(10);
+        beaconFilter->nStrongest(nStrongest);
         mLocalizer->beaconFilter(beaconFilter);
         
         // Set standard deviation of Pose

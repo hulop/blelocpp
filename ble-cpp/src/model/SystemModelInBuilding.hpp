@@ -46,7 +46,7 @@ namespace loc{
         double velocityRateElevator_ = 0.5;
         double velocityRateEscalator_ = 0.5;
         
-        double relativeVelocityEscalator_ = 0.3;
+        double relativeVelocityEscalator_ = 0.4;
         
         double weightDecayRate_ = 0.9;
         

@@ -128,6 +128,10 @@ namespace loc{
         return std::abs(loc1.floor() - loc2.floor());
     }
     
+    bool Location::checkDifferentFloor(const Location& loc1, const Location& loc2){
+        double fdiff = Location::floorDifference(loc1, loc2);
+        return 1.0 <= fdiff;
+    }
     
     void Location::copyLocation(const Location& location){
         x_ = location.x();

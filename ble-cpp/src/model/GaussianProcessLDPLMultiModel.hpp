@@ -100,6 +100,7 @@ namespace loc{
         bool mFillsUnknownBeaconRssi = false;
         double mStdevRssiForUnknownBeacon = 0.0;
         double computeNormalStandardDeviation(std::vector<double> standardDeviations);
+        double mCoeffDiffFloorStdev = 5.0;
         
         // Private function to train the model
         //GaussianProcessLDPLMultiModel& kernelFunction(std::shared_ptr<KernelFunction> kernel);
@@ -126,7 +127,7 @@ namespace loc{
         
         Tinput convertInput(const Tinput& input);
         // predict mean and stdev given state for input beacon id
-        std::map<long, std::vector<double>> predict(const Tstate& state, const Tinput& input) const;
+        std::map<long, NormalParameter> predict(const Tstate& state, const Tinput& input) const;
         
         double computeLogLikelihood(const Tstate& state, const Tinput& input);
         std::vector<double> computeLogLikelihood(const std::vector<Tstate> & states, const Tinput& input) override;
@@ -139,6 +140,8 @@ namespace loc{
         
         GaussianProcessLDPLMultiModel& rssiStandardDeviationForUnknownBeacons(double stdevRssi);
         double rssiStandardDeviationForUnknownBeacons() const;
+        
+        GaussianProcessLDPLMultiModel& coeffDiffFloorStdev(double);
         
         template<class Archive>
         void save(Archive& ar) const;

@@ -505,10 +505,9 @@ namespace loc{
     }
     
     template<class Tstate, class Tinput>
-    std::map<long, std::vector<double>>  GaussianProcessLDPLMultiModel<Tstate, Tinput>::predict(const Tstate& state, const Tinput& input) const{
+    std::map<long, NormalParameter>  GaussianProcessLDPLMultiModel<Tstate, Tinput>::predict(const Tstate& state, const Tinput& input) const{
         //Assuming Tinput = Beacons
-        
-        std::map<long, std::vector<double>> beaconIdRssiStatsMap;
+        std::map<long, NormalParameter> beaconIdRssiStatsMap;
         
         std::vector<double> xvec = MLAdapter::locationToVec(state);
         std::vector<int> indices = extractKnownBeaconIndices(input);
@@ -532,7 +531,11 @@ namespace loc{
                 double ypred = mean + dypred;
                 double stdev = mRssiStandardDeviations[idx_global];
                 
-                std::vector<double> rssiStats{ypred, stdev};
+                if(mCoeffDiffFloorStdev!=1.0 && Location::checkDifferentFloor(state, bleBeacon)){
+                    stdev = stdev*mCoeffDiffFloorStdev ;
+                }
+                
+                NormalParameter rssiStats(ypred, stdev);
                 beaconIdRssiStatsMap[id] = rssiStats;
                 
                 idx_local++;
@@ -583,8 +586,8 @@ namespace loc{
             // RSSI of known beacons are predicted by a model.
             if(mBeaconIdIndexMap.count(id)==1){
                 auto rssiStats = beaconIdRssiStatsMap[id];
-                double ypred = rssiStats.at(0);
-                double stdev = rssiStats.at(1);
+                double ypred = rssiStats.mean();
+                double stdev = rssiStats.stdev();
                 
                 //double logLL = MathUtils::logProbaNormal(rssi, ypred, stdev);
                 double logLL = normFunc(rssi, ypred, stdev);
@@ -660,6 +663,11 @@ namespace loc{
         return mStdevRssiForUnknownBeacon;
     }
     
+    template<class Tstate, class Tinput>
+    GaussianProcessLDPLMultiModel<Tstate, Tinput>& GaussianProcessLDPLMultiModel<Tstate, Tinput>::coeffDiffFloorStdev(double coeff){
+        mCoeffDiffFloorStdev = coeff;
+        return *this;
+    }
     
     // CEREAL function
     template<class Tstate, class Tinput>

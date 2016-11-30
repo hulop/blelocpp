@@ -43,17 +43,22 @@ public:
     }
 };
 
-class WrappedNormalParameter{
+class NormalParameter{
+protected:
     double mMean;
     double mStdev;
 public:
-    WrappedNormalParameter(double mean, double stdev){
+    NormalParameter() = default;
+    NormalParameter(double mean, double stdev){
         this->mMean = mean;
         this->mStdev = stdev;
     }
+    ~NormalParameter() = default;
     double mean() const{return mMean;}
     double stdev() const{return mStdev;}
 };
+
+using WrappedNormalParameter = NormalParameter;
 
 class MathUtils{
     

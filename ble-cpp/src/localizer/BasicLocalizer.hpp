@@ -141,6 +141,8 @@ namespace loc {
         SmoothType smoothType = SMOOTH_LOCATION;
         LocalizeMode localizeMode = ONESHOT;
         double effectiveSampleSizeThreshold = 1000;
+        int nStrongest = 10;
+        bool enablesFloorUpdate = true;
         
         double walkDetectSigmaThreshold = 0.6;
         double meanVelocity = 1.0;
@@ -173,7 +175,7 @@ namespace loc {
         double velocityRateStair = 0.5;
         
         // Parameters for WeakPoseRandomWalker
-        double probabilityOrientationBiasJump = 0.0;
+        double probabilityOrientationBiasJump = 0.1;
         double poseRandomWalkRate = 1.0;
         double randomWalkRate = 0.2;
         
