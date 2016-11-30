@@ -30,7 +30,6 @@
 #include "Location.hpp"
 #include "Pose.hpp"
 #include "State.hpp"
-//#include "State.hpp"
 
 namespace loc{
     
@@ -55,12 +54,13 @@ namespace loc{
         std::shared_ptr<std::vector<State>> states() const;
         Step step() const;
         
-        Status& meanLocation(Location* loc);
         Status& meanLocation(std::shared_ptr<Location> location);
-        Status& meanPose(Pose* pose);
         Status& meanPose(std::shared_ptr<Pose> pose);
         Status& timestamp(long timestamp);
+        
+        [[deprecated("please use states(std::shared_ptr<std::vector<State>>) function")]]
         Status& states(std::vector<State>* states);
+        Status& states(std::shared_ptr<std::vector<State>> states);
         Status& step(Step step);
         
     private:

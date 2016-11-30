@@ -57,8 +57,8 @@ namespace loc{
     
     void StreamLocalizerStub::updateStateStub(){
         Status* statusNew = new Status();
-        Location* loc = new Location(1,2,0,0);
-        Pose* pose = new Pose();
+        auto loc = std::shared_ptr<Location>(new Location(1,2,0,0));
+        auto pose = std::shared_ptr<Pose>(new Pose);
         pose->x(loc->x()).y(loc->y()).z(loc->z());
         statusNew->meanLocation(loc);
         statusNew->meanPose(pose);

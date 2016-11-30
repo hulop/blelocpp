@@ -47,20 +47,23 @@ namespace loc{
         return states_;
     }
     
+    /*
     Status& Status::meanLocation(Location* loc){
         meanLocation_.reset(loc);
         return *this;
     }
+    */
     
     Status& Status::meanLocation(std::shared_ptr<Location> location){
         meanLocation_ = location;
         return *this;
     }
-    
+    /*
     Status& Status::meanPose(Pose* pose){
         meanPose_.reset(pose);
         return *this;
     }
+    */
     
     Status& Status::meanPose(std::shared_ptr<Pose> pose){
         meanPose_ = pose;
@@ -72,6 +75,7 @@ namespace loc{
         return *this;
     }
     
+    /*
     Status& Status::states(std::vector<State>* states){
         states_->clear();
         states_.reset(states);
@@ -89,6 +93,27 @@ namespace loc{
         Pose* meanPs = new Pose(Pose::weightedMean(*states, weights));
         meanPose(meanPs);
         
+        return *this;
+    }
+    */
+    Status& Status::states(std::vector<State>* states){
+        auto statesTmp = std::shared_ptr<States>();
+        statesTmp.reset(states);
+        return this->states(statesTmp);
+    }
+    
+    Status& Status::states(std::shared_ptr<std::vector<State>> states){
+        states_ = states;
+        size_t n = states->size();
+        std::vector<double> weights(n);
+        for(int i=0; i<n; i++){
+            weights[i] = states->at(i).weight();
+        }
+        // Compute mean Location
+        auto meanLoc = std::shared_ptr<Location>(new Location(Location::weightedMean(*states, weights)));
+        meanLocation(meanLoc);
+        auto meanPs = std::shared_ptr<Pose>(new Pose(Pose::weightedMean(*states, weights)));
+        meanPose(meanPs);
         return *this;
     }
     

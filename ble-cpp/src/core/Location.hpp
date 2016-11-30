@@ -42,6 +42,8 @@ namespace loc{
         double floor_ = 0;
         
     public:
+        using Ptr = std::shared_ptr<Location>;
+        
         Location(){}
         Location(double x, double y, double z, double floor);
         ~Location(){}

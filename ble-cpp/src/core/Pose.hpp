@@ -44,6 +44,8 @@ namespace loc {
         double mNormalVelocity = 0;
         
     public:
+        using Ptr = std::shared_ptr<Pose>;
+        
         Pose() = default;
         ~Pose() = default;
         

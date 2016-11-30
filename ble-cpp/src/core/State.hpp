@@ -42,6 +42,8 @@ namespace loc{
         double mahalanobisDistance_;
         
     public:
+        using Ptr = std::shared_ptr<State>;
+        
         State() = default;
         ~State() = default;
         

@@ -200,6 +200,7 @@ namespace loc{
             mFunctionCalledAfterUpdate2(mUserData, mResult.get());
         }
         
+        // is tracking mode & finished initial localization & tracking state has not been set to TRACKING
         if (isTrackingMode() && smooth_count >= nSmooth && mState != TRACKING) {
             Pose refPose = *mResult->meanPose();
             std::vector<State> states = *mResult->states();
