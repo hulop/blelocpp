@@ -4,14 +4,14 @@ target 'bleloc' do
   platform :ios, '8.4'
   pod 'OpenCV', '2.4.9'
   pod 'boost', :podspec => './podspecs/boost.podspec.json'
-  pod 'eigen'
+  pod 'eigen', '3.2.5'
   pod 'picojson', :podspec => './podspecs/picojson.podspec'
   pod 'cereal', :podspec => './podspecs/cereal.podspec'
 end
 target 'blelocjni' do
-    platform :osx
+  platform :osx
   pod 'boost', :podspec => './podspecs/boost.podspec.json'
-  pod 'eigen'
+  pod 'eigen', '3.2.5'
   pod 'picojson', :podspec => './podspecs/picojson.podspec'
   pod 'cereal', :podspec => './podspecs/cereal.podspec'
 end
