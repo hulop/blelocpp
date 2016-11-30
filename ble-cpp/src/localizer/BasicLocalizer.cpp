@@ -239,6 +239,9 @@ namespace loc{
     bool BasicLocalizer::resetStatus(Pose meanPose, Pose stdevPose) {
         return mLocalizer->resetStatus(meanPose, stdevPose);
     }
+    bool BasicLocalizer::resetStatus(Pose meanPose, Pose stdevPose, double rateContami) {
+        return mLocalizer->resetStatus(meanPose, stdevPose, rateContami);
+    }
     bool BasicLocalizer::resetStatus(const Beacons& beacons) {
         return mLocalizer->resetStatus(beacons);
     }
