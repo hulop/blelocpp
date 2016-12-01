@@ -31,9 +31,9 @@
 namespace loc{
     
     class SystemModelInBuildingProperty{
-        double probabilityUp_ = 0.25;
-        double probabilityDown_ = 0.25;
-        double probabilityStay_ = 0.5;
+        double probabilityUp_ = 0.1;
+        double probabilityDown_ = 0.1;
+        double probabilityStay_ = 0.8;
         
         double probabilityFloorJump_ = 0.0;
         
