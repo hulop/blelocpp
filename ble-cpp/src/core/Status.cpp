@@ -47,23 +47,10 @@ namespace loc{
         return states_;
     }
     
-    /*
-    Status& Status::meanLocation(Location* loc){
-        meanLocation_.reset(loc);
-        return *this;
-    }
-    */
-    
     Status& Status::meanLocation(std::shared_ptr<Location> location){
         meanLocation_ = location;
         return *this;
     }
-    /*
-    Status& Status::meanPose(Pose* pose){
-        meanPose_.reset(pose);
-        return *this;
-    }
-    */
     
     Status& Status::meanPose(std::shared_ptr<Pose> pose){
         meanPose_ = pose;
@@ -75,27 +62,6 @@ namespace loc{
         return *this;
     }
     
-    /*
-    Status& Status::states(std::vector<State>* states){
-        states_->clear();
-        states_.reset(states);
-        
-        size_t n = states->size();
-        std::vector<double> weights(n);
-        for(int i=0; i<n; i++){
-            weights[i] = states->at(i).weight();
-        }
-        
-        // Compute mean Location
-        Location* meanLoc = new Location(Location::weightedMean(*states, weights));
-        meanLocation(meanLoc);
-        
-        Pose* meanPs = new Pose(Pose::weightedMean(*states, weights));
-        meanPose(meanPs);
-        
-        return *this;
-    }
-    */
     Status& Status::states(std::vector<State>* states){
         auto statesTmp = std::shared_ptr<States>();
         statesTmp.reset(states);
@@ -122,7 +88,30 @@ namespace loc{
     }
     
     Status& Status::step(Status::Step step){
+        this->reset();
         step_ = step;
         return *this;
+    }
+    
+    void Status::reset(){
+        step_ = OTHER;
+        mWasFloorUpdated = false;
+    }
+    
+    bool Status::wasFloorUpdated() const{
+        if(mWasFloorUpdated){
+            return true;
+        }else{
+            if(step_==FILTERING_WITH_RESAMPLING || step_==FILTERING_WITHOUT_RESAMPLING){
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+    }
+    
+    void Status::wasFloorUpdated(bool wasFloorUpdated){
+        mWasFloorUpdated = wasFloorUpdated;
     }
 }

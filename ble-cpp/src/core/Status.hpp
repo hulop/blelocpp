@@ -63,12 +63,17 @@ namespace loc{
         Status& states(std::shared_ptr<std::vector<State>> states);
         Status& step(Step step);
         
+        void reset();
+        bool wasFloorUpdated() const;
+        void wasFloorUpdated(bool);
+        
     private:
         long timestamp_;
         Step step_ = Step::OTHER;
         std::shared_ptr<Location> meanLocation_;
         std::shared_ptr<Pose> meanPose_;
         std::shared_ptr<std::vector<State>> states_;
+        bool mWasFloorUpdated = false;
     };
     
 }

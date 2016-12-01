@@ -578,10 +578,12 @@ namespace loc{
                     }
                     status->step(Status::OBSERVATION_WITHOUT_FILTERING);
                 }
+                if(mEnablesFloorUpdate){
+                    status->wasFloorUpdated(true);
+                }
             }else{
                 status->step(Status::OBSERVATION_WITHOUT_FILTERING);
             }
-                
             status->timestamp(beacons.timestamp());
             callback(status.get());
         };
