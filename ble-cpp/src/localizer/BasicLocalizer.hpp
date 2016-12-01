@@ -173,6 +173,8 @@ namespace loc {
         double velocityRateFloor = 1.0;
         double velocityRateElevator = 0.5;
         double velocityRateStair = 0.5;
+        double velocityRateEscalator = 0.5;
+        double relativeVelocityEscalator = 0.4; // m/s
         
         // Parameters for WeakPoseRandomWalker
         double probabilityOrientationBiasJump = 0.1;
@@ -218,7 +220,7 @@ namespace loc {
         std::shared_ptr<PoseRandomWalker>poseRandomWalker;
         std::shared_ptr<RandomWalker<State, SystemModelInput>>randomWalker;
         
-        std::shared_ptr<PoseRandomWalkerInBuildingProperty> prwBuildingProperty;
+        SystemModelInBuildingProperty::Ptr prwBuildingProperty = SystemModelInBuildingProperty::Ptr(new SystemModelInBuildingProperty);
         std::shared_ptr<PoseRandomWalkerInBuilding> poseRandomWalkerInBuilding;
         
         std::shared_ptr<Resampler<State>> resampler;

@@ -333,7 +333,7 @@ namespace loc{
         bool doTraining = true;
         try {
             auto& str = getString(json, "ObservationModelParameters");
-            if (false) {
+            if (/* DISABLES CODE */ (false)) {
                 std::string omppath = DataUtils::stringToFile(str, workingDir, "ObservationModelParameters");
                 
                 msec = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now()-s).count();
@@ -524,7 +524,6 @@ namespace loc{
         poseRandomWalker->setStateProperty(stateProperty);
         
         // Combine poseRandomWalker and building
-        prwBuildingProperty = SystemModelInBuildingProperty::Ptr(new SystemModelInBuildingProperty);
         prwBuildingProperty->maxIncidenceAngle(maxIncidenceAngle/180.0*M_PI);
         //prwBuildingProperty.weightDecayRate(0.9);
         //prwBuildingProperty.weightDecayRate(0.96593632892); // this^20 = 0.5
@@ -534,7 +533,8 @@ namespace loc{
         prwBuildingProperty->velocityRateFloor(velocityRateFloor);
         prwBuildingProperty->velocityRateElevator(velocityRateElevator);
         prwBuildingProperty->velocityRateStair(velocityRateStair);
-        
+        prwBuildingProperty->velocityRateEscalator(velocityRateEscalator);
+        prwBuildingProperty->relativeVelocityEscalator(relativeVelocityEscalator);
         
         Building building = dataStore->getBuilding();
         Building::Ptr buildingPtr(new Building(building));
@@ -682,7 +682,6 @@ namespace loc{
         else if (type == TDIST) {
             deserializedModel->normFunc = MathUtils::logProbatDistFunc(option);
         }
-        
     }
     
     LatLngConverter::Ptr BasicLocalizer::latLngConverter(){
