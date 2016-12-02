@@ -36,8 +36,8 @@ namespace loc {
     
     //Color struct is defined to keep color in RGB format.
     struct Color{
-        int r_, g_, b_;
-        Color(int r, int g, int b);
+        uint8_t r_, g_, b_;
+        Color(uint8_t r, uint8_t g, uint8_t b);
         bool equals(Color c) const;
     };
     
@@ -45,9 +45,20 @@ namespace loc {
         const Color black(0,0,0);
         const Color white(255, 255, 255);
         const Color red(255,0,0);
-        const Color green(0,255,0);
+        const Color lime(0,255,0);
         const Color blue(0,0,255);
         const Color yellow(255, 255, 0);
+        
+        const Color green(0,128,0);
+        const Color olive(128,128,0);
+        const Color fuchsia(255,0,255);
+        const Color silver(192,192,192);
+        const Color aqua(0,255,255);
+        const Color gray(128,128,128);
+        const Color purple(128,128,128);
+        const Color navy(0,0,128);
+        const Color teal(0,128,128);
+        const Color maroon(128,0,0);
     }
         
     class ImageHolder{

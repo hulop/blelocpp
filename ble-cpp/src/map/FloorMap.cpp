@@ -30,7 +30,9 @@ namespace loc{
         const Color colorWall = black;
         const Color colorStairs = blue;
         const Color colorElevator = yellow;
-        const Color colorEscalator = green;
+        const Color colorEscalator = lime;
+        
+        const Color colorEscalatorEnd = green;
     }
         
     FloorMap::FloorMap(ImageHolder image, CoordinateSystem coordSys){
@@ -111,6 +113,10 @@ namespace loc{
     bool FloorMap::isEscalator(const Location& location) const{
         return checkColor(location, color::colorEscalator);
     }
+    
+    bool FloorMap::isEscalatorEnd(const Location& location) const{
+        return checkColor(location, color::colorEscalatorEnd);
+    }
 
     double FloorMap::wallCrossingRatio(const Location& start, const Location& end) const{
         Location startLocal = mCoordSys.worldToLocalState(start);
@@ -130,6 +136,8 @@ namespace loc{
 
         double x = x0;
         double y = y0;
+        
+        bool startIsEscEnd = isEscalatorEnd(start);
 
         int count=0;
         while(count<=norm_int){
@@ -143,6 +151,9 @@ namespace loc{
                 c = color::colorFloor;
             }
             if(c.equals(color::colorWall)){
+                return ((double)count-1)/norm_int;
+            }
+            if(startIsEscEnd && c.equals(color::colorEscalator)){
                 return ((double)count-1)/norm_int;
             }
             x+=dx;

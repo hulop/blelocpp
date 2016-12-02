@@ -29,25 +29,33 @@ namespace loc{
     
     ImageHolderMode ImageHolder::mode_ = light;
     
-    Color::Color(int r, int g, int b){
+    Color::Color(uint8_t r, uint8_t g, uint8_t b){
         r_ = r;
         g_ = g;
         b_ = b;
     }
     
-    static std::vector<Color> colorList;
-    class ColorListInitializer{
-    public:
-        ColorListInitializer(){
-            colorList.push_back(color::white);
-            colorList.push_back(color::black);
-            colorList.push_back(color::red);
-            colorList.push_back(color::green);
-            colorList.push_back(color::blue);
-            colorList.push_back(color::yellow);
-        }
+    static const std::vector<Color> colorList{
+        color::white,
+        color::black,
+        color::red,
+        color::lime,
+        color::blue,
+        color::yellow,
+        color::green
+        
+        /*
+        color::olive,
+        color::fuchsia,
+        color::silver,
+        color::aqua,
+        color::gray,
+        color::purple,
+        color::navy,
+        color::teal,
+        color::maroon
+        */
     };
-    static ColorListInitializer colorListInitializer;
     
     bool Color::equals(Color c)const{
         if( this->b_ == c.b_
@@ -101,9 +109,9 @@ namespace loc{
         }
         Color get(int y, int x) const{
             cv::Vec3b vec = mat_.at<cv::Vec3b>(y, x);
-            int b = vec[0];
-            int g = vec[1];
-            int r = vec[2];
+            uint8_t b = vec[0];
+            uint8_t g = vec[1];
+            uint8_t r = vec[2];
             Color color(r,g,b);
             return color;
         }

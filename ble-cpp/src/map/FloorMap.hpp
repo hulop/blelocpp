@@ -52,6 +52,7 @@ namespace loc{
         bool isStairs(const Location& location) const;
         bool isElevator(const Location& location) const;
         bool isEscalator(const Location& location) const;
+        bool isEscalatorEnd(const Location& location) const;
 
         bool checkMovable(const Location& start, const Location& end) const;
 

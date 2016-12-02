@@ -302,7 +302,7 @@ namespace loc{
                  sysVelAdj->velocityRate(mProperty->velocityRateElevator());
              }else if(mBuilding->isStair(state)){
                  sysVelAdj->velocityRate(mProperty->velocityRateStair());
-             }else if(mBuilding->isEscalator(state)){
+             }else if(mBuilding->isEscalatorGroup(state)){
                  sysVelAdj->velocityRate(mProperty->velocityRateEscalator());
                  sysVelAdj->relativeVelocity(mProperty->relativeVelocityEscalator());
              }else{
@@ -310,7 +310,7 @@ namespace loc{
              }
         }
         if(sysCtrl!=NULL){
-            if(mBuilding->isEscalator(state)){
+            if(mBuilding->isEscalatorGroup(state)){
                 sysCtrl->forceMove();
             }
         }
@@ -406,7 +406,7 @@ namespace loc{
                 }else{
                     return stateTmp;
                 }
-            }else if(mBuilding->isEscalator(state)){
+            }else if(mBuilding->isEscalator(state)){ // escalator move is not allowed on escalator end
                 State stateTmp = moveOnEscalator(state, input);
                 return moveOnFloor(stateTmp, input);
             }else if(mBuilding->isStair(state)){

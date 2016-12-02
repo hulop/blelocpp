@@ -109,6 +109,22 @@ namespace loc{
         return floorMap.isEscalator(location);
     }
 
+    bool Building::isEscalatorEnd(const Location& location) const{
+        const FloorMap& floorMap = getFloorAt(location);
+        bool isEscEnd = floorMap.isEscalatorEnd(location);
+        return isEscEnd;
+    }
+    
+    bool Building::isEscalatorGroup(const Location& location) const{
+        if(isEscalator(location)){
+            return true;
+        }
+        if(isEscalatorEnd(location)){
+            return true;
+        }
+        return false;
+    }
+    
     bool Building::checkCrossingWall(const Location& start, const Location& end) const{
         double floor0 = start.floor();
         double floor1 = end.floor();
@@ -125,6 +141,12 @@ namespace loc{
     bool Building::checkMovableRoute(const Location& start, const Location& end) const{
         if(! isMovable(end)){
             return false;
+        }
+        // Do not allow to move from escalater_end to escalator
+        if(isEscalatorEnd(start)){
+            if(isEscalator(end)){
+                return false;
+            }
         }
         if(checkCrossingWall(start, end)){
             return false;
