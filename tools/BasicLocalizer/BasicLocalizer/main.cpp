@@ -133,7 +133,7 @@ Option parseArguments(int argc, char *argv[]){
                 if(optarg!=NULL){
                     opt.restartLogPath.assign(optarg);
                 }else{
-                    std::cout << "restart log path is null" << std::endl;
+                    std::cout << "restart log path is null." << std::endl;
                 }
             }
             break;
@@ -247,6 +247,10 @@ int main(int argc, char * argv[]) {
     };
     
     BasicLocalizer localizer = resetBasicLocalizer(opt, ud);
+    // Parameter for reset log play
+    double dx_reset = 1.0;
+    double dy_reset = 1.0;
+    double std_ori_reset = 10;
     
     if (opt.findRssiBias) {
         double step = (opt.maxRssiBias - opt.minRssiBias)/20;
@@ -382,7 +386,10 @@ int main(int argc, char * argv[]) {
                         loc::Pose newPose(loc);
                         newPose.orientation(orientation);
                         
-                        localizer.resetStatus(newPose);
+                        loc::Pose stdevPose;
+                        stdevPose.x(dx_reset).y(dy_reset).orientation(std_ori_reset/180*M_PI);
+                        
+                        localizer.resetStatus(newPose, stdevPose);
                     }
                     if (opt.usesRestart && logString.compare(0, 7, "Restart") == 0){
                         // "Restart",timestamp
@@ -410,13 +417,14 @@ int main(int argc, char * argv[]) {
                         global.floor(floor);
                         markerLoc = ud.latLngConverter->globalToLocal(global);
                         
-                        std::cout << "LogReplay:" << timestamp << ",Marker,";
-                        std::cout << std::setprecision(10) << lat << "," << lng;
-                        std::cout << "," << floor;
+                        std::stringstream ss;
+                        ss << "LogReplay:" << timestamp << ",Marker,";
+                        ss << std::setprecision(10) << lat << "," << lng;
+                        ss << "," << floor;
                         
                         if(restarter.counter==0){
                             auto recentPose = ud.recentPose;
-                            std::cout << ",d2D=" << Location::distance2D(markerLoc, recentPose)
+                            ss << ",d2D=" << Location::distance2D(markerLoc, recentPose)
                             << ",dFloor=" << Location::floorDifference(markerLoc, recentPose) ;
                         }else if(restarter.counter==1){
                             restarter.markerLocStart.reset(new Location(markerLoc));
@@ -429,7 +437,7 @@ int main(int argc, char * argv[]) {
                             restarter.counter=2;
                         }else if(restarter.counter==2){
                             if(restarter.markerLocStart && !restarter.repPoseStart){
-                                std::cout << "Marker duplication was found. Marker=" << markerLoc << " was not used.";
+                                ss << "Marker duplication was found. Marker=" << markerLoc << " was not used.";
                             }else{
                                 restarter.markerLocEnd.reset(new Location(markerLoc));
                                 //ud.func = [&](long ts, Pose pose, States states){
@@ -441,15 +449,18 @@ int main(int argc, char * argv[]) {
                                 };
                             }
                         }
-                        std::cout << std::endl;
+                        std::cout << ss.str() << std::endl;
                     }
                     if (logString.compare(0, 4, "Note") == 0){
                         // "Note", note_string
-                        // When "Note" is detected after restarting, the error must not be evaluated at the step.
-                        std::cout << "LogReplay: Note is detected. Markers before the Note will not be evaluated." << std::endl;
+                        std::stringstream ss;
+                        ss << "LogReplay: " << logString;
                         if(1<=restarter.counter){
+                            // When "Note" is detected after restarting, the error must not be evaluated at the step.
+                            ss << " Note is detected after restart. Markers before the Note will not be evaluated.";
                             restarter.reset();
                         }
+                        std::cout << ss.str() << std::endl;
                     }
                     if (logString.compare(0, 9,"Altimeter") == 0){
                         // pass
