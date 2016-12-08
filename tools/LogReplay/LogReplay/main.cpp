@@ -362,7 +362,7 @@ int main(int argc,char *argv[]){
         for(const loc::Location& loc : locs){
             State s(loc);
             auto obsModel = builder.obsModel();
-            std::map<long,std::vector<double>> idRssiStats = obsModel->predict(s, beacons);
+            auto idRssiStats = obsModel->predict(s, beacons);
             auto jobj = ExtendedDataUtils::predictionDataToJSONObject(s, beacons, idRssiStats);
             jarray.push_back(picojson::value(jobj));
         }
@@ -403,7 +403,7 @@ int main(int argc,char *argv[]){
             picojson::array jarray;
             for(const State& s : *states){
                 auto obsModel = builder.obsModel();
-                std::map<long,std::vector<double>> idRssiStats = obsModel->predict(s, beacons);
+                auto idRssiStats = obsModel->predict(s, beacons);
                 auto jobj = ExtendedDataUtils::predictionDataToJSONObject(s, beacons, idRssiStats);
                 jarray.push_back(picojson::value(jobj));
             }

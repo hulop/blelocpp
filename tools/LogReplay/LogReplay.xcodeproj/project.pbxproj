@@ -71,6 +71,8 @@
 		FBB76B231DB64E70003E6294 /* SystemModelInBuilding.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBB76B1D1DB64E70003E6294 /* SystemModelInBuilding.cpp */; };
 		FBB76B241DB64E70003E6294 /* WeakPoseRandomWalker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBB76B1F1DB64E70003E6294 /* WeakPoseRandomWalker.cpp */; };
 		FBBA09FE1DACB8F400EB2553 /* Heading.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBBA09FC1DACB8F400EB2553 /* Heading.cpp */; };
+		FBE583221DF9CEE900057DB5 /* Altimeter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBE5831D1DF9CEE900057DB5 /* Altimeter.cpp */; };
+		FBE583231DF9CEE900057DB5 /* AltitudeManagerSimple.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBE583201DF9CEE900057DB5 /* AltitudeManagerSimple.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -218,6 +220,11 @@
 		FBB76B201DB64E70003E6294 /* WeakPoseRandomWalker.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WeakPoseRandomWalker.hpp; sourceTree = "<group>"; };
 		FBBA09FC1DACB8F400EB2553 /* Heading.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Heading.cpp; sourceTree = "<group>"; };
 		FBBA09FD1DACB8F400EB2553 /* Heading.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Heading.hpp; sourceTree = "<group>"; };
+		FBE5831D1DF9CEE900057DB5 /* Altimeter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Altimeter.cpp; sourceTree = "<group>"; };
+		FBE5831E1DF9CEE900057DB5 /* Altimeter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Altimeter.hpp; sourceTree = "<group>"; };
+		FBE5831F1DF9CEE900057DB5 /* AltitudeManager.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AltitudeManager.hpp; sourceTree = "<group>"; };
+		FBE583201DF9CEE900057DB5 /* AltitudeManagerSimple.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AltitudeManagerSimple.cpp; sourceTree = "<group>"; };
+		FBE583211DF9CEE900057DB5 /* AltitudeManagerSimple.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AltitudeManagerSimple.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -463,6 +470,11 @@
 		7E7728391C97985D0013FC40 /* sensor */ = {
 			isa = PBXGroup;
 			children = (
+				FBE5831D1DF9CEE900057DB5 /* Altimeter.cpp */,
+				FBE5831E1DF9CEE900057DB5 /* Altimeter.hpp */,
+				FBE5831F1DF9CEE900057DB5 /* AltitudeManager.hpp */,
+				FBE583201DF9CEE900057DB5 /* AltitudeManagerSimple.cpp */,
+				FBE583211DF9CEE900057DB5 /* AltitudeManagerSimple.hpp */,
 				7E77283A1C97985D0013FC40 /* OrientationMeter.hpp */,
 				7E77283B1C97985D0013FC40 /* OrientationMeterAverage.cpp */,
 				7E77283C1C97985D0013FC40 /* OrientationMeterAverage.hpp */,
@@ -643,6 +655,7 @@
 				7E7728761C97D5D80013FC40 /* DataStoreImpl.cpp in Sources */,
 				7E7728771C97D5D80013FC40 /* DataUtils.cpp in Sources */,
 				FB7B22941DE4963000FF8BF3 /* SystemModel.cpp in Sources */,
+				FBE583231DF9CEE900057DB5 /* AltitudeManagerSimple.cpp in Sources */,
 				7E7728781C97D5D80013FC40 /* LazyDataStore.cpp in Sources */,
 				7E7728791C97D5D80013FC40 /* VirtualDevice.cpp in Sources */,
 				7E77287A1C97D5D80013FC40 /* GridResampler.cpp in Sources */,
@@ -660,6 +673,7 @@
 				7E7728881C97D5D80013FC40 /* GaussianProcessLDPLMultiModel.cpp in Sources */,
 				7E7728891C97D5D80013FC40 /* KernelFunction.cpp in Sources */,
 				7E77288A1C97D5D80013FC40 /* PoseRandomWalker.cpp in Sources */,
+				FBE583221DF9CEE900057DB5 /* Altimeter.cpp in Sources */,
 				7E77288C1C97D5D80013FC40 /* RandomWalker.cpp in Sources */,
 				7E77288D1C97D5D80013FC40 /* OrientationMeterAverage.cpp in Sources */,
 				FBB76B221DB64E70003E6294 /* RandomWalkerMotion.cpp in Sources */,

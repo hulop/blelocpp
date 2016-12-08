@@ -226,6 +226,7 @@ namespace loc{
 
         std::shared_ptr<Pedometer> mPedometer;
         std::shared_ptr<OrientationMeter> mOrientationmeter;
+        std::shared_ptr<AltitudeManager> mAltitudeManager;
 
         std::shared_ptr<SystemModel<State, SystemModelInput>> mRandomWalker;
 
@@ -291,6 +292,12 @@ namespace loc{
             attitudeIsUpdated = mOrientationmeter->isUpdated();
 
             processResetStatus();
+        }
+        
+        void putAltimeter(const Altimeter altimeter){
+            if(mAltitudeManager){
+                mAltitudeManager->putAltimeter(altimeter);
+            }
         }
 
         void predictMotionState(long timestamp){
@@ -548,6 +555,24 @@ namespace loc{
             return beaconsFloorEst;
         }
         
+        bool checkTryFloorUpdate(){
+            if(mEnablesFloorUpdate){
+                if(mAltitudeManager){
+                    auto heightChanged = mAltitudeManager->heightChange();
+                    double heightChangedCriterion = 0.0;
+                    if(heightChanged > heightChangedCriterion){
+                        return true;
+                    }else{
+                        return false;
+                    }
+                }else{
+                    return true;
+                }
+            }else{
+                return false;
+            }
+        }
+        
         void putBeacon(const Beacons & beacons){
             initializeStatusIfZero();
 
@@ -557,6 +582,7 @@ namespace loc{
             if(beaconsFiltered.size()>0){
                 // Observation dependent floor update
                 std::shared_ptr<States> states = status->states();
+                bool tryFloorUpdate = false;
                 if(mEnablesFloorUpdate){
                     if(!mFloorUpdater){
                         mFloorUpdater.reset(new FloorUpdater);
@@ -565,7 +591,10 @@ namespace loc{
                         mFloorUpdater->mObsModel = mObservationModel;
                         mFloorUpdater->randomGenerator = mRand;
                     }
-                    mFloorUpdater->floorUpdate(*states, beaconsFiltered);
+                    tryFloorUpdate = checkTryFloorUpdate();
+                    if(tryFloorUpdate){
+                        mFloorUpdater->floorUpdate(*states, beaconsFiltered);
+                    }
                 }
                 // filtering
                 if(checkIfDoFiltering(*states)){
@@ -579,7 +608,9 @@ namespace loc{
                     status->step(Status::OBSERVATION_WITHOUT_FILTERING);
                 }
                 if(mEnablesFloorUpdate){
-                    status->wasFloorUpdated(true);
+                    if(tryFloorUpdate){
+                        status->wasFloorUpdated(true);
+                    }
                 }
             }else{
                 status->step(Status::OBSERVATION_WITHOUT_FILTERING);
@@ -911,6 +942,10 @@ namespace loc{
         void orientationmeter(std::shared_ptr<OrientationMeter> orientationMeter){
             mOrientationmeter = orientationMeter;
         }
+        
+        void altitudeManager(std::shared_ptr<AltitudeManager> altitudeManager){
+            mAltitudeManager = altitudeManager;
+        }
 
         void systemModel(std::shared_ptr<SystemModel<State, SystemModelInput>> randomWalker){
             mRandomWalker = randomWalker;
@@ -973,6 +1008,11 @@ namespace loc{
         return *this;
     }
 
+    StreamParticleFilter& StreamParticleFilter::putAltimeter(const Altimeter altimeter) {
+        impl->putAltimeter(altimeter);
+        return *this;
+    }
+    
     StreamParticleFilter& StreamParticleFilter::updateHandler(void (*functionCalledAfterUpdate)(Status*)) {
         impl->updateHandler(functionCalledAfterUpdate);
         return *this;
@@ -1055,6 +1095,10 @@ namespace loc{
     }
     StreamParticleFilter& StreamParticleFilter::orientationMeter(std::shared_ptr<OrientationMeter> orientationMeter){
         impl->orientationmeter(orientationMeter);
+        return *this;
+    }
+    StreamParticleFilter& StreamParticleFilter::altitudeManager(std::shared_ptr<AltitudeManager> altitudeManager){
+        impl->altitudeManager(altitudeManager);
         return *this;
     }
 

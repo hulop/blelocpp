@@ -38,6 +38,7 @@ namespace loc {
         StreamLocalizer& putAttitude(const Attitude attitude) override;
         StreamLocalizer& putBeacons(const Beacons beacons) override;
         virtual StreamLocalizer& putHeading(const Heading heading) override;
+        virtual StreamLocalizer& putAltimeter(const Altimeter altimeter) override;
         StreamLocalizer& updateHandler(void (*functionCalledAfterUpdate)(Status*)) override;
         StreamLocalizer& updateHandler(void (*functionCalledAfterUpdate)(void*, Status*), void* inUserData) override;
         
@@ -46,6 +47,7 @@ namespace loc {
         bool resetStatus() override;
         bool resetStatus(Pose pose) override;
         bool resetStatus(Pose meanPose, Pose stdevPose) override;
+        bool resetStatus(Pose meanPose, Pose stdevPose, double contamiRate) override;
         /*
         StreamLocalizer* pedometer(Pedometer* pedometer);
         StreamLocalizer* orientationMeter(OrientationMeter*  orientationMeter);

@@ -205,6 +205,8 @@ namespace loc {
          */
         double estimatedRssiBias();
         
+        bool usesAltimeterForFloorTransCheck = false;
+        
         // parameters
         OrientationMeterAverageParameters orientationMeterAverageParameters;
         std::shared_ptr<OrientationMeter> orientationMeter;
@@ -247,6 +249,7 @@ namespace loc {
         StreamLocalizer& putBeacons(const Beacons beacons) override;
         // StreamLocalizer& putWiFiAPs(const WiFiAPs wifiaps) override;
         StreamLocalizer& putHeading(const Heading heading) override;
+        StreamLocalizer& putAltimeter(const Altimeter altimeter) override;
         Status* getStatus() override;
                                  
         bool resetStatus() override;

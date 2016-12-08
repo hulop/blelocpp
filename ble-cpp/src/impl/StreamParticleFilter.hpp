@@ -35,6 +35,7 @@
 #include "PosteriorResampler.hpp"
 
 #include "BeaconFilter.hpp"
+#include "AltitudeManager.hpp"
 
 namespace loc {
     
@@ -73,6 +74,7 @@ namespace loc {
         
         StreamParticleFilter& pedometer(std::shared_ptr<Pedometer> pedometer);
         StreamParticleFilter& orientationMeter(std::shared_ptr<OrientationMeter>  orientationMeter);
+        StreamParticleFilter& altitudeManager(std::shared_ptr<AltitudeManager>  altitudeManager);
         StreamParticleFilter& statusInitializer(std::shared_ptr<StatusInitializer> statusInitializer);
         StreamParticleFilter& systemModel(std::shared_ptr<SystemModel<State, SystemModelInput>> poseRandomWalker);
         StreamParticleFilter& observationModel(std::shared_ptr<ObservationModel<State, Beacons>> observationModel);
@@ -93,6 +95,7 @@ namespace loc {
         StreamParticleFilter& putAttitude(const Attitude attitude) override;
         StreamParticleFilter& putBeacons(const Beacons beacons) override;
         StreamParticleFilter& putHeading(const Heading heading) override;
+        StreamParticleFilter& putAltimeter(const Altimeter altimeter) override;
         Status* getStatus() override;
         
         // optional methods

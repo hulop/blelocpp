@@ -54,6 +54,9 @@ namespace loc{
     StreamLocalizer& StreamLocalizerStub::putHeading(const Heading heading) {
         return *this;
     }
+    StreamLocalizer& StreamLocalizerStub::putAltimeter(const Altimeter altimeter) {
+        return *this;
+    }
     
     void StreamLocalizerStub::updateStateStub(){
         Status* statusNew = new Status();
@@ -91,6 +94,11 @@ namespace loc{
     }
     
     bool StreamLocalizerStub::resetStatus(Pose meanPose, Pose stdevPose){
+        resetStatus();
+        return true;
+    }
+    
+    bool StreamLocalizerStub::resetStatus(Pose meanPose, Pose stdevPose, double contamiRate){
         resetStatus();
         return true;
     }

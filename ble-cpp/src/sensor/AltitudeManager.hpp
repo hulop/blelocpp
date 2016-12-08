@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2015  IBM Corporation and others
+ * Copyright (c) 2014, 2016  IBM Corporation and others
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,36 +20,20 @@
  * THE SOFTWARE.
  *******************************************************************************/
 
-#ifndef StreamLocalizer_hpp
-#define StreamLocalizer_hpp
+#ifndef AltitudeManager_hpp
+#define AltitudeManager_hpp
 
 #include <stdio.h>
-#include "bleloc.h"
+#include <memory>
 #include "Altimeter.hpp"
 
 namespace loc {
-    class StreamLocalizer{
+    class AltitudeManager{
     public:
-        virtual ~StreamLocalizer(){};
-        
-        virtual StreamLocalizer& updateHandler(void (*functionCalledAfterUpdate)(Status*)) = 0;
-        virtual StreamLocalizer& updateHandler(void (*functionCalledAfterUpdate)(void*, Status*), void* inUserData) = 0;
-        
-        virtual StreamLocalizer& putAcceleration(const Acceleration acceleration) = 0;
-        virtual StreamLocalizer& putAttitude(const Attitude attitude) = 0;
-        virtual StreamLocalizer& putBeacons(const Beacons beacons) = 0;
-        virtual StreamLocalizer& putHeading(const Heading heading) = 0;
-        virtual StreamLocalizer& putAltimeter(const Altimeter altimeter) = 0;
-        virtual Status* getStatus() = 0;
-        
-        virtual bool resetStatus() = 0;
-        virtual bool resetStatus(Pose pose) = 0;
-        virtual bool resetStatus(Pose meanPose, Pose stdevPose) = 0;
-        virtual bool resetStatus(const Beacons& beacons) = 0;
-        virtual bool resetStatus(const Location& location, const Beacons& beacons) = 0;
-        
-        virtual bool resetStatus(Pose meanPose, Pose stdevPose, double rateContami) = 0;
+        using Ptr = std::shared_ptr<AltitudeManager>;
+        virtual ~AltitudeManager() = default;
+        virtual void putAltimeter(Altimeter alt) = 0;
+        virtual double heightChange() const = 0;
     };
 }
-
-#endif /* StreamLocalizer_hpp */
+#endif /* AltitudeManager_hpp */

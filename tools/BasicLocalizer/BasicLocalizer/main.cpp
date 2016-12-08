@@ -357,6 +357,24 @@ int main(int argc, char * argv[]) {
                         Attitude att = LogUtil::toAttitude(logString);
                         localizer.putAttitude(att);
                     }
+                    
+                    if (logString.compare(0, 9,"Altimeter") == 0){
+                        std::vector<std::string> values;
+                        boost::split(values, logString, boost::is_any_of(","));
+                        long timestamp = stol(values.at(3));
+                        double relAlt = stod(values.at(1));
+                        double pressure = stod(values.at(2));
+                        Altimeter alt(timestamp,relAlt,pressure);
+                        localizer.putAltimeter(alt);
+                        std::cout << "LogReplay:" << timestamp << ", Altimeter, " << relAlt << "," << pressure << std::endl;
+                        
+                    }
+                    if (logString.compare(0, 7,"Heading") == 0){
+                        // pass
+                    }
+                    
+                    
+                    
                     if (opt.usesReset && logString.compare(0, 5, "Reset") == 0) {
                         // "Reset",lat,lng,floor,heading,timestamp
                         std::vector<std::string> values;

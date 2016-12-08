@@ -191,6 +191,7 @@
 		7EDEDC121D1CCCD800AC111A /* BasicLocalizer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7EDEDC0B1D1A5E1600AC111A /* BasicLocalizer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7EF5DB421D46F73300D22C02 /* LogUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EF5DB401D46F73300D22C02 /* LogUtil.cpp */; };
 		7EF5DB431D46F73300D22C02 /* LogUtil.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7EF5DB411D46F73300D22C02 /* LogUtil.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		A350205D9597EA9D7442790F /* libPods-bleloc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5D651D528829A828244BD797 /* libPods-bleloc.a */; };
 		F52FFB891C08861800508330 /* libopencv_contrib.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F52FFB791C08861800508330 /* libopencv_contrib.dylib */; };
 		F52FFB8A1C08861800508330 /* libopencv_core.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F52FFB7A1C08861800508330 /* libopencv_core.dylib */; };
 		F52FFB8B1C08861800508330 /* libopencv_features2d.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F52FFB7B1C08861800508330 /* libopencv_features2d.dylib */; };
@@ -229,6 +230,11 @@
 		FBBA09F71DACB2DA00EB2553 /* Heading.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBBA09F51DACB2DA00EB2553 /* Heading.cpp */; };
 		FBBA09F81DACB2DA00EB2553 /* Heading.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FBBA09F61DACB2DA00EB2553 /* Heading.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		FBC2B5091D956CE400E09B16 /* LocException.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FBC2B5081D956CE400E09B16 /* LocException.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		FBE583181DF9BF1B00057DB5 /* Altimeter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBE583131DF9BF1B00057DB5 /* Altimeter.cpp */; };
+		FBE583191DF9BF1B00057DB5 /* Altimeter.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FBE583141DF9BF1B00057DB5 /* Altimeter.hpp */; };
+		FBE5831A1DF9BF1B00057DB5 /* AltitudeManager.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FBE583151DF9BF1B00057DB5 /* AltitudeManager.hpp */; };
+		FBE5831B1DF9BF1B00057DB5 /* AltitudeManagerSimple.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBE583161DF9BF1B00057DB5 /* AltitudeManagerSimple.cpp */; };
+		FBE5831C1DF9BF1B00057DB5 /* AltitudeManagerSimple.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FBE583171DF9BF1B00057DB5 /* AltitudeManagerSimple.hpp */; };
 		FBEB01E71D756F1300CB808D /* RandomWalkerMotion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBEB01E31D756F1300CB808D /* RandomWalkerMotion.cpp */; };
 		FBEB01E81D756F1300CB808D /* RandomWalkerMotion.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FBEB01E41D756F1300CB808D /* RandomWalkerMotion.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		FBEB01E91D756F1300CB808D /* SystemModelInBuilding.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBEB01E51D756F1300CB808D /* SystemModelInBuilding.cpp */; };
@@ -394,6 +400,11 @@
 		FBBA09F51DACB2DA00EB2553 /* Heading.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Heading.cpp; sourceTree = "<group>"; };
 		FBBA09F61DACB2DA00EB2553 /* Heading.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Heading.hpp; sourceTree = "<group>"; };
 		FBC2B5081D956CE400E09B16 /* LocException.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LocException.hpp; sourceTree = "<group>"; };
+		FBE583131DF9BF1B00057DB5 /* Altimeter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Altimeter.cpp; sourceTree = "<group>"; };
+		FBE583141DF9BF1B00057DB5 /* Altimeter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Altimeter.hpp; sourceTree = "<group>"; };
+		FBE583151DF9BF1B00057DB5 /* AltitudeManager.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AltitudeManager.hpp; sourceTree = "<group>"; };
+		FBE583161DF9BF1B00057DB5 /* AltitudeManagerSimple.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AltitudeManagerSimple.cpp; sourceTree = "<group>"; };
+		FBE583171DF9BF1B00057DB5 /* AltitudeManagerSimple.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AltitudeManagerSimple.hpp; sourceTree = "<group>"; };
 		FBEB01E31D756F1300CB808D /* RandomWalkerMotion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RandomWalkerMotion.cpp; sourceTree = "<group>"; };
 		FBEB01E41D756F1300CB808D /* RandomWalkerMotion.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = RandomWalkerMotion.hpp; sourceTree = "<group>"; };
 		FBEB01E51D756F1300CB808D /* SystemModelInBuilding.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SystemModelInBuilding.cpp; sourceTree = "<group>"; };
@@ -405,6 +416,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A350205D9597EA9D7442790F /* libPods-bleloc.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -586,6 +598,11 @@
 		7E6F25211C0F1D76007A97A1 /* sensor */ = {
 			isa = PBXGroup;
 			children = (
+				FBE583131DF9BF1B00057DB5 /* Altimeter.cpp */,
+				FBE583141DF9BF1B00057DB5 /* Altimeter.hpp */,
+				FBE583151DF9BF1B00057DB5 /* AltitudeManager.hpp */,
+				FBE583161DF9BF1B00057DB5 /* AltitudeManagerSimple.cpp */,
+				FBE583171DF9BF1B00057DB5 /* AltitudeManagerSimple.hpp */,
 				7E6F25231C0F1D76007A97A1 /* OrientationMeter.hpp */,
 				7E6F25241C0F1D76007A97A1 /* OrientationMeterAverage.cpp */,
 				7E6F25251C0F1D76007A97A1 /* OrientationMeterAverage.hpp */,
@@ -746,11 +763,13 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FBE5831A1DF9BF1B00057DB5 /* AltitudeManager.hpp in Headers */,
 				7E6F25451C0F1D76007A97A1 /* Acceleration.hpp in Headers */,
 				7E6F25771C0F1D76007A97A1 /* Status.hpp in Headers */,
 				7E6F257F1C0F1D76007A97A1 /* DataStore.hpp in Headers */,
 				7E6F26051C0F1D79007A97A1 /* RandomGenerator.hpp in Headers */,
 				7E6F25E31C0F1D78007A97A1 /* OrientationMeter.hpp in Headers */,
+				FBE5831C1DF9BF1B00057DB5 /* AltitudeManagerSimple.hpp in Headers */,
 				7E6F25511C0F1D76007A97A1 /* BLEBeacon.hpp in Headers */,
 				FB176CBB1D7824A0008C1745 /* ExtendedDataUtils.hpp in Headers */,
 				7E6F25531C0F1D76007A97A1 /* bleloc.h in Headers */,
@@ -792,6 +811,7 @@
 				7E6F25411C0F1D76007A97A1 /* StrongestBeaconFilter.hpp in Headers */,
 				7E6F25B91C0F1D77007A97A1 /* GaussianProcessLDPLMultiModel.hpp in Headers */,
 				7E6F255F1C0F1D76007A97A1 /* Location.hpp in Headers */,
+				FBE583191DF9BF1B00057DB5 /* Altimeter.hpp in Headers */,
 				7E6F25951C0F1D77007A97A1 /* Resampler.hpp in Headers */,
 				7E6F25DF1C0F1D78007A97A1 /* SystemModel.hpp in Headers */,
 				FB5B4BF21C7C41B600D00E8E /* MetropolisSampler.hpp in Headers */,
@@ -874,11 +894,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7E8A88891C071C2F00C32E70 /* Build configuration list for PBXNativeTarget "bleloc" */;
 			buildPhases = (
-				8C086403DFA5BDC14D48FAF6 /* Check Pods Manifest.lock */,
+				8C086403DFA5BDC14D48FAF6 /* [CP] Check Pods Manifest.lock */,
 				7E8A887C1C071C2F00C32E70 /* Sources */,
 				7E8A887D1C071C2F00C32E70 /* Frameworks */,
 				7E8A887E1C071C2F00C32E70 /* CopyFiles */,
-				9434ED5E19CFC706D080F6FF /* Copy Pods Resources */,
+				9434ED5E19CFC706D080F6FF /* [CP] Copy Pods Resources */,
 				7E8A89231C072C7B00C32E70 /* Headers */,
 				7E8A89881C073E8400C32E70 /* ShellScript */,
 			);
@@ -895,11 +915,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = F5013CD91C08799F007B6557 /* Build configuration list for PBXNativeTarget "blelocjni" */;
 			buildPhases = (
-				D49FB588BA5AA206EE4EFAF3 /* Check Pods Manifest.lock */,
+				D49FB588BA5AA206EE4EFAF3 /* [CP] Check Pods Manifest.lock */,
 				F5013CCB1C08799F007B6557 /* Sources */,
 				F5013CCC1C08799F007B6557 /* Frameworks */,
 				F5013CCD1C08799F007B6557 /* Headers */,
-				B617C1E9455C5C8A81BBF662 /* Copy Pods Resources */,
+				B617C1E9455C5C8A81BBF662 /* [CP] Copy Pods Resources */,
 				F5027DAA1C0BEE9F0027329C /* ShellScript */,
 			);
 			buildRules = (
@@ -977,29 +997,29 @@
 			shellPath = /bin/sh;
 			shellScript = "set -e\n\nmkdir -p \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/A/Headers\"\n\n# Link the \"Current\" version to \"A\"\n/bin/ln -sfh A \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/Current\"\n/bin/ln -sfh Versions/Current/Headers \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Headers\"\n/bin/ln -sfh \"Versions/Current/${PRODUCT_NAME}\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/${PRODUCT_NAME}\"\n\n# The -a ensures that the headers maintain the source modification date so that we don't constantly\n# cause propagating rebuilds of files that import these headers.\necho \"${TARGET_BUILD_DIR}/${PUBLIC_HEADERS_FOLDER_PATH}/\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/\" > ~/watsonsdklocation.txt\necho \"${TARGET_BUILD_DIR}/${PUBLIC_HEADERS_FOLDER_PATH}/\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/A/Headers\"\n\n\n/bin/cp -a \"${TARGET_BUILD_DIR}/${PUBLIC_HEADERS_FOLDER_PATH}/\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/A/Headers\"\n\n# create a zip of the framework and add it to the project root\ncd ${SRCROOT}\nrm -rf ${PRODUCT_NAME}.framework ${PRODUCT_NAME}.framework.zip\n\ncd ${BUILT_PRODUCTS_DIR}\nzip -r ${SRCROOT}/${PRODUCT_NAME}.framework.zip ${PRODUCT_NAME}.framework\ncd ${SRCROOT}\nunzip -o ${PRODUCT_NAME}.framework.zip\n\n# [Rob] we need to copy the other headers keeping their folder structure\n#echo 'SRCROOT:'${SRCROOT}\n#cd ${SRCROOT}/watsonsdk\n\n# I have to move up a directory due to my layout.\n#echo 'Copying Headers into Framework..'\n#for H in `find ./ -name \"*.h\"`;  do\n#echo ${H}\n#ditto ${H} ${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/A/Headers/${H}\n#done\n\n";
 		};
-		8C086403DFA5BDC14D48FAF6 /* Check Pods Manifest.lock */ = {
+		8C086403DFA5BDC14D48FAF6 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Check Pods Manifest.lock";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		9434ED5E19CFC706D080F6FF /* Copy Pods Resources */ = {
+		9434ED5E19CFC706D080F6FF /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Copy Pods Resources";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1007,14 +1027,14 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-bleloc/Pods-bleloc-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		B617C1E9455C5C8A81BBF662 /* Copy Pods Resources */ = {
+		B617C1E9455C5C8A81BBF662 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Copy Pods Resources";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1022,19 +1042,19 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-blelocjni/Pods-blelocjni-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		D49FB588BA5AA206EE4EFAF3 /* Check Pods Manifest.lock */ = {
+		D49FB588BA5AA206EE4EFAF3 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Check Pods Manifest.lock";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		F5027DAA1C0BEE9F0027329C /* ShellScript */ = {
@@ -1071,6 +1091,7 @@
 				FB273EF51D22226B00F53CCB /* ExtendedDataUtils.cpp in Sources */,
 				FB71CE4F1C46889F00A4DB67 /* MathUtils.cpp in Sources */,
 				7E6F254B1C0F1D76007A97A1 /* Beacon.cpp in Sources */,
+				FBE5831B1DF9BF1B00057DB5 /* AltitudeManagerSimple.cpp in Sources */,
 				FBEB01E71D756F1300CB808D /* RandomWalkerMotion.cpp in Sources */,
 				7E6F25E51C0F1D78007A97A1 /* OrientationMeterAverage.cpp in Sources */,
 				FB176CB91D7823D1008C1745 /* LatLngConverter.cpp in Sources */,
@@ -1096,6 +1117,7 @@
 				7E6F254F1C0F1D76007A97A1 /* BLEBeacon.cpp in Sources */,
 				7E6F25F71C0F1D79007A97A1 /* ArrayUtils.cpp in Sources */,
 				FBBA09F71DACB2DA00EB2553 /* Heading.cpp in Sources */,
+				FBE583181DF9BF1B00057DB5 /* Altimeter.cpp in Sources */,
 				7E6F25A51C0F1D77007A97A1 /* Building.cpp in Sources */,
 				7E6F25BB1C0F1D77007A97A1 /* KernelFunction.cpp in Sources */,
 				7E6F25F31C0F1D78007A97A1 /* PedometerWalkingState.cpp in Sources */,

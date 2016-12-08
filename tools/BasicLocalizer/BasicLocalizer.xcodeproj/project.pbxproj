@@ -82,6 +82,8 @@
 		FB05F26C1D8ADCCC003B472A /* WeakPoseRandomWalker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB05F2681D8ADCCC003B472A /* WeakPoseRandomWalker.cpp */; };
 		FB176CB51D78128B008C1745 /* LatLngConverter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB176CB31D78128B008C1745 /* LatLngConverter.cpp */; };
 		FB176CB61D78128B008C1745 /* LatLngConverter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB176CB31D78128B008C1745 /* LatLngConverter.cpp */; };
+		FB3926F01DF9B52A006B6ECB /* AltitudeManagerSimple.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB3926EE1DF9B52A006B6ECB /* AltitudeManagerSimple.cpp */; };
+		FB3926F61DF9B65C006B6ECB /* Altimeter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB3926F41DF9B65C006B6ECB /* Altimeter.cpp */; };
 		FB7B22901DE484E200FF8BF3 /* SystemModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB7B228F1DE484E200FF8BF3 /* SystemModel.cpp */; };
 		FBBA09FB1DACB89000EB2553 /* Heading.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBBA09F91DACB89000EB2553 /* Heading.cpp */; };
 		FBEB01EF1D7588F200CB808D /* RandomWalkerMotion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBEB01EB1D7588F200CB808D /* RandomWalkerMotion.cpp */; };
@@ -234,6 +236,11 @@
 		FB05F2691D8ADCCC003B472A /* WeakPoseRandomWalker.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WeakPoseRandomWalker.hpp; sourceTree = "<group>"; };
 		FB176CB31D78128B008C1745 /* LatLngConverter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LatLngConverter.cpp; sourceTree = "<group>"; };
 		FB176CB41D78128B008C1745 /* LatLngConverter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LatLngConverter.hpp; sourceTree = "<group>"; };
+		FB3926EC1DF9B50F006B6ECB /* AltitudeManager.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AltitudeManager.hpp; sourceTree = "<group>"; };
+		FB3926EE1DF9B52A006B6ECB /* AltitudeManagerSimple.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AltitudeManagerSimple.cpp; sourceTree = "<group>"; };
+		FB3926EF1DF9B52A006B6ECB /* AltitudeManagerSimple.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AltitudeManagerSimple.hpp; sourceTree = "<group>"; };
+		FB3926F41DF9B65C006B6ECB /* Altimeter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Altimeter.cpp; sourceTree = "<group>"; };
+		FB3926F51DF9B65C006B6ECB /* Altimeter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Altimeter.hpp; sourceTree = "<group>"; };
 		FB7B228F1DE484E200FF8BF3 /* SystemModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SystemModel.cpp; sourceTree = "<group>"; };
 		FBA5E62F1D9E90930027E06F /* LocException.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LocException.hpp; sourceTree = "<group>"; };
 		FBBA09F91DACB89000EB2553 /* Heading.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Heading.cpp; sourceTree = "<group>"; };
@@ -524,6 +531,11 @@
 				7E12B4B51D3474B900614DBB /* Pedometer.hpp */,
 				7E12B4B61D3474B900614DBB /* PedometerWalkingState.cpp */,
 				7E12B4B71D3474B900614DBB /* PedometerWalkingState.hpp */,
+				FB3926EC1DF9B50F006B6ECB /* AltitudeManager.hpp */,
+				FB3926EE1DF9B52A006B6ECB /* AltitudeManagerSimple.cpp */,
+				FB3926EF1DF9B52A006B6ECB /* AltitudeManagerSimple.hpp */,
+				FB3926F41DF9B65C006B6ECB /* Altimeter.cpp */,
+				FB3926F51DF9B65C006B6ECB /* Altimeter.hpp */,
 			);
 			name = sensor;
 			path = "../../ble-cpp/src/sensor";
@@ -761,6 +773,7 @@
 				7E12B4EB1D34767500614DBB /* BLEBeacon.cpp in Sources */,
 				7E12B4EC1D34767500614DBB /* Location.cpp in Sources */,
 				7E12B4ED1D34767500614DBB /* Pose.cpp in Sources */,
+				FB3926F01DF9B52A006B6ECB /* AltitudeManagerSimple.cpp in Sources */,
 				7E12B4EE1D34767500614DBB /* Sample.cpp in Sources */,
 				7E12B4EF1D34767500614DBB /* State.cpp in Sources */,
 				7E12B4F01D34767500614DBB /* Status.cpp in Sources */,
@@ -771,6 +784,7 @@
 				7E12B4F31D34767500614DBB /* DataUtils.cpp in Sources */,
 				7E12B4F41D34767500614DBB /* ExtendedDataUtils.cpp in Sources */,
 				FB7B22901DE484E200FF8BF3 /* SystemModel.cpp in Sources */,
+				FB3926F61DF9B65C006B6ECB /* Altimeter.cpp in Sources */,
 				7E12B4F51D34767500614DBB /* LazyDataStore.cpp in Sources */,
 				7E12B4F61D34767500614DBB /* VirtualDevice.cpp in Sources */,
 				7E12B4F71D34767500614DBB /* GridResampler.cpp in Sources */,
@@ -911,7 +925,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 7A6816C23FFCCD44FD1F0490 /* Pods-BasicLocalizer.debug.xcconfig */;
 			buildSettings = {
-				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_OPTIMIZATION_LEVEL = 2;
 				HEADER_SEARCH_PATHS = (
 					"\"${PODS_ROOT}/boost\"",
 					"\"${PODS_ROOT}/cereal/include\"",

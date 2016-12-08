@@ -28,6 +28,7 @@
 #include <chrono>
 #include "LogUtil.hpp"
 #include "WeakPoseRandomWalker.hpp"
+#include "AltitudeManagerSimple.hpp"
 
 namespace loc{
     BasicLocalizer::BasicLocalizer(){
@@ -224,6 +225,21 @@ namespace loc{
     
     StreamLocalizer& BasicLocalizer::putHeading(const Heading heading) {
         // Pass
+        return *this;
+    }
+    
+    StreamLocalizer& BasicLocalizer::putAltimeter(const Altimeter altimeter) {
+        if (!isReady) {
+            return *this;
+        }
+        if (!isTrackingMode()) {
+            return *this;
+        }
+        switch(mState) {
+            case UNKNOWN: case LOCATING:
+            case TRACKING:
+                mLocalizer->putAltimeter(altimeter);
+        }
         return *this;
     }
     
@@ -493,6 +509,12 @@ namespace loc{
         // Set dependency
         mLocalizer->orientationMeter(orientationMeter);
         mLocalizer->pedometer(pedometer);
+        
+        // AltitudeManager
+        if(usesAltimeterForFloorTransCheck){
+            AltitudeManagerSimple::Ptr altMgr(new AltitudeManagerSimple);
+            mLocalizer->altitudeManager(altMgr);
+        }
         
         // Build System Model
         // TODO (PoseProperty and StateProperty)
