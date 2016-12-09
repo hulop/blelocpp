@@ -107,7 +107,7 @@ namespace loc{
             return *this;
         }
         if (smoothType == SMOOTH_RSSI) {
-            beacons_list[(smooth_count++)%MIN(N_SMOOTH_MAX,nSmooth)] = beacons;
+            beacons_list[(smooth_count++)%std::min(N_SMOOTH_MAX,nSmooth)] = beacons;
             
             std::map<long, loc::Beacons> allBeacons;
             
@@ -165,18 +165,17 @@ namespace loc{
             }
         }
         
-        loc::Status *status = new loc::Status();
-        
         if (smoothType == SMOOTH_LOCATION) {
+            auto statusOneshot = mLocalizer->getStatus();
+            loc::Status *status = new loc::Status(*statusOneshot);
+            
             if (isTrackingMode() && smooth_count >= nSmooth) {
                 nSmooth = nSmoothTracking;
             }
             
-            std::shared_ptr<loc::Location> loc = mLocalizer->getStatus()->meanLocation();
+            status_list[(smooth_count++)%std::min(N_SMOOTH_MAX,nSmooth)] = *statusOneshot->states();
             
-            status_list[(smooth_count++)%MIN(N_SMOOTH_MAX,nSmooth)] = *mLocalizer->getStatus()->states().get();
-            
-            std::vector<loc::State> *states = new std::vector<loc::State>();
+            std::shared_ptr<States> states (new std::vector<loc::State>);
             double meanBias = 0;
             for(int i = 0; i < N_SMOOTH_MAX && i < smooth_count && i < nSmooth; i++) {
                 for(auto& s: status_list[i]) {
@@ -185,7 +184,7 @@ namespace loc{
                 }
             }
             mEstimatedRssiBias = meanBias / states->size();
-            status->states(states);
+            status->states(states, Status::RESET);
             mResult.reset(status);
         } else {
             mResult.reset(getStatus());

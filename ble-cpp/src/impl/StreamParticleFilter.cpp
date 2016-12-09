@@ -272,8 +272,8 @@ namespace loc{
 
         void putAcceleration(const Acceleration acceleration){
             initializeStatusIfZero();
-
             status->step(Status::OTHER);
+            
             mPedometer->putAcceleration(acceleration);
             accelerationIsUpdated = mPedometer->isUpdated();
 
@@ -315,8 +315,8 @@ namespace loc{
             std::shared_ptr<States> states = status->states();
             
             if(input.timestamp() - input.previousTimestamp() < timestampIntervalLimit){
-                States* statesPredicted = new States(mRandomWalker->predict(*states.get(), input));
-                status->states(statesPredicted);
+                StatesPtr statesPredicted(new States(mRandomWalker->predict(*states.get(), input)));
+                status->states(statesPredicted, Status::PREDICTION);
             }else{
                 std::cout << "Interval between two timestamps is too large. The input at timestamp=" << timestamp << " was not used." << std::endl;
             }
@@ -325,10 +325,7 @@ namespace loc{
             if(mOptVerbose){
                 std::cout << "prediction at t=" << timestamp << std::endl;
             }
-
-            status->step(Status::PREDICTION);
             callback(status.get());
-
             previousTimestampMotion = timestamp;
         }
 
@@ -475,18 +472,19 @@ namespace loc{
             if(mOptVerbose){
                 std::cout << "ESS=" << ess << std::endl;
             }
-            States* statesNew;
+            StatesPtr statesNew;
+            Status::Step step = Status::FILTERING_WITHOUT_RESAMPLING;
             if(ess<=mEssThreshold){
-                statesNew = mResampler->resample(*states, &weights[0]);
+                statesNew.reset(mResampler->resample(*states, &weights[0]));
                 // Assign equal weights after resampling
                 for(int i=0; i<weights.size(); i++){
                     double weight = 1.0/(weights.size());
                     statesNew->at(i).weight(weight);
                 }
-                status->step(Status::FILTERING_WITH_RESAMPLING);
+                step = Status::FILTERING_WITH_RESAMPLING;
             }else{
-                statesNew = new States(*states);
-                status->step(Status::FILTERING_WITHOUT_RESAMPLING);
+                statesNew.reset(new States(*states));
+                step = Status::FILTERING_WITHOUT_RESAMPLING;
             }
             
             // Posterior-resampling
@@ -494,7 +492,7 @@ namespace loc{
                 *statesNew = mPostResampler->resample(*statesNew);
             }
             
-            status->states(statesNew);
+            status->states(statesNew, step);
             if(mOptVerbose){
                 std::cout << "resampling at t=" << beacons.timestamp() << std::endl;
             }
@@ -573,9 +571,8 @@ namespace loc{
             }
         }
         
-        void putBeacon(const Beacons & beacons){
+        void putBeacons(const Beacons& beacons){
             initializeStatusIfZero();
-
             status->step(Status::OTHER);
             
             const Beacons& beaconsFiltered = filterBeacons(beacons);
@@ -636,13 +633,13 @@ namespace loc{
             this->reset();
             mPedometer->reset();
             mOrientationmeter->reset();
-            States* states = new States(mStatusInitializer->initializeStates(mNumStates));
+            StatesPtr states(new States(mStatusInitializer->initializeStates(mNumStates)));
             updateStatus(states);
         }
 
-        void updateStatus(States* states){
+        void updateStatus(StatesPtr states){
             Status *st = new Status();
-            st->states(states);
+            st->states(states, Status::OTHER);
             status.reset(st);
         }
 
@@ -682,9 +679,8 @@ namespace loc{
             if(orientationWasUpdated){
                 std::cout << "Orientation is updated. Reset succeeded." << std::endl;
                 double orientationMeasured = mOrientationmeter->getYaw();
-                States* states = new States(mStatusInitializer->resetStates(mNumStates, pose, orientationMeasured));
-                status->states(states);
-                status->step(Status::RESET);
+                StatesPtr states(new States(mStatusInitializer->resetStates(mNumStates, pose, orientationMeasured)));
+                status->states(states, Status::RESET);
                 callback(status.get());
                 return true;
             }else{
@@ -702,9 +698,8 @@ namespace loc{
             if(orientationWasUpdated){
                 std::cout << "Orientation is updated. Reset succeeded." << std::endl;
                 double orientationMeasured = mOrientationmeter->getYaw();
-                States* states = new States(mStatusInitializer->resetStates(mNumStates, meanPose, stdevPose, orientationMeasured));
-                status->states(states);
-                status->step(Status::RESET);
+                StatesPtr states(new States(mStatusInitializer->resetStates(mNumStates, meanPose, stdevPose, orientationMeasured)));
+                status->states(states, Status::RESET);
                 callback(status.get());
                 return true;
             }else{
@@ -732,9 +727,8 @@ namespace loc{
                         s.orientation(orientation);
                     }
                 }
-                States* states = new States(statesTmp);
-                status->states(states);
-                status->step(Status::RESET);
+                StatesPtr states(new States(statesTmp));
+                status->states(states, Status::RESET);
                 callback(status.get());
                 return true;
             }else{
@@ -762,9 +756,8 @@ namespace loc{
                 BOOST_THROW_EXCEPTION(LocException("beaconsFiltered.size==0 in resetStatus(beacons)."));
             }
             States statesTmp = sampleStatesByObservation(mNumStates, beaconsFiltered);
-            States* statesNew = new States(statesTmp);
-            status->states(statesNew);
-            status->step(Status::RESET);
+            StatesPtr statesNew(new States(statesTmp));
+            status->states(statesNew, Status::RESET);
             status->timestamp(beacons.timestamp());
             if(mMetro){
                 ss << "an ObservationDependentInitializer.";
@@ -799,9 +792,8 @@ namespace loc{
             std::stringstream ss;
             ss << "Status was initialized by ";
             States statesTmp = sampleStatesByLocationAndObservation(mNumStates, location, beaconsFiltered);
-            States* statesNew = new States(statesTmp);
-            status->states(statesNew);
-            status->step(Status::RESET);
+            StatesPtr statesNew(new States(statesTmp));
+            status->states(statesNew, Status::RESET);
             status->timestamp(beacons.timestamp());
             if(mMetro){
                 ss << "an ObservationDependentInitializer.";
@@ -811,7 +803,6 @@ namespace loc{
             std::cout << ss.str() << std::endl;
             return false;
         }
-
         
         States sampleStatesByLocationAndObservation(int n, const Location& location, const Beacons& beacons){
             const Beacons& beaconsFiltered = filterBeacons(beacons);
@@ -840,10 +831,9 @@ namespace loc{
             }
             std::shared_ptr<States> statesTmp = status->states();
             std::vector<Location> locations(statesTmp->begin(), statesTmp->end());
-            States* statesNew = new States(mStatusInitializer->initializeStatesFromLocations(locations));
-            status->states(statesNew);
+            StatesPtr statesNew(new States(mStatusInitializer->initializeStatesFromLocations(locations)));
             status->timestamp(beacons.timestamp());
-            status->step(Status::RESET);
+            status->states(statesNew, Status::RESET);
             callback(status.get());
             return false;
         }
@@ -999,7 +989,7 @@ namespace loc{
     }
 
     StreamParticleFilter& StreamParticleFilter::putBeacons(const Beacons beacons) {
-        impl->putBeacon(beacons);
+        impl->putBeacons(beacons);
         return *this;
     }
     

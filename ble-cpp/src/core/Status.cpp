@@ -30,6 +30,42 @@ namespace loc{
     
     Status::~Status(){}
     
+    Status::Status(const Status& status){
+        step_ = status.step_;
+        timestamp_ = status.timestamp_;
+        mWasFloorUpdated = status.mWasFloorUpdated;
+        auto meanLoc = status.meanLocation();
+        auto meanPose = status.meanPose();
+        auto states = status.states();
+        if(meanLoc){
+            meanLocation_ = Location::Ptr(new Location(*meanLoc));
+        }
+        if(meanPose){
+            meanPose_ = Pose::Ptr(new Pose(*meanPose));
+        }
+        if(states){
+            states_ = std::shared_ptr<States>(new States(*states));
+        }
+    }
+    
+    Status& Status::operator=(const Status& status){
+        step_ = status.step_;
+        timestamp_ = status.timestamp_;
+        mWasFloorUpdated = status.mWasFloorUpdated;
+        auto meanLoc = status.meanLocation();
+        auto meanPose = status.meanPose();
+        auto states = status.states();
+        if(meanLoc){
+            meanLocation_ = Location::Ptr(new Location(*meanLoc));
+        }
+        if(meanPose){
+            meanPose_ = Pose::Ptr(new Pose(*meanPose));
+        }
+        if(states){
+            states_ = std::shared_ptr<States>(new States(*states));
+        }
+        return *this;
+    }
     
     std::shared_ptr<Location> Status::meanLocation() const{
         return meanLocation_;
@@ -69,6 +105,8 @@ namespace loc{
     }
     
     Status& Status::states(std::shared_ptr<std::vector<State>> states){
+        this->step(Status::OTHER);
+        
         states_ = states;
         size_t n = states->size();
         std::vector<double> weights(n);
@@ -83,32 +121,30 @@ namespace loc{
         return *this;
     }
     
+    Status& Status::states(std::shared_ptr<std::vector<State>> states, Step step){
+        this->states(states);
+        this->step(step);
+        return *this;
+    }
+    
     Status::Step Status::step() const{
         return step_;
     }
     
     Status& Status::step(Status::Step step){
-        this->reset();
         step_ = step;
+        
+        if(step_==FILTERING_WITH_RESAMPLING || step_==FILTERING_WITHOUT_RESAMPLING || step_==RESET){
+            mWasFloorUpdated =  true;
+        }else{
+            mWasFloorUpdated = false;
+        }
+        
         return *this;
     }
     
-    void Status::reset(){
-        step_ = OTHER;
-        mWasFloorUpdated = false;
-    }
-    
     bool Status::wasFloorUpdated() const{
-        if(mWasFloorUpdated){
-            return true;
-        }else{
-            if(step_==FILTERING_WITH_RESAMPLING || step_==FILTERING_WITHOUT_RESAMPLING){
-                return true;
-            }
-            else{
-                return false;
-            }
-        }
+        return mWasFloorUpdated;
     }
     
     void Status::wasFloorUpdated(bool wasFloorUpdated){

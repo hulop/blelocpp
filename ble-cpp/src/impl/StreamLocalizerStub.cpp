@@ -63,8 +63,11 @@ namespace loc{
         auto loc = std::shared_ptr<Location>(new Location(1,2,0,0));
         auto pose = std::shared_ptr<Pose>(new Pose);
         pose->x(loc->x()).y(loc->y()).z(loc->z());
-        statusNew->meanLocation(loc);
-        statusNew->meanPose(pose);
+        
+        std::shared_ptr<States> states(new States);
+        State s(*pose);
+        states->push_back(s);
+        statusNew->states(states, Status::RESET);
         status = statusNew;
     }
 

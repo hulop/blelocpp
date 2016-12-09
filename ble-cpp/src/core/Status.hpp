@@ -39,6 +39,10 @@ namespace loc{
         Status();
         ~Status();
         
+        // copy constructor
+        Status(const Status& s);
+        Status& operator=(const Status& s);
+        
         enum Step{
             PREDICTION,
             RESET,
@@ -53,17 +57,15 @@ namespace loc{
         long timestamp() const;
         std::shared_ptr<std::vector<State>> states() const;
         Step step() const;
-        
-        Status& meanLocation(std::shared_ptr<Location> location);
-        Status& meanPose(std::shared_ptr<Pose> pose);
+
         Status& timestamp(long timestamp);
         
         [[deprecated("please use states(std::shared_ptr<std::vector<State>>) function")]]
         Status& states(std::vector<State>* states);
         Status& states(std::shared_ptr<std::vector<State>> states);
+        Status& states(std::shared_ptr<std::vector<State>> states, Step step);
         Status& step(Step step);
         
-        void reset();
         bool wasFloorUpdated() const;
         void wasFloorUpdated(bool);
         
@@ -74,6 +76,10 @@ namespace loc{
         std::shared_ptr<Pose> meanPose_;
         std::shared_ptr<std::vector<State>> states_;
         bool mWasFloorUpdated = false;
+        
+        Status& meanLocation(std::shared_ptr<Location> location);
+        Status& meanPose(std::shared_ptr<Pose> pose);
+        
     };
     
 }

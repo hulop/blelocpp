@@ -32,6 +32,7 @@
 namespace loc{
     class State;
     using States = std::vector<State>;
+    using StatesPtr = std::shared_ptr<States>;
     
     class State : public Pose{
     private:
