@@ -28,6 +28,7 @@
 #include <vector>
 #include <queue>
 #include <deque>
+#include <mutex>
 #include "AltitudeManager.hpp"
 
 namespace loc{
@@ -63,10 +64,15 @@ namespace loc{
         virtual void putAltimeter(Altimeter alt);
         virtual double heightChange() const;
         void parameters(std::shared_ptr<Parameters> params);
-        
+        void verbose(bool);
+        bool verbose() const;
+    
     protected:
         std::shared_ptr<Parameters> mParams = std::shared_ptr<Parameters>(new Parameters);
         std::deque<Altimeter> altimeterQueue;
+        bool verbose_ = false;
+    private:
+        std::mutex mtx_;
     };
 }
 

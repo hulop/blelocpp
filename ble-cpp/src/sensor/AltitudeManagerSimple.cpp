@@ -21,6 +21,7 @@
  *******************************************************************************/
 
 #include "AltitudeManagerSimple.hpp"
+#include <sstream>
 #include <valarray>
 
 namespace loc{
@@ -31,6 +32,8 @@ namespace loc{
     
     void AltitudeManagerSimple::putAltimeter(Altimeter alt){
         
+        std::lock_guard<std::mutex> lock(mtx_);
+        
         if(altimeterQueue.size()>=mParams->queueLimit()){
             altimeterQueue.pop_front();
         }
@@ -40,37 +43,55 @@ namespace loc{
         }
         auto last = altimeterQueue.back();
         if(std::abs(last.timestamp() - alt.timestamp()) > mParams->timestampIntervalLimit()){
-            std::cout << "timestamp interval between two altimeters is too large. altitudeManager was reset." << std::endl;
+            if(verbose()){
+                std::cout << "timestamp interval between two altimeters is too large. altitudeManager was reset." << std::endl;
+            }
             altimeterQueue.clear();
         }
         altimeterQueue.push_back(alt);
     }
     
+    void AltitudeManagerSimple::verbose(bool verbose){
+        verbose_ = verbose;
+    }
+    
+    bool AltitudeManagerSimple::verbose() const{
+        return verbose_;
+    }
+    
     double AltitudeManagerSimple::heightChange() const{
         int win = mParams->window();
-        if(altimeterQueue.size()<win){
+        std::deque<Altimeter> queueTmp;
+        queueTmp = altimeterQueue;
+
+        if(queueTmp.size()<win){
             return 0.0;
         }
-        auto n = altimeterQueue.size();
+        auto n = queueTmp.size();
         std::valarray<double> relAlts(win);
         for(int i=0; i<win; i++){
             auto idx = n-1-i;
-            auto alt = altimeterQueue.at(idx);
+            auto alt = queueTmp.at(idx);
             auto relAlt = alt.relativeAltitude();
             relAlts[i] = relAlt;
         }
-        auto mean = relAlts.sum() / relAlts.size();
-        auto var = ((relAlts*relAlts).sum() - mean*mean*relAlts.size()) / relAlts.size();
-        auto std = std::sqrt(var);
+        double mean = relAlts.sum()/relAlts.size();
+        double var = ((relAlts*relAlts).sum() - mean*mean*relAlts.size())/relAlts.size();
+        var = std::max(0.0, var);
+        double stdev = std::sqrt(var);
         
         double th = mParams->stdThreshold();
-        std::cout << "std_relAlt=" << std << ". (threshold=" << th << ")" << std::endl;
-        if(std > th){
-            //std::cout << "std_relAlt=" << std << " is gt " << th << "." << std::endl;
-            return 1.0;
-        }else{
-            return 0.0;
+        std::stringstream ss;
+        ss << "std_relAlt=" << stdev << ". (threshold=" << th << ")";
+        double retVal = 0.0;
+        if(stdev > th){
+            ss << " Height change detected.";
+            retVal =  1.0;
         }
+        if(verbose()){
+            std::cout << ss.str() << std::endl;
+        }
+        return retVal;
     }
 }
 
