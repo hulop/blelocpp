@@ -140,6 +140,7 @@ namespace loc {
         int nSmoothTracking = 1;
         SmoothType smoothType = SMOOTH_LOCATION;
         LocalizeMode localizeMode = ONESHOT;
+        
         double effectiveSampleSizeThreshold = 1000;
         int nStrongest = 10;
         bool enablesFloorUpdate = true;
@@ -206,6 +207,7 @@ namespace loc {
         double estimatedRssiBias();
         
         bool usesAltimeterForFloorTransCheck = false;
+        double coeffDiffFloorStdev = 5.0;
         
         // parameters
         OrientationMeterAverageParameters orientationMeterAverageParameters;
@@ -274,6 +276,12 @@ namespace loc {
                     return false;
             }
         };
+        
+        
+        std::shared_ptr<GaussianProcessLDPLMultiModel<State, Beacons>> observationModel() const{
+            return deserializedModel;
+        };
+        
     };
 }
 

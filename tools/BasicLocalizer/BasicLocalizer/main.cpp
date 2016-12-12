@@ -335,6 +335,9 @@ int main(int argc, char * argv[]) {
             }
         } restarter;
         
+        Beacons beaconsRecent;
+        std::vector<double> errorsAtMarkers;
+        
         while (getline(ifs, str))
         {
             try {
@@ -346,6 +349,16 @@ int main(int argc, char * argv[]) {
                     if (logString.compare(0, 6, "Beacon") == 0) {
                         Beacons beacons = LogUtil::toBeacons(logString);
                         localizer.putBeacons(beacons);
+                        beaconsRecent = beacons;
+                        
+                        // Compute likelihood at recent pose
+                        {
+                            auto recentPose = ud.recentPose;
+                            auto obsModel = localizer.observationModel();
+                            State sTmp(recentPose);
+                            auto logLikelihood = obsModel->computeLogLikelihood(sTmp, beaconsRecent);
+                        }
+                        
                     }
                     // Parsing acceleration values
                     if (logString.compare(0, 3, "Acc") == 0) {
@@ -442,8 +455,10 @@ int main(int argc, char * argv[]) {
                         
                         if(restarter.counter==0){
                             auto recentPose = ud.recentPose;
-                            ss << ",d2D=" << Location::distance2D(markerLoc, recentPose)
-                            << ",dFloor=" << Location::floorDifference(markerLoc, recentPose) ;
+                            double d2D = Location::distance2D(markerLoc, recentPose);
+                            double dFloor = Location::floorDifference(markerLoc, recentPose);
+                            errorsAtMarkers.push_back(d2D);
+                            std::cout << ",d2D=" << d2D << ",dFloor=" <<dFloor ;
                         }else if(restarter.counter==1){
                             restarter.markerLocStart.reset(new Location(markerLoc));
                             //ud.func = [&](long ts, Pose pose, States states){
@@ -468,6 +483,22 @@ int main(int argc, char * argv[]) {
                             }
                         }
                         std::cout << ss.str() << std::endl;
+                        
+                        // Compare prediction at marker location with recent beacons
+                        {
+                            std::cout << std::endl;
+                            auto obsModel = localizer.observationModel();
+                            State sTmp(markerLoc);
+                            auto predictions = obsModel->predict(sTmp, beaconsRecent);
+                            std::cout << "(minor,meas,pred)=";
+                            for(auto& b : beaconsRecent){
+                                if(b.rssi() > -100){
+                                    auto pred = predictions.at(b.id());
+                                    std::cout << "(" << b.minor() << "," << b.rssi()  << "," << pred.mean() << "),";
+                                }
+                            }
+                            std::cout << std::endl;
+                        }
                     }
                     if (logString.compare(0, 4, "Note") == 0){
                         // "Note", note_string

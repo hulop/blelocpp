@@ -373,9 +373,11 @@ namespace loc{
             msec = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now()-s).count();
             std::cerr << "load deserialized model: " << msec << "ms" << std::endl;
             doTraining = false;
-        } catch(...) {
+        } catch(std::exception& e) {
+            std::cerr << e.what() << std::endl;
         }
-        
+        // update observation model
+        deserializedModel->coeffDiffFloorStdev(coeffDiffFloorStdev);
         
         mLocalizer = std::shared_ptr<StreamParticleFilter>(new StreamParticleFilter());
         if (mFunctionCalledAfterUpdate2 && mUserData) {
