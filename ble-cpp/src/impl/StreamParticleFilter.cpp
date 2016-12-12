@@ -336,6 +336,9 @@ namespace loc{
         }
 
         void mixStates(States& states, const Beacons&beacons, double mixProba){
+            if( beacons.size() < mMixParams.nBeaconsMinimum){
+                return;
+            }
             size_t nStates = states.size();
             std::vector<int> indices;
             // Select particles that will be removed randomly.

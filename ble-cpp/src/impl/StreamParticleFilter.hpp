@@ -53,6 +53,7 @@ namespace loc {
             double mixtureProbability=0;
             double rejectDistance=5; // Threshold of the distance between the states and a state to be mixed
             int burnInQuick = 50;
+            int nBeaconsMinimum = 3; // The minimum number of observed beacons to apply mix.
             
             double rejectFloorDifference() const{return mRejectFloorDifference;}
             void rejectFloorDifference(double rejFloorDiff){mRejectFloorDifference = rejFloorDiff;}

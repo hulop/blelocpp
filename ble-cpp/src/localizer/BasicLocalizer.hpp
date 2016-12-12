@@ -190,6 +190,7 @@ namespace loc {
         double mixProba = 0.000;
         double rejectDistance = 5;
         double rejectFloorDifference = 0.99;
+        int nBeaconsMinimum = 3;
         
         Location locLB{0.5, 0.5, 1e-6, 1e-6};
         //Location locLB(0.5, 0.5, 0.0);

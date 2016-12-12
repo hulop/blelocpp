@@ -656,6 +656,7 @@ namespace loc{
         mixParams.mixtureProbability = mixProba;
         mixParams.rejectDistance = rejectDistance;
         mixParams.rejectFloorDifference(rejectFloorDifference);
+        mixParams.nBeaconsMinimum = nBeaconsMinimum;
         mLocalizer->mixtureParameters(mixParams);
         msec = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now()-s).count();
         std::cerr << "finish setModel: " << msec << "ms" << std::endl;
