@@ -31,9 +31,17 @@
 namespace loc{
     
     class SystemModelInBuildingProperty{
-        double probabilityUp_ = 0.1;
-        double probabilityDown_ = 0.1;
-        double probabilityStay_ = 0.8;
+        double probabilityUpStair_ = 0.25;
+        double probabilityDownStair_ = 0.25;
+        double probabilityStayStair_ = 0.5;
+        
+        double probabilityUpElevator_ = 0.1;
+        double probabilityDownElevator_ = 0.1;
+        double probabilityStayElevator_ = 0.8;
+        
+        double probabilityUpEscalator_ = 0.25;
+        double probabilityDownEscalator_ = 0.25;
+        double probabilityStayEscalator_ = 0.5;
         
         double probabilityFloorJump_ = 0.0;
         
@@ -56,9 +64,18 @@ namespace loc{
         
         using Ptr = std::shared_ptr<SystemModelInBuildingProperty>;
         
-        SystemModelInBuildingProperty& probabilityUp(double probabilityUp);
-        SystemModelInBuildingProperty& probabilityDown(double probabilityDown);
-        SystemModelInBuildingProperty& probabilityStay(double probabilityStay);
+        SystemModelInBuildingProperty& probabilityUpStair(double probabilityUp);
+        SystemModelInBuildingProperty& probabilityDownStair(double probabilityDown);
+        SystemModelInBuildingProperty& probabilityStayStair(double probabilityStay);
+        
+        SystemModelInBuildingProperty& probabilityUpElevator(double probabilityUp);
+        SystemModelInBuildingProperty& probabilityDownElevator(double probabilityDown);
+        SystemModelInBuildingProperty& probabilityStayElevator(double probabilityStay);
+        
+        SystemModelInBuildingProperty& probabilityUpEscalator(double probabilityUp);
+        SystemModelInBuildingProperty& probabilityDownEscalator(double probabilityDown);
+        SystemModelInBuildingProperty& probabilityStayEscalator(double probabilityStay);
+        
         SystemModelInBuildingProperty& wallCrossingAliveRate(double wallCrossingAliveRate);
         SystemModelInBuildingProperty& maxIncidenceAngle(double maxIncidenceAngle);
         
@@ -69,9 +86,18 @@ namespace loc{
         SystemModelInBuildingProperty& relativeVelocityEscalator(double relativeVelocityEscalator);
         
         SystemModelInBuildingProperty& weightDecayRate(double weightDecayRate);
-        double probabilityUp() const;
-        double probabilityDown() const;
-        double probabilityStay() const;
+        double probabilityUpStair() const;
+        double probabilityDownStair() const;
+        double probabilityStayStair() const;
+        
+        double probabilityUpElevator() const;
+        double probabilityDownElevator() const;
+        double probabilityStayElevator() const;
+        
+        double probabilityUpEscalator() const;
+        double probabilityDownEscalator() const;
+        double probabilityStayEscalator() const;
+        
         double wallCrossingAliveRate() const;
         double maxIncidenceAngle() const;
         double velocityRateFloor() const;

@@ -25,20 +25,51 @@
 namespace loc{
     
     // Property
-    SystemModelInBuildingProperty& SystemModelInBuildingProperty::probabilityUp(double probabilityUp){
-        probabilityUp_ = probabilityUp;
+    SystemModelInBuildingProperty& SystemModelInBuildingProperty::probabilityUpStair(double probabilityUp){
+        probabilityUpStair_ = probabilityUp;
         return *this;
     }
     
-    SystemModelInBuildingProperty& SystemModelInBuildingProperty::probabilityDown(double probabilityDown){
-        probabilityDown_ = probabilityDown;
+    SystemModelInBuildingProperty& SystemModelInBuildingProperty::probabilityDownStair(double probabilityDown){
+        probabilityDownStair_ = probabilityDown;
         return *this;
     }
     
-    SystemModelInBuildingProperty& SystemModelInBuildingProperty::probabilityStay(double probabilityStay){
-        probabilityStay_ = probabilityStay;
+    SystemModelInBuildingProperty& SystemModelInBuildingProperty::probabilityStayStair(double probabilityStay){
+        probabilityStayStair_ = probabilityStay;
         return *this;
     }
+    
+    SystemModelInBuildingProperty& SystemModelInBuildingProperty::probabilityUpElevator(double probabilityUp){
+        probabilityUpElevator_ = probabilityUp;
+        return *this;
+    }
+    
+    SystemModelInBuildingProperty& SystemModelInBuildingProperty::probabilityDownElevator(double probabilityDown){
+        probabilityDownElevator_ = probabilityDown;
+        return *this;
+    }
+    
+    SystemModelInBuildingProperty& SystemModelInBuildingProperty::probabilityStayElevator(double probabilityStay){
+        probabilityStayElevator_ = probabilityStay;
+        return *this;
+    }
+    
+    SystemModelInBuildingProperty& SystemModelInBuildingProperty::probabilityUpEscalator(double probabilityUp){
+        probabilityUpEscalator_ = probabilityUp;
+        return *this;
+    }
+    
+    SystemModelInBuildingProperty& SystemModelInBuildingProperty::probabilityDownEscalator(double probabilityDown){
+        probabilityDownEscalator_ = probabilityDown;
+        return *this;
+    }
+    
+    SystemModelInBuildingProperty& SystemModelInBuildingProperty::probabilityStayEscalator(double probabilityStay){
+        probabilityStayEscalator_ = probabilityStay;
+        return *this;
+    }
+    
     
     SystemModelInBuildingProperty& SystemModelInBuildingProperty::wallCrossingAliveRate(double wallCrossingAliveRate){
         wallCrossingAliveRate_ = wallCrossingAliveRate;
@@ -85,16 +116,40 @@ namespace loc{
         return *this;
     }
     
-    double SystemModelInBuildingProperty::probabilityUp() const{
-        return probabilityUp_;
+    double SystemModelInBuildingProperty::probabilityUpStair() const{
+        return probabilityUpStair_;
     }
     
-    double SystemModelInBuildingProperty::probabilityDown() const{
-        return probabilityDown_;
+    double SystemModelInBuildingProperty::probabilityDownStair() const{
+        return probabilityDownStair_;
     }
     
-    double SystemModelInBuildingProperty::probabilityStay() const{
-        return probabilityStay_;
+    double SystemModelInBuildingProperty::probabilityStayStair() const{
+        return probabilityStayStair_;
+    }
+    
+    double SystemModelInBuildingProperty::probabilityUpElevator() const{
+        return probabilityUpElevator_;
+    }
+    
+    double SystemModelInBuildingProperty::probabilityDownElevator() const{
+        return probabilityDownElevator_;
+    }
+    
+    double SystemModelInBuildingProperty::probabilityStayElevator() const{
+        return probabilityStayElevator_;
+    }
+    
+    double SystemModelInBuildingProperty::probabilityUpEscalator() const{
+        return probabilityUpEscalator_;
+    }
+    
+    double SystemModelInBuildingProperty::probabilityDownEscalator() const{
+        return probabilityDownEscalator_;
+    }
+    
+    double SystemModelInBuildingProperty::probabilityStayEscalator() const{
+        return probabilityStayEscalator_;
     }
     
     double SystemModelInBuildingProperty::wallCrossingAliveRate() const{
@@ -171,20 +226,38 @@ namespace loc{
     Tstate SystemModelInBuilding<Tstate, Tinput>::moveOnElevator(const Tstate& state, Tinput input){
         int f_min = mBuilding->minFloor();
         int f_max = mBuilding->maxFloor();
-        Tstate stateNew;
+        int f_current = std::round(state.floor());
+        
+        // pUp and pDown are currently not used.
+        double pStay = mProperty->probabilityStayElevator();
+        
+        Tstate stateNew(state);
+        if(f_min == f_max){
+            return stateNew;
+        }
         while(true){
-            int f_new = f_min + mRandomGenerator.nextInt(f_max - f_min);
-            if(mBuilding->isValidFloor(f_new)){
-                stateNew = Tstate(state);
-                stateNew.floor(f_new);
-                if(mBuilding->isMovable(stateNew) && mBuilding->isElevator(stateNew)){
-                    break;
+            double p = mRandomGenerator.nextDouble();
+            if(p<=pStay){
+                break;
+            }else{
+                int f_new = f_current;
+                while(true){
+                    f_new = f_min + mRandomGenerator.nextInt(f_max - f_min);
+                    if(f_new != f_current){
+                        break;
+                    }
+                }
+                if(mBuilding->isValidFloor(f_new)){
+                    stateNew = Tstate(state);
+                    stateNew.floor(f_new);
+                    if(mBuilding->isMovable(stateNew) && mBuilding->isElevator(stateNew)){
+                        break;
+                    }
                 }
             }
         }
         return stateNew;
     }
-    
     
     template<class Tstate, class Tinput>
     Tstate SystemModelInBuilding<Tstate, Tinput>::moveOnEscalator(const Tstate& state, Tinput input){
@@ -194,16 +267,16 @@ namespace loc{
         int f = state.floor();
         int f_new;
         
-        double pUp = mProperty->probabilityUp();
-        double pDown = mProperty->probabilityDown();
-        double pStay = mProperty->probabilityStay();
+        double pUp = mProperty->probabilityUpEscalator();
+        double pDown = mProperty->probabilityDownEscalator();
+        double pStay = mProperty->probabilityStayEscalator();
         
         if(f==f_min){
             pDown = 0;
-            pUp = mProperty->probabilityDown()/(mProperty->probabilityDown() + mProperty->probabilityStay());
+            pUp = mProperty->probabilityDownEscalator()/(mProperty->probabilityDownEscalator() + mProperty->probabilityStayEscalator());
             pStay = 1 - pUp;
         }else if(f==f_max){
-            pDown = mProperty->probabilityUp()/(mProperty->probabilityUp() + mProperty->probabilityStay());
+            pDown = mProperty->probabilityUpEscalator()/(mProperty->probabilityUpEscalator() + mProperty->probabilityStayEscalator());
             pUp = 0;
             pStay = 1 - pDown;
         }
@@ -237,16 +310,16 @@ namespace loc{
         int f = state.floor();
         int f_new;
         
-        double pUp = mProperty->probabilityUp();
-        double pDown = mProperty->probabilityDown();
-        double pStay = mProperty->probabilityStay();
+        double pUp = mProperty->probabilityUpStair();
+        double pDown = mProperty->probabilityDownStair();
+        double pStay = mProperty->probabilityStayStair();
         
         if(f==f_min){
             pDown = 0;
-            pUp = mProperty->probabilityDown()/(mProperty->probabilityDown() + mProperty->probabilityStay());
+            pUp = mProperty->probabilityDownStair()/(mProperty->probabilityDownStair() + mProperty->probabilityStayStair());
             pStay = 1 - pUp;
         }else if(f==f_max){
-            pDown = mProperty->probabilityUp()/(mProperty->probabilityUp() + mProperty->probabilityStay());
+            pDown = mProperty->probabilityUpStair()/(mProperty->probabilityUpStair() + mProperty->probabilityStayStair());
             pUp = 0;
             pStay = 1 - pDown;
         }
