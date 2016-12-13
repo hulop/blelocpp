@@ -95,7 +95,7 @@ namespace loc{
         GaussianProcess& actives(const Eigen::MatrixXd& Actives);
         
         Eigen::MatrixXd computeKernelMatrix(const Eigen::MatrixXd& X);
-        void computeKstar(double x[], Eigen::VectorXd& kstar) const;
+        Eigen::VectorXd computeKstar(double x[]) const;
         
         Eigen::VectorXd predict(double x[]) const;
         Eigen::VectorXd predict(const Eigen::VectorXd& kstar) const;

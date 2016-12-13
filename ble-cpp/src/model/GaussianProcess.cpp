@@ -128,19 +128,17 @@ namespace loc{
             }
         }
         
-        delete x1;
-        delete x2;
+        delete[] x1;
+        delete[] x2;
         
         return K;
     }
     
-    void GaussianProcess::computeKstar(double x[], Eigen::VectorXd& kstar) const{
+    Eigen::VectorXd GaussianProcess::computeKstar(double x[]) const{
         size_t n = X_.rows();
         size_t nx = X_.cols();
         
-        if(kstar.size()!=n){
-            kstar = Eigen::VectorXd(n);
-        }
+        Eigen::VectorXd kstar = Eigen::VectorXd(n);
         
         double* x_i;
         x_i = new double[nx];
@@ -152,19 +150,13 @@ namespace loc{
             double k = mGaussianKernel.computeKernel(x, x_i);
             kstar(i) = k;
         }
-        
         delete x_i;
+        
+        return kstar;
     }
     
     Eigen::VectorXd GaussianProcess::predict(double x[]) const{
-        
-        static Eigen::VectorXd kstar;
-        long n = X_.rows();
-        if(kstar.size()!=n){
-            kstar = Eigen::VectorXd(n);
-        }
-        computeKstar(x, kstar);
-        
+        Eigen::VectorXd kstar = computeKstar(x);
         return predict(kstar);
     }
     
@@ -180,12 +172,7 @@ namespace loc{
     }
     
     std::vector<double> GaussianProcess::predict(double x[], const std::vector<int>& indices) const{
-        static Eigen::VectorXd kstar;
-        long n = X_.rows();
-        if(kstar.size()!=n){
-            kstar = Eigen::VectorXd(n);
-        }
-        computeKstar(x, kstar);
+        Eigen::VectorXd kstar = computeKstar(x);
         return predict(kstar, indices);
     }
     
@@ -201,12 +188,7 @@ namespace loc{
     }
     
     Eigen::VectorXd GaussianProcess::predictVarianceF(double x[]) const{
-        static Eigen::VectorXd kstar;
-        long ns = X_.rows();
-        if(kstar.size() != ns){
-            kstar = Eigen::VectorXd(ns);
-        }
-        computeKstar(x, kstar);
+        Eigen::VectorXd kstar = computeKstar(x);
         return predictVarianceF(kstar);
     }
     
@@ -217,13 +199,7 @@ namespace loc{
     }
     
     double GaussianProcess::computeLogLikelihood(double x[], const Eigen::VectorXd& y) const{
-        
-        static Eigen::VectorXd kstar;
-        long ns = X_.rows();
-        if(kstar.size()!=ns){
-            kstar = Eigen::VectorXd(ns);
-        }
-        computeKstar(x, kstar);
+        Eigen::VectorXd kstar = computeKstar(x);
         
         Eigen::VectorXd ypred = predict(kstar);
         Eigen::VectorXd varianceFs = predictVarianceF(kstar);
