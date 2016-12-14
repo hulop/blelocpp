@@ -27,6 +27,7 @@
 #include "RandomWalker.hpp"
 #include "RandomWalkerMotion.hpp"
 #include "Building.hpp"
+#include "AltitudeManager.hpp"
 
 namespace loc{
     
@@ -124,6 +125,7 @@ namespace loc{
         typename SystemModel<Tstate, Tinput>::Ptr mSysModel;
         Building::Ptr mBuilding;
         SystemModelInBuildingProperty::Ptr mProperty;
+        AltitudeManager::Ptr mAltManager;
         
         Tstate moveOnElevator(const Tstate& state, Tinput input);
         Tstate moveOnStair(const Tstate& state, Tinput input);
@@ -142,6 +144,7 @@ namespace loc{
         SystemModelInBuilding& systemModel(typename SystemModelT::Ptr sysModel);
         SystemModelInBuilding& building(Building::Ptr building);
         SystemModelInBuilding& property(SystemModelInBuildingProperty::Ptr property);
+        SystemModelInBuilding& altitudeManager(AltitudeManager::Ptr altManager);
         
         Tstate predict(Tstate state, Tinput input) override;
         std::vector<Tstate> predict(std::vector<Tstate> states, Tinput input) override;

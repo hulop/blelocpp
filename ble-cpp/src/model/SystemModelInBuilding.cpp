@@ -220,7 +220,11 @@ namespace loc{
         return *this;
     }
     
-    
+    template<class Tstate, class Tinput>
+    SystemModelInBuilding<Tstate, Tinput>& SystemModelInBuilding<Tstate, Tinput>::altitudeManager(AltitudeManager::Ptr altManager){
+        mAltManager = altManager;
+        return *this;
+    }
     
     template<class Tstate, class Tinput>
     Tstate SystemModelInBuilding<Tstate, Tinput>::moveOnElevator(const Tstate& state, Tinput input){
