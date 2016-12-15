@@ -314,18 +314,25 @@ namespace loc{
 
             std::shared_ptr<States> states = status->states();
             
-            if(input.timestamp() - input.previousTimestamp() < timestampIntervalLimit){
+            bool timestampIntervalIsValid = input.timestamp() - input.previousTimestamp() < timestampIntervalLimit;
+            
+            if(timestampIntervalIsValid){
                 StatesPtr statesPredicted(new States(mRandomWalker->predict(*states.get(), input)));
                 status->states(statesPredicted, Status::PREDICTION);
             }else{
                 std::cout << "Interval between two timestamps is too large. The input at timestamp=" << timestamp << " was not used." << std::endl;
             }
+            
             status->timestamp(timestamp);
 
             if(mOptVerbose){
                 std::cout << "prediction at t=" << timestamp << std::endl;
             }
-            callback(status.get());
+
+            if(status->step()==Status::PREDICTION){
+                callback(status.get());
+            }
+            
             previousTimestampMotion = timestamp;
         }
 
