@@ -26,6 +26,7 @@
 #include "Beacon.hpp"
 #include "Attitude.hpp"
 #include "Acceleration.hpp"
+#include "Altimeter.hpp"
 
 namespace loc {
     class LogUtil {
@@ -33,10 +34,12 @@ namespace loc {
         static std::string toString(const Beacons& beacons);
         static std::string toString(const Acceleration& acc);
         static std::string toString(const Attitude& att);
+        static std::string toString(const Altimeter& alt);
         
         static Beacons toBeacons(std::string str);
         static Acceleration toAcceleration(std::string str);
         static Attitude toAttitude(std::string str);
+        static Altimeter toAltimeter(const std::string& str);
     };
 }
 

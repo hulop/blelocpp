@@ -55,6 +55,14 @@ string LogUtil::toString(const Attitude& att) {
     return buffer.str();
 }
 
+string LogUtil::toString(const Altimeter& alt) {
+    std::stringbuf buffer;
+    std::ostream os (&buffer);
+    os << "Altimeter," << alt.relativeAltitude() << "," << alt.pressure() << "," << alt.timestamp();
+    return buffer.str();
+}
+
+
 Beacons LogUtil::toBeacons(std::string str){
     return DataUtils::parseLogBeaconsCSV(str);
 }
@@ -80,7 +88,7 @@ Attitude LogUtil::toAttitude(std::string str){
     if(values.at(0).compare("Motion")!=0){
         BOOST_THROW_EXCEPTION(LocException("Log Motion is not correct. string="+str));
     }
-    // "Motion", pitch, roll, yaw
+    // "Motion", pitch, roll, yaw, timestamp
     double pitch = stod(values.at(1));
     double roll = stod(values.at(2));
     double yaw = stod(values.at(3));
@@ -88,3 +96,19 @@ Attitude LogUtil::toAttitude(std::string str){
     Attitude att(timestamp, pitch, roll, yaw);// Attitude(timestamp, pitch, roll, yaw)
     return att;
 }
+
+
+Altimeter LogUtil::toAltimeter(const std::string& str){
+    std::vector<std::string> values;
+    boost::split(values, str, boost::is_any_of(","));
+    if(values.at(0).compare("Altimeter")!=0){
+        BOOST_THROW_EXCEPTION(LocException("Log Altimeter is not correct. string="+str));
+    }
+    // "Altimeter", relativeAltitude, pressure, timestamp
+    long timestamp = stol(values.at(3));
+    double relAlt = stod(values.at(1));
+    double pressure = stod(values.at(2));
+    Altimeter alt(timestamp,relAlt,pressure);
+    return alt;
+}
+
