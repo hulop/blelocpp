@@ -62,6 +62,9 @@ namespace loc{
         double estimateWallAngle(const Location&start, const Location& end) const;
         
         const CoordinateSystem& coordinateSystem() const;
+        
+    protected:
+        bool isInsideFloor(const Location& location) const;
     };
 }
 #endif /* Floor_hpp */

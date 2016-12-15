@@ -41,7 +41,7 @@ namespace loc{
     }
 
     Color FloorMap::getColor(const Location& location) const{
-        if(isValid(location)){
+        if(isInsideFloor(location)){
             Location localCoord = mCoordSys.worldToLocalState(location);
             int x = getX(localCoord);
             int y = getY(localCoord);
@@ -79,19 +79,24 @@ namespace loc{
     }
     
     bool FloorMap::isValid(const Location& location) const{
+        return true;
+    }
+    
+    bool FloorMap::isInsideFloor(const Location& location) const{
         Location localCoord = mCoordSys.worldToLocalState(location);
         int x = getX(localCoord);
         int y = getY(localCoord);
         
         int cols = mImage.cols();
         int rows = mImage.rows();
-
+        
         if ( 0<=x && x<cols && 0<=y && y<rows ){
             return true;
         }else{
             return false;
         }
     }
+    
 
     bool FloorMap::checkColor(const Location& location, const Color& color) const{
         Color pixelColor = getColor(location);
