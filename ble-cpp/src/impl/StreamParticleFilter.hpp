@@ -59,6 +59,18 @@ namespace loc {
             void rejectFloorDifference(double rejFloorDiff){mRejectFloorDifference = rejFloorDiff;}
         };
         
+        class FloorTransitionParameters{
+        protected:
+            double heightChangedCriterion_ = 0.0;
+            double weightTransitionArea_ = 2.0;
+        public:
+            using Ptr = std::shared_ptr<FloorTransitionParameters>;
+            double heightChangedCriterion() const{ return heightChangedCriterion_;}
+            double weightTransitionArea() const{ return weightTransitionArea_;}
+            void heightChangedCriterion(double heightChanged){heightChangedCriterion_=heightChanged;}
+            void weightTransitionArea(double weight){weightTransitionArea_=weight;}
+        };
+        
         StreamParticleFilter();
         ~StreamParticleFilter();
         
@@ -68,6 +80,7 @@ namespace loc {
         StreamParticleFilter& alphaWeaken(double);
         StreamParticleFilter& effectiveSampleSizeThreshold(double);
         StreamParticleFilter& mixtureParameters(MixtureParameters);
+        StreamParticleFilter& floorTransitionParameters(FloorTransitionParameters::Ptr);
         StreamParticleFilter& enablesFloorUpdate(bool);
         StreamParticleFilter& floorUpdateMode(FloorUpdateMode);
         

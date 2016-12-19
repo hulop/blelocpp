@@ -218,6 +218,7 @@ namespace loc{
         bool mEnablesFloorUpdate = true;
         
         MixtureParameters mMixParams;
+        FloorTransitionParameters::Ptr mFloorTransParams = FloorTransitionParameters::Ptr(new FloorTransitionParameters);
 
         //std::queue<Pose> posesForReset;
         std::queue<std::function<void()>> functionsForReset;
@@ -294,12 +295,6 @@ namespace loc{
             processResetStatus();
         }
         
-        void putAltimeter(const Altimeter altimeter){
-            if(mAltitudeManager){
-                mAltitudeManager->putAltimeter(altimeter);
-            }
-        }
-
         void predictMotionState(long timestamp){
             initializeStatusIfZero();
 
@@ -334,6 +329,56 @@ namespace loc{
             }
             
             previousTimestampMotion = timestamp;
+        }
+        
+        void putAltimeter(const Altimeter altimeter){
+            if(mAltitudeManager){
+                mAltitudeManager->putAltimeter(altimeter);
+                
+                // Update states with the altimeter manager.
+                long ts = altimeter.timestamp();
+                std::shared_ptr<States> states = status->states();
+                auto statesNew = this->predictFloorTransState(states);
+                status->timestamp(ts);
+                status->states(statesNew);
+                callback(status.get());
+            }
+        }
+        
+        StatesPtr predictFloorTransState(const StatesPtr& states){
+            auto heightChanged = mAltitudeManager->heightChange();
+            const auto& building = mDataStore->getBuilding();
+            
+            auto statesNew = StatesPtr(new States(*states));
+            
+            if(heightChanged > mFloorTransParams->heightChangedCriterion()){
+                double sumWeights = 0.0;
+                size_t nTrans = 0;
+                size_t n = statesNew->size();
+                double coeff = mFloorTransParams->weightTransitionArea();
+                // multiply weight by coeff in transition area.
+                for(auto& s: *statesNew){
+                    if(building.isEscalator(s)
+                       || building.isElevator(s)){
+                        s.weight(s.weight() * coeff);
+                        nTrans++;
+                    }
+                    sumWeights += s.weight();
+                }
+                if(sumWeights<=0){
+                    LocException ex("sum(weights) <= 0");
+                    BOOST_THROW_EXCEPTION(ex);
+                }
+                // normalize weights
+                for(auto&s: *statesNew){
+                    double w = s.weight()/sumWeights;
+                    s.weight(w);
+                }
+                if(mOptVerbose){
+                    std::cout << "AltimeterManager detected height change. " << nTrans << "/" << n << " states are " << coeff << "x-weighted." << std::endl;
+                }
+            }
+            return statesNew;
         }
 
         void logStates(const States& states, const std::string& filename){
@@ -567,8 +612,7 @@ namespace loc{
             if(mEnablesFloorUpdate){
                 if(mAltitudeManager){
                     auto heightChanged = mAltitudeManager->heightChange();
-                    double heightChangedCriterion = 0.0;
-                    if(heightChanged > heightChangedCriterion){
+                    if(heightChanged > mFloorTransParams->heightChangedCriterion()){
                         return true;
                     }else{
                         return false;
@@ -960,6 +1004,10 @@ namespace loc{
             mFloorUpdateMode = mode;
         }
         
+        void floorTransitionParameters(FloorTransitionParameters::Ptr params){
+            mFloorTransParams = params;
+        }
+        
     };
 
 
@@ -1130,6 +1178,11 @@ namespace loc{
     
     StreamParticleFilter& StreamParticleFilter::floorUpdateMode(FloorUpdateMode mode){
         impl->floorUpdateMode(mode);
+        return * this;
+    }
+    
+    StreamParticleFilter& StreamParticleFilter::floorTransitionParameters(FloorTransitionParameters::Ptr params){
+        impl->floorTransitionParameters(params);
         return * this;
     }
     
