@@ -97,6 +97,8 @@ namespace loc{
         // for string stream
         friend std::ostream& operator<<(std::ostream&os, const Location& location);
         
+        template <class Tlocation>
+        static double compute2DVariance(const std::vector<Tlocation>& locations);
     };
     
         

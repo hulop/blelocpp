@@ -32,6 +32,7 @@ namespace loc{
     
     Status::Status(const Status& status){
         step_ = status.step_;
+        locationStatus_ = status.locationStatus_;
         timestamp_ = status.timestamp_;
         mWasFloorUpdated = status.mWasFloorUpdated;
         auto meanLoc = status.meanLocation();
@@ -50,6 +51,7 @@ namespace loc{
     
     Status& Status::operator=(const Status& status){
         step_ = status.step_;
+        locationStatus_ = status.locationStatus_;
         timestamp_ = status.timestamp_;
         mWasFloorUpdated = status.mWasFloorUpdated;
         auto meanLoc = status.meanLocation();
@@ -131,6 +133,10 @@ namespace loc{
         return step_;
     }
     
+    Status::LocationStatus Status::locationStatus() const{
+        return locationStatus_;
+    }
+    
     Status& Status::step(Status::Step step){
         step_ = step;
         
@@ -142,6 +148,12 @@ namespace loc{
         
         return *this;
     }
+    
+    Status& Status::locationStatus(Status::LocationStatus locationStatus){
+        locationStatus_ = locationStatus;
+        return *this;
+    }
+    
     
     bool Status::wasFloorUpdated() const{
         return mWasFloorUpdated;

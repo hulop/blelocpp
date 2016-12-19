@@ -302,4 +302,29 @@ namespace loc{
     
     template int Location::findKDEDensestLocationIndex<State>(const std::vector<State>& locs, double bandwidth, double floorCoeff);
     
+    
+    template <class Tlocation>
+    double Location::compute2DVariance(const std::vector<Tlocation>& locations){
+        auto meanLoc = Location::mean(locations);
+        double varx = 0, vary = 0, covxy = 0; // = yx
+        size_t n = locations.size();
+        for(int i=0; i<n; i++){
+            const Tlocation& loc = locations.at(i);
+            double dx = loc.x() - meanLoc.x();
+            double dy = loc.y() - meanLoc.y();
+            varx += dx*dx;
+            vary += dy*dy;
+            covxy += dx*dy;
+        }
+        varx/=n;
+        vary/=n;
+        covxy/=n;
+        double det = varx*vary - covxy*covxy;
+        return det;
+    }
+    template double Location::compute2DVariance<Location>(const std::vector<Location>& locations);
+    template double Location::compute2DVariance<Pose>(const std::vector<Pose>& locations);
+    template double Location::compute2DVariance<State>(const std::vector<State>& locations);
+    
+    
 }

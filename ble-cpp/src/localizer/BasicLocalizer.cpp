@@ -95,6 +95,62 @@ namespace loc{
         return *this;
     }
     
+    StreamLocalizer& BasicLocalizer::putHeading(const Heading heading) {
+        // Pass
+        return *this;
+    }
+    
+    StreamLocalizer& BasicLocalizer::putAltimeter(const Altimeter altimeter) {
+        if (!isReady) {
+            return *this;
+        }
+        if (!isTrackingMode()) {
+            return *this;
+        }
+        switch(mState) {
+            case UNKNOWN: case LOCATING:
+            case TRACKING:
+                mLocalizer->putAltimeter(altimeter);
+        }
+        return *this;
+    }
+    
+    Beacons smoothBeaconsList(const std::vector<Beacon>* beacons_list , int smooth_count, int nSmooth){
+        std::map<long, loc::Beacons> allBeacons;
+        
+        for(int i = 0; i < N_SMOOTH_MAX && i < smooth_count+1 && i < nSmooth; i++) {
+            for(auto& b: beacons_list[i]) {
+                if (b.rssi() == 0) {
+                    continue;
+                }
+                auto iter = allBeacons.find(b.id());
+                if (iter == allBeacons.end()) {
+                    auto bs = loc::Beacons();
+                    bs.insert(bs.end(), b);
+                    allBeacons.insert(std::make_pair(b.id(), bs));
+                }else{
+                    iter->second.insert(iter->second.end(), b);
+                }
+            }
+        }
+        
+        Beacons beaconsAveraged;
+        for(auto itr = allBeacons.begin(); itr != allBeacons.end(); ++itr) {
+            long id = itr->first;
+            auto major = Beacon::convertIdToMajor(id);
+            auto minor = Beacon::convertIdToMinor(id);
+            auto& bs = itr->second;
+            int c = 0;
+            double rssi = 0;
+            for(auto& b:bs) {
+                rssi += b.rssi();
+                c++;
+            }
+            beaconsAveraged.insert(beaconsAveraged.end(), loc::Beacon(major, minor, rssi/c));
+        }
+        return beaconsAveraged;
+    }
+    
     StreamLocalizer& BasicLocalizer::putBeacons(const Beacons beacons) {
         if (!isReady) {
             return *this;
@@ -106,39 +162,12 @@ namespace loc{
             std::cout << "The number of strong beacon is zero." << std::endl;
             return *this;
         }
+        
         if (smoothType == SMOOTH_RSSI) {
-            beacons_list[(smooth_count++)%std::min(N_SMOOTH_MAX,nSmooth)] = beacons;
-            
-            std::map<long, loc::Beacons> allBeacons;
-            
-            for(int i = 0; i < N_SMOOTH_MAX && i < smooth_count && i < nSmooth; i++) {
-                for(auto& b: beacons_list[i]) {
-                    if (b.rssi() == 0) {
-                        continue;
-                    }
-                    auto iter = allBeacons.find(b.id());
-                    if (iter == allBeacons.end()) {
-                        auto bs = loc::Beacons();
-                        bs.insert(bs.end(), b);
-                        allBeacons.insert(std::make_pair(b.id(), bs));
-                    } else {
-                        iter->second.insert(iter->second.end(), b);
-                    }
-                }
-            }
-            
-            Beacons newBeacons;
-            
-            for(auto itr = allBeacons.begin(); itr != allBeacons.end(); ++itr) {
-                auto& bs = itr->second;
-                int c = 0;
-                double rssi = 0;
-                for(auto& b:bs) {
-                    rssi += b.rssi();
-                    c++;
-                }
-                newBeacons.insert(newBeacons.end(), loc::Beacon(bs[0].major(), bs[0].minor(), rssi/c));
-            }
+            beacons_list[(smooth_count)%std::min(N_SMOOTH_MAX,nSmooth)] = beacons;
+            Beacons newBeacons = smoothBeaconsList(beacons_list, smooth_count, nSmooth);
+            newBeacons.timestamp(beacons.timestamp());
+            smooth_count++;
             
             switch(mState) {
                 case UNKNOWN:
@@ -161,8 +190,13 @@ namespace loc{
                     break;
                 case TRACKING:
                     mLocalizer->putBeacons(beacons);
-                    return *this;
+                    break;
+                    
             }
+        }
+        
+        if(smoothType == SMOOTH_LOCATION && mState == TRACKING){
+            return *this; // SMOOTH_LOCATION & TRACKING ends here.
         }
         
         if (smoothType == SMOOTH_LOCATION) {
@@ -187,7 +221,14 @@ namespace loc{
             status->states(states, Status::RESET);
             mResult.reset(status);
         } else {
-            mResult.reset(getStatus());
+            auto statusOneshot = mLocalizer->getStatus();
+            mResult.reset(statusOneshot);
+        }
+        
+        if(!this->isTrackingMode()){
+            mResult->locationStatus(Status::STABLE);
+        }else{
+            mResult->locationStatus(Status::LOCATING);
         }
 
         if (mFunctionCalledAfterUpdate) {
@@ -201,6 +242,21 @@ namespace loc{
         }
         
         // is tracking mode & finished initial localization & tracking state has not been set to TRACKING
+        
+        std::function<bool(const Status&)> checkStatusConverged = [](const Status& status){
+            double stdevLimit = 5.0;
+            
+            std::vector<State> states = *status.states();
+            double var2D = Location::compute2DVariance(states);
+            double stdev2D = std::sqrt(var2D);
+            
+            if(stdev2D < stdevLimit){
+                return true;
+            }else{
+                return false;
+            }
+        };
+        
         if (isTrackingMode() && smooth_count >= nSmooth && mState != TRACKING) {
             Pose refPose = *mResult->meanPose();
             std::vector<State> states = *mResult->states();
@@ -213,32 +269,13 @@ namespace loc{
             loc::Pose stdevPose;
             stdevPose.x(std.x()).y(std.y()).orientation(10*M_PI);
             mLocalizer->resetStatus(refPose, stdevPose);
+            mLocalizer->getStatus()->locationStatus(Status::STABLE);
             
             std::cout << "Reset=" << refPose << ", STD=" << std << std::endl;
             
             mState = TRACKING;
         }
         
-        return *this;
-    }
-    
-    StreamLocalizer& BasicLocalizer::putHeading(const Heading heading) {
-        // Pass
-        return *this;
-    }
-    
-    StreamLocalizer& BasicLocalizer::putAltimeter(const Altimeter altimeter) {
-        if (!isReady) {
-            return *this;
-        }
-        if (!isTrackingMode()) {
-            return *this;
-        }
-        switch(mState) {
-            case UNKNOWN: case LOCATING:
-            case TRACKING:
-                mLocalizer->putAltimeter(altimeter);
-        }
         return *this;
     }
     
@@ -692,12 +729,13 @@ namespace loc{
         stateProperty->maxRssiBias(b);
         updateStateProperty();
     }
+    
     /*
     void BasicLocalizer::angularVelocityLimit(double a) {
         poseRandomWalkerProperty.angularVelocityLimit(a);
         updateStateProperty();
     }
-     */
+    */
 
     void BasicLocalizer::normalFunction(NormalFunction type, double option) {
         if (type == NORMAL) {

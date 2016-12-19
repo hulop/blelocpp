@@ -78,7 +78,9 @@ namespace loc {
     } LocalizeMode;
     
     typedef enum {
-        UNKNOWN, LOCATING, TRACKING
+        UNKNOWN,
+        LOCATING,
+        TRACKING
     } LocalizeState;
     
     typedef enum {

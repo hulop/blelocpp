@@ -52,19 +52,30 @@ namespace loc{
             OTHER
         };
         
+        enum LocationStatus{
+            UNKNOWN,
+            LOCATING,
+            STABLE,
+            UNSTABLE,
+            NIL
+        };
+        
         std::shared_ptr<Location> meanLocation() const;
         std::shared_ptr<Pose> meanPose() const;
         long timestamp() const;
         std::shared_ptr<std::vector<State>> states() const;
         Step step() const;
-
+        LocationStatus locationStatus() const;
+        
         Status& timestamp(long timestamp);
         
         [[deprecated("please use states(std::shared_ptr<std::vector<State>>) function")]]
         Status& states(std::vector<State>* states);
+        
         Status& states(std::shared_ptr<std::vector<State>> states);
         Status& states(std::shared_ptr<std::vector<State>> states, Step step);
         Status& step(Step step);
+        Status& locationStatus(LocationStatus locationStatus);
         
         bool wasFloorUpdated() const;
         void wasFloorUpdated(bool);
@@ -72,6 +83,7 @@ namespace loc{
     private:
         long timestamp_;
         Step step_ = Step::OTHER;
+        LocationStatus locationStatus_ = NIL;
         std::shared_ptr<Location> meanLocation_;
         std::shared_ptr<Pose> meanPose_;
         std::shared_ptr<std::vector<State>> states_;

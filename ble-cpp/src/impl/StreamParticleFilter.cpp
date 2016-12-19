@@ -865,7 +865,7 @@ namespace loc{
             double stdZLB = mLocStdevLB.z();
             double stdFloorLB = mLocStdevLB.floor();
             
-            double variance2D = computeStates2DVariance(states);
+            double variance2D = Location::compute2DVariance(states);
             Location stdevLoc = Location::standardDeviation(states);
             
             if(mOptVerbose){
@@ -886,25 +886,6 @@ namespace loc{
         bool checkIfDoFiltering() const{
             std::shared_ptr<States> states = status->states();
             return checkIfDoFiltering(*states);
-        }
-
-        double computeStates2DVariance(const States& states) const{
-            auto meanLoc = Location::mean(states);
-            double varx = 0, vary = 0, covxy = 0; // = yx
-            size_t n = states.size();
-            for(int i=0; i<n; i++){
-                const State& s = states.at(i);
-                double dx = s.x() - meanLoc.x();
-                double dy = s.y() - meanLoc.y();
-                varx += dx*dx;
-                vary += dy*dy;
-                covxy += dx*dy;
-            }
-            varx/=n;
-            vary/=n;
-            covxy/=n;
-            double det = varx*vary - covxy*covxy;
-            return det;
         }
 
         void optVerbose(bool optVerbose){
