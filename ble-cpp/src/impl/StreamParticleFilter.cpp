@@ -170,15 +170,18 @@ namespace loc{
             }
             
             // update floors
+            std::vector<int> floorsWritten(states.size());
             for(int i=0; i<states.size(); i++){
                 auto&s = states.at(i);
                 int floor = std::round(s.floor());
                 int floorGen = floorsGenerated.at(i);
+                floorsWritten.at(i) = floor;
                 if(floor!=floorGen){
                     State sTmp(s);
                     sTmp.floor(floorGen);
                     if(building.isMovable(sTmp)){
                         s.floor(floorGen);
+                        floorsWritten.at(i) = floorGen;
                     }
                 }
             }
@@ -186,11 +189,12 @@ namespace loc{
             size_t fsize = 0;
             if(mVerbose){
                 std::stringstream ss;
-                ss << "(floor,weights,count)=";
+                ss << "(floor,weights,countGenerated,countWritten)=";
                 for(int i=0; i<weights.size(); i++){
                     int floor = floors.at(i);
-                    auto count = std::count(floorsGenerated.begin(), floorsGenerated.end(), floor);
-                    ss << "("<<floor<<","<<weights.at(i)<<","<<count <<")," ;
+                    auto countGen = std::count(floorsGenerated.begin(), floorsGenerated.end(), floor);
+                    auto countWri = std::count(floorsWritten.begin(), floorsWritten.end(), floor);
+                    ss << "("<<floor<<","<<weights.at(i)<<"," << countGen << "," <<countWri <<")," ;
                 }
                 std::cout << ss.str() << std::endl;
                 
@@ -640,11 +644,13 @@ namespace loc{
                         mFloorUpdater->mode = mFloorUpdateMode;
                         mFloorUpdater->mDataStore = mDataStore;
                         mFloorUpdater->mObsModel = mObservationModel;
+                        mFloorUpdater->mVerbose = mOptVerbose;
                         mFloorUpdater->randomGenerator = mRand;
                     }
                     tryFloorUpdate = checkTryFloorUpdate();
                     if(tryFloorUpdate){
                         mFloorUpdater->floorUpdate(*states, beaconsFiltered);
+                        status->states(states);// update states to compute rep values.
                     }
                 }
                 // filtering
