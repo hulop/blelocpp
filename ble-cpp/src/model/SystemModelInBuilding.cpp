@@ -242,6 +242,7 @@ namespace loc{
         while(true){
             double p = mRandomGenerator.nextDouble();
             if(p<=pStay){
+                stateNew.floor(f_current);
                 break;
             }else{
                 int f_new = f_current;
@@ -259,6 +260,9 @@ namespace loc{
                     }
                 }
             }
+        }
+        if(! mBuilding->isMovable(stateNew)){
+            BOOST_THROW_EXCEPTION(LocException("building->isMovable(state) is false"));
         }
         return stateNew;
     }
