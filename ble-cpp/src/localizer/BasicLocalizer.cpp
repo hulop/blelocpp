@@ -32,6 +32,7 @@
 
 namespace loc{
     BasicLocalizer::BasicLocalizer(){
+        pfFloorTransParams = StreamParticleFilter::FloorTransitionParameters::Ptr(new StreamParticleFilter::FloorTransitionParameters);
     }
     BasicLocalizer::~BasicLocalizer(){
     }
@@ -709,6 +710,9 @@ namespace loc{
         mixParams.rejectFloorDifference(rejectFloorDifference);
         mixParams.nBeaconsMinimum = nBeaconsMinimum;
         mLocalizer->mixtureParameters(mixParams);
+        
+        mLocalizer->floorTransitionParameters(pfFloorTransParams);
+        
         msec = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now()-s).count();
         std::cerr << "finish setModel: " << msec << "ms" << std::endl;
         isReady = true;

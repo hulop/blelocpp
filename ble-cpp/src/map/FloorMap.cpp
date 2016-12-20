@@ -34,10 +34,18 @@ namespace loc{
         
         const Color colorEscalatorEnd = green;
     }
+    
+    using namespace color;
+    
+    const std::vector<Color> colorTransitionArea{colorStairs, colorElevator, colorEscalator};
         
     FloorMap::FloorMap(ImageHolder image, CoordinateSystem coordSys){
         mImage = image;
         mCoordSys = coordSys;
+        
+        for(const Color&c : colorTransitionArea){
+            mImage.setUpIndexForColor(c);
+        }
     }
 
     Color FloorMap::getColor(const Location& location) const{
@@ -62,11 +70,19 @@ namespace loc{
         return y;
     }
     
+    ImageHolder::Point FloorMap::getPoint(const loc::Location &location) const{
+        Location localCoord = mCoordSys.worldToLocalState(location);
+        int x = getX(localCoord);
+        int y = getY(localCoord);
+        ImageHolder::Point p(x,y);
+        return p;
+    }
+    
     int FloorMap::doubleToImageCoordinate(double x) const{
         int i = static_cast<int>(std::round(x));
         return i;
     }
-
+        
     bool FloorMap::isMovable(const Location& location) const{
         if(isWall(location)){
             return false;
@@ -212,5 +228,42 @@ namespace loc{
     const CoordinateSystem& FloorMap::coordinateSystem() const{
         return mCoordSys;
     }
-
+    
+    bool FloorMap::isTransitionArea(const Location& location) const{
+        if(isEscalator(location) || isElevator(location) || isStairs(location)){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    
+    std::vector<Location> FloorMap::findClosestTransitionAreaLocations(const Location& location) const{
+        Location localCoord = mCoordSys.worldToLocalState(location);
+        ImageHolder::Point pIm = getPoint(location);
+        ImageHolder::Point pClosest;
+        
+        double dmin = std::numeric_limits<double>::max();
+        for(auto& c: colorTransitionArea){
+            auto psRet = mImage.findClosestPoints(c, pIm);
+            if(psRet.size()==0) continue;
+        
+            auto pRet = psRet.at(0);
+            double dist = ImageHolder::Point::distance(pIm, pRet);
+            if(dist < dmin){
+                dmin = dist;
+                pClosest = pRet;
+            }
+        }
+        std::vector<Location> locsRet;
+        if(std::numeric_limits<double>::max()<=dmin){
+            return locsRet;
+        }
+        
+        localCoord.x(pClosest.x);
+        localCoord.y(pClosest.y);
+        
+        Location locRet = mCoordSys.localToWorldState(localCoord);
+        locsRet.push_back(locRet);
+        return locsRet;
+    }
 }

@@ -24,8 +24,19 @@
 #include <boost/bimap.hpp>
 #include "ImageHolder.hpp"
 #include "LocException.hpp"
+#include <opencv2/flann/flann.hpp>
 
 namespace loc{
+    
+    double ImageHolder::Point::distance(const Point& left, const Point& right){
+        double x1 = left.x;
+        double y1 = left.y;
+        double x2 = right.x;
+        double y2 = right.y;
+        double sq = (x1-x2)*(x1-x2) + (y1-y2)*(y1-y2);
+        double dist = std::sqrt(sq);
+        return dist;
+    }
     
     ImageHolderMode ImageHolder::mode_ = light;
     
@@ -57,7 +68,15 @@ namespace loc{
         */
     };
     
-    bool Color::equals(Color c)const{
+    static const std::vector<Color> colorsToIndices{
+        color::red,
+        color::lime,
+        color::blue,
+        color::yellow,
+        color::green
+    };
+    
+    bool Color::equals(const Color& c)const{
         if( this->b_ == c.b_
            && this->g_ == c.g_
            && this->r_ == c.r_
@@ -66,6 +85,19 @@ namespace loc{
         }else{
             return false;
         }
+    }
+    
+    bool Color::operator==(const Color& right) const{
+        return this->equals(right);
+    }
+    
+    int Color::rgbcode() const{
+        int t = 65536*this->r_ + 256*this->g_ + this->b_;
+        return t;
+    }
+    
+    bool Color::operator<(const Color& right) const{
+        return this->rgbcode() < right.rgbcode();
     }
     
     bool ImageHolder::checkValid(int y, int x) const
@@ -78,11 +110,70 @@ namespace loc{
     }
     
     class ImageHolder::Impl{
+    protected:
+        mutable std::mutex mtx_;
+        std::map<Color, ImageHolder::Points> mColorPointsMap;
+        std::map<Color, cv::Mat> mColorDataMap;
+        
     public:
         virtual ~Impl() = default;
         virtual int rows() const = 0;
         virtual int cols() const = 0;
         virtual Color get(int y, int x) const = 0;
+        virtual std::vector<Point> getPoints(const Color& c) const = 0;
+        
+        virtual void setUpIndices(){
+            for(const Color& c: colorsToIndices){
+                this->setUpIndexForColor(c);
+            }
+        }
+        
+        virtual void setUpIndexForColor(const Color& c){
+            std::lock_guard<std::mutex> lock(mtx_);
+            if(mColorPointsMap.count(c)==0){
+                auto points = getPoints(c);
+                int n = points.size();
+                mColorPointsMap[c] = points;
+                if(n>0){
+                    cv::Mat data = cv::Mat::zeros(n, 2, CV_32FC1);
+                    for(int j=0; j<n; j++){
+                        data.at<float>(j,0) = points.at(j).x;
+                        data.at<float>(j,1) = points.at(j).y;
+                    }
+                    mColorDataMap[c] = data;
+                }
+            }
+        }
+        
+        virtual Points findClosestPoints(const Color& c, const ImageHolder::Point& p, int k = 1) const{
+            
+            std::lock_guard<std::mutex> lock(mtx_);
+            if(mColorPointsMap.count(c)==0){
+                LocException ex("Index is not set for the input color");
+                BOOST_THROW_EXCEPTION(ex);
+            }
+            
+            const Points& points = mColorPointsMap.at(c);
+            if(points.size()==0){
+                return Points(0);
+            }
+            
+            cv::Mat query = (cv::Mat_<float>(1,2) << p.x , p.y);
+            std::vector<int> indices;
+            std::vector<float> dists;
+            
+            cv::Mat data = mColorDataMap.at(c);
+            cv::flann::Index idx(data, cv::flann::KDTreeIndexParams(), cvflann::FLANN_DIST_EUCLIDEAN);
+            idx.knnSearch(query, indices, dists, k);
+            
+            Points psRet(k);
+            for(int i=0; i<k; i++){
+                int index = indices.at(0);
+                Point pret = points.at(index);
+                psRet[i] = pret;
+            }
+            return psRet;
+        }
     };
     
     class ImageHolder::ImplHeavy : public ImageHolder::Impl{
@@ -91,13 +182,15 @@ namespace loc{
         
     public:
         ImplHeavy(){}
-        ImplHeavy(std::string filepath, const std::string name){
+        ImplHeavy(const std::string& filepath, const std::string& name){
             name_ = name;
             mat_ = cv::imread(filepath);
             if(mat_.empty()){
                 LocException ex("Failed to read the image file at " + filepath);
                 BOOST_THROW_EXCEPTION(ex);
             }
+            
+            this->setUpIndices();
         }
         ~ImplHeavy() = default;
         
@@ -115,6 +208,21 @@ namespace loc{
             Color color(r,g,b);
             return color;
         }
+        
+        std::vector<Point> getPoints(const Color& c) const{
+            cv::Mat binary;
+            cv::inRange(mat_, cv::Scalar(c.b_, c.g_, c.r_), cv::Scalar(c.b_, c.g_, c.r_), binary);
+            cv::Mat idx;
+            cv::findNonZero(binary, idx);
+            std::vector<Point> points;
+            for(int i=0; i<idx.total(); i++){
+                Point p;
+                p.x = idx.at<cv::Point>(i).x;
+                p.y = idx.at<cv::Point>(i).y;
+                points.push_back(p);
+            }
+            return points;
+        }
     };
     
     class ImageHolder::ImplLight : public ImageHolder::Impl{
@@ -122,7 +230,7 @@ namespace loc{
         Eigen::SparseMatrix<uint8_t> mat_;
     public:
         ImplLight(){}
-        ImplLight(std::string filepath, const std::string name){
+        ImplLight(const std::string& filepath, const std::string& name){
             
             typedef Eigen::Triplet<uint8_t> Triplet;
             
@@ -151,12 +259,14 @@ namespace loc{
             }
             
             mat_.setFromTriplets(tripletList.begin(), tripletList.end());
+            
+            this->setUpIndices();
         }
         ~ImplLight() = default;
         
-        uint8_t colorToUint8(Color color) const{
+        uint8_t colorToUint8(const Color& color) const{
             for(int i=0; i<colorList.size(); i++){
-                Color c = colorList.at(i);
+                const Color& c = colorList.at(i);
                 if(color.equals(c)){
                     return i;
                 }
@@ -184,6 +294,24 @@ namespace loc{
             Color color = uint8ToColor(code);
             return color;
         }
+        
+        std::vector<Point> getPoints(const Color& c) const{
+            Points points;
+            uint8_t code_q = colorToUint8(c);
+            for(int k=0; k<mat_.outerSize(); k++){
+                auto iter = Eigen::SparseMatrix<uint8_t>::InnerIterator(mat_, k);
+                for(; iter; ++iter){
+                    uint8_t code = iter.value();
+                    if(code == code_q){
+                        Point p;
+                        p.x = iter.col();
+                        p.y = iter.row();
+                        points.push_back(p);
+                    }
+                }
+            }
+            return points;
+        }
     };
     
     ImageHolder::ImageHolder(){
@@ -196,7 +324,7 @@ namespace loc{
         }
     }
     
-    ImageHolder::ImageHolder(std::string filepath, const std::string name){
+    ImageHolder::ImageHolder(const std::string& filepath, const std::string& name){
         if(mode_ == light){
             std::cout << "ImageHolder::ImplLight is instantiated." << std::endl;
             impl.reset(new ImplLight(filepath, name));
@@ -224,5 +352,17 @@ namespace loc{
     
     Color ImageHolder::get(int y, int x) const{
         return impl->get(y, x);
+    }
+    
+    void ImageHolder::setUpIndexForColor(const loc::Color &c){
+        impl->setUpIndexForColor(c);
+    }
+    
+    std::vector<ImageHolder::Point> ImageHolder::getPoints(const Color& c) const{
+        return impl->getPoints(c);
+    }
+    
+    ImageHolder::Points ImageHolder::findClosestPoints(const Color& c, const ImageHolder::Point& p, int k) const{
+        return impl->findClosestPoints(c, p, k);
     }
 }

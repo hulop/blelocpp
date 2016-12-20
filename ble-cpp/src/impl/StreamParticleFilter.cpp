@@ -46,6 +46,44 @@
 
 namespace loc{
     
+    // Parameter class implementation
+    double StreamParticleFilter::FloorTransitionParameters::heightChangedCriterion() const{ return heightChangedCriterion_;
+    }
+    
+    double StreamParticleFilter::FloorTransitionParameters::weightTransitionArea() const{
+        return weightTransitionArea_;
+    }
+    
+    StreamParticleFilter::FloorTransitionParameters& StreamParticleFilter::FloorTransitionParameters::heightChangedCriterion(double heightChanged){
+        heightChangedCriterion_=heightChanged;
+        return *this;
+    }
+    
+    StreamParticleFilter::FloorTransitionParameters& StreamParticleFilter::FloorTransitionParameters::weightTransitionArea(double weight){
+        weightTransitionArea_=weight;
+        return *this;
+    }
+    
+    double StreamParticleFilter::FloorTransitionParameters::mixtureProbaTransArea() const{ return mixtureProbaTransArea_;
+    }
+    
+    double StreamParticleFilter::FloorTransitionParameters::rejectDistance() const {
+        return rejectDistance_;
+    }
+    
+    StreamParticleFilter::FloorTransitionParameters& StreamParticleFilter::FloorTransitionParameters::mixtureProbaTransArea(double proba){
+        mixtureProbaTransArea_=proba;
+        return *this;
+    }
+    
+    StreamParticleFilter::FloorTransitionParameters& StreamParticleFilter::FloorTransitionParameters::rejectDistance(double dist){
+        rejectDistance_=dist;
+        return *this;
+    }
+    
+    
+    // Helper class implementations
+    
     class FloorUpdater{
         
     public:
@@ -356,14 +394,13 @@ namespace loc{
             auto statesNew = StatesPtr(new States(*states));
             
             if(heightChanged > mFloorTransParams->heightChangedCriterion()){
-                double sumWeights = 0.0;
+                // multiply weight by coeff in transition area.
                 size_t nTrans = 0;
                 size_t n = statesNew->size();
                 double coeff = mFloorTransParams->weightTransitionArea();
-                // multiply weight by coeff in transition area.
+                double sumWeights = 0.0;
                 for(auto& s: *statesNew){
-                    if(building.isEscalator(s)
-                       || building.isElevator(s)){
+                    if(building.isTransitionArea(s)){
                         s.weight(s.weight() * coeff);
                         nTrans++;
                     }
@@ -378,8 +415,41 @@ namespace loc{
                     double w = s.weight()/sumWeights;
                     s.weight(w);
                 }
+                
+                // mix for floor transition area
+                double ratioTrans = static_cast<double>(nTrans)/static_cast<double>(n);
+                int nMixed = 0;
+                if(ratioTrans < mFloorTransParams->mixtureProbaTransArea()){
+                    double ratioResid = mFloorTransParams->mixtureProbaTransArea() - ratioTrans;
+                    for(auto& s: *statesNew){
+                        if(building.isTransitionArea(s)){
+                            continue;
+                        }
+                        double d = mRand->nextDouble();
+                        if( d < ratioResid){
+                            const auto& floorMap = building.getFloorAt(s);
+                            auto locsTA = floorMap.findClosestTransitionAreaLocations(s);
+                            if(locsTA.size()==0){
+                                continue;
+                            }
+                            auto locTA = locsTA.at(0);
+                            if( mFloorTransParams->rejectDistance() <= Location::distance(s, locTA)){
+                                continue;
+                            }else{
+                                s.copyLocation(locTA);
+                                nMixed++;
+                            }
+                        }
+                    }
+                }
+                
                 if(mOptVerbose){
-                    std::cout << "AltimeterManager detected height change. " << nTrans << "/" << n << " states are " << coeff << "x-weighted." << std::endl;
+                    std::stringstream ss;
+                    ss << "AltimeterManager detected height change. " << nTrans << "/" << n << " states are " << coeff << "x-weighted.";
+                    if(nMixed!=0){
+                        ss << "(" << nMixed << " states in floor transition area were mixed.)";
+                    }
+                    std::cout << ss.str() << std::endl;
                 }
             }
             return statesNew;

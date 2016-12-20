@@ -35,10 +35,14 @@ namespace loc {
     };
     
     //Color struct is defined to keep color in RGB format.
-    struct Color{
+    class Color{
+    public:
         uint8_t r_, g_, b_;
         Color(uint8_t r, uint8_t g, uint8_t b);
-        bool equals(Color c) const;
+        bool equals(const Color& c) const;
+        bool operator==(const Color& right) const;
+        bool operator<(const Color& right) const;
+        int rgbcode() const;
     };
     
     namespace color{
@@ -73,8 +77,19 @@ namespace loc {
         static ImageHolderMode mode_;
         
     public:
+        class Point{
+        public:
+            Point() = default;
+            ~Point() = default;
+            Point(int x, int y){this->x=x; this->y=y;}
+            int x;
+            int y;
+            static double distance(const Point& left, const Point& right);
+        };
+        using Points = std::vector<Point>;
+        
         ImageHolder();
-        ImageHolder(std::string filepath, const std::string name);
+        ImageHolder(const std::string& filepath, const std::string& name);
         ~ImageHolder();
         
         static void setMode(ImageHolderMode mode);
@@ -84,6 +99,10 @@ namespace loc {
         
         bool checkValid(int y, int x) const;
         Color get(int y, int x) const;
+        
+        void setUpIndexForColor(const Color& c);
+        std::vector<Point> getPoints(const Color& c) const;
+        Points findClosestPoints(const Color&c, const Point& p, int k=1) const;
     };
     
 }

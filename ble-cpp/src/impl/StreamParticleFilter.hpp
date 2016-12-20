@@ -62,13 +62,21 @@ namespace loc {
         class FloorTransitionParameters{
         protected:
             double heightChangedCriterion_ = 0.0;
-            double weightTransitionArea_ = 2.0;
+            double weightTransitionArea_ = 1.0;
+            double mixtureProbaTransArea_ = 0.0;
+            double rejectDistance_ = 5.0;
+            
         public:
             using Ptr = std::shared_ptr<FloorTransitionParameters>;
-            double heightChangedCriterion() const{ return heightChangedCriterion_;}
-            double weightTransitionArea() const{ return weightTransitionArea_;}
-            void heightChangedCriterion(double heightChanged){heightChangedCriterion_=heightChanged;}
-            void weightTransitionArea(double weight){weightTransitionArea_=weight;}
+            double heightChangedCriterion() const;
+            double weightTransitionArea() const;
+            FloorTransitionParameters& heightChangedCriterion(double);
+            FloorTransitionParameters& weightTransitionArea(double);
+            
+            double mixtureProbaTransArea() const;
+            double rejectDistance() const;
+            FloorTransitionParameters& mixtureProbaTransArea(double);
+            FloorTransitionParameters& rejectDistance(double);
         };
         
         StreamParticleFilter();

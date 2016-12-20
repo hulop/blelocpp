@@ -198,6 +198,8 @@ namespace loc {
         //Location locLB(0.5, 0.5, 0.0);
         bool isVerboseLocalizer = false;
         
+        StreamParticleFilter::FloorTransitionParameters::Ptr pfFloorTransParams;
+        
         std::shared_ptr<DataStoreImpl> dataStore;
         
         void normalFunction(NormalFunction type, double option);

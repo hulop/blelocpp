@@ -115,6 +115,12 @@ namespace loc{
         return isEscEnd;
     }
     
+    bool Building::isTransitionArea(const Location& location) const{
+        const FloorMap& floorMap = getFloorAt(location);
+        bool isEscEnd = floorMap.isTransitionArea(location);
+        return isEscEnd;
+    }
+    
     bool Building::isEscalatorGroup(const Location& location) const{
         if(isEscalator(location)){
             return true;

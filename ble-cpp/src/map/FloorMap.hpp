@@ -31,6 +31,7 @@
 
 namespace loc{
     class FloorMap{
+    protected:
         CoordinateSystem mCoordSys;
         ImageHolder mImage;
 
@@ -38,6 +39,7 @@ namespace loc{
         bool checkColor(const Location& location, const Color& color) const;
         int getX(const Location& location) const;
         int getY(const Location& location) const;
+        ImageHolder::Point getPoint(const Location& location) const;
         int doubleToImageCoordinate(double x) const;
 
     public:
@@ -62,6 +64,9 @@ namespace loc{
         double estimateWallAngle(const Location&start, const Location& end) const;
         
         const CoordinateSystem& coordinateSystem() const;
+        
+        bool isTransitionArea(const Location& location) const;
+        std::vector<Location> findClosestTransitionAreaLocations(const Location& location) const;
         
     protected:
         bool isInsideFloor(const Location& location) const;
