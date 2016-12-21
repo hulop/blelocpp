@@ -383,36 +383,50 @@ namespace loc{
         deserializedModel = std::shared_ptr<GaussianProcessLDPLMultiModel<State, Beacons>> (new GaussianProcessLDPLMultiModel<State, Beacons>());
         
         bool doTraining = true;
-        try {
-            auto& str = getString(json, "ObservationModelParameters");
-            if (/* DISABLES CODE */ (false)) {
-                std::string omppath = DataUtils::stringToFile(str, workingDir, "ObservationModelParameters");
-                
-                msec = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now()-s).count();
-                std::cerr << "save deserialized model: " << msec << "ms" << std::endl;
-                
-                std::cerr << omppath << std::endl;
-                //std::istringstream ompss(str);
-                std::ifstream ompss(omppath);
-                //if (ompss) {
-                std::cout << "loading" << std::endl;
-                deserializedModel->load(ompss);
-                std::cout << "loaded" << std::endl;
-                //}
-            } else {
-                std::istringstream ompss(str);
-                if (ompss) {
+        try{
+            try {
+                auto& str = getString(json, "ObservationModelParameters");
+                if (/* DISABLES CODE */ (false)) {
+                    std::string omppath = DataUtils::stringToFile(str, workingDir, "ObservationModelParameters");
+                    
+                    msec = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now()-s).count();
+                    std::cerr << "save deserialized model: " << msec << "ms" << std::endl;
+                    
+                    std::cerr << omppath << std::endl;
+                    //std::istringstream ompss(str);
+                    std::ifstream ompss(omppath);
+                    //if (ompss) {
                     std::cout << "loading" << std::endl;
                     deserializedModel->load(ompss);
                     std::cout << "loaded" << std::endl;
+                    //}
+                } else {
+                    std::istringstream ompss(str);
+                    if (ompss) {
+                        std::cout << "loading" << std::endl;
+                        deserializedModel->load(ompss);
+                        std::cout << "loaded" << std::endl;
+                    }
                 }
+                msec = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now()-s).count();
+                std::cerr << "load deserialized model: " << msec << "ms" << std::endl;
+                doTraining = false;
+            } catch(LocException& e){
+                throw e;
+            } catch(const std::exception& e) {
+                LocException ex(std::string(e.what()));
+                BOOST_THROW_EXCEPTION(ex);
+            } catch(const char* ch){
+                LocException ex((std::string(ch)));
+                BOOST_THROW_EXCEPTION(ex);
+            } catch(...){
+                BOOST_THROW_EXCEPTION(LocException("..."));
             }
-            msec = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now()-s).count();
-            std::cerr << "load deserialized model: " << msec << "ms" << std::endl;
-            doTraining = false;
-        } catch(std::exception& e) {
-            std::cerr << e.what() << std::endl;
+        }catch(LocException& e){
+            e << boost::error_info<struct err_info, std::string>("exception at loading ObservationModelParameters");
+            throw e;
         }
+        
         // update observation model
         deserializedModel->coeffDiffFloorStdev(coeffDiffFloorStdev);
         
