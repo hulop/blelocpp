@@ -27,19 +27,41 @@
 #include "Attitude.hpp"
 #include "Acceleration.hpp"
 #include "Altimeter.hpp"
+#include "Heading.hpp"
 
 namespace loc {
     class LogUtil {
     public:
-        static std::string toString(const Beacons& beacons);
-        static std::string toString(const Acceleration& acc);
-        static std::string toString(const Attitude& att);
-        static std::string toString(const Altimeter& alt);
         
+        /*
+         * "Beacon",number_of_beacons,major0,minor0,rssi0,...,majorN,minorN,rssiN
+         */
+        static std::string toString(const Beacons& beacons);
         static Beacons toBeacons(std::string str);
+        
+        /*
+         * "Acc",ax,ay,az,timestamp
+         */
+        static std::string toString(const Acceleration& acc);
         static Acceleration toAcceleration(std::string str);
+        
+        /*
+         * "Motion",pitch,roll,yaw,timestamp
+         */
+        static std::string toString(const Attitude& att);
         static Attitude toAttitude(std::string str);
+        
+        /*
+         * "Altimeter",relativeAltitude,pressure,timestamp
+         */
+        static std::string toString(const Altimeter& alt);
         static Altimeter toAltimeter(const std::string& str);
+        
+        /*
+         * "Heading",magneticHeading,trueHeading,headingAccuracy,timestamp
+         */
+        static std::string toString(const Heading& head);
+        static Heading toHeading(const std::string& str);
     };
 }
 

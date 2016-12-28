@@ -37,7 +37,7 @@ namespace loc {
         StreamLocalizer& putAcceleration(const Acceleration acceleration) override;
         StreamLocalizer& putAttitude(const Attitude attitude) override;
         StreamLocalizer& putBeacons(const Beacons beacons) override;
-        virtual StreamLocalizer& putHeading(const Heading heading) override;
+        virtual StreamLocalizer& putLocalHeading(const LocalHeading heading) override;
         virtual StreamLocalizer& putAltimeter(const Altimeter altimeter) override;
         StreamLocalizer& updateHandler(void (*functionCalledAfterUpdate)(Status*)) override;
         StreamLocalizer& updateHandler(void (*functionCalledAfterUpdate)(void*, Status*), void* inUserData) override;

@@ -23,6 +23,14 @@
 #include "Heading.hpp"
 
 namespace loc{
+    
+    Heading::Heading(long timestamp, double magneticHeading, double trueHeading, double headingAccuracy){
+        timestamp_ = timestamp;
+        magneticHeading_ = magneticHeading;
+        trueHeading_ = trueHeading;
+        headingAccuracy_ = headingAccuracy;
+    }
+    
     Heading::Heading(long timestamp_, double magneticHeading_, double trueHeading_, double headingAccuracy_, double x_, double y_, double z_){
         timestamp(timestamp_);
         magneticHeading(magneticHeading_);
@@ -75,5 +83,41 @@ namespace loc{
     }
     double Heading::z() const{
         return z_;
+    }
+    
+    
+    
+    // LocalHeading
+    LocalHeading::LocalHeading(long timestamp, double orientation, double orientationDeviation){
+        timestamp_ = timestamp;
+        orientation_ = orientation;
+        orientationDeviation_ = orientationDeviation;
+    }
+    
+    LocalHeading& LocalHeading::timestamp(long timestamp){
+        timestamp_ = timestamp;
+        return *this;
+    }
+    
+    LocalHeading& LocalHeading::orientation(double orientation){
+        orientation_ = orientation;
+        return *this;
+    }
+    
+    LocalHeading& LocalHeading::orientationDeviation(double orientationDeviation){
+        orientationDeviation_ = orientationDeviation;
+        return *this;
+    }
+    
+    long LocalHeading::timestamp() const{
+        return timestamp_;
+    }
+    
+    double LocalHeading::orientation() const{
+        return orientation_;
+    }
+    
+    double LocalHeading::orientationDeviation() const{
+        return orientationDeviation_;
     }
 }

@@ -26,6 +26,7 @@
 #include <stdio.h>
 #include "bleloc.h"
 #include "Altimeter.hpp"
+#include "Heading.hpp"
 
 namespace loc {
     class StreamLocalizer{
@@ -38,7 +39,7 @@ namespace loc {
         virtual StreamLocalizer& putAcceleration(const Acceleration acceleration) = 0;
         virtual StreamLocalizer& putAttitude(const Attitude attitude) = 0;
         virtual StreamLocalizer& putBeacons(const Beacons beacons) = 0;
-        virtual StreamLocalizer& putHeading(const Heading heading) = 0;
+        virtual StreamLocalizer& putLocalHeading(const LocalHeading heading) = 0;
         virtual StreamLocalizer& putAltimeter(const Altimeter altimeter) = 0;
         virtual Status* getStatus() = 0;
         
@@ -49,7 +50,7 @@ namespace loc {
         virtual bool resetStatus(const Location& location, const Beacons& beacons) = 0;
         
         virtual bool resetStatus(Pose meanPose, Pose stdevPose, double rateContami) = 0;
-    };
+    };    
 }
 
 #endif /* StreamLocalizer_hpp */

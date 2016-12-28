@@ -870,8 +870,6 @@ namespace loc{
                 return false;
             }
         }
-        
-        
 
         bool resetStatus(const Beacons& beacons){
             initializeStatusIfZero();
@@ -1083,7 +1081,6 @@ namespace loc{
         void floorTransitionParameters(FloorTransitionParameters::Ptr params){
             mFloorTransParams = params;
         }
-        
     };
 
 
@@ -1108,8 +1105,9 @@ namespace loc{
         return *this;
     }
     
-    StreamParticleFilter& StreamParticleFilter::putHeading(const Heading heading) {
+    StreamParticleFilter& StreamParticleFilter::putLocalHeading(const LocalHeading heading) {
         // Pass
+        BOOST_THROW_EXCEPTION(LocException("not supported"));
         return *this;
     }
 
@@ -1255,7 +1253,7 @@ namespace loc{
     StreamParticleFilter& StreamParticleFilter::floorUpdateMode(FloorUpdateMode mode){
         impl->floorUpdateMode(mode);
         return * this;
-    }
+    }    
     
     StreamParticleFilter& StreamParticleFilter::floorTransitionParameters(FloorTransitionParameters::Ptr params){
         impl->floorTransitionParameters(params);

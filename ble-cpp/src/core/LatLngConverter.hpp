@@ -30,6 +30,7 @@
 #include <iomanip>
 #include "Location.hpp"
 #include "LatLngUtil.hpp"
+#include "Heading.hpp"
 
 namespace loc {
     
@@ -85,6 +86,10 @@ namespace loc {
         GlobalState<Tstate> localToGlobal(const Tstate& local);
         template<class Tstate>
         Tstate globalToLocal(const GlobalState<Tstate>& global);
+        
+        // convert degree in the global coordinate to radian in the local coordinate
+        double headingGlobalToLocal(double heading);
+        LocalHeading headingGlobalToLocal(const Heading&);
     };
 }
 #endif /* LatLngConverter_hpp */

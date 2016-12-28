@@ -116,7 +116,7 @@ namespace loc {
         StreamParticleFilter& putAcceleration(const Acceleration acceleration) override;
         StreamParticleFilter& putAttitude(const Attitude attitude) override;
         StreamParticleFilter& putBeacons(const Beacons beacons) override;
-        StreamParticleFilter& putHeading(const Heading heading) override;
+        StreamParticleFilter& putLocalHeading(const LocalHeading heading) override;
         StreamParticleFilter& putAltimeter(const Altimeter altimeter) override;
         Status* getStatus() override;
         

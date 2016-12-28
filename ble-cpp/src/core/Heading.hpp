@@ -24,8 +24,10 @@
 #define Heading_hpp
 
 #include <stdio.h>
+#include <memory>
 
 namespace loc {
+    
     class Heading{
     private:
         long timestamp_;
@@ -33,11 +35,13 @@ namespace loc {
         double trueHeading_;
         double headingAccuracy_;
         
-        double x_;
-        double y_;
-        double z_;
+        double x_ = 0;
+        double y_ = 0;
+        double z_ = 0;
     
     public:
+        using Ptr = std::shared_ptr<Heading>;
+        Heading(long timestamp, double magneticHeading, double trueHeading, double headingAccuracy);
         Heading(long timestamp, double magneticHeading, double trueHeading, double headingAccuracy, double x, double y, double z);
         ~Heading() = default;
         
@@ -56,6 +60,26 @@ namespace loc {
         double y() const;
         void z(double);
         double z() const;
+    };
+    
+    
+    class LocalHeading{
+    protected:
+        long timestamp_;
+        double orientation_; // radian in local coordinate
+        double orientationDeviation_; // radian in local coordinate
+        
+    public:
+        using Ptr = std::shared_ptr<LocalHeading>;
+        LocalHeading(long timestamp, double orientation, double orientationDeviation);
+        ~LocalHeading() = default;
+        
+        LocalHeading& timestamp(long);
+        long timestamp() const;
+        LocalHeading& orientation(double);
+        double orientation() const;
+        LocalHeading& orientationDeviation(double);
+        double orientationDeviation() const;
     };
 }
 

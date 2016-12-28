@@ -31,12 +31,12 @@
 #include "AltitudeManagerSimple.hpp"
 
 namespace loc{
+    // BasicLocalizer
     BasicLocalizer::BasicLocalizer(){
         pfFloorTransParams = StreamParticleFilter::FloorTransitionParameters::Ptr(new StreamParticleFilter::FloorTransitionParameters);
     }
     BasicLocalizer::~BasicLocalizer(){
     }
-    
     
     StreamLocalizer& BasicLocalizer::updateHandler(void (*functionCalledAfterUpdate)(Status*)) {
         mFunctionCalledAfterUpdate = functionCalledAfterUpdate;
@@ -96,8 +96,24 @@ namespace loc{
         return *this;
     }
     
+    StreamLocalizer& BasicLocalizer::putLocalHeading(const LocalHeading localHeading) {
+        // pass
+        return *this;
+    }
+    
+    
     StreamLocalizer& BasicLocalizer::putHeading(const Heading heading) {
-        // Pass
+        if (!isReady) {
+            return *this;
+        }
+        if (!isTrackingMode()) {
+            return *this;
+        }
+        auto cvt = latLngConverter();
+        if(cvt){
+            auto localHeading = cvt->headingGlobalToLocal(heading);
+            mLocalHeadingBuffer.push_back(localHeading);
+        }
         return *this;
     }
     
@@ -269,10 +285,27 @@ namespace loc{
             refPose.floor(roundf(refPose.floor()));
             loc::Pose stdevPose;
             stdevPose.x(std.x()).y(std.y()).orientation(10*M_PI);
-            mLocalizer->resetStatus(refPose, stdevPose);
-            mLocalizer->getStatus()->locationStatus(Status::STABLE);
             
-            std::cout << "Reset=" << refPose << ", STD=" << std << std::endl;
+            if(0.0<headingConfidenceForOrientationInit_ && headingConfidenceForOrientationInit_<=1.0){
+                if(mLocalHeadingBuffer.size()==0){
+                    BOOST_THROW_EXCEPTION(LocException("Heading has not been input."));
+                }
+                LocalHeading locHead = mLocalHeadingBuffer.back();
+                refPose.orientation(locHead.orientation());
+                double oriDev = locHead.orientationDeviation();
+                if(oriDev>0){
+                    stdevPose.orientation(oriDev);
+                }
+                double contamiRate =  std::max(1.0-headingConfidenceForOrientationInit_, 0.0);
+                mLocalizer->resetStatus(refPose, stdevPose, contamiRate);
+                mLocalizer->getStatus()->locationStatus(Status::STABLE);
+                std::cout << "Reset=" << refPose << ", STD=" << std
+                            << " with orientation(" << refPose.orientation() << "," << stdevPose.orientation() << ")" << std::endl;
+            }else{
+                mLocalizer->resetStatus(refPose, stdevPose);
+                mLocalizer->getStatus()->locationStatus(Status::STABLE);
+                std::cout << "Reset=" << refPose << ", STD=" << std << std::endl;
+            }
             
             mState = TRACKING;
         }
@@ -768,5 +801,28 @@ namespace loc{
         return latLngConverter_;
     }
     
+    
+    //LocalHeadingBuffer
+    LocalHeadingBuffer::LocalHeadingBuffer(size_t n){
+        buffer_ = boost::circular_buffer<LocalHeading>(n);
+    }
+    LocalHeadingBuffer::LocalHeadingBuffer(const LocalHeadingBuffer& lhb){
+        buffer_ = boost::circular_buffer<LocalHeading>(lhb.buffer_);
+    }
+    LocalHeadingBuffer& LocalHeadingBuffer::operator=(const LocalHeadingBuffer& lhb){
+        this->buffer_ = boost::circular_buffer<LocalHeading>(lhb.buffer_);
+        return *this;
+    }
+    void LocalHeadingBuffer::push_back(const LocalHeading& lh){
+        std::lock_guard<std::mutex> lock(mtx_);
+        buffer_.push_back(lh);
+    }
+    LocalHeading& LocalHeadingBuffer::back(){
+        std::lock_guard<std::mutex> lock(mtx_);
+        return buffer_.back();
+    }
+    size_t LocalHeadingBuffer::size(){
+        return buffer_.size();
+    }
     
 }

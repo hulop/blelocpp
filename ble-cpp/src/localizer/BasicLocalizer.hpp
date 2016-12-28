@@ -26,6 +26,8 @@
 #include <iostream>
 #include <string>
 
+#include <boost/circular_buffer.hpp>
+
 #include "StreamLocalizer.hpp"
 #include "StreamParticleFilter.hpp"
 
@@ -92,6 +94,21 @@ namespace loc {
         SMOOTH_RSSI
     } SmoothType;
     
+    
+    class LocalHeadingBuffer{
+    protected:
+        boost::circular_buffer<LocalHeading> buffer_;
+        std::mutex mtx_;
+    public:
+        LocalHeadingBuffer(size_t);
+        ~LocalHeadingBuffer() = default;
+        LocalHeadingBuffer(const LocalHeadingBuffer&);
+        LocalHeadingBuffer& operator=(const LocalHeadingBuffer&);
+        void push_back(const LocalHeading&);
+        LocalHeading& back();
+        size_t size();
+    };
+    
     class BasicLocalizer: public StreamLocalizer{
         
     private:
@@ -131,6 +148,10 @@ namespace loc {
         
         Anchor anchor;
         LatLngConverter::Ptr latLngConverter_ = LatLngConverter::Ptr(new LatLngConverter());
+        
+        LocalHeadingBuffer mLocalHeadingBuffer = LocalHeadingBuffer(10); // buffer size 10 is not important.
+        
+        double headingConfidenceForOrientationInit_ = 0.0;
         
     public:
         BasicLocalizer();
@@ -255,7 +276,8 @@ namespace loc {
         StreamLocalizer& putAcceleration(const Acceleration acceleration) override;
         StreamLocalizer& putBeacons(const Beacons beacons) override;
         // StreamLocalizer& putWiFiAPs(const WiFiAPs wifiaps) override;
-        StreamLocalizer& putHeading(const Heading heading) override;
+        StreamLocalizer& putLocalHeading(const LocalHeading heading) override;
+        StreamLocalizer& putHeading(const Heading heading);
         StreamLocalizer& putAltimeter(const Altimeter altimeter) override;
         Status* getStatus() override;
                                  
@@ -282,11 +304,17 @@ namespace loc {
             }
         };
         
-        
         std::shared_ptr<GaussianProcessLDPLMultiModel<State, Beacons>> observationModel() const{
             return deserializedModel;
         };
         
+        // for orientation initialization
+        void headingConfidenceForOrientationInit(double confidence){
+            if(!(0.0<=confidence && confidence<=1.0)){
+                BOOST_THROW_EXCEPTION(LocException("range check error (0.0<=confidence && confidence<=1.0)"));
+            }
+            headingConfidenceForOrientationInit_ = confidence;
+        }
     };
 }
 

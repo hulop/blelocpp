@@ -66,4 +66,24 @@ namespace loc{
     template GlobalState<State> LatLngConverter::localToGlobal<State>(const State& local);
     template State LatLngConverter::globalToLocal<State>(const GlobalState<State>& global);
     
+    
+    double LatLngConverter::headingGlobalToLocal(double heading){
+        double localHeading = ( heading - anchor_.rotate )/180.0*M_PI; // radian
+        double xH = std::sin(localHeading);
+        double yH = std::cos(localHeading);
+        double orientation = atan2(yH,xH);
+        return orientation;
+    }
+    
+    LocalHeading LatLngConverter::headingGlobalToLocal(const Heading& heading){
+        long ts = heading.timestamp();
+        double trueHeading = heading.trueHeading(); // deg
+        double headingAcc = heading.headingAccuracy(); // deg
+
+        double ori = this->headingGlobalToLocal(trueHeading);
+        double oriDev = headingAcc/180.0*M_PI;
+        
+        LocalHeading locHead(ts, ori, oriDev);
+        return locHead;
+    }
 }

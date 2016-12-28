@@ -51,7 +51,7 @@ namespace loc{
         callback(status);
         return *this;
     }
-    StreamLocalizer& StreamLocalizerStub::putHeading(const Heading heading) {
+    StreamLocalizer& StreamLocalizerStub::putLocalHeading(const LocalHeading heading) {
         return *this;
     }
     StreamLocalizer& StreamLocalizerStub::putAltimeter(const Altimeter altimeter) {

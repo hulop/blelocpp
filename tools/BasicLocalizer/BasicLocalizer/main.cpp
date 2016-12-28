@@ -377,7 +377,10 @@ int main(int argc, char * argv[]) {
                         std::cout << "LogReplay:" << alt.timestamp() << ", Altimeter, " << alt.relativeAltitude() << "," << alt.pressure() << std::endl;
                     }
                     if (logString.compare(0, 7,"Heading") == 0){
-                        // pass
+                        Heading heading = LogUtil::toHeading(logString);
+                        localizer.putHeading(heading);
+                        LocalHeading localHeading = ud.latLngConverter->headingGlobalToLocal(heading);
+                        std::cout << "LogReplay:" << heading.timestamp() << ", Heading, " << heading.trueHeading() << "," << heading.magneticHeading() << "," << heading.headingAccuracy() << "(localHeading=" << localHeading.orientation() << ")" << std::endl;
                     }
                     
                     if (opt.usesReset && logString.compare(0, 5, "Reset") == 0) {
@@ -551,7 +554,9 @@ int main(int argc, char * argv[]) {
                         }
                     }
                 }
-            } catch (std::invalid_argument e){
+            }catch (LocException& e){
+                std::cerr << boost::diagnostic_information(e) << std::endl;
+            }catch (std::invalid_argument e){
                 std::cerr << e.what() << std::endl;
                 std::cerr << "error in parse log file" << std::endl;
             }
