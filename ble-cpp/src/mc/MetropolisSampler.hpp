@@ -88,6 +88,8 @@ namespace loc{
         void prepare();
         void startBurnIn();
         void startBurnIn(int burnIn);
+        std::vector<Tstate> getAllStates() const override;
+        std::vector<double> getAllLogLLs() const override;
         
         bool sample();
         bool sample(bool transitLoc, bool transitRssiBias);
@@ -97,7 +99,7 @@ namespace loc{
         
         void clear();
         
-        void print();
+        void print() const;
         
     };
     

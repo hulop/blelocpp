@@ -62,7 +62,6 @@ string LogUtil::toString(const Altimeter& alt) {
     return buffer.str();
 }
 
-
 Beacons LogUtil::toBeacons(std::string str){
     return DataUtils::parseLogBeaconsCSV(str);
 }

@@ -162,4 +162,27 @@ namespace loc{
     void Status::wasFloorUpdated(bool wasFloorUpdated){
         mWasFloorUpdated = wasFloorUpdated;
     }
+    
+    std::string Status::locationStatusToString(const loc::Status::LocationStatus & locStatus){
+        std::string str;
+        switch(locStatus){
+            case(Status::UNKNOWN):
+                str =  "UNKNOWN";
+                break;
+            case(Status::LOCATING):
+                str = "LOCATING";
+                break;
+            case(Status::STABLE):
+                str = "STABLE";
+                break;
+            case(Status::UNSTABLE):
+                str = "UNSTABLE";
+                break;
+            case(Status::NIL):
+                str = "NIL";
+                break;
+        }
+        return str;
+    }
+    
 }

@@ -185,6 +185,12 @@ namespace loc{
             }
             assert(statesTmp.size() == floors.size());
             auto logLLs = mObsModel->computeLogLikelihood(statesTmp, beacons);
+            
+            //if(true){
+            //    double avgLogLL = std::accumulate(logLLs.begin(), logLLs.end(), 0.0)/(logLLs.size());
+            //    std::cout << "#beacons=" << beacons.size() << ",avgLogLL = " << avgLogLL << std::endl;
+            //}
+            
             std::vector<double> weights = ArrayUtils::computeWeightsFromLogLikelihood(logLLs);
             
             // generate floors using weights and random numbers
@@ -260,8 +266,9 @@ namespace loc{
         bool mEnablesFloorUpdate = true;
         
         MixtureParameters mMixParams;
-        FloorTransitionParameters::Ptr mFloorTransParams = FloorTransitionParameters::Ptr(new FloorTransitionParameters);
-
+        FloorTransitionParameters::Ptr mFloorTransParams = std::make_shared<FloorTransitionParameters>();
+        LocationStatusMonitorParameters::Ptr mLocStatusMonitorParams = std::make_shared<LocationStatusMonitorParameters>();
+        
         //std::queue<Pose> posesForReset;
         std::queue<std::function<void()>> functionsForReset;
 
@@ -460,36 +467,57 @@ namespace loc{
                 DataLogger::getInstance()->log(filename, DataUtils::statesToCSV(states));
             }
         }
-
-        void mixStates(States& states, const Beacons&beacons, double mixProba){
-            if( beacons.size() < mMixParams.nBeaconsMinimum){
-                return;
+        
+        States generateStatesForMix(int nGen, const Beacons& beacons, const MixtureParameters& mixParams,
+                                    std::vector<State>& allGeneratedStates, std::vector<double>& allGeneratedStatesLogLLs
+                                    ){
+            // Generate states
+            int burnInLight = mixParams.burnInQuick;
+            States statesGen;
+            if(mMetro){
+                mMetro->input(beacons);
+                mMetro->startBurnIn(burnInLight);
+                statesGen = mMetro->sampling(nGen);
+                //mMetro->print();
+                auto allStates =  mMetro->getAllStates();
+                auto allLogLLs = mMetro->getAllLogLLs();
+                allGeneratedStates = allStates;
+                allGeneratedStatesLogLLs = allLogLLs;
+                //double avgLogLL = std::accumulate(allLogLLs.begin(), allLogLLs.end(), 0.0)/allLogLLs.size();
+                //std::cout << "avgLogLL=" << avgLogLL << std::endl;
+            }else{
+                statesGen = mStatusInitializer->resetStates(nGen, beacons);
+            }
+            return statesGen;
+        }
+        
+        States mixStates(const States& states, const Beacons& beacons, const MixtureParameters& mixParams,
+                       std::vector<State>& allGeneratedStates, std::vector<double>& allGeneratedStatesLogLLs
+                       ){
+            if( beacons.size() < mixParams.nBeaconsMinimum){
+                return states;
             }
             size_t nStates = states.size();
             std::vector<int> indices;
             // Select particles that will be removed randomly.
             for(int i=0; i<nStates; i++){
                 double u = mRand->nextDouble();
-                if(u< mixProba){
+                if(u< mixParams.mixtureProbability){
                     indices.push_back(i);
                 }
             }
             int nGen = static_cast<int>(indices.size());
-            if(nGen==0){
-                return;
-            }
-            // Generate states
-            int burnInLight = mMixParams.burnInQuick;
-            States statesGen;
-            if(mMetro){
-                mMetro->input(beacons);
-                mMetro->startBurnIn(burnInLight);
-                statesGen = mMetro->sampling(nGen);
-            }else{
-                statesGen = mStatusInitializer->resetStates(nGen, beacons);
-            }
-
-            Location locMean = Location::mean(states);
+            
+            //// do burn-in even if nGen==0 to evaluate likelihood
+            //if(nGen==0){
+            //    return;
+            //}
+            
+            States statesGen = generateStatesForMix(nGen, beacons, mixParams, allGeneratedStates, allGeneratedStatesLogLLs);
+            
+            
+            States statesMixed(states);
+            //Location locMean = Location::mean(states);
             // Copy location of generated states to the existing states.
             for(int i=0; i<nGen; i++){
                 auto& st = statesGen.at(i);
@@ -497,9 +525,11 @@ namespace loc{
                 double p = computeStateAcceptProbability(states, st); //compare all states and new state.
                 if(mRand->nextDouble() < p ){
                     int idx = indices.at(i);
-                    states.at(idx).copyLocation(st);
+                    statesMixed.at(idx).copyLocation(st);
                 }
             }
+            
+            return statesMixed;
         }
         
         double computeStateAcceptProbability(const Location& locMean, const Location& locNew){
@@ -536,6 +566,10 @@ namespace loc{
         }
         
         void doFiltering(const Beacons& beacons){
+            this->updateStatusByBeacons(beacons, true, true);
+        }
+        
+        void updateStatusByBeacons(const Beacons& beacons, const bool& doesFiltering, const bool& monitorsStatus){
 
             if(beacons.size()==0){
                 return;
@@ -544,12 +578,17 @@ namespace loc{
             long timestamp = beacons.timestamp();
             status->timestamp(timestamp);
             std::shared_ptr<States> states = status->states();
-
-            // Logging before likelihood computation
-            logStates(*states, "before_likelihood_states_"+std::to_string(timestamp)+".csv");
             
-            // Mix new states generated from observations into particles
-            mixStates(*states, beacons, mMixParams.mixtureProbability);
+            // Compute states mixed with states generated from observations
+            std::vector<State> allMixStates;
+            std::vector<double> allMixLogLLs;
+            auto statesMixed =  mixStates(*states, beacons, mMixParams, allMixStates, allMixLogLLs);
+            if(doesFiltering){
+                // Logging before weights updated
+                logStates(*states, "before_likelihood_states_"+std::to_string(timestamp)+".csv");
+                // Copy mixed states when apply filtering
+                *states = statesMixed;
+            }
             
             // Compute log likelihood
             std::vector<std::vector<double>> vLogLLsAndMDists = mObservationModel->computeLogLikelihoodRelatedValues(*states, beacons);
@@ -560,76 +599,112 @@ namespace loc{
                 mDists[i] = vLogLLsAndMDists.at(i).at(1);
             }
             
-            // Apply alpha-weaken
-            vLogLLs = weakenLogLikelihoods(vLogLLs, mAlphaWeaken);
-            
-            // Set negative log-likelihoods
-            for(int i=0; i<vLogLLs.size(); i++){
-                State& s = states->at(i);
-                s.negativeLogLikelihood(-vLogLLs.at(i));
-                s.mahalanobisDistance(mDists.at(i));
-            }
-
-            std::vector<double> weights = ArrayUtils::computeWeightsFromLogLikelihood(vLogLLs);
-            double sumWeights = 0;
-            // Multiply loglikelihood-based weights and particle weights.
-            for(int i=0; i<weights.size(); i++){
-                weights[i] = weights[i] * (states->at(i).weight());
-                sumWeights += weights[i];
-            }
-            if(sumWeights<=0){
-                LocException ex("sum(weights) <= 0");
-                for(auto logLL: vLogLLs){
-                    if(logLL == 0){
-                        ex << boost::error_info<struct error_info, std::string>("logLikelihood == 0. (Probably, input beacons are unknown.)");
-                        break;
+            if(monitorsStatus){
+                // Update locationStatus by comparing likelihoods between states and one-shot states
+                
+                double avgLogLL = std::accumulate(vLogLLs.begin(), vLogLLs.end(), 0.0)/vLogLLs.size();
+                double avgMixLogLL = std::accumulate(allMixLogLLs.begin(), allMixLogLLs.end(), 0.0)/allMixLogLLs.size();
+                
+                double weightAvgLogLL = std::exp(avgLogLL)/(std::exp(avgLogLL)+std::exp(avgMixLogLL));
+                double wTol = mLocStatusMonitorParams->minimumWeightStable();
+                if(mOptVerbose){
+                    std::cout << "Average logLikelihood (inStates,inMix)=(" << avgLogLL << "," << avgMixLogLL << "), weightInStates=" << weightAvgLogLL << ",wTol=" << wTol << std::endl;
+                }
+                if(!isnan(avgMixLogLL)){
+                    auto locationStatus = status->locationStatus();
+                    if(mOptVerbose){
+                        std::cout << "locationStatus = " << Status::locationStatusToString(locationStatus) << ", weightInStates=" << weightAvgLogLL << ",wTol=" << wTol << std::endl;
                     }
+                    if(locationStatus==Status::STABLE){
+                        if(weightAvgLogLL < wTol){
+                            locationStatus=Status::UNSTABLE;
+                        }
+                    }else if(locationStatus==Status::UNSTABLE){
+                        if(weightAvgLogLL < wTol){
+                            locationStatus=Status::UNKNOWN;
+                        }else{
+                            locationStatus=Status::STABLE;
+                        }
+                    }
+                    status->locationStatus(locationStatus);
                 }
-                BOOST_THROW_EXCEPTION(ex);
-            }
-            // Renormalized
-            for(int i=0; i<weights.size(); i++){
-                weights[i] = weights[i]/sumWeights;
-                states->at(i).weight(weights[i]);
             }
             
-            // Logging after likelihood computation
-            logStates(*states, "after_likelihood_states_"+std::to_string(timestamp)+".csv");
-
-            // Resampling step
-            double ess = computeESS(weights);
-            if(mOptVerbose){
-                std::cout << "ESS=" << ess << std::endl;
-            }
-            StatesPtr statesNew;
-            Status::Step step = Status::FILTERING_WITHOUT_RESAMPLING;
-            if(ess<=mEssThreshold){
-                statesNew.reset(mResampler->resample(*states, &weights[0]));
-                // Assign equal weights after resampling
+            if(doesFiltering){
+                // Apply alpha-weaken
+                vLogLLs = weakenLogLikelihoods(vLogLLs, mAlphaWeaken);
+                
+                // Set negative log-likelihoods
+                for(int i=0; i<vLogLLs.size(); i++){
+                    State& s = states->at(i);
+                    s.negativeLogLikelihood(-vLogLLs.at(i));
+                    s.mahalanobisDistance(mDists.at(i));
+                }
+                
+                std::vector<double> weights = ArrayUtils::computeWeightsFromLogLikelihood(vLogLLs);
+                double sumWeights = 0;
+                // Multiply loglikelihood-based weights and particle weights.
                 for(int i=0; i<weights.size(); i++){
-                    double weight = 1.0/(weights.size());
-                    statesNew->at(i).weight(weight);
+                    weights[i] = weights[i] * (states->at(i).weight());
+                    sumWeights += weights[i];
                 }
-                step = Status::FILTERING_WITH_RESAMPLING;
+                if(sumWeights<=0){
+                    LocException ex("sum(weights) <= 0");
+                    for(auto logLL: vLogLLs){
+                        if(logLL == 0){
+                            ex << boost::error_info<struct error_info, std::string>("logLikelihood == 0. (Probably, input beacons are unknown.)");
+                            break;
+                        }
+                    }
+                    BOOST_THROW_EXCEPTION(ex);
+                }
+                // Renormalized
+                for(int i=0; i<weights.size(); i++){
+                    weights[i] = weights[i]/sumWeights;
+                    states->at(i).weight(weights[i]);
+                }
+                
+                // Logging after weights updated
+                logStates(*states, "after_likelihood_states_"+std::to_string(timestamp)+".csv");
+                
+                // Resampling step
+                double ess = computeESS(weights);
+                if(mOptVerbose){
+                    std::cout << "ESS=" << ess << std::endl;
+                }
+                StatesPtr statesNew;
+                Status::Step step;
+                
+                if(ess<=mEssThreshold){
+                    statesNew.reset(mResampler->resample(*states, &weights[0]));
+                    // Assign equal weights after resampling
+                    for(int i=0; i<weights.size(); i++){
+                        double weight = 1.0/(weights.size());
+                        statesNew->at(i).weight(weight);
+                    }
+                    step = Status::FILTERING_WITH_RESAMPLING;
+                }else{
+                    statesNew.reset(new States(*states));
+                    step = Status::FILTERING_WITHOUT_RESAMPLING;
+                }
+                
+                // Posterior-resampling
+                if(mPostResampler){
+                    *statesNew = mPostResampler->resample(*statesNew);
+                }
+                
+                status->states(statesNew, step);
+                if(mOptVerbose){
+                    std::cout << "resampling at t=" << beacons.timestamp() << std::endl;
+                }
+                // Logging after resampling
+                logStates(*statesNew, "resampled_states_"+std::to_string(timestamp)+".csv");
+                
+                // Notify registered instances of the update of particle fiter
+                this->notifyObservationUpdated();
             }else{
-                statesNew.reset(new States(*states));
-                step = Status::FILTERING_WITHOUT_RESAMPLING;
+                return;
             }
-            
-            // Posterior-resampling
-            if(mPostResampler){
-                *statesNew = mPostResampler->resample(*statesNew);
-            }
-            
-            status->states(statesNew, step);
-            if(mOptVerbose){
-                std::cout << "resampling at t=" << beacons.timestamp() << std::endl;
-            }
-            // Logging after resampling
-            logStates(*statesNew, "resampled_states_"+std::to_string(timestamp)+".csv");
-            
-            // Notify registered instances of the update of particle fiter
-            this->notifyObservationUpdated();
         }
 
         void notifyObservationUpdated(){
@@ -724,11 +799,15 @@ namespace loc{
                     }
                 }
                 // filtering
-                if(checkIfDoFiltering(*states)){
-                    doFiltering(beaconsFiltered);
+                bool doesFiltering = checkIfDoFiltering(*states);
+                bool monitorsStatus = true;
+                
+                if(doesFiltering){
+                    updateStatusByBeacons(beaconsFiltered, doesFiltering, monitorsStatus);
                     assert( status->step()==Status::FILTERING_WITH_RESAMPLING
                            || status->step()==Status::FILTERING_WITHOUT_RESAMPLING );
                 }else{
+                    updateStatusByBeacons(beaconsFiltered, doesFiltering, monitorsStatus);
                     if(mOptVerbose){
                         std::cout<<"filtering step was not applied."<<std::endl;
                     }
@@ -950,10 +1029,13 @@ namespace loc{
 
         bool refineStatus(const Beacons& beacons){
             // TODO
+            BOOST_THROW_EXCEPTION(LocException("unsupported method"));
+            
             const Beacons& beaconsFiltered = filterBeacons(beacons);
 
             if(beaconsFiltered.size()>0){
-                if(checkIfDoFiltering()){
+                auto states = status->states();
+                if(checkIfDoFiltering(*states)){
                     doFiltering(beaconsFiltered);
                 }
             }
@@ -999,11 +1081,6 @@ namespace loc{
             }else{
                 return true;
             }
-        }
-        
-        bool checkIfDoFiltering() const{
-            std::shared_ptr<States> states = status->states();
-            return checkIfDoFiltering(*states);
         }
 
         void optVerbose(bool optVerbose){
@@ -1080,6 +1157,10 @@ namespace loc{
         
         void floorTransitionParameters(FloorTransitionParameters::Ptr params){
             mFloorTransParams = params;
+        }
+        
+        void locationStatusMonitorParameters(LocationStatusMonitorParameters::Ptr params){
+            mLocStatusMonitorParams = params;
         }
     };
 
@@ -1260,4 +1341,8 @@ namespace loc{
         return * this;
     }
     
+    StreamParticleFilter& StreamParticleFilter::locationStatusMonitorParameters(LocationStatusMonitorParameters::Ptr params){
+        impl->locationStatusMonitorParameters(params);
+        return * this;
+    }
 }

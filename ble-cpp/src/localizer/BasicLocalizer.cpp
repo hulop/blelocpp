@@ -46,11 +46,29 @@ namespace loc{
         return *this;
     }
     
+    void bridgeFunctionCalledAfterUpdate2(void* userDataBridge, Status* status){
+        UserDataBridge* udb = (UserDataBridge*) userDataBridge;
+        
+        BasicLocalizer* localizer = udb->basicLocalizer;
+        UserData* userData = udb->userData;
+        
+        localizer->updateLocationStatus(localizer->getStatus());
+        
+        udb->functionCalledAfterUpdateWithPtr(userData, status);
+    }
+    
     StreamLocalizer& BasicLocalizer::updateHandler(void (*functionCalledAfterUpdate)(void*, Status*), void* inUserData) {
         mFunctionCalledAfterUpdate2 = functionCalledAfterUpdate;
         mUserData = inUserData;
+        
+        userDataBridge.userData = (UserData*) inUserData;
+        userDataBridge.functionCalledAfterUpdateWithPtr = mFunctionCalledAfterUpdate2;
+        userDataBridge.basicLocalizer = this;
+        
+        mUserDataBridge = &userDataBridge;
+        
         if (mLocalizer) {
-            mLocalizer->updateHandler(mFunctionCalledAfterUpdate2, mUserData);
+            mLocalizer->updateHandler(bridgeFunctionCalledAfterUpdate2, mUserDataBridge);
         }
         return *this;
     }
@@ -68,14 +86,14 @@ namespace loc{
         if (mFunctionCalledToLog) {
             mFunctionCalledToLog(mUserDataToLog, LogUtil::toString(attitude));
         }
-        if (!isTrackingMode()) {
+        if (!isTrackingLocalizer()) {
             return *this;
         }
-        switch(mState) {
-            case UNKNOWN: case LOCATING:
-            case TRACKING:
+        //switch(mState) {
+        //    case UNKNOWN: case LOCATING:
+        //    case TRACKING:
                 mLocalizer->putAttitude(attitude);
-        }
+        //}
         return *this;
     }
     StreamLocalizer& BasicLocalizer::putAcceleration(const Acceleration acceleration) {
@@ -85,14 +103,20 @@ namespace loc{
         if (mFunctionCalledToLog) {
             mFunctionCalledToLog(mUserDataToLog, LogUtil::toString(acceleration));
         }
-        if (!isTrackingMode()) {
+        if (!isTrackingLocalizer()) {
             return *this;
         }
-        switch(mState) {
-            case UNKNOWN: case LOCATING:
-            case TRACKING:
+        //switch(mState) {
+        //    case UNKNOWN: case LOCATING:
+        //    case TRACKING:
+        //        mLocalizer->putAcceleration(acceleration);
+        //}
+        else{
+            if(mLocationStatus==Status::STABLE or mLocationStatus==Status::UNSTABLE){
                 mLocalizer->putAcceleration(acceleration);
+            }
         }
+        
         return *this;
     }
     
@@ -106,7 +130,7 @@ namespace loc{
         if (!isReady) {
             return *this;
         }
-        if (!isTrackingMode()) {
+        if (!isTrackingLocalizer()) {
             return *this;
         }
         auto cvt = latLngConverter();
@@ -121,13 +145,18 @@ namespace loc{
         if (!isReady) {
             return *this;
         }
-        if (!isTrackingMode()) {
+        if (!isTrackingLocalizer()) {
             return *this;
         }
-        switch(mState) {
-            case UNKNOWN: case LOCATING:
-            case TRACKING:
+        //switch(mState) {
+        //    case UNKNOWN: case LOCATING:
+        //    case TRACKING:
+        //        mLocalizer->putAltimeter(altimeter);
+        //}
+        else{
+            if(mLocationStatus==Status::STABLE or mLocationStatus==Status::UNSTABLE){
                 mLocalizer->putAltimeter(altimeter);
+            }
         }
         return *this;
     }
@@ -168,6 +197,18 @@ namespace loc{
         return beaconsAveraged;
     }
     
+    
+    bool checkStatesInStdev2D(const std::vector<State>& states, double stdevLimit){
+        double var2D = Location::compute2DVariance(states);
+        double stdev2D = std::sqrt(var2D);
+        std::cout << "stdev2D = " << stdev2D << std::endl;
+        if(stdev2D < stdevLimit){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    
     StreamLocalizer& BasicLocalizer::putBeacons(const Beacons beacons) {
         if (!isReady) {
             return *this;
@@ -179,25 +220,15 @@ namespace loc{
             std::cout << "The number of strong beacon is zero." << std::endl;
             return *this;
         }
-        
+        Beacons beaconsTmp = beacons;
         if (smoothType == SMOOTH_RSSI) {
             beacons_list[(smooth_count)%std::min(N_SMOOTH_MAX,nSmooth)] = beacons;
             Beacons newBeacons = smoothBeaconsList(beacons_list, smooth_count, nSmooth);
             newBeacons.timestamp(beacons.timestamp());
+            beaconsTmp = newBeacons;
             smooth_count++;
-            
-            switch(mState) {
-                case UNKNOWN:
-                    mLocalizer->resetStatus(newBeacons);
-                    break;
-                case LOCATING:
-                    mLocalizer->resetStatus(newBeacons);
-                    break;
-                case TRACKING:
-                    mLocalizer->putBeacons(newBeacons);
-                    break;
-            }
-        } else {//smoothType==SMOOTH_LOCATION
+        }
+        /*
             switch(mState) {
                 case UNKNOWN:
                     mLocalizer->resetStatus(beacons);
@@ -208,73 +239,107 @@ namespace loc{
                 case TRACKING:
                     mLocalizer->putBeacons(beacons);
                     break;
-                    
+            }
+        */
+        mLocalizer->getStatus()->locationStatus(mLocationStatus); // ensure innerStatus == mLocationStatus before put method
+        
+        if(isTrackingLocalizer()){
+            switch(mLocationStatus){
+                case(Status::UNKNOWN): case(Status::LOCATING):
+                    mLocalizer->resetStatus(beaconsTmp);
+                    break;
+                case(Status::STABLE): case(Status::UNSTABLE):
+                    mLocalizer->putBeacons(beaconsTmp);
+                    break;
+                case(Status::NIL):
+                    BOOST_THROW_EXCEPTION(LocException("location status is not set (NIL)"));
+                    break;
+            }
+        }else{
+            switch(mLocationStatus){
+                case(Status::UNKNOWN): case(Status::LOCATING): case(Status::STABLE): case(Status::UNSTABLE):
+                    mLocalizer->resetStatus(beaconsTmp);
+                    break;
+                case(Status::NIL):
+                    BOOST_THROW_EXCEPTION(LocException("location status is not set (NIL)"));
+                    break;
             }
         }
         
-        if(smoothType == SMOOTH_LOCATION && mState == TRACKING){
+        if(smoothType == SMOOTH_LOCATION
+           && (mLocationStatus==Status::STABLE || mLocationStatus==Status::UNSTABLE )
+           && isTrackingLocalizer()){
             return *this; // SMOOTH_LOCATION & TRACKING ends here.
         }
         
+        bool isStatesConverged = false;
+        
+        auto statusLatest = mLocalizer->getStatus();
         if (smoothType == SMOOTH_LOCATION) {
-            auto statusOneshot = mLocalizer->getStatus();
-            loc::Status *status = new loc::Status(*statusOneshot);
+            loc::Status *status = new loc::Status(*statusLatest);
             
-            if (isTrackingMode() && smooth_count >= nSmooth) {
-                nSmooth = nSmoothTracking;
+            int nSmoothTmp;
+            //if (isTrackingLocalizer() && mLocationStatus==Status::STABLE) {
+            if (mLocationStatus==Status::STABLE || mLocationStatus==Status::UNSTABLE) {
+                nSmoothTmp = nSmoothTracking;
+            }else{
+                nSmoothTmp = nSmooth;
             }
             
-            status_list[(smooth_count++)%std::min(N_SMOOTH_MAX,nSmooth)] = *statusOneshot->states();
+            status_list[(smooth_count++)%std::min(N_SMOOTH_MAX,nSmoothTmp)] = *statusLatest->states();
             
             std::shared_ptr<States> states (new std::vector<loc::State>);
             double meanBias = 0;
-            for(int i = 0; i < N_SMOOTH_MAX && i < smooth_count && i < nSmooth; i++) {
+            for(int i = 0; i < N_SMOOTH_MAX && i < smooth_count && i < nSmoothTmp; i++) {
                 for(auto& s: status_list[i]) {
                     states->push_back(s);
                     meanBias += s.rssiBias();
                 }
             }
             mEstimatedRssiBias = meanBias / states->size();
+            
             status->states(states, Status::RESET);
+            status->locationStatus(mLocationStatus);
             mResult.reset(status);
+            
+            /*
+            double stdev2D = std::sqrt(Location::compute2DVariance(*states));
+            const auto& monitorParams = locationStatusMonitorParameters;
+            if(mLocationStatus == Status::UNKNOWN){
+                if(stdev2D < monitorParams->stdev2DEnterLocating()){
+                    mLocationStatus = Status::LOCATING;
+                }
+            }
+            
+            bool csc = stdev2D < monitorParams->stdev2DEnterStable();
+            if(csc && smooth_count >=nSmooth){
+                isStatesConverged = true;
+            }
+            */
+            
+            updateLocationStatus(mResult.get());
+            if(mResult->locationStatus() == Status::STABLE){
+                isStatesConverged = true;
+            }
+            
         } else {
-            auto statusOneshot = mLocalizer->getStatus();
-            mResult.reset(statusOneshot);
-        }
-        
-        if(!this->isTrackingMode()){
-            mResult->locationStatus(Status::STABLE);
-        }else{
-            mResult->locationStatus(Status::LOCATING);
+            mResult.reset(statusLatest);
         }
 
         if (mFunctionCalledAfterUpdate) {
-            //mFunctionCalledAfterUpdate(mLocalizer->getStatus());
             mFunctionCalledAfterUpdate(mResult.get());
         }
         
         if (mFunctionCalledAfterUpdate2 && mUserData) {
-            //mFunctionCalledAfterUpdate2(mUserData, mLocalizer->getStatus());
             mFunctionCalledAfterUpdate2(mUserData, mResult.get());
         }
         
-        // is tracking mode & finished initial localization & tracking state has not been set to TRACKING
-        
-        std::function<bool(const Status&)> checkStatusConverged = [](const Status& status){
-            double stdevLimit = 5.0;
-            
-            std::vector<State> states = *status.states();
-            double var2D = Location::compute2DVariance(states);
-            double stdev2D = std::sqrt(var2D);
-            
-            if(stdev2D < stdevLimit){
-                return true;
-            }else{
-                return false;
-            }
-        };
-        
-        if (isTrackingMode() && smooth_count >= nSmooth && mState != TRACKING) {
+        //if (isTrackingLocalizer() && smooth_count >= nSmooth && mState != TRACKING) {
+        if(!isTrackingLocalizer()){
+            return *this;
+        }
+        //if (isTrackingLocalizer() && isStatesConverged && mLocationStatus!=Status::STABLE) {
+        if (isTrackingLocalizer() && isStatesConverged) {
             Pose refPose = *mResult->meanPose();
             std::vector<State> states = *mResult->states();
             int idx = Location::findClosestLocationIndex(refPose, states);
@@ -284,9 +349,13 @@ namespace loc{
             auto std = loc::Location::standardDeviation(*mResult->states());
             refPose.floor(roundf(refPose.floor()));
             loc::Pose stdevPose;
-            stdevPose.x(std.x()).y(std.y()).orientation(10*M_PI);
+            double largeOridev = 10*M_PI;
+            stdevPose.x(std.x()).y(std.y()).orientation(largeOridev);
             
-            if(0.0<headingConfidenceForOrientationInit_ && headingConfidenceForOrientationInit_<=1.0){
+            mLocationStatus = Status::STABLE;
+            
+            bool headingConfidenceIsActive = 0.0<headingConfidenceForOrientationInit_ && headingConfidenceForOrientationInit_<=1.0;
+            if(headingConfidenceIsActive){
                 if(mLocalHeadingBuffer.size()==0){
                     BOOST_THROW_EXCEPTION(LocException("Heading has not been input."));
                 }
@@ -295,22 +364,99 @@ namespace loc{
                 double oriDev = locHead.orientationDeviation();
                 if(oriDev>0){
                     stdevPose.orientation(oriDev);
+                }else{
+                    stdevPose.orientation(largeOridev);
                 }
                 double contamiRate =  std::max(1.0-headingConfidenceForOrientationInit_, 0.0);
+                mLocalizer->getStatus()->locationStatus(mLocationStatus);// must overwrite locationStatus before resetStatus because the callback function is called in resetStatus.
                 mLocalizer->resetStatus(refPose, stdevPose, contamiRate);
-                mLocalizer->getStatus()->locationStatus(Status::STABLE);
                 std::cout << "Reset=" << refPose << ", STD=" << std
                             << " with orientation(" << refPose.orientation() << "," << stdevPose.orientation() << ")" << std::endl;
             }else{
+                mLocalizer->getStatus()->locationStatus(mLocationStatus);
                 mLocalizer->resetStatus(refPose, stdevPose);
-                mLocalizer->getStatus()->locationStatus(Status::STABLE);
                 std::cout << "Reset=" << refPose << ", STD=" << std << std::endl;
             }
-            
-            mState = TRACKING;
         }
         
         return *this;
+    }
+    
+    Status::LocationStatus transitLocationStatus(const Status::LocationStatus& tempLocStatus, const States& states, const LocationStatusMonitorParameters& params){
+
+        double std2DExitStable = params.stdev2DExitStable();
+        double std2DEnterStable = params.stdev2DEnterStable();
+        double std2DEnterLocating = params.stdev2DEnterLocating();
+        double std2DExitLocating = params.stdev2DExitLocating();
+        
+        double std2D = std::sqrt(Location::compute2DVariance(states));
+        
+        Status::LocationStatus newLocStatus = tempLocStatus;
+        switch(tempLocStatus){
+            case(Status::UNKNOWN):
+                if(std2D < std2DEnterLocating){
+                    newLocStatus = Status::LOCATING;
+                }
+                break;
+            case(Status::LOCATING):
+                if(std2DExitLocating < std2D){
+                    newLocStatus = Status::UNKNOWN;
+                }
+                else if(std2D < std2DEnterStable){
+                    newLocStatus = Status::STABLE;
+                }
+                break;
+            case(Status::STABLE):
+                if(std2DExitStable < std2D){
+                    newLocStatus = Status::UNKNOWN;
+                }
+                break;
+            case(Status::UNSTABLE):
+                // release control to mLocalizer
+                break;
+            case(Status::NIL):
+                BOOST_THROW_EXCEPTION(LocException("location status is not set (NIL)"));
+                break;
+        }
+        return newLocStatus;
+    }
+    
+    void BasicLocalizer::updateLocationStatus(Status* status){
+        
+        auto oldLocStatus = mLocationStatus;
+        auto midLocStatus = status->locationStatus();
+        Status::LocationStatus newLocStatus;
+        
+        bool innerStatusWasUpdated = midLocStatus!=oldLocStatus;
+        if(innerStatusWasUpdated){
+            newLocStatus = midLocStatus;
+        } else {
+            auto tmpLocStatus = transitLocationStatus(midLocStatus, *status->states(), *locationStatusMonitorParameters);
+            if(midLocStatus==Status::LOCATING && tmpLocStatus==Status::STABLE){
+                if(smooth_count>=nSmooth){
+                    newLocStatus = Status::STABLE;
+                }else{
+                    newLocStatus = Status::LOCATING;
+                }
+            }else{
+                newLocStatus = tmpLocStatus;
+            }
+        }
+    
+        mLocationStatus = newLocStatus;
+        status->locationStatus(mLocationStatus);
+        
+        // check if location status changed
+        if(oldLocStatus!=mLocationStatus){
+            std::cout << "locationStatus changed from " << Status::locationStatusToString(oldLocStatus) << " to " << Status::locationStatusToString(newLocStatus) << std::endl;
+            if(mLocationStatus==Status::UNKNOWN){ // when locationStatus becomes UNKNOWN
+                //TODO (this block can be moved to a public method)
+                smooth_count = 0;
+                if (mFunctionCalledAfterUpdate2 && mUserData) {
+                    mFunctionCalledAfterUpdate2(mUserData, status);
+                }
+            }
+        }
     }
     
     Status* BasicLocalizer::getStatus() {
@@ -466,7 +612,8 @@ namespace loc{
         
         mLocalizer = std::shared_ptr<StreamParticleFilter>(new StreamParticleFilter());
         if (mFunctionCalledAfterUpdate2 && mUserData) {
-            mLocalizer->updateHandler(mFunctionCalledAfterUpdate2, mUserData);
+            //mLocalizer->updateHandler(mFunctionCalledAfterUpdate2, mUserData);
+            mLocalizer->updateHandler(bridgeFunctionCalledAfterUpdate2, mUserDataBridge);
         }
         if (mFunctionCalledAfterUpdate) {
             mLocalizer->updateHandler(mFunctionCalledAfterUpdate);
@@ -745,6 +892,7 @@ namespace loc{
         mLocalizer->mixtureParameters(mixParams);
         
         mLocalizer->floorTransitionParameters(pfFloorTransParams);
+        mLocalizer->locationStatusMonitorParameters(locationStatusMonitorParameters);
         
         msec = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now()-s).count();
         std::cerr << "finish setModel: " << msec << "ms" << std::endl;

@@ -42,8 +42,13 @@ namespace loc{
         virtual void input(const Tinput& input) = 0;
         virtual void startBurnIn() = 0;
         virtual void startBurnIn(int n) = 0;
+        virtual std::vector<Tstate> getAllStates() const = 0;
+        virtual std::vector<double> getAllLogLLs() const = 0;
+        
         virtual std::vector<Tstate> sampling(int n) = 0;
         virtual std::vector<Tstate> sampling(int n, const Location &location) = 0;
+        
+        virtual void print() const = 0;
         
     };
 }

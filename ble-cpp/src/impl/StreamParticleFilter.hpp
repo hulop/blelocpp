@@ -44,6 +44,31 @@ namespace loc {
         WEIGHT
     };
     
+    class LocationStatusMonitorParameters{
+    protected:
+        double minimumWeightStable_ = 1.0e-5;
+        
+        double stdev2DEnterStable_ = 5.0;
+        double stdev2DExitStable_ = 10.0;
+        double stdevFloorEnterStable_ = 0.1;
+        
+        double stdev2DEnterLocating_ = 8.0;
+        double stdev2DExitLocating_ = 10.0;
+        
+    public:
+        using Ptr = std::shared_ptr<LocationStatusMonitorParameters>;
+        double minimumWeightStable() const {return minimumWeightStable_;}
+        double stdev2DEnterStable() const {return stdev2DEnterStable_;}
+        double stdev2DExitStable() const {return stdev2DExitStable_;}
+        double stdev2DEnterLocating() const{return stdev2DEnterLocating_;}
+        double stdev2DExitLocating() const{return stdev2DExitLocating_; }
+        void minimumWeightStable(double weight){minimumWeightStable_=weight;}
+        void stdev2DEnterStable(double stdev2D) {stdev2DEnterStable_ = stdev2D;}
+        void stdev2DExitStable(double stdev2D){stdev2DExitStable_ = stdev2D;}
+        void stdev2DEnterLocating(double stdev2D){stdev2DEnterLocating_ = stdev2D;}
+        void stdev2DExitLocating(double stdev2D){stdev2DExitLocating_ = stdev2D; }
+    };
+    
     //template<class Tsys, class Tobs>
     class StreamParticleFilter : public StreamLocalizer{
     public:
@@ -91,6 +116,7 @@ namespace loc {
         StreamParticleFilter& floorTransitionParameters(FloorTransitionParameters::Ptr);
         StreamParticleFilter& enablesFloorUpdate(bool);
         StreamParticleFilter& floorUpdateMode(FloorUpdateMode);
+        StreamParticleFilter& locationStatusMonitorParameters(LocationStatusMonitorParameters::Ptr);
         
         StreamParticleFilter& locationStandardDeviationLowerBound(Location loc);
         

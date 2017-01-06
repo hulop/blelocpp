@@ -101,6 +101,16 @@ namespace loc{
     }
     
     template <class Tstate, class Tinput>
+    std::vector<Tstate> MetropolisSampler<Tstate, Tinput>::getAllStates() const{
+        return allStates;
+    }
+    
+    template <class Tstate, class Tinput>
+    std::vector<double> MetropolisSampler<Tstate, Tinput>::getAllLogLLs() const{
+        return allLogLLs;
+    }
+    
+    template <class Tstate, class Tinput>
     bool MetropolisSampler<Tstate, Tinput>::sample(){
         return sample(true, true);
     }
@@ -127,8 +137,6 @@ namespace loc{
         
         return isAccepted;
     }
-    
-    
     
     template <class Tstate, class Tinput>
     std::vector<Tstate> MetropolisSampler<Tstate, Tinput>::sampling(int n){
@@ -168,6 +176,9 @@ namespace loc{
         int count = 0;
         int countAccepted = 0;
         for(int i=1; ;i++){
+            if(n==0){
+                break;
+            }
             bool isAccepted = sample();
             count++;
             if(isAccepted){
@@ -226,6 +237,9 @@ namespace loc{
         int count = 0;
         int countAccepted = 0;
         for(int i=1; ;i++){
+            if(n==0){
+                break;
+            }
             bool isAccepted = sample(false, true);
             count++;
             if(isAccepted){
@@ -272,9 +286,11 @@ namespace loc{
     }
     
     template <class Tstate, class Tinput>
-    void MetropolisSampler<Tstate, Tinput>::print(){
-        std::cout << "allStates.size()=" << allStates.size() << std::endl;
-        std::cout << "allLogLLs.size()=" << allLogLLs.size() << std::endl;
+    void MetropolisSampler<Tstate, Tinput>::print() const{
+        double averageLogLL = std::accumulate(allLogLLs.begin(), allLogLLs.end(), 0.0)/(allLogLLs.size());
+        std::cout << "allStates.size()=" << allStates.size()
+                << ",allLogLLs.size()=" << allLogLLs.size()
+                << ",averageLogLL=" << averageLogLL << std::endl;
     }
     
     // explicit instantiation

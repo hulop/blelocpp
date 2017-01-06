@@ -80,10 +80,13 @@ namespace loc{
         bool wasFloorUpdated() const;
         void wasFloorUpdated(bool);
         
+        static std::string locationStatusToString(const LocationStatus&);
+        
     private:
         long timestamp_;
         Step step_ = Step::OTHER;
         LocationStatus locationStatus_ = NIL;
+        //LocationStatus locationStatus_ = UNKNOWN;
         std::shared_ptr<Location> meanLocation_;
         std::shared_ptr<Pose> meanPose_;
         std::shared_ptr<std::vector<State>> states_;

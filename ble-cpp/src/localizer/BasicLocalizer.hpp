@@ -79,11 +79,13 @@ namespace loc {
         WEAK_POSE_RANDOM_WALKER
     } LocalizeMode;
     
+    /*
     typedef enum {
         UNKNOWN,
         LOCATING,
         TRACKING
     } LocalizeState;
+    */
     
     typedef enum {
         NORMAL, TDIST
@@ -109,6 +111,13 @@ namespace loc {
         size_t size();
     };
     
+    
+    struct UserDataBridge{
+        UserData* userData;
+        void (*functionCalledAfterUpdateWithPtr)(void*, Status*) = NULL;
+        BasicLocalizer* basicLocalizer;
+    };
+    
     class BasicLocalizer: public StreamLocalizer{
         
     private:
@@ -123,15 +132,21 @@ namespace loc {
         void *mUserData = NULL;
         void *mUserDataToLog = NULL;
         
-        LocalizeState mState = UNKNOWN;
+        
+        UserDataBridge userDataBridge;
+        void *mUserDataBridge = NULL;
+        
+        
+        //LocalizeState mState = UNKNOWN;
         std::shared_ptr<loc::Status> mResult;
         
         std::vector<loc::State> status_list[N_SMOOTH_MAX];
         std::vector<loc::Beacon> beacons_list[N_SMOOTH_MAX];
+        
         int smooth_count = 0;
         double mEstimatedRssiBias = 0;
         
-        bool isTrackingMode() {
+        bool isTrackingLocalizer() {
             switch(localizeMode) {
                 case ONESHOT:
                     return false;
@@ -152,6 +167,8 @@ namespace loc {
         LocalHeadingBuffer mLocalHeadingBuffer = LocalHeadingBuffer(10); // buffer size 10 is not important.
         
         double headingConfidenceForOrientationInit_ = 0.0;
+        
+        Status::LocationStatus mLocationStatus = Status::UNKNOWN;
         
     public:
         BasicLocalizer();
@@ -220,6 +237,7 @@ namespace loc {
         bool isVerboseLocalizer = false;
         
         StreamParticleFilter::FloorTransitionParameters::Ptr pfFloorTransParams;
+        LocationStatusMonitorParameters::Ptr locationStatusMonitorParameters = std::make_shared<LocationStatusMonitorParameters>();
         
         std::shared_ptr<DataStoreImpl> dataStore;
         
@@ -315,6 +333,9 @@ namespace loc {
             }
             headingConfidenceForOrientationInit_ = confidence;
         }
+        
+        void updateLocationStatus(Status*);
+        
     };
 }
 

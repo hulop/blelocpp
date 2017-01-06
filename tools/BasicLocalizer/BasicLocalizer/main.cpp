@@ -182,6 +182,7 @@ void functionCalledWhenUpdated(void *userData, loc::Status *pStatus){
     if (ud->opt->findRssiBias) {
         ud->status_list.insert(ud->status_list.end(), pStatus);
     } else {
+        std::cout << "locationStatus=" << Status::locationStatusToString(pStatus->locationStatus()) << std::endl;
         if(pStatus->step()==Status::FILTERING_WITH_RESAMPLING ||
            pStatus->step()==Status::FILTERING_WITHOUT_RESAMPLING ||
             pStatus->step()==Status::RESET){
@@ -193,7 +194,7 @@ void functionCalledWhenUpdated(void *userData, loc::Status *pStatus){
                 ud->func = NULL;
             }
         }
-        int i=0;
+
         for(const State& s: *pStatus->states()) {
             auto gs = ud->latLngConverter->localToGlobal(s);
             assert(gs.lat() != 0);
@@ -224,6 +225,7 @@ int main(int argc, char * argv[]) {
 
     auto resetBasicLocalizer = [](Option& opt, MyData& ud){
         BasicLocalizer localizer;
+
         localizer.localizeMode = opt.localizeMode;
         
         localizer.nSmooth = opt.nSmooth;
@@ -240,6 +242,8 @@ int main(int argc, char * argv[]) {
         localizer.minRssiBias(opt.minRssiBias);
         localizer.maxRssiBias(opt.maxRssiBias);
         localizer.normalFunction(opt.normFunc, opt.tDistNu);
+        
+        localizer.headingConfidenceForOrientationInit(0.5);
         
         ud.latLngConverter = localizer.latLngConverter();
         
@@ -348,9 +352,9 @@ int main(int argc, char * argv[]) {
                     // Parsing beacons values
                     if (logString.compare(0, 6, "Beacon") == 0) {
                         Beacons beacons = LogUtil::toBeacons(logString);
+                        //std::cout << "LogReplay:" << beacons.timestamp() << ",Beacon," << beacons.size() << std::endl;
                         localizer.putBeacons(beacons);
                         beaconsRecent = beacons;
-                        
                         // Compute likelihood at recent pose
                         {
                             auto recentPose = ud.recentPose;
@@ -374,13 +378,13 @@ int main(int argc, char * argv[]) {
                     if (logString.compare(0, 9,"Altimeter") == 0){
                         Altimeter alt = LogUtil::toAltimeter(logString);
                         localizer.putAltimeter(alt);
-                        std::cout << "LogReplay:" << alt.timestamp() << ", Altimeter, " << alt.relativeAltitude() << "," << alt.pressure() << std::endl;
+                        //std::cout << "LogReplay:" << alt.timestamp() << ", Altimeter, " << alt.relativeAltitude() << "," << alt.pressure() << std::endl;
                     }
                     if (logString.compare(0, 7,"Heading") == 0){
                         Heading heading = LogUtil::toHeading(logString);
                         localizer.putHeading(heading);
                         LocalHeading localHeading = ud.latLngConverter->headingGlobalToLocal(heading);
-                        std::cout << "LogReplay:" << heading.timestamp() << ", Heading, " << heading.trueHeading() << "," << heading.magneticHeading() << "," << heading.headingAccuracy() << "(localHeading=" << localHeading.orientation() << ")" << std::endl;
+                        //std::cout << "LogReplay:" << heading.timestamp() << ", Heading, " << heading.trueHeading() << "," << heading.magneticHeading() << "," << heading.headingAccuracy() << "(localHeading=" << localHeading.orientation() << ")" << std::endl;
                     }
                     
                     if (opt.usesReset && logString.compare(0, 5, "Reset") == 0) {
