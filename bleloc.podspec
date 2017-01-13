@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "bleloc"
-  s.version      = "1.1.15"
+  s.version      = "1.2.0-alpha"
   s.summary      = "Localization library"
   s.homepage     = "https://github.com/hulop/"
   s.description  = <<-DESC
@@ -9,10 +9,10 @@ This is a localization library for bluetooth le beacons.
 
   s.license      = "MIT"
   s.author    = "HULOP"
-#  s.source       = { :git => "https://github.com/hulop/blelocpp.git", :tag => "v1.1.15" }
+#  s.source       = { :git => "https://github.com/hulop/blelocpp.git", :tag => "v1.2.0-alpha" }
 #  s.preserve_path = "platform/ios/bleloc.framework"
 #  s.vendored_frameworks = "platform/ios/bleloc.framework"
-  s.source       = { :http => "http://github.com/hulop/blelocpp/releases/download/v1.1.15/bleloc.framework.zip" }
+  s.source       = { :http => "http://github.com/hulop/blelocpp/releases/download/v1.2.0-alpha/bleloc.framework.zip" }
   s.preserve_path = "bleloc.framework"
   s.vendored_frameworks = "bleloc.framework"
   s.platforms = {:ios => "8.4"}
