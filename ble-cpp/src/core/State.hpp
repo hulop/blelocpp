@@ -37,6 +37,7 @@ namespace loc{
     class State : public Pose{
     private:
         double orientationBias_ = 0;
+        double orientationAlignment_ = 0;
         double rssiBias_ = 0;
         double weight_ = 1.0;
         double negativeLogLikelihood_;
@@ -50,11 +51,13 @@ namespace loc{
         
         State(const Pose& pose);
         double orientationBias() const;
+        double orientationAlignment() const;
         double rssiBias() const;
         double weight() const;
         double negativeLogLikelihood() const;
         double mahalanobisDistance() const;
         State& orientationBias(double orientationBias);
+        State& orientationAlignment(double orientationAlignment);
         State& rssiBias(double rssiBias);
         State& weight(double weight);
         State& negativeLogLikelihood(double negativeLogLikelihood);

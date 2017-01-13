@@ -82,7 +82,7 @@ namespace loc{
             
             // Add noise to (actually) static parameters just after resampling
             if(wasResampled){
-                // Update only if a device is moving by walking
+                // Update only if a device is moving by active moving (not passive moveing)
                 if(nSteps > 0){
                     double dt_long = (t_cur - previousTimestampResample) * input.timeUnit(); // time interval between resampling steps
                     double sqdt_long = std::sqrt(dt_long);
@@ -104,11 +104,18 @@ namespace loc{
                                                          mPoseProperty->minVelocity(),
                                                          mPoseProperty->maxVelocity());
                     state.normalVelocity(nV);
+                    
+                    // Assign orientationAlignment
+                    state.orientationAlignment(0.0);
+                    if( mRandGen->nextDouble() < wPRWProperty->probabilityBackwardMove()){
+                        double oriBW = M_PI;
+                        state.orientationAlignment(oriBW);
+                    }
                 }
             }
             
+            // update orientation
             double orientationActual = yaw - state.orientationBias();
-            double v = 0.0;
             if(movLevel>0 ){
                 // Add noise to orientation
                 orientationActual = mRandGen->nextWrappedNormal(orientationActual, mPoseProperty->stdOrientation() * sqdt);
@@ -119,6 +126,7 @@ namespace loc{
             state.orientation(orientationActual);
             
             // Update velocity
+            double v = 0.0;
             if(nSteps > 0){
                 double nV = state.normalVelocity();
                 v = nV * velocityRate() * turningVelocityRate;
@@ -131,9 +139,12 @@ namespace loc{
             }
             state.velocity(v);
             
+            // consider orientation alignment
+            double oriActAl = Pose::normalizeOrientaion(orientationActual + state.orientationAlignment());
+            
             // Update in-plane coordinate.
-            double dx_v = state.vx() * dt;
-            double dy_v = state.vy() * dt;
+            double dx_v = state.velocity()*std::cos(oriActAl) * dt;
+            double dy_v = state.velocity()*std::sin(oriActAl) * dt;
             
             double dx_noise = sigma * mRandGen->nextGaussian() * sqdt;
             double dy_noise = sigma * mRandGen->nextGaussian() * sqdt;

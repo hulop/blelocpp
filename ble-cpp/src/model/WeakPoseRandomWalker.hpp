@@ -38,6 +38,8 @@ namespace loc {
         double mPoseRandomWalkRate = 0.5; // defines mixture rate of orientation-based prediction
         double mRandomWalkRate = 0.5; // defines mixture rate of random-walk-based prediction
         
+        double pBackwardMove = 0.0;
+        
     public:
         using Ptr = std::shared_ptr<WeakPoseRandomWalkerProperty>;
         
@@ -69,6 +71,14 @@ namespace loc {
         
         double randomWalkRate() const{
             return mRandomWalkRate;
+        }
+        
+        void probabilityBackwardMove(double probabilityBackwardMove){
+            pBackwardMove = probabilityBackwardMove;
+        }
+        
+        double probabilityBackwardMove() const{
+            return pBackwardMove;
         }
     };
     

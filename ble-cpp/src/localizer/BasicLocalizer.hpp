@@ -32,6 +32,7 @@
 #include "StreamParticleFilter.hpp"
 
 #include "PoseRandomWalker.hpp"
+#include "WeakPoseRandomWalker.hpp"
 
 #include "GridResampler.hpp"
 #include "StatusInitializerStub.hpp"
@@ -221,6 +222,7 @@ namespace loc {
         double probabilityOrientationBiasJump = 0.1;
         double poseRandomWalkRate = 1.0;
         double randomWalkRate = 0.2;
+        double probabilityBackwardMove = 0.0;
         
         int nBurnIn = 1000;
         int burnInRadius2D = 10;
@@ -265,6 +267,7 @@ namespace loc {
         PoseProperty::Ptr poseProperty = PoseProperty::Ptr(new PoseProperty);
         StateProperty::Ptr stateProperty = StateProperty::Ptr(new StateProperty);
         PoseRandomWalkerProperty::Ptr poseRandomWalkerProperty = PoseRandomWalkerProperty::Ptr(new PoseRandomWalkerProperty);
+        WeakPoseRandomWalkerProperty::Ptr wPRWproperty = std::make_shared<WeakPoseRandomWalkerProperty>();
         std::shared_ptr<PoseRandomWalker>poseRandomWalker;
         std::shared_ptr<RandomWalker<State, SystemModelInput>>randomWalker;
         

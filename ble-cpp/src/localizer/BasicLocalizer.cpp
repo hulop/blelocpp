@@ -831,8 +831,8 @@ namespace loc{
             wPRW->setPoseProperty(poseProperty);
             wPRW->setStateProperty(stateProperty);
             
-            WeakPoseRandomWalkerProperty::Ptr wPRWproperty(new WeakPoseRandomWalkerProperty);
             wPRWproperty->probabilityOrientationBiasJump(probabilityOrientationBiasJump);
+            wPRWproperty->probabilityBackwardMove(probabilityBackwardMove);
             wPRWproperty->probabilityOrientationJump(0.0);
             wPRWproperty->poseRandomWalkRate(poseRandomWalkRate);
             wPRWproperty->randomWalkRate(randomWalkRate);

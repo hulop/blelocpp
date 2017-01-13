@@ -33,6 +33,10 @@ namespace  loc {
         return orientationBias_;
     }
     
+    double State::orientationAlignment() const{
+        return orientationAlignment_;
+    }
+    
     double State::rssiBias() const{
         return rssiBias_;
     }
@@ -51,6 +55,11 @@ namespace  loc {
     
     State& State::orientationBias(double orientationBias){
         orientationBias_ = orientationBias;
+        return *this;
+    }
+    
+    State& State::orientationAlignment(double orientationAlignment){
+        orientationAlignment_ = orientationAlignment;
         return *this;
     }
     

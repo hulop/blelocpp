@@ -482,6 +482,7 @@
 				7E6F24E11C0F1D76007A97A1 /* Pose.hpp */,
 				7E6F24E21C0F1D76007A97A1 /* Sample.cpp */,
 				7E6F24E31C0F1D76007A97A1 /* Sample.hpp */,
+				7E6F24E41C0F1D76007A97A1 /* State.cpp */,
 				7E6F24E51C0F1D76007A97A1 /* State.hpp */,
 				7E6F24E61C0F1D76007A97A1 /* Status.cpp */,
 				7E6F24E71C0F1D76007A97A1 /* Status.hpp */,
@@ -551,7 +552,6 @@
 		7E6F25011C0F1D76007A97A1 /* map */ = {
 			isa = PBXGroup;
 			children = (
-				7E6F24E41C0F1D76007A97A1 /* State.cpp */,
 				7E6F25021C0F1D76007A97A1 /* Building.cpp */,
 				7E6F25031C0F1D76007A97A1 /* Building.hpp */,
 				7E6F25041C0F1D76007A97A1 /* CoordinateSystem.hpp */,
