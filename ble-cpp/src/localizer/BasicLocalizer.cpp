@@ -89,11 +89,8 @@ namespace loc{
         if (!isTrackingLocalizer()) {
             return *this;
         }
-        //switch(mState) {
-        //    case UNKNOWN: case LOCATING:
-        //    case TRACKING:
-                mLocalizer->putAttitude(attitude);
-        //}
+        
+        mLocalizer->putAttitude(attitude);
         return *this;
     }
     StreamLocalizer& BasicLocalizer::putAcceleration(const Acceleration acceleration) {
@@ -106,17 +103,11 @@ namespace loc{
         if (!isTrackingLocalizer()) {
             return *this;
         }
-        //switch(mState) {
-        //    case UNKNOWN: case LOCATING:
-        //    case TRACKING:
-        //        mLocalizer->putAcceleration(acceleration);
-        //}
         else{
             if(mLocationStatus==Status::STABLE or mLocationStatus==Status::UNSTABLE){
                 mLocalizer->putAcceleration(acceleration);
             }
         }
-        
         return *this;
     }
     
@@ -148,11 +139,6 @@ namespace loc{
         if (!isTrackingLocalizer()) {
             return *this;
         }
-        //switch(mState) {
-        //    case UNKNOWN: case LOCATING:
-        //    case TRACKING:
-        //        mLocalizer->putAltimeter(altimeter);
-        //}
         else{
             if(mLocationStatus==Status::STABLE or mLocationStatus==Status::UNSTABLE){
                 mLocalizer->putAltimeter(altimeter);
@@ -241,6 +227,15 @@ namespace loc{
                     break;
             }
         */
+        
+        if(isVerboseLocalizer){
+            if(mTrackedStatus){
+                std::cout << "mTrackedStatus exists" << std::endl;
+            }else{
+                std::cout << "mTrackedStatus does not exist" << std::endl;
+            }
+        }
+        
         mLocalizer->getStatus()->locationStatus(mLocationStatus); // ensure innerStatus == mLocationStatus before put method
         
         if(isTrackingLocalizer()){
@@ -250,6 +245,10 @@ namespace loc{
                     break;
                 case(Status::STABLE): case(Status::UNSTABLE):
                     mLocalizer->putBeacons(beaconsTmp);
+                    if(!mTrackedStatus){
+                        mTrackedStatus = std::make_shared<Status>();
+                    }
+                    *mTrackedStatus = *mLocalizer->getStatus();
                     break;
                 case(Status::NIL):
                     BOOST_THROW_EXCEPTION(LocException("location status is not set (NIL)"));
@@ -274,9 +273,47 @@ namespace loc{
         
         bool isStatesConverged = false;
         
+        std::function<NormalParameter()> computeNormalParameterForInit = [&]{
+            double ori;
+            double oridev;
+            if(mTrackedStatus){
+                auto yaw = orientationMeter->getYaw(); // orientationMeter is always updated in putAttitude.
+                auto trackedStates = mTrackedStatus->states();
+                std::vector<double> orientations;
+                for(const auto& s: *trackedStates){
+                    orientations.push_back(s.orientationBias());
+                }
+                auto wnp = MathUtils::computeWrappedNormalParameters(orientations);
+                ori = yaw - wnp.mean();
+                oridev = wnp.stdev();
+            }else{
+                if(mLocalHeadingBuffer.size()>0){
+                    LocalHeading locHead = mLocalHeadingBuffer.back();
+                    ori = locHead.orientation();
+                    double largeOridev = 10.0 * M_PI;
+                    oridev = locHead.orientationDeviation()>0 ? locHead.orientationDeviation() : largeOridev;
+                }else{
+                    BOOST_THROW_EXCEPTION(LocException("Heading has not been input."));
+                }
+            }
+            
+            NormalParameter wnp(ori, oridev);
+            if(isVerboseLocalizer){
+                if(mTrackedStatus){
+                    std::cout << "orientation updated by tracked states (mu,sigma)=" << wnp.mean() << "," << wnp.stdev() << ")" << std::endl;
+                }else{
+                    std::cout << "orientation updated by device heading (mu,sigma)=" << wnp.mean() << "," << wnp.stdev() << ")" << std::endl;
+                }
+            }
+            return wnp;
+        };
+        
+        
         auto statusLatest = mLocalizer->getStatus();
+        auto mResult = std::make_shared<Status>(); // local
         if (smoothType == SMOOTH_LOCATION) {
-            loc::Status *status = new loc::Status(*statusLatest);
+            *mResult = *statusLatest;
+            ////loc::Status *status = new loc::Status(*statusLatest);
             
             int nSmoothTmp;
             //if (isTrackingLocalizer() && mLocationStatus==Status::STABLE) {
@@ -298,32 +335,31 @@ namespace loc{
             }
             mEstimatedRssiBias = meanBias / states->size();
             
-            status->states(states, Status::RESET);
-            status->locationStatus(mLocationStatus);
-            mResult.reset(status);
-            
-            /*
-            double stdev2D = std::sqrt(Location::compute2DVariance(*states));
-            const auto& monitorParams = locationStatusMonitorParameters;
-            if(mLocationStatus == Status::UNKNOWN){
-                if(stdev2D < monitorParams->stdev2DEnterLocating()){
-                    mLocationStatus = Status::LOCATING;
+            // update orientation by heading or tracked orientation
+            bool headingConfidenceIsActive = 0.0<headingConfidenceForOrientationInit_ && headingConfidenceForOrientationInit_<=1.0;
+            if(headingConfidenceIsActive){
+                auto wnp = computeNormalParameterForInit();
+                RandomGenerator randGen;
+                double contamiRate =  std::max(1.0-headingConfidenceForOrientationInit_, 0.0);
+                for(auto& s: *states){
+                    if(randGen.nextDouble() < contamiRate){
+                        s.orientation(Pose::normalizeOrientaion(2.0*M_PI*randGen.nextDouble()));
+                    }else{
+                        s.orientation(randGen.nextWrappedNormal(wnp.mean(), wnp.stdev()));
+                    }
                 }
             }
             
-            bool csc = stdev2D < monitorParams->stdev2DEnterStable();
-            if(csc && smooth_count >=nSmooth){
-                isStatesConverged = true;
-            }
-            */
+            mResult->states(states, Status::RESET);
+            mResult->locationStatus(mLocationStatus);
             
             updateLocationStatus(mResult.get());
             if(mResult->locationStatus() == Status::STABLE){
                 isStatesConverged = true;
             }
-            
         } else {
             mResult.reset(statusLatest);
+            BOOST_THROW_EXCEPTION(LocException("smoothType!=SMOOTH_LOCATION is not supported"));
         }
 
         if (mFunctionCalledAfterUpdate) {
@@ -354,19 +390,12 @@ namespace loc{
             
             mLocationStatus = Status::STABLE;
             
+            // update orientation by heading or tracked orientation
             bool headingConfidenceIsActive = 0.0<headingConfidenceForOrientationInit_ && headingConfidenceForOrientationInit_<=1.0;
             if(headingConfidenceIsActive){
-                if(mLocalHeadingBuffer.size()==0){
-                    BOOST_THROW_EXCEPTION(LocException("Heading has not been input."));
-                }
-                LocalHeading locHead = mLocalHeadingBuffer.back();
-                refPose.orientation(locHead.orientation());
-                double oriDev = locHead.orientationDeviation();
-                if(oriDev>0){
-                    stdevPose.orientation(oriDev);
-                }else{
-                    stdevPose.orientation(largeOridev);
-                }
+                auto wnp = computeNormalParameterForInit();
+                refPose.orientation(wnp.mean());
+                stdevPose.orientation(wnp.stdev());
                 double contamiRate =  std::max(1.0-headingConfidenceForOrientationInit_, 0.0);
                 mLocalizer->getStatus()->locationStatus(mLocationStatus);// must overwrite locationStatus before resetStatus because the callback function is called in resetStatus.
                 mLocalizer->resetStatus(refPose, stdevPose, contamiRate);

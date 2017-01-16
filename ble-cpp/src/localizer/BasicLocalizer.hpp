@@ -137,9 +137,8 @@ namespace loc {
         UserDataBridge userDataBridge;
         void *mUserDataBridge = NULL;
         
-        
-        //LocalizeState mState = UNKNOWN;
-        std::shared_ptr<loc::Status> mResult;
+        //std::shared_ptr<loc::Status> mResult;
+        std::shared_ptr<Status> mTrackedStatus;
         
         std::vector<loc::State> status_list[N_SMOOTH_MAX];
         std::vector<loc::Beacon> beacons_list[N_SMOOTH_MAX];
