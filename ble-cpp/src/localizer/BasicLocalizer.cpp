@@ -488,6 +488,11 @@ namespace loc{
         }
     }
     
+    void BasicLocalizer::overwriteLocationStatus(Status::LocationStatus locStatus){
+        this->getStatus()->locationStatus(locStatus);
+        updateLocationStatus(this->getStatus());
+    }
+    
     Status* BasicLocalizer::getStatus() {
         return mLocalizer->getStatus();
     }

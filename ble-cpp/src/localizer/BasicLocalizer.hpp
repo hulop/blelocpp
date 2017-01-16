@@ -337,7 +337,7 @@ namespace loc {
         }
         
         void updateLocationStatus(Status*);
-        
+        void overwriteLocationStatus(Status::LocationStatus);
     };
 }
 
