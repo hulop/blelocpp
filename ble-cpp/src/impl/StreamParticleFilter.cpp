@@ -267,6 +267,8 @@ namespace loc{
         
         MixtureParameters mMixParams;
         FloorTransitionParameters::Ptr mFloorTransParams = std::make_shared<FloorTransitionParameters>();
+        
+        long previousTimestampMonitoring = 0;;
         LocationStatusMonitorParameters::Ptr mLocStatusMonitorParams = std::make_shared<LocationStatusMonitorParameters>();
         
         //std::queue<Pose> posesForReset;
@@ -491,7 +493,7 @@ namespace loc{
             return statesGen;
         }
         
-        States mixStates(const States& states, const Beacons& beacons, const MixtureParameters& mixParams,
+        States mixStates(const States& states, const Beacons& beacons, const MixtureParameters& mixParams, bool evaluatesLLs,
                        std::vector<State>& allGeneratedStates, std::vector<double>& allGeneratedStatesLogLLs
                        ){
             if( beacons.size() < mixParams.nBeaconsMinimum){
@@ -509,12 +511,11 @@ namespace loc{
             int nGen = static_cast<int>(indices.size());
             
             //// do burn-in even if nGen==0 to evaluate likelihood
-            //if(nGen==0){
-            //    return;
-            //}
+            if(nGen==0 && !evaluatesLLs){
+                return states;
+            }
             
             States statesGen = generateStatesForMix(nGen, beacons, mixParams, allGeneratedStates, allGeneratedStatesLogLLs);
-            
             
             States statesMixed(states);
             //Location locMean = Location::mean(states);
@@ -576,13 +577,25 @@ namespace loc{
             }
 
             long timestamp = beacons.timestamp();
+            
             status->timestamp(timestamp);
             std::shared_ptr<States> states = status->states();
+            
+            bool passedMonitoringInterval = false;
+            if(timestamp - previousTimestampMonitoring > mLocStatusMonitorParams->monitorIntervalMS() ){
+                passedMonitoringInterval = true;
+                previousTimestampMonitoring = timestamp;
+            }
             
             // Compute states mixed with states generated from observations
             std::vector<State> allMixStates;
             std::vector<double> allMixLogLLs;
-            auto statesMixed =  mixStates(*states, beacons, mMixParams, allMixStates, allMixLogLLs);
+            States statesMixed;
+            if(passedMonitoringInterval || mMixParams.mixtureProbability>0){
+                statesMixed = mixStates(*states, beacons, mMixParams, passedMonitoringInterval, allMixStates, allMixLogLLs);
+            }else{
+                statesMixed = *states;
+            }
             if(doesFiltering){
                 // Logging before weights updated
                 logStates(*states, "before_likelihood_states_"+std::to_string(timestamp)+".csv");
@@ -607,10 +620,10 @@ namespace loc{
                 
                 double weightAvgLogLL = std::exp(avgLogLL)/(std::exp(avgLogLL)+std::exp(avgMixLogLL));
                 double wTol = mLocStatusMonitorParams->minimumWeightStable();
-                if(mOptVerbose){
-                    std::cout << "Average logLikelihood (inStates,inMix)=(" << avgLogLL << "," << avgMixLogLL << "), weightInStates=" << weightAvgLogLL << ",wTol=" << wTol << std::endl;
-                }
                 if(!isnan(avgMixLogLL)){
+                    if(mOptVerbose){
+                        std::cout << "Average logLikelihood (inStates,inMix)=(" << avgLogLL << "," << avgMixLogLL << "), weightInStates=" << weightAvgLogLL << ",wTol=" << wTol << std::endl;
+                    }
                     auto locationStatus = status->locationStatus();
                     if(mOptVerbose){
                         std::cout << "locationStatus = " << Status::locationStatusToString(locationStatus) << ", weightInStates=" << weightAvgLogLL << ",wTol=" << wTol << std::endl;

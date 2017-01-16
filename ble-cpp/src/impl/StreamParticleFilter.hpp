@@ -55,6 +55,8 @@ namespace loc {
         double stdev2DEnterLocating_ = 8.0;
         double stdev2DExitLocating_ = 10.0;
         
+        long monitorIntervalMS_ = 3000;
+        
     public:
         using Ptr = std::shared_ptr<LocationStatusMonitorParameters>;
         double minimumWeightStable() const {return minimumWeightStable_;}
@@ -67,6 +69,10 @@ namespace loc {
         void stdev2DExitStable(double stdev2D){stdev2DExitStable_ = stdev2D;}
         void stdev2DEnterLocating(double stdev2D){stdev2DEnterLocating_ = stdev2D;}
         void stdev2DExitLocating(double stdev2D){stdev2DExitLocating_ = stdev2D; }
+        
+        void monitorIntervalMS(long interval){monitorIntervalMS_ = interval;}
+        long monitorIntervalMS() const{return monitorIntervalMS_;}
+        
     };
     
     //template<class Tsys, class Tobs>
