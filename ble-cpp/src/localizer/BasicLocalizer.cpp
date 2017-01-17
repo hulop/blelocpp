@@ -30,6 +30,8 @@
 #include "WeakPoseRandomWalker.hpp"
 #include "AltitudeManagerSimple.hpp"
 
+#include "TransformedOrientationMeterAverage.hpp"
+
 namespace loc{
     // BasicLocalizer
     BasicLocalizer::BasicLocalizer(){
@@ -763,9 +765,13 @@ namespace loc{
         // Orientation
         orientationMeterAverageParameters.interval(0.1);
         orientationMeterAverageParameters.windowAveraging(0.1);
-        orientationMeter = std::shared_ptr<OrientationMeter>(new OrientationMeterAverage(orientationMeterAverageParameters));
-
-        
+        if(orientationMeterType==RAW_AVERAGE){
+            orientationMeter = std::make_shared<OrientationMeterAverage>(orientationMeterAverageParameters);
+        }else if(orientationMeterType==TRANSFORMED_AVERAGE){
+            orientationMeter = std::make_shared<TransformedOrientationMeterAverage>(orientationMeterAverageParameters);
+        }else{
+            BOOST_THROW_EXCEPTION(LocException("unsupported orientation meter type"));
+        }
         // Pedometer
         // TODO
         pedometerWSParams.updatePeriod(0.1);

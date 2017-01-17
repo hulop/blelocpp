@@ -97,6 +97,10 @@ namespace loc {
         SMOOTH_RSSI
     } SmoothType;
     
+    typedef enum{
+        RAW_AVERAGE,
+        TRANSFORMED_AVERAGE
+    } OrientationMeterType;
     
     class LocalHeadingBuffer{
     protected:
@@ -338,6 +342,8 @@ namespace loc {
         
         void updateLocationStatus(Status*);
         void overwriteLocationStatus(Status::LocationStatus);
+        
+        OrientationMeterType orientationMeterType = RAW_AVERAGE;
     };
 }
 
