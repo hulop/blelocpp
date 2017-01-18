@@ -84,6 +84,7 @@
 		FB176CB61D78128B008C1745 /* LatLngConverter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB176CB31D78128B008C1745 /* LatLngConverter.cpp */; };
 		FB3926F01DF9B52A006B6ECB /* AltitudeManagerSimple.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB3926EE1DF9B52A006B6ECB /* AltitudeManagerSimple.cpp */; };
 		FB3926F61DF9B65C006B6ECB /* Altimeter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB3926F41DF9B65C006B6ECB /* Altimeter.cpp */; };
+		FB6ADB4D1E2F40B0009943C0 /* TransformedOrientationMeterAverage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB6ADB4B1E2F40B0009943C0 /* TransformedOrientationMeterAverage.cpp */; };
 		FB7B22901DE484E200FF8BF3 /* SystemModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB7B228F1DE484E200FF8BF3 /* SystemModel.cpp */; };
 		FBBA09FB1DACB89000EB2553 /* Heading.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBBA09F91DACB89000EB2553 /* Heading.cpp */; };
 		FBEB01EF1D7588F200CB808D /* RandomWalkerMotion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBEB01EB1D7588F200CB808D /* RandomWalkerMotion.cpp */; };
@@ -241,6 +242,8 @@
 		FB3926EF1DF9B52A006B6ECB /* AltitudeManagerSimple.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AltitudeManagerSimple.hpp; sourceTree = "<group>"; };
 		FB3926F41DF9B65C006B6ECB /* Altimeter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Altimeter.cpp; sourceTree = "<group>"; };
 		FB3926F51DF9B65C006B6ECB /* Altimeter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Altimeter.hpp; sourceTree = "<group>"; };
+		FB6ADB4B1E2F40B0009943C0 /* TransformedOrientationMeterAverage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TransformedOrientationMeterAverage.cpp; sourceTree = "<group>"; };
+		FB6ADB4C1E2F40B0009943C0 /* TransformedOrientationMeterAverage.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = TransformedOrientationMeterAverage.hpp; sourceTree = "<group>"; };
 		FB7B228F1DE484E200FF8BF3 /* SystemModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SystemModel.cpp; sourceTree = "<group>"; };
 		FBA5E62F1D9E90930027E06F /* LocException.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LocException.hpp; sourceTree = "<group>"; };
 		FBBA09F91DACB89000EB2553 /* Heading.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Heading.cpp; sourceTree = "<group>"; };
@@ -525,6 +528,8 @@
 		7E12B4B11D3474B900614DBB /* sensor */ = {
 			isa = PBXGroup;
 			children = (
+				FB6ADB4B1E2F40B0009943C0 /* TransformedOrientationMeterAverage.cpp */,
+				FB6ADB4C1E2F40B0009943C0 /* TransformedOrientationMeterAverage.hpp */,
 				7E12B4B21D3474B900614DBB /* OrientationMeter.hpp */,
 				7E12B4B31D3474B900614DBB /* OrientationMeterAverage.cpp */,
 				7E12B4B41D3474B900614DBB /* OrientationMeterAverage.hpp */,
@@ -790,6 +795,7 @@
 				7E12B4F71D34767500614DBB /* GridResampler.cpp in Sources */,
 				7E12B4F81D34767500614DBB /* StatusInitializerImpl.cpp in Sources */,
 				FB05F26C1D8ADCCC003B472A /* WeakPoseRandomWalker.cpp in Sources */,
+				FB6ADB4D1E2F40B0009943C0 /* TransformedOrientationMeterAverage.cpp in Sources */,
 				7E12B4F91D34767500614DBB /* StatusInitializerStub.cpp in Sources */,
 				7E12B4FA1D34767500614DBB /* StreamLocalizerStub.cpp in Sources */,
 				FB05F26A1D8ADCCC003B472A /* PosteriorResampler.cpp in Sources */,
