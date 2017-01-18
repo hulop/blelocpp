@@ -57,6 +57,8 @@ public:
     
     double computeKernel(const double x1[], const double x2[]) const override;
     double variance() const override;
+    double sqsum(const double x1[], const double x2[]) const;
+    
     template<class Archive>
     void save(Archive& ar) const;
     template<class Archive>

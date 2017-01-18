@@ -40,6 +40,11 @@ namespace loc{
      ITUModelFunction
      **/
     
+    enum GPType{
+        GPNORMAL,
+        GPLIGHT
+    };
+    
     class ITUModelFunction{
     
     private:
@@ -93,7 +98,8 @@ namespace loc{
         
         std::vector<std::vector<double>> mITUParameters;
         
-        GaussianProcess mGP;
+        //GaussianProcess mGP;
+        std::shared_ptr<GaussianProcess> mGP;
         std::map<long, int> mBeaconIdIndexMap;
         //boost::bimaps::bimap<long, int> mBeaconIdIndexBimap;
         std::vector<double> mRssiStandardDeviations;
@@ -111,7 +117,8 @@ namespace loc{
         std::vector<int> extractKnownBeaconIndices(const Tinput& beacons) const;
         
         friend class GaussianProcessLDPLMultiModelTrainer<Tstate, Tinput>;
-        int version = 1;
+        int version = 2;
+        GPType gpType = GPNORMAL;
         
     public:
         GaussianProcessLDPLMultiModel() = default;
@@ -177,6 +184,9 @@ namespace loc{
             mDataStore = dataStore;
             return *this;
         }
+        
+        GPType gpType = GPLIGHT;
+        
     private:
         std::shared_ptr<DataStore> mDataStore;
     };

@@ -76,43 +76,43 @@ namespace loc{
         template<class Archive>
         void serialize(Archive& ar);
         
-        GaussianProcess& sigmaN(double sigmaN);
-        double sigmaN() const;
+        virtual GaussianProcess& sigmaN(double sigmaN);
+        virtual double sigmaN() const;
         /*
         GaussianProcess& kernel(std::shared_ptr<KernelFunction> kernel){
             mKernel = kernel;
             return *this;
         }
         */
-        GaussianProcess& gaussianProcessParameterSet(const GaussianProcessParameterSet&);
-        GaussianProcess& gaussianKernel(GaussianKernel gaussianKernel);
-        GaussianKernel gaussianKernel() const;
+        virtual GaussianProcess& gaussianProcessParameterSet(const GaussianProcessParameterSet&);
+        virtual GaussianProcess& gaussianKernel(GaussianKernel gaussianKernel);
+        virtual GaussianKernel gaussianKernel() const;
         
-        Eigen::MatrixXd X() const;
-        Eigen::MatrixXd Y() const;
-        GaussianProcess& fit(const Eigen::MatrixXd & X, const Eigen::MatrixXd& Y);
-        GaussianProcess& fit(const Eigen::MatrixXd & X, const Eigen::MatrixXd& Y, const Eigen::MatrixXd& Actives);
-        GaussianProcess& actives(const Eigen::MatrixXd& Actives);
+        virtual Eigen::MatrixXd X() const;
+        virtual Eigen::MatrixXd Y() const;
+        virtual GaussianProcess& fit(const Eigen::MatrixXd & X, const Eigen::MatrixXd& Y);
+        virtual GaussianProcess& fit(const Eigen::MatrixXd & X, const Eigen::MatrixXd& Y, const Eigen::MatrixXd& Actives);
+        virtual GaussianProcess& actives(const Eigen::MatrixXd& Actives);
         
-        Eigen::MatrixXd computeKernelMatrix(const Eigen::MatrixXd& X);
-        Eigen::VectorXd computeKstar(double x[]) const;
+        virtual Eigen::MatrixXd computeKernelMatrix(const Eigen::MatrixXd& X);
+        virtual Eigen::VectorXd computeKstar(double x[]) const;
         
-        Eigen::VectorXd predict(double x[]) const;
-        Eigen::VectorXd predict(const Eigen::VectorXd& kstar) const;
+        virtual Eigen::VectorXd predict(double x[]) const;
+        virtual Eigen::VectorXd predict(const Eigen::VectorXd& kstar) const;
         
-        double predict(double x[], int index);
-        std::vector<double> predict(double x[], const std::vector<int>& indices) const;
-        std::vector<double> predict(const Eigen::VectorXd& kstar, const std::vector<int>& indices) const;
-        Eigen::VectorXd predictVarianceF(double x[]) const;
-        Eigen::VectorXd predictVarianceF(const Eigen::VectorXd& kstar) const;
+        virtual double predict(double x[], int index);
+        virtual std::vector<double> predict(double x[], const std::vector<int>& indices) const;
+        virtual std::vector<double> predict(const Eigen::VectorXd& kstar, const std::vector<int>& indices) const;
+        virtual Eigen::VectorXd predictVarianceF(double x[]) const;
+        virtual Eigen::VectorXd predictVarianceF(const Eigen::VectorXd& kstar) const;
         
-        double computeLogLikelihood(double x[], const Eigen::VectorXd& y) const;
-        double marginalLogLikelihood();
-        double predictiveLogLikelihood();
-        double leaveOneOutMSE();
+        virtual double computeLogLikelihood(double x[], const Eigen::VectorXd& y) const;
+        virtual double marginalLogLikelihood();
+        virtual double predictiveLogLikelihood();
+        virtual double leaveOneOutMSE();
         
-        std::vector<GaussianProcessParameters> createParameterMatrix(const GaussianProcessParameterSet&) const;
-        void fitCV(const Eigen::MatrixXd & X, const Eigen::MatrixXd& Y, const Eigen::MatrixXd& Actives);
+        virtual std::vector<GaussianProcessParameters> createParameterMatrix(const GaussianProcessParameterSet&) const;
+        virtual void fitCV(const Eigen::MatrixXd & X, const Eigen::MatrixXd& Y, const Eigen::MatrixXd& Actives);
     };
 }
 

@@ -24,6 +24,9 @@
 #include "ArrayUtils.hpp"
 #include "SerializeUtils.hpp"
 #include "DataLogger.hpp"
+
+#include "GaussianProcessLight.hpp"
+
 //#include "ExtendedDataUtils.hpp"
 
 namespace loc{
@@ -327,6 +330,13 @@ namespace loc{
     
     template<class Tstate, class Tinput>
     GaussianProcessLDPLMultiModel<Tstate, Tinput>& GaussianProcessLDPLMultiModel<Tstate, Tinput>::train(Samples samples){
+        
+        if(gpType==GPNORMAL){
+            mGP = std::make_shared<GaussianProcess>();
+        }else{
+            mGP = std::make_shared<GaussianProcessLight>();
+        }
+        
         std::vector<Sample> samplesAveraged = Sample::mean(Sample::splitSamplesToConsecutiveSamples(samples)); // averaging consecutive samples
         std::cout << "#samplesAveraged = " << samplesAveraged.size() << std::endl;
         
@@ -393,7 +403,7 @@ namespace loc{
         }
         
         // Training with selection of kernel parameters
-        mGP.fitCV(X, dY, Actives);
+        mGP->fitCV(X, dY, Actives);
         
         // Estimate variance parameter (sigma_n) by using raw (=not averaged) data
         mRssiStandardDeviations = computeRssiStandardDeviations(samples);
@@ -428,7 +438,7 @@ namespace loc{
             
             std::vector<double> xvec = MLAdapter::locationToVec(loc);
             std::vector<int> indices = extractKnownBeaconIndices(bs);
-            std::vector<double> dypreds = mGP.predict(xvec.data(), indices);
+            std::vector<double> dypreds = mGP->predict(xvec.data(), indices);
             
             int i = 0;
             for(const Beacon& b: bs){
@@ -511,7 +521,7 @@ namespace loc{
         
         std::vector<double> xvec = MLAdapter::locationToVec(state);
         std::vector<int> indices = extractKnownBeaconIndices(input);
-        std::vector<double> dypreds = mGP.predict(xvec.data(), indices);
+        std::vector<double> dypreds = mGP->predict(xvec.data(), indices);
         
         int idx_local=0;
         for(auto iter=input.begin(); iter!=input.end(); iter++){
@@ -679,8 +689,19 @@ namespace loc{
         ar(CEREAL_NVP(mBLEBeacons));
         ar(CEREAL_NVP(mITUModelMap));
         ar(CEREAL_NVP(mITUParameters));
-        
-        ar(CEREAL_NVP(mGP));
+
+        if(version<=1){
+            ar(cereal::make_nvp("mGP",*mGP));
+        }else if(version == 2){
+            auto lgp = std::dynamic_pointer_cast<GaussianProcessLight>(mGP);
+            if(lgp){
+                ar(cereal::make_nvp("GaussianProcessLight", *lgp));
+            }else{
+                ar(cereal::make_nvp("GaussianProcess", *mGP));
+            }
+        }else{
+            BOOST_THROW_EXCEPTION(LocException("unsupported version (version=" + std::to_string(version) +")"));
+        }
         ar(CEREAL_NVP(mRssiStandardDeviations));
     }
     
@@ -707,7 +728,25 @@ namespace loc{
         }
             
         ar(CEREAL_NVP(mITUParameters));
-        ar(CEREAL_NVP(mGP));
+        
+        // deserialize gp
+        if(version<=1){
+            GaussianProcess gp;
+            ar(cereal::make_nvp("mGP", gp));
+            this->mGP = std::make_shared<GaussianProcess>(gp);
+        }else if (version==2){
+            try{
+                GaussianProcessLight lgp;
+                ar(cereal::make_nvp("GaussianProcessLight", lgp));
+                this->mGP = std::make_shared<GaussianProcessLight>(lgp);
+            }catch(cereal::Exception& e){
+                GaussianProcess gp;
+                ar(cereal::make_nvp("GaussianProcess", gp));
+                this->mGP = std::make_shared<GaussianProcess>(gp);
+            }
+        }else{
+            BOOST_THROW_EXCEPTION(LocException("unsupported version (version=" + std::to_string(version) +")"));
+        }
         ar(CEREAL_NVP(mRssiStandardDeviations));
         mBeaconIdIndexMap = BLEBeacon::constructBeaconIdToIndexMap(mBLEBeacons);
         mStdevRssiForUnknownBeacon = computeNormalStandardDeviation(mRssiStandardDeviations);
@@ -761,6 +800,9 @@ namespace loc{
             throw ex;
         }
         GaussianProcessLDPLMultiModel<Tstate, Tinput>* obsModel = new GaussianProcessLDPLMultiModel<Tstate, Tinput>();
+        
+        obsModel->gpType = gpType;
+        
         obsModel->bleBeacons(bleBeacons);
         obsModel->train(samplesFiltered);
         

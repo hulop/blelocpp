@@ -42,6 +42,14 @@ double GaussianKernel::variance() const{
     return variance_;
 }
 
+double GaussianKernel::sqsum(const double x1[], const double x2[]) const {
+    double sqsum = 0;
+    for(int i=0; i<ndim; i++){
+        double diff = (x1[i] - x2[i])/params.lengthes[i];
+        sqsum += diff*diff;
+    }
+    return sqsum;
+}
 
 template<class Archive>
 void GaussianKernel::Parameters::serialize(Archive& ar){
