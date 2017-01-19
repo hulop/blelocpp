@@ -75,6 +75,7 @@ namespace loc {
         std::shared_ptr<Impl> impl;
         
         static ImageHolderMode mode_;
+        static bool precomputesIndex;
         
     public:
         class Point{

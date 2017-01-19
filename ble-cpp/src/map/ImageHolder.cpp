@@ -39,6 +39,7 @@ namespace loc{
     }
     
     ImageHolderMode ImageHolder::mode_ = light;
+    bool ImageHolder::precomputesIndex = false;
     
     Color::Color(uint8_t r, uint8_t g, uint8_t b){
         r_ = r;
@@ -109,10 +110,23 @@ namespace loc{
         }
     }
     
+    class IndexWrapper: public cv::flann::Index{
+    public:
+        IndexWrapper(const IndexWrapper& idx) : Index(idx){};
+        IndexWrapper(): Index(){}
+        IndexWrapper(cv::InputArray data,
+                     const cv::flann::IndexParams& params,
+                     cvflann::flann_distance_t distType):
+                    Index(data, params, distType){}
+        ~IndexWrapper(){};
+    };
+    
     class ImageHolder::Impl{
     protected:
         mutable std::mutex mtx_;
         std::map<Color, ImageHolder::Points> mColorPointsMap;
+        
+        mutable std::map<Color, std::shared_ptr<IndexWrapper>> mColorIndexMap;
         std::map<Color, cv::Mat> mColorDataMap;
         
     public:
@@ -132,7 +146,7 @@ namespace loc{
             std::lock_guard<std::mutex> lock(mtx_);
             if(mColorPointsMap.count(c)==0){
                 auto points = getPoints(c);
-                int n = points.size();
+                int n = static_cast<int>(points.size());
                 mColorPointsMap[c] = points;
                 if(n>0){
                     cv::Mat data = cv::Mat::zeros(n, 2, CV_32FC1);
@@ -141,6 +155,9 @@ namespace loc{
                         data.at<float>(j,1) = points.at(j).y;
                     }
                     mColorDataMap[c] = data;
+                    if(ImageHolder::precomputesIndex){
+                        mColorIndexMap[c] = std::make_shared<IndexWrapper>(mColorDataMap[c], cv::flann::KDTreeIndexParams(), cvflann::FLANN_DIST_EUCLIDEAN);
+                    }
                 }
             }
         }
@@ -148,6 +165,7 @@ namespace loc{
         virtual Points findClosestPoints(const Color& c, const ImageHolder::Point& p, int k = 1) const{
             
             std::lock_guard<std::mutex> lock(mtx_);
+            
             if(mColorPointsMap.count(c)==0){
                 LocException ex("Index is not set for the input color");
                 BOOST_THROW_EXCEPTION(ex);
@@ -162,9 +180,21 @@ namespace loc{
             std::vector<int> indices;
             std::vector<float> dists;
             
-            cv::Mat data = mColorDataMap.at(c);
-            cv::flann::Index idx(data, cv::flann::KDTreeIndexParams(), cvflann::FLANN_DIST_EUCLIDEAN);
-            idx.knnSearch(query, indices, dists, k);
+            {
+                if(ImageHolder::precomputesIndex){
+                    std::shared_ptr<IndexWrapper> idx = mColorIndexMap.at(c);
+                    if(idx){
+                        idx->knnSearch(query, indices, dists, k);
+                    }else{
+                        cv::Mat data = mColorDataMap.at(c);
+                        mColorIndexMap[c] = std::make_shared<IndexWrapper>(data, cv::flann::KDTreeIndexParams(), cvflann::FLANN_DIST_EUCLIDEAN);
+                    }
+                }else{
+                    cv::Mat data = mColorDataMap.at(c);
+                    cv::flann::Index idx(data, cv::flann::KDTreeIndexParams(), cvflann::FLANN_DIST_EUCLIDEAN);
+                    idx.knnSearch(query, indices, dists, k);
+                }
+            }
             
             Points psRet(k);
             for(int i=0; i<k; i++){

@@ -43,9 +43,9 @@ namespace loc{
         mImage = image;
         mCoordSys = coordSys;
         
-        for(const Color&c : colorTransitionArea){
-            mImage.setUpIndexForColor(c);
-        }
+        //for(const Color&c : colorTransitionArea){
+        //    mImage.setUpIndexForColor(c);
+        //}
     }
 
     Color FloorMap::getColor(const Location& location) const{
