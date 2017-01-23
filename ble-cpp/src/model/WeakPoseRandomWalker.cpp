@@ -81,10 +81,17 @@ namespace loc{
             sigma = sigma * velocityRate() * turningVelocityRate;
             
             // Add noise to (actually) static parameters just after resampling
-            if(wasResampled){
+            if(wasFiltered){
                 // Update only if a device is moving by active moving (not passive moveing)
                 if(nSteps > 0){
-                    double dt_long = (t_cur - previousTimestampResample) * input.timeUnit(); // time interval between resampling steps
+                    double dt_longTmp = (t_cur - previousTimestampResample) * input.timeUnit(); //time interval between resampling steps
+                    double dt_long; // cap dt_long value
+                    if(wPRWProperty->maxLongTimestep() < dt_longTmp){
+                        dt_long = wPRWProperty->maxLongTimestep();
+                    }else{
+                        dt_long = dt_longTmp;
+                    }
+                    
                     double sqdt_long = std::sqrt(dt_long);
                     // Perturb variables in State (orientationBias, rssiBias)
                     double oriTmp;
@@ -180,16 +187,16 @@ namespace loc{
     
     template<class Ts, class Tin>
     void WeakPoseRandomWalker<Ts, Tin>::endPredictions(const std::vector<Ts>& states, const Tin& input){
-        if(wasResampled){
+        if(wasFiltered){
             previousTimestampResample = input.timestamp();
         }
-        wasResampled = false;
+        wasFiltered = false;
     }
     
     
     template<class Ts, class Tin>
     void WeakPoseRandomWalker<Ts, Tin>::notifyObservationUpdated(){
-        wasResampled = true;
+        wasFiltered = true;
     }
     
     template class WeakPoseRandomWalker<State, SystemModelInput>;

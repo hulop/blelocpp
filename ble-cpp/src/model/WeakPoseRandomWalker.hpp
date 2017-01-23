@@ -40,6 +40,9 @@ namespace loc {
         
         double pBackwardMove = 0.0;
         
+        double mMaxLongTimestep = 1.2;
+        
+        
     public:
         using Ptr = std::shared_ptr<WeakPoseRandomWalkerProperty>;
         
@@ -80,6 +83,14 @@ namespace loc {
         double probabilityBackwardMove() const{
             return pBackwardMove;
         }
+        
+        void maxLongTimestep(double timestep){
+            mMaxLongTimestep = timestep;
+        }
+        
+        double maxLongTimestep() const{
+            return mMaxLongTimestep;
+        }
     };
     
     
@@ -96,7 +107,7 @@ namespace loc {
         WeakPoseRandomWalkerProperty::Ptr wPRWProperty;
         
         bool enabledPredictions = false;
-        bool wasResampled = false;
+        bool wasFiltered = false;
         long previousTimestampResample = 0;
         
     public:
