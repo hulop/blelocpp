@@ -50,6 +50,11 @@ namespace loc{
         return *this;
     }
     
+    DataStoreImpl& DataStoreImpl::locations(Locations locations){
+        mLocations = locations;
+        return *this;
+    }
+    
     const Samples& DataStoreImpl::getSamples() const{
         return mSamples;
     }
@@ -61,5 +66,11 @@ namespace loc{
     const Building& DataStoreImpl::getBuilding() const{
         return mBuilding;
     }
-
+    
+    const Locations& DataStoreImpl::getLocations() const{
+        if(mLocations.size()==0){
+            mLocations = Sample::extractUniqueLocations(mSamples);
+        }
+        return mLocations;
+    }
 }

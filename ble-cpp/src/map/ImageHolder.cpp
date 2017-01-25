@@ -258,9 +258,17 @@ namespace loc{
     class ImageHolder::ImplLight : public ImageHolder::Impl{
         std::string name_;
         Eigen::SparseMatrix<uint8_t> mat_;
+        boost::bimap<Color, uint8_t> colorIntBM;
     public:
-        ImplLight(){}
-        ImplLight(const std::string& filepath, const std::string& name){
+        ImplLight(){
+            using bm_type = boost::bimap<Color, uint8_t>;
+            for(int i=0; i<colorList.size(); i++){
+                const Color& c = colorList.at(i);
+                colorIntBM.insert( bm_type::value_type(c, i));
+            }
+        }
+        
+        ImplLight(const std::string& filepath, const std::string& name) : ImplLight(){
             
             typedef Eigen::Triplet<uint8_t> Triplet;
             
@@ -311,6 +319,23 @@ namespace loc{
                 return colorList.at(0);
             }
         }
+        
+        uint8_t colorToUint8BM(const Color& color) const{
+            if(colorIntBM.left.count(color) != 0){
+                return colorIntBM.left.at(color);
+            }else{
+                return colorIntBM.left.at(color::white);
+            }
+        }
+        
+        Color uint8ToColorBM(uint8_t i) const{
+            if(colorIntBM.right.count(i) != 0){
+                return colorIntBM.right.at(0);
+            }else{
+                return colorIntBM.right.at(i);
+            }
+        }
+        
         
         int rows() const{
             return mat_.rows();

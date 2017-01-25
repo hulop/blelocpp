@@ -366,9 +366,23 @@ namespace loc{
         return sample;
     }
     
+    void DataUtils::csvLocationsToLocations(std::istream& istream, Locations &locations){
+        std::string strBuffer;
+        while(std::getline(istream, strBuffer)){
+            try{
+                Location loc = parseLocationCSV(strBuffer);
+                locations.push_back(loc);
+            } catch (std::invalid_argument e){
+                std::cout << "Invalid csv line was found. line=" <<strBuffer << std::endl;
+            }
+        }
+    }
+    
+    
     void DataUtils::csvSamplesToSamples(std::istream& istream, Samples &samples){
         DataUtils::csvSamplesToSamples(istream, samples, false);
     }
+    
     void DataUtils::csvSamplesToSamples(std::istream& istream, Samples &samples, bool noBeacons){
         std::string strBuffer;
         while(std::getline(istream, strBuffer)){

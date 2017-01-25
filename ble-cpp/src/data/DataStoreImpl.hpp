@@ -40,6 +40,7 @@ namespace loc{
         Samples mSamples;
         BLEBeacons mBLEBeacons;
         Building mBuilding;
+        mutable Locations mLocations;
         
     public:
         using Ptr = std::shared_ptr<DataStoreImpl>;
@@ -50,6 +51,7 @@ namespace loc{
         DataStoreImpl& samples(Samples samples);
         DataStoreImpl& bleBeacons(BLEBeacons bleBeacons);
         DataStoreImpl& building(Building building);
+        DataStoreImpl& locations(Locations locations);
         
         void readSamples(std::istream &is);
         void readSamples(std::istream &is, bool noBeacons);
@@ -57,10 +59,10 @@ namespace loc{
         const BLEBeacons& getBLEBeacons() const override;
         
         const Building& getBuilding() const override;
+        
+        const Locations& getLocations() const override;
     };
     
 }
-
-
 
 #endif /* DataStoreImpl_hpp */

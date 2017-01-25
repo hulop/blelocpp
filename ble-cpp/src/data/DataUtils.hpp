@@ -67,6 +67,8 @@ namespace loc{
         static Sample parseSampleCSV(const std::string& csvLine)  throw (std::invalid_argument);
         static Sample parseSampleCSV(const std::string& csvLine, bool noBeacons)  throw (std::invalid_argument);
         
+        static void csvLocationsToLocations(std::istream& istream, Locations& locations);
+        
         static void csvSamplesToSamples(std::istream& istream, Samples &Samples);
         static void csvSamplesToSamples(std::istream& istream, Samples &Samples, bool noBeacons);
         static Samples csvSamplesToSamples(std::istream& istream);

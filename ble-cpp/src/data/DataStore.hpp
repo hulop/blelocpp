@@ -45,6 +45,8 @@ public:
     virtual const BLEBeacons& getBLEBeacons() const = 0;
     
     virtual const Building& getBuilding() const = 0;
+    
+    virtual const Locations& getLocations() const = 0;
 };
     
 }

@@ -709,25 +709,61 @@ namespace loc{
         // Sampling data
         
         // Samples samples;
-        auto& samples = getArray(json, "samples");
-        for(int i = 0; i < samples.size(); i++) {
-            auto& sample = samples.at(i).get<picojson::value::object>();
-            auto& data = getString(sample, "data");
-            
-            //std::string samplepath = DataUtils::stringToFile(data, workingDir);
-            //std::ifstream is(samplepath);
-            std::istringstream is(data);
-            dataStore->readSamples(is);
-        }
-        {
-            std::cerr << dataStore->getSamples().size() << " samples have been loaded" << std::endl;
+        try{
+            auto& samples = getArray(json, "samples");
+            for(int i = 0; i < samples.size(); i++) {
+                auto& sample = samples.at(i).get<picojson::value::object>();
+                auto& data = getString(sample, "data");
+                
+                //std::string samplepath = DataUtils::stringToFile(data, workingDir);
+                //std::ifstream is(samplepath);
+                std::istringstream is(data);
+                dataStore->readSamples(is);
+            }
+            {
+                std::cerr << dataStore->getSamples().size() << " samples have been loaded" << std::endl;
+            }
+        }catch(const char* ch){
+            std::cerr << "samples have not been loaded." << std::endl;
         }
         msec = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now()-s).count();
         std::cerr << "load sample data: " << msec << "ms" << std::endl;
-        //dataStore->samples(samples);
         
-        // BLE beacon locations
+        // set unique locations to data store 
+        if(dataStore->getSamples().size() != 0){
+            const auto& uniLocs = Sample::extractUniqueLocations(dataStore->getSamples());
+            dataStore->locations(uniLocs);
+        }
         
+        
+        // set sample locations
+        try{
+            auto& locationsJarray = getArray(json, "locations");
+            Locations locations;
+            for(int i = 0; i < locationsJarray.size(); i++) {
+                auto& locationsJobj = locationsJarray.at(i).get<picojson::value::object>();
+                auto& data = getString(locationsJobj, "data");
+                std::istringstream is(data);
+                DataUtils::csvLocationsToLocations(is, locations);
+            }
+            dataStore->locations(locations);
+            {
+                std::cerr << dataStore->getLocations().size() << " locations have been loaded" << std::endl;
+            }
+        }catch(const char* ch){
+            {
+                std::cerr << "locations have not been loaded" << std::endl;
+            }
+        }
+        msec = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now()-s).count();
+        std::cerr << "load location data: " << msec << "ms" << std::endl;
+        
+        if(dataStore->getLocations().size()==0){
+            BOOST_THROW_EXCEPTION(LocException("Neither samples nor locations have been loaded"));
+        }
+        
+        
+        // set BLE beacon locations
         BLEBeacons bleBeacons;
         auto& beacons = getArray(json, "beacons");
         for(int i = 0; i < beacons.size(); i++) {

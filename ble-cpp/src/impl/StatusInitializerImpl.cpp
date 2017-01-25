@@ -130,14 +130,11 @@ namespace loc{
             BOOST_THROW_EXCEPTION(LocException("n==0"));
         }
         
-        const Samples& samples = mDataStore->getSamples();
-        
-        std::vector<Location> uniqueLocations = Sample::extractUniqueLocations(samples);
-        std::vector<Location> movableLocations = extractMovableLocations(uniqueLocations);
-        
         // Filter movable points
-        int countNonMovable = uniqueLocations.size() - movableLocations.size();
-
+        auto uniqueLocations = mDataStore->getLocations();
+        auto movableLocations = extractMovableLocations(uniqueLocations);
+        size_t countNonMovable = uniqueLocations.size() - movableLocations.size();
+        
         std::cout << "Invalid " << countNonMovable << " points are not used for initialization." << std::endl;
         
         // Random sampling
@@ -312,7 +309,7 @@ namespace loc{
     
     Locations StatusInitializerImpl::extractLocationsCloseToBeacons(const std::vector<Beacon> &beacons, double radius2D) const{
         
-        auto& samples = mDataStore->getSamples();
+        auto& uniqueLocations = mDataStore->getLocations();
         auto& bleBeacons = mDataStore->getBLEBeacons();
         
         std::map<long, int> idToIndexMap = BLEBeacon::constructBeaconIdToIndexMap(bleBeacons);
@@ -326,8 +323,7 @@ namespace loc{
             }
         }
         
-        auto locations = Sample::extractUniqueLocations(samples);
-        for(auto& loc: locations){
+        for(auto& loc: uniqueLocations){
             for(auto& bloc: observedBLEBeacons){
                 double dist = Location::distance2D(loc, bloc);
                 double floorDiff = Location::floorDifference(loc, bloc);
@@ -342,9 +338,8 @@ namespace loc{
     }
     
     
-    Locations StatusInitializerImpl::extractLocationsCloseToBeaconsWithPerturbation(const std::vector<Beacon> &beacons, double radius2D) {
+    Locations StatusInitializerImpl::generateLocationsCloseToBeaconsWithPerturbation(const std::vector<Beacon> &beacons, double radius2D) {
         
-        auto& samples = mDataStore->getSamples();
         auto& bleBeacons = mDataStore->getBLEBeacons();
         
         std::map<long, int> idToIndexMap = BLEBeacon::constructBeaconIdToIndexMap(bleBeacons);
@@ -365,19 +360,6 @@ namespace loc{
                 selectedLocations.push_back(newLoc);
             }
         }
-        
-        /*
-        auto locations = Sample::extractUniqueLocations(samples);
-        for(auto& loc: locations){
-            for(auto& bloc: observedBLEBeacons){
-                double dist = Location::distance2D(loc, bloc);
-                double floorDiff = Location::floorDifference(loc, bloc);
-                if(dist <= radius2D && floorDiff==0){
-                    selectedLocations.push_back(loc);
-                    continue;
-                }
-            }
-        }*/
         
         return selectedLocations;
     }

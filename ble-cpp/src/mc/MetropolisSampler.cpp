@@ -49,7 +49,7 @@ namespace loc{
         if (mParams.initType == INIT_WITH_SAMPLE_LOCATIONS) {
             locations = mStatusInitializer->extractLocationsCloseToBeacons(mInput, mParams.radius2D);
         } else if (mParams.initType == INIT_WITH_BEACON_LOCATIONS){
-            locations = mStatusInitializer->extractLocationsCloseToBeaconsWithPerturbation(mInput, mParams.radius2D);
+            locations = mStatusInitializer->generateLocationsCloseToBeaconsWithPerturbation(mInput, mParams.radius2D);
         }
         if(locations.size()==0){
             BOOST_THROW_EXCEPTION(LocException("No location close to beacons was found in sampler."));
@@ -60,7 +60,7 @@ namespace loc{
             if (mParams.initType == INIT_WITH_SAMPLE_LOCATIONS) {
                 locations = mStatusInitializer->extractLocationsCloseToBeacons(mInput, mParams.radius2D);
             } else if (mParams.initType == INIT_WITH_BEACON_LOCATIONS){
-                locations = mStatusInitializer->extractLocationsCloseToBeaconsWithPerturbation(mInput, mParams.radius2D);
+                locations = mStatusInitializer->generateLocationsCloseToBeaconsWithPerturbation(mInput, mParams.radius2D);
             }
 
         }
