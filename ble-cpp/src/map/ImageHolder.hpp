@@ -104,6 +104,9 @@ namespace loc {
         void setUpIndexForColor(const Color& c);
         std::vector<Point> getPoints(const Color& c) const;
         Points findClosestPoints(const Color&c, const Point& p, int k=1) const;
+        
+        static void setPrecomputesIndex(bool precomputesIdx);
+        
     };
     
 }

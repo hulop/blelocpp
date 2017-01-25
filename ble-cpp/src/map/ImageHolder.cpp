@@ -395,4 +395,8 @@ namespace loc{
     ImageHolder::Points ImageHolder::findClosestPoints(const Color& c, const ImageHolder::Point& p, int k) const{
         return impl->findClosestPoints(c, p, k);
     }
+    
+    void ImageHolder::setPrecomputesIndex(bool precomputesIdx){
+        ImageHolder::precomputesIndex = precomputesIdx;
+    }
 }
