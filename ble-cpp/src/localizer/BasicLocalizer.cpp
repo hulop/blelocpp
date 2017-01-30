@@ -185,10 +185,10 @@ namespace loc{
         return beaconsAveraged;
     }
     
-    
+    /*
     bool checkStatesInStdev2D(const std::vector<State>& states, double stdevLimit){
         double var2D = Location::compute2DVariance(states);
-        double stdev2D = std::sqrt(var2D);
+        double stdev2D = std::pow(var2D, 1.0/4.0);
         std::cout << "stdev2D = " << stdev2D << std::endl;
         if(stdev2D < stdevLimit){
             return true;
@@ -196,6 +196,7 @@ namespace loc{
             return false;
         }
     }
+    */
     
     StreamLocalizer& BasicLocalizer::putBeacons(const Beacons beacons) {
         if (!isReady) {
@@ -420,7 +421,7 @@ namespace loc{
         double std2DEnterLocating = params.stdev2DEnterLocating();
         double std2DExitLocating = params.stdev2DExitLocating();
         
-        double std2D = std::sqrt(Location::compute2DVariance(states));
+        double std2D = std::pow(Location::compute2DVariance(states), 1.0/4.0);
         
         Status::LocationStatus newLocStatus = tempLocStatus;
         switch(tempLocStatus){
@@ -462,6 +463,11 @@ namespace loc{
         if(innerStatusWasUpdated){
             newLocStatus = midLocStatus;
         } else {
+            if(this->isVerboseLocalizer){
+                double std2D = std::pow(Location::compute2DVariance(*status->states()), 1.0/4.0);
+                auto stdLoc = Location::standardDeviation(*status->states());
+                std::cout << "std2D=" << std2D << ",stdX="<< stdLoc.x() << ",stdY=" << stdLoc.y()  << std::endl;
+            }
             auto tmpLocStatus = transitLocationStatus(midLocStatus, *status->states(), *locationStatusMonitorParameters);
             if(midLocStatus==Status::LOCATING && tmpLocStatus==Status::STABLE){
                 if(smooth_count>=nSmooth){
