@@ -615,25 +615,31 @@ namespace loc{
             if(monitorsStatus){
                 // Update locationStatus by comparing likelihoods between states and one-shot states
                 
-                double avgLogLL = std::accumulate(vLogLLs.begin(), vLogLLs.end(), 0.0)/vLogLLs.size();
+                double avgCurrentLogLL = std::accumulate(vLogLLs.begin(), vLogLLs.end(), 0.0)/vLogLLs.size();
                 double avgMixLogLL = std::accumulate(allMixLogLLs.begin(), allMixLogLLs.end(), 0.0)/allMixLogLLs.size();
                 
-                double weightAvgLogLL = std::exp(avgLogLL)/(std::exp(avgLogLL)+std::exp(avgMixLogLL));
-                double wTol = mLocStatusMonitorParams->minimumWeightStable();
                 if(!isnan(avgMixLogLL)){
-                    if(mOptVerbose){
-                        std::cout << "Average logLikelihood (inStates,inMix)=(" << avgLogLL << "," << avgMixLogLL << "), weightInStates=" << weightAvgLogLL << ",wTol=" << wTol << std::endl;
-                    }
+                    double maxCurrentLogLL = *std::max_element(vLogLLs.begin(), vLogLLs.end());
+                    double maxMixLogLL = *std::max_element(allMixLogLLs.begin(), allMixLogLLs.end());
+                    
+                    double weightAvgLogLL = std::exp(avgCurrentLogLL)/(std::exp(avgCurrentLogLL)+std::exp(avgMixLogLL));
+                    double weightMaxLogLL = std::exp(maxCurrentLogLL)/(std::exp(maxCurrentLogLL)+std::exp(maxMixLogLL));
+                    double wTol = mLocStatusMonitorParams->minimumWeightStable();
+                    
+                    double weightInStates = weightMaxLogLL;
+                    
                     auto locationStatus = status->locationStatus();
                     if(mOptVerbose){
-                        std::cout << "locationStatus = " << Status::locationStatusToString(locationStatus) << ", weightInStates=" << weightAvgLogLL << ",wTol=" << wTol << std::endl;
+                        std::cout << "locationStatus = " << Status::locationStatusToString(locationStatus) << std::endl;
+                        std::cout << "Average logLikelihood (inStates,inMix)=(" << avgCurrentLogLL << "," << avgMixLogLL << "), weightAvgLogLL=" << weightAvgLogLL << ",wTol=" << wTol << std::endl;
+                        std::cout << "Max logLikelihood (inStates,inMix)=(" << maxCurrentLogLL << "," << maxMixLogLL << "), weightMaxLogLL=" << weightMaxLogLL << ",wTol=" << wTol << std::endl;
                     }
                     if(locationStatus==Status::STABLE){
-                        if(weightAvgLogLL < wTol){
+                        if(weightInStates < wTol){
                             locationStatus=Status::UNSTABLE;
                         }
                     }else if(locationStatus==Status::UNSTABLE){
-                        if(weightAvgLogLL < wTol){
+                        if(weightInStates < wTol){
                             locationStatus=Status::UNKNOWN;
                         }else{
                             locationStatus=Status::STABLE;
