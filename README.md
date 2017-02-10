@@ -1,6 +1,5 @@
 # BLE localization library
-This is a BLE beacon-based localization library.
-It is necessary to build this library as an iOS Framework before building NavCog2.
+A BLE beacon-based localization library. This library is used as an iOS framework in NavCogIOSv3.
 
 ## Prerequisites
 - [cereal version 1.1.2](http://uscilab.github.io/cereal/) (BSD License)
@@ -20,11 +19,7 @@ It is necessary to build this library as an iOS Framework before building NavCog
 - $git clone https://github.com/hulop/blelocpp.git
 - $cd blelocpp/platform/ios
 - $pod install
-- Open the Xcode workspace by typing $open bleloc.xcworkspace
-- Product > Clean
-- Build scheme "bleloc" for Generic iOS device target
-- Remove libPods-bleloc.a from "Link Binary With Libraries" in "Build Phrases" in bleloc project
-- Build scheme "framework" for Generic iOS device target
+- $sh build.sh Release
 
 ----
 ## About
