@@ -35,7 +35,7 @@
 namespace loc{
     // BasicLocalizer
     BasicLocalizer::BasicLocalizer(){
-        pfFloorTransParams = StreamParticleFilter::FloorTransitionParameters::Ptr(new StreamParticleFilter::FloorTransitionParameters);
+        //pfFloorTransParams = StreamParticleFilter::FloorTransitionParameters::Ptr(new StreamParticleFilter::FloorTransitionParameters);
     }
     BasicLocalizer::~BasicLocalizer(){
     }
@@ -842,8 +842,10 @@ namespace loc{
         poseProperty->stdX(1.0);
         poseProperty->stdY(1.0);
         
-        //    stateProperty.meanRssiBias(0.0);
-        stateProperty->meanRssiBias(0.0);
+        this->meanRssiBias(meanRssiBias_);
+        this->minRssiBias(minRssiBias_);
+        this->maxRssiBias(maxRssiBias_);
+        
         stateProperty->stdRssiBias(stdRssiBias);
         stateProperty->diffusionRssiBias(diffusionRssiBias);
         stateProperty->diffusionOrientationBias(diffusionOrientationBias/180.0*M_PI);
@@ -994,21 +996,23 @@ namespace loc{
         if (statusInitializer) {
             statusInitializer->stateProperty(stateProperty);
         }
-        
     }
     
     void BasicLocalizer::meanRssiBias(double b) {
+        meanRssiBias_ = b;
         stateProperty->meanRssiBias(b);
-        updateStateProperty();
+        //updateStateProperty();
     }
 
     void BasicLocalizer::minRssiBias(double b) {
+        minRssiBias_ = b;
         stateProperty->minRssiBias(b);
-        updateStateProperty();
+        //updateStateProperty();
     }
     void BasicLocalizer::maxRssiBias(double b) {
+        maxRssiBias_ = b;
         stateProperty->maxRssiBias(b);
-        updateStateProperty();
+        //updateStateProperty();
     }
     
     /*
@@ -1027,10 +1031,17 @@ namespace loc{
         }
     }
     
+    // for orientation initialization
+    void BasicLocalizer::headingConfidenceForOrientationInit(double confidence){
+        if(!(0.0<=confidence && confidence<=1.0)){
+            BOOST_THROW_EXCEPTION(LocException("range check error (0.0<=confidence && confidence<=1.0)"));
+        }
+        headingConfidenceForOrientationInit_ = confidence;
+    }
+
     LatLngConverter::Ptr BasicLocalizer::latLngConverter(){
         return latLngConverter_;
     }
-    
     
     //LocalHeadingBuffer
     LocalHeadingBuffer::LocalHeadingBuffer(size_t n){

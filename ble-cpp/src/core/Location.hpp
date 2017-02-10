@@ -28,6 +28,7 @@
 #include <cmath>
 
 #include "LatLngUtil.hpp"
+#include "SerializeUtils.hpp"
 
 namespace loc{
     
@@ -99,6 +100,10 @@ namespace loc{
         
         template <class Tlocation>
         static double compute2DVariance(const std::vector<Tlocation>& locations);
+        
+        // serialization
+        template<class Archive>
+        void serialize(Archive& ar);
     };
     
         
@@ -178,6 +183,14 @@ namespace loc{
             }
         }
         return locsNew;
+    }
+    
+    template<class Archive>
+    void Location::serialize(Archive& ar){
+        ar(CEREAL_NVP(x_));
+        ar(CEREAL_NVP(y_));
+        ar(CEREAL_NVP(z_));
+        ar(CEREAL_NVP(floor_));
     }
 }
 

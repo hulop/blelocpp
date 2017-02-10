@@ -73,6 +73,19 @@ namespace loc {
         void monitorIntervalMS(long interval){monitorIntervalMS_ = interval;}
         long monitorIntervalMS() const{return monitorIntervalMS_;}
         
+        template<class Archive>
+        void serialize(Archive & ar, std::uint32_t const version)
+        {
+            if (0 <= version) {
+                ar(CEREAL_NVP(minimumWeightStable_));
+                ar(CEREAL_NVP(stdev2DEnterStable_));
+                ar(CEREAL_NVP(stdev2DExitStable_));
+                ar(CEREAL_NVP(stdevFloorEnterStable_));
+                ar(CEREAL_NVP(stdev2DEnterLocating_));
+                ar(CEREAL_NVP(stdev2DExitLocating_));
+                ar(CEREAL_NVP(monitorIntervalMS_));
+            }
+        }
     };
     
     //template<class Tsys, class Tobs>
@@ -108,6 +121,17 @@ namespace loc {
             double rejectDistance() const;
             FloorTransitionParameters& mixtureProbaTransArea(double);
             FloorTransitionParameters& rejectDistance(double);
+
+            template<class Archive>
+            void serialize(Archive & ar, std::uint32_t const version)
+            {
+                if (0 <= version) {
+                    ar(CEREAL_NVP(heightChangedCriterion_));
+                    ar(CEREAL_NVP(weightTransitionArea_));
+                    ar(CEREAL_NVP(mixtureProbaTransArea_));
+                    ar(CEREAL_NVP(rejectDistance_));
+                }
+            }
         };
         
         StreamParticleFilter();
@@ -170,4 +194,7 @@ namespace loc {
     };
 }
 
+// assign version
+CEREAL_CLASS_VERSION(loc::LocationStatusMonitorParameters, 0);
+CEREAL_CLASS_VERSION(loc::StreamParticleFilter::FloorTransitionParameters, 0);
 #endif /* StreamParticleFilter_hpp */

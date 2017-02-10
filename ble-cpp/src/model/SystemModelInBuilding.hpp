@@ -28,6 +28,7 @@
 #include "RandomWalkerMotion.hpp"
 #include "Building.hpp"
 #include "AltitudeManager.hpp"
+#include "SerializeUtils.hpp"
 
 namespace loc{
     
@@ -111,6 +112,38 @@ namespace loc{
         
         SystemModelInBuildingProperty& probabilityFloorJump(double probability);
         double probabilityFloorJump() const;
+
+        template<class Archive>
+        void serialize(Archive & ar, std::uint32_t const version)
+        {
+            if (0 <= version) {
+                ar(CEREAL_NVP(probabilityUpStair_));
+                ar(CEREAL_NVP(probabilityDownStair_));
+                ar(CEREAL_NVP(probabilityStayStair_));
+
+                ar(CEREAL_NVP(probabilityUpElevator_));
+                ar(CEREAL_NVP(probabilityDownElevator_));
+                ar(CEREAL_NVP(probabilityStayElevator_));
+
+                ar(CEREAL_NVP(probabilityUpEscalator_));
+                ar(CEREAL_NVP(probabilityDownEscalator_));
+                ar(CEREAL_NVP(probabilityStayEscalator_));
+
+                ar(CEREAL_NVP(probabilityFloorJump_));
+
+                ar(CEREAL_NVP(wallCrossingAliveRate_));
+                ar(CEREAL_NVP(maxIncidenceAngle_));
+
+                ar(CEREAL_NVP(velocityRateFloor_));
+                ar(CEREAL_NVP(velocityRateStair_));
+                ar(CEREAL_NVP(velocityRateElevator_));
+                ar(CEREAL_NVP(velocityRateEscalator_));
+
+                ar(CEREAL_NVP(relativeVelocityEscalator_));
+
+                ar(CEREAL_NVP(weightDecayRate_));
+            }
+        }
     };
     
     template<class Tstate, class Tinput>
@@ -174,5 +207,7 @@ namespace loc{
     };
 }
 
+// assign version
+CEREAL_CLASS_VERSION(loc::SystemModelInBuildingProperty, 0);
 
 #endif /* SystemModelInBuilding_hpp */

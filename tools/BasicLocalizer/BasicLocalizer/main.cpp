@@ -49,6 +49,9 @@ typedef struct {
     bool usesReset = false;
     bool usesRestart = false;
     std::string restartLogPath = "";
+    
+    std::string localizerJSONPath = "";
+    
 } Option;
 
 void printHelp() {
@@ -69,6 +72,7 @@ void printHelp() {
     std::cout << " --wc                use wheelchair mode set" << std::endl;
     std::cout << " --reset             use reset in log" << std::endl;
     std::cout << " --restart=<outputpath>  use restart in log (outputpath is optional argument)" << std::endl;
+    std::cout << " --lj                set localizer config json" << std::endl;
 }
 
 Option parseArguments(int argc, char *argv[]){
@@ -85,6 +89,7 @@ Option parseArguments(int argc, char *argv[]){
         {"wc",         no_argument, NULL, 0},
         {"reset",      no_argument, NULL, 0},
         {"restart",    optional_argument , NULL, 0},
+        {"lj",         required_argument , NULL, 0},
         //{"stdY",            required_argument, NULL,  0 },
         {0,         0,                 0,  0 }
     };
@@ -135,6 +140,9 @@ Option parseArguments(int argc, char *argv[]){
                 }else{
                     std::cout << "restart log path is null." << std::endl;
                 }
+            }
+            if (strcmp(long_options[option_index].name, "lj") == 0){
+                opt.localizerJSONPath.assign(optarg);
             }
             break;
         case 'h':
@@ -225,27 +233,54 @@ int main(int argc, char * argv[]) {
 
     auto resetBasicLocalizer = [](Option& opt, MyData& ud){
         BasicLocalizer localizer;
-
-        localizer.localizeMode = opt.localizeMode;
         
-        localizer.nSmooth = opt.nSmooth;
-        localizer.smoothType = opt.smoothType;
-        localizer.nStates = opt.nStates;
+        std::ifstream ifs;
+        if(opt.localizerJSONPath!=""){
+            ifs = std::ifstream(opt.localizerJSONPath);
+        }
+        if(ifs.is_open()){
+            std::cout << "localizerJSON=" << opt.localizerJSONPath << " is opened." << std::endl;
+            //std::cout << ""
+            BasicLocalizerParameters localizerParams;
+            cereal::JSONInputArchive iarchive(ifs);
+            iarchive(localizerParams);
+            localizer = BasicLocalizer(localizerParams);
+            
+        }else{
+            localizer.localizeMode = opt.localizeMode;
+            
+            localizer.nSmooth = opt.nSmooth;
+            localizer.smoothType = opt.smoothType;
+            localizer.nStates = opt.nStates;
+            
+            // Some parameters must be set before calling setModel function.
+            localizer.updateHandler(functionCalledWhenUpdated, &ud);
+            localizer.walkDetectSigmaThreshold = opt.walkDetectSigmaThreshold;
+            
+            localizer.meanRssiBias(opt.meanRssiBias);
+            localizer.minRssiBias(opt.minRssiBias);
+            localizer.maxRssiBias(opt.maxRssiBias);
+            localizer.normalFunction(opt.normFunc, opt.tDistNu);
+            
+            localizer.headingConfidenceForOrientationInit(0.5);
+        }
         
-        localizer.updateHandler(functionCalledWhenUpdated, &ud);
-        localizer.walkDetectSigmaThreshold = opt.walkDetectSigmaThreshold;
+        localizer.isVerboseLocalizer = true;
         
-        // Some parameters must be set before calling setModel function.
         localizer.setModel(opt.mapPath, "./");
         
-        localizer.meanRssiBias(opt.meanRssiBias);
-        localizer.minRssiBias(opt.minRssiBias);
-        localizer.maxRssiBias(opt.maxRssiBias);
-        localizer.normalFunction(opt.normFunc, opt.tDistNu);
-        
-        localizer.headingConfidenceForOrientationInit(0.5);
-        
         ud.latLngConverter = localizer.latLngConverter();
+        
+        bool doSerialize = false;
+        if(doSerialize){
+            std::string strPath = "basic_localizer_params.json";
+            std::ofstream ofs(strPath);
+            if(ofs.is_open()){
+                cereal::JSONOutputArchive oarchive(ofs);
+                BasicLocalizerParameters localizerParams(localizer);
+                oarchive(localizerParams);
+            }
+        }
         
         return localizer;
     };
