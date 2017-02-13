@@ -194,8 +194,9 @@ void functionCalledWhenUpdated(void *userData, loc::Status *pStatus){
         if(pStatus->step()==Status::FILTERING_WITH_RESAMPLING ||
            pStatus->step()==Status::FILTERING_WITHOUT_RESAMPLING ||
             pStatus->step()==Status::RESET){
+            auto ts = pStatus->timestamp();
             auto meanLoc = ud->latLngConverter->localToGlobal(*pStatus->meanLocation());
-            *ud->out << meanLoc << std::endl;
+            *ud->out << ts << "," << meanLoc << std::endl;
             ud->recentPose = *pStatus->meanPose();
             if(ud->func != NULL){
                 ud->func(*pStatus);
@@ -254,21 +255,20 @@ int main(int argc, char * argv[]) {
             localizer.nStates = opt.nStates;
             
             // Some parameters must be set before calling setModel function.
-            localizer.updateHandler(functionCalledWhenUpdated, &ud);
             localizer.walkDetectSigmaThreshold = opt.walkDetectSigmaThreshold;
             
             localizer.meanRssiBias(opt.meanRssiBias);
             localizer.minRssiBias(opt.minRssiBias);
             localizer.maxRssiBias(opt.maxRssiBias);
-            localizer.normalFunction(opt.normFunc, opt.tDistNu);
             
+            localizer.normalFunction(opt.normFunc, opt.tDistNu);
             localizer.headingConfidenceForOrientationInit(0.5);
         }
         
         localizer.isVerboseLocalizer = true;
-        
+
+        localizer.updateHandler(functionCalledWhenUpdated, &ud);
         localizer.setModel(opt.mapPath, "./");
-        
         ud.latLngConverter = localizer.latLngConverter();
         
         bool doSerialize = false;
