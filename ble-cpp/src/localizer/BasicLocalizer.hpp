@@ -276,7 +276,7 @@ namespace loc {
                 ar(CEREAL_NVP(coeffDiffFloorStdev));
 
                 ar(CEREAL_NVP(orientationMeterType));
-
+                
                 // parameter objects
                 ar(CEREAL_NVP(*poseProperty));
                 ar(CEREAL_NVP(*stateProperty));
@@ -284,6 +284,12 @@ namespace loc {
                 ar(CEREAL_NVP(*pfFloorTransParams));
                 ar(CEREAL_NVP(*locationStatusMonitorParameters));
                 ar(CEREAL_NVP(*prwBuildingProperty));
+                
+                // protected
+                ar(CEREAL_NVP(meanRssiBias_));
+                ar(CEREAL_NVP(minRssiBias_));
+                ar(CEREAL_NVP(maxRssiBias_));
+                ar(CEREAL_NVP(headingConfidenceForOrientationInit_));
             }
         }
         
