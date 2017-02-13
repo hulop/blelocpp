@@ -191,6 +191,9 @@ namespace loc {
         OrientationMeterType orientationMeterType = RAW_AVERAGE;
 
         // parameter objects
+        PoseProperty::Ptr poseProperty = std::make_shared<PoseProperty>();
+        StateProperty::Ptr stateProperty = std::make_shared<StateProperty>();
+        
         StreamParticleFilter::FloorTransitionParameters::Ptr pfFloorTransParams = std::make_shared<StreamParticleFilter::FloorTransitionParameters>();
         LocationStatusMonitorParameters::Ptr locationStatusMonitorParameters = std::make_shared<LocationStatusMonitorParameters>();
         SystemModelInBuildingProperty::Ptr prwBuildingProperty = std::make_shared<SystemModelInBuildingProperty>();
@@ -275,6 +278,9 @@ namespace loc {
                 ar(CEREAL_NVP(orientationMeterType));
 
                 // parameter objects
+                ar(CEREAL_NVP(*poseProperty));
+                ar(CEREAL_NVP(*stateProperty));
+                
                 ar(CEREAL_NVP(*pfFloorTransParams));
                 ar(CEREAL_NVP(*locationStatusMonitorParameters));
                 ar(CEREAL_NVP(*prwBuildingProperty));
@@ -361,11 +367,9 @@ namespace loc {
         std::shared_ptr<Pedometer> pedometer;
         
         // parameter objects
-        PoseProperty::Ptr poseProperty = std::make_shared<PoseProperty>();
-        StateProperty::Ptr stateProperty = std::make_shared<StateProperty>();
         PoseRandomWalkerProperty::Ptr poseRandomWalkerProperty = std::make_shared<PoseRandomWalkerProperty>();
         WeakPoseRandomWalkerProperty::Ptr wPRWproperty = std::make_shared<WeakPoseRandomWalkerProperty>();
-
+        
         // system models
         std::shared_ptr<RandomWalker<State, SystemModelInput>>randomWalker;
         std::shared_ptr<PoseRandomWalker>poseRandomWalker;

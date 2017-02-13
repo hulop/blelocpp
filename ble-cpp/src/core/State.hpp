@@ -96,6 +96,24 @@ namespace loc{
         double minRssiBias() const;
         StateProperty& maxRssiBias(double maxRssiBias);
         double maxRssiBias() const;
+        
+        
+        template<class Archive>
+        void serialize(Archive & ar, std::uint32_t const version)
+        {
+            if (0 <= version) {
+                ar(CEREAL_NVP(meanRssiBias_));
+                ar(CEREAL_NVP(stdRssiBias_));
+                ar(CEREAL_NVP(diffusionRssiBias_));
+                ar(CEREAL_NVP(diffusionOrientationBias_));
+                
+                ar(CEREAL_NVP(minRssiBias_));
+                ar(CEREAL_NVP(maxRssiBias_));
+            }
+        }
     };
 }
+
+// assign version
+CEREAL_CLASS_VERSION(loc::StateProperty, 0);
 #endif /* State_hpp */

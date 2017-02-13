@@ -162,7 +162,6 @@ namespace loc {
         
         double meanVelocity_ = 1.0; // [m/s]
         double stdVelocity_ = 0.25; // [m/s]
-        //double driftVelocity = 0.05; // [m/s/s]
         double diffusionVelocity_ = 0.05; // [m/s/s]
         double minVelocity_ = 0.1; // [m/s]
         double maxVelocity_ = 1.5; // [m/s]
@@ -184,7 +183,21 @@ namespace loc {
         double maxVelocity() const;
         PoseProperty& stdOrientation(double stdOrientation);
         double stdOrientation() const;
+        
+        template<class Archive>
+        void serialize(Archive & ar, std::uint32_t const version)
+        {
+            if (0 <= version) {
+                ar(CEREAL_NVP(meanVelocity_));
+                ar(CEREAL_NVP(stdVelocity_));
+                ar(CEREAL_NVP(diffusionVelocity_));
+                ar(CEREAL_NVP(minVelocity_));
+                ar(CEREAL_NVP(maxVelocity_));
+                ar(CEREAL_NVP(stdOrientation_));
+            }
+        }
     };
 }
-
+// assign version
+CEREAL_CLASS_VERSION(loc::PoseProperty, 0);
 #endif /* Pose_hpp */
