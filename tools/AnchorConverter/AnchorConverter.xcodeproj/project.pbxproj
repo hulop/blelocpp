@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		165DE464344BCA8D54755716 /* libPods-AnchorConverter.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E2FC09B7DCFCAB03FF0DF409 /* libPods-AnchorConverter.a */; };
+		FB4850431E6418CB0020ED8F /* Altimeter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB4850411E6418CB0020ED8F /* Altimeter.cpp */; };
+		FB4850461E6418E40020ED8F /* Heading.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB4850441E6418E40020ED8F /* Heading.cpp */; };
 		FBB76B6A1DB8F899003E6294 /* libopencv_flann.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FBB76B691DB8F899003E6294 /* libopencv_flann.dylib */; };
 		FBB76B6C1DB8F8A1003E6294 /* libopencv_core.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FBB76B6B1DB8F8A1003E6294 /* libopencv_core.dylib */; };
 		FBE0F1C01DA3528F006A7885 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBE0F1BF1DA3528F006A7885 /* main.cpp */; };
@@ -45,6 +47,10 @@
 		66690E4BF17C44941FD615B7 /* Pods-AnchorConverter.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AnchorConverter.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AnchorConverter/Pods-AnchorConverter.debug.xcconfig"; sourceTree = "<group>"; };
 		7745DE82F9826069B3EF0CFE /* Pods-AnchorConverter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AnchorConverter.release.xcconfig"; path = "Pods/Target Support Files/Pods-AnchorConverter/Pods-AnchorConverter.release.xcconfig"; sourceTree = "<group>"; };
 		E2FC09B7DCFCAB03FF0DF409 /* libPods-AnchorConverter.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AnchorConverter.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		FB4850411E6418CB0020ED8F /* Altimeter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Altimeter.cpp; path = "../../ble-cpp/src/sensor/Altimeter.cpp"; sourceTree = "<group>"; };
+		FB4850421E6418CB0020ED8F /* Altimeter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Altimeter.hpp; path = "../../ble-cpp/src/sensor/Altimeter.hpp"; sourceTree = "<group>"; };
+		FB4850441E6418E40020ED8F /* Heading.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Heading.cpp; path = "../../ble-cpp/src/core/Heading.cpp"; sourceTree = "<group>"; };
+		FB4850451E6418E40020ED8F /* Heading.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Heading.hpp; path = "../../ble-cpp/src/core/Heading.hpp"; sourceTree = "<group>"; };
 		FBB76B671DB8F88E003E6294 /* libopencv_core.2.4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_core.2.4.dylib; path = ../../../../../../usr/local/Cellar/opencv/2.4.13/lib/libopencv_core.2.4.dylib; sourceTree = "<group>"; };
 		FBB76B691DB8F899003E6294 /* libopencv_flann.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_flann.dylib; path = ../../../../../../usr/local/Cellar/opencv/2.4.13/lib/libopencv_flann.dylib; sourceTree = "<group>"; };
 		FBB76B6B1DB8F8A1003E6294 /* libopencv_core.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_core.dylib; path = ../../../../../../usr/local/Cellar/opencv/2.4.13/lib/libopencv_core.dylib; sourceTree = "<group>"; };
@@ -121,6 +127,15 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		FB4850391E63F79A0020ED8F /* sensor */ = {
+			isa = PBXGroup;
+			children = (
+				FB4850411E6418CB0020ED8F /* Altimeter.cpp */,
+				FB4850421E6418CB0020ED8F /* Altimeter.hpp */,
+			);
+			name = sensor;
+			sourceTree = "<group>";
+		};
 		FBE0F1B31DA3528F006A7885 = {
 			isa = PBXGroup;
 			children = (
@@ -151,6 +166,7 @@
 		FBE0F1C61DA36081006A7885 /* localization-library */ = {
 			isa = PBXGroup;
 			children = (
+				FB4850391E63F79A0020ED8F /* sensor */,
 				FBE0F2141DA36292006A7885 /* utils */,
 				FBE0F1DC1DA3624A006A7885 /* data */,
 				FBE0F1D91DA36232006A7885 /* core */,
@@ -161,6 +177,8 @@
 		FBE0F1D91DA36232006A7885 /* core */ = {
 			isa = PBXGroup;
 			children = (
+				FB4850441E6418E40020ED8F /* Heading.cpp */,
+				FB4850451E6418E40020ED8F /* Heading.hpp */,
 				FBE0F1F01DA36274006A7885 /* Acceleration.cpp */,
 				FBE0F1F11DA36274006A7885 /* Acceleration.hpp */,
 				FBE0F1F21DA36274006A7885 /* Attitude.cpp */,
@@ -314,11 +332,13 @@
 				FBE0F1C01DA3528F006A7885 /* main.cpp in Sources */,
 				FBE0F2201DA362A0006A7885 /* MathUtils.cpp in Sources */,
 				FBE0F1EC1DA36264006A7885 /* DataUtils.cpp in Sources */,
+				FB4850461E6418E40020ED8F /* Heading.cpp in Sources */,
 				FBE0F2121DA36274006A7885 /* State.cpp in Sources */,
 				FBE0F2101DA36274006A7885 /* Pose.cpp in Sources */,
 				FBE0F20C1DA36274006A7885 /* BLEBeacon.cpp in Sources */,
 				FBE0F2111DA36274006A7885 /* Sample.cpp in Sources */,
 				FBE0F21F1DA362A0006A7885 /* LogUtil.cpp in Sources */,
+				FB4850431E6418CB0020ED8F /* Altimeter.cpp in Sources */,
 				FBE0F2211DA362A0006A7885 /* RandomGenerator.cpp in Sources */,
 				FBE0F2131DA36274006A7885 /* Status.cpp in Sources */,
 				FBE0F20D1DA36274006A7885 /* LatLngConverter.cpp in Sources */,
