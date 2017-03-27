@@ -84,8 +84,8 @@
 		FB176CB61D78128B008C1745 /* LatLngConverter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB176CB31D78128B008C1745 /* LatLngConverter.cpp */; };
 		FB3926F01DF9B52A006B6ECB /* AltitudeManagerSimple.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB3926EE1DF9B52A006B6ECB /* AltitudeManagerSimple.cpp */; };
 		FB3926F61DF9B65C006B6ECB /* Altimeter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB3926F41DF9B65C006B6ECB /* Altimeter.cpp */; };
-		FB6ADB4D1E2F40B0009943C0 /* TransformedOrientationMeterAverage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB6ADB4B1E2F40B0009943C0 /* TransformedOrientationMeterAverage.cpp */; };
 		FB6ADB471E2F3FAE009943C0 /* GaussianProcessLight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB6ADB451E2F3FAE009943C0 /* GaussianProcessLight.cpp */; };
+		FB6ADB4D1E2F40B0009943C0 /* TransformedOrientationMeterAverage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB6ADB4B1E2F40B0009943C0 /* TransformedOrientationMeterAverage.cpp */; };
 		FB7B22901DE484E200FF8BF3 /* SystemModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB7B228F1DE484E200FF8BF3 /* SystemModel.cpp */; };
 		FBBA09FB1DACB89000EB2553 /* Heading.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBBA09F91DACB89000EB2553 /* Heading.cpp */; };
 		FBEB01EF1D7588F200CB808D /* RandomWalkerMotion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBEB01EB1D7588F200CB808D /* RandomWalkerMotion.cpp */; };
@@ -243,10 +243,10 @@
 		FB3926EF1DF9B52A006B6ECB /* AltitudeManagerSimple.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AltitudeManagerSimple.hpp; sourceTree = "<group>"; };
 		FB3926F41DF9B65C006B6ECB /* Altimeter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Altimeter.cpp; sourceTree = "<group>"; };
 		FB3926F51DF9B65C006B6ECB /* Altimeter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Altimeter.hpp; sourceTree = "<group>"; };
-		FB6ADB4B1E2F40B0009943C0 /* TransformedOrientationMeterAverage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TransformedOrientationMeterAverage.cpp; sourceTree = "<group>"; };
-		FB6ADB4C1E2F40B0009943C0 /* TransformedOrientationMeterAverage.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = TransformedOrientationMeterAverage.hpp; sourceTree = "<group>"; };
 		FB6ADB451E2F3FAE009943C0 /* GaussianProcessLight.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GaussianProcessLight.cpp; sourceTree = "<group>"; };
 		FB6ADB461E2F3FAE009943C0 /* GaussianProcessLight.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GaussianProcessLight.hpp; sourceTree = "<group>"; };
+		FB6ADB4B1E2F40B0009943C0 /* TransformedOrientationMeterAverage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TransformedOrientationMeterAverage.cpp; sourceTree = "<group>"; };
+		FB6ADB4C1E2F40B0009943C0 /* TransformedOrientationMeterAverage.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = TransformedOrientationMeterAverage.hpp; sourceTree = "<group>"; };
 		FB7B228F1DE484E200FF8BF3 /* SystemModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SystemModel.cpp; sourceTree = "<group>"; };
 		FBA5E62F1D9E90930027E06F /* LocException.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LocException.hpp; sourceTree = "<group>"; };
 		FBBA09F91DACB89000EB2553 /* Heading.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Heading.cpp; sourceTree = "<group>"; };
@@ -609,11 +609,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7E12B44B1D3473D100614DBB /* Build configuration list for PBXNativeTarget "BasicLocalizer" */;
 			buildPhases = (
-				88A4486BDD6C0D087B80C698 /* Check Pods Manifest.lock */,
+				88A4486BDD6C0D087B80C698 /* [CP] Check Pods Manifest.lock */,
 				7E12B4401D3473D100614DBB /* Sources */,
 				7E12B4411D3473D100614DBB /* Frameworks */,
 				7E12B4421D3473D100614DBB /* CopyFiles */,
-				2DBBF8E829A63D5832550FA3 /* Copy Pods Resources */,
+				2DBBF8E829A63D5832550FA3 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -628,12 +628,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7E9239071D53156400875766 /* Build configuration list for PBXNativeTarget "BasicLocalizerTest" */;
 			buildPhases = (
-				0E74348C11881DE10E17A2BC /* Check Pods Manifest.lock */,
+				0E74348C11881DE10E17A2BC /* [CP] Check Pods Manifest.lock */,
 				7E9238FE1D53156400875766 /* Sources */,
 				7E9238FF1D53156400875766 /* Frameworks */,
 				7E9239001D53156400875766 /* Resources */,
-				F81BFF9C52C1B540FA3EC0D8 /* Embed Pods Frameworks */,
-				E18A060AEEA348FEC8D39A72 /* Copy Pods Resources */,
+				F81BFF9C52C1B540FA3EC0D8 /* [CP] Embed Pods Frameworks */,
+				E18A060AEEA348FEC8D39A72 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -690,29 +690,29 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		0E74348C11881DE10E17A2BC /* Check Pods Manifest.lock */ = {
+		0E74348C11881DE10E17A2BC /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Check Pods Manifest.lock";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		2DBBF8E829A63D5832550FA3 /* Copy Pods Resources */ = {
+		2DBBF8E829A63D5832550FA3 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Copy Pods Resources";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -720,29 +720,29 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-BasicLocalizer/Pods-BasicLocalizer-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		88A4486BDD6C0D087B80C698 /* Check Pods Manifest.lock */ = {
+		88A4486BDD6C0D087B80C698 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Check Pods Manifest.lock";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		E18A060AEEA348FEC8D39A72 /* Copy Pods Resources */ = {
+		E18A060AEEA348FEC8D39A72 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Copy Pods Resources";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -750,14 +750,14 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-BasicLocalizerTest/Pods-BasicLocalizerTest-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		F81BFF9C52C1B540FA3EC0D8 /* Embed Pods Frameworks */ = {
+		F81BFF9C52C1B540FA3EC0D8 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Embed Pods Frameworks";
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -816,7 +816,6 @@
 				7E9239411D547A5600875766 /* LatLngUtil.cpp in Sources */,
 				7E12B5061D34767500614DBB /* GaussianProcess.cpp in Sources */,
 				7E12B5071D34767500614DBB /* GaussianProcessLDPLMultiModel.cpp in Sources */,
-				FB6ADB4A1E2F4051009943C0 /* TransformedOrientationMeterAverage.cpp in Sources */,
 				7E12B5081D34767500614DBB /* KernelFunction.cpp in Sources */,
 				7E12B5091D34767500614DBB /* PoseRandomWalker.cpp in Sources */,
 				7E12B50B1D34767500614DBB /* RandomWalker.cpp in Sources */,
@@ -949,15 +948,9 @@
 					"\"${PODS_ROOT}/Headers/Public/cereal\"",
 					"\"${PODS_ROOT}/Headers/Public/eigen\"",
 					"\"${PODS_ROOT}/Headers/Public/picojson\"",
-					"\"/usr/local/Cellar/opencv/2.4.13/include/\"",
-					"\"/usr/local/Cellar/opencv/2.4.12_2/include/\"",
-					"\"/usr/local/Cellar/opencv/2.4.12/include/\"",
+					"\"/usr/local/Cellar/opencv/\"/**",
 				);
-				LIBRARY_SEARCH_PATHS = (
-					/usr/local/Cellar/opencv/2.4.13/lib,
-					/usr/local/Cellar/opencv/2.4.12_2/lib,
-					/usr/local/Cellar/opencv/2.4.12/lib,
-				);
+				LIBRARY_SEARCH_PATHS = "/usr/local/Cellar/opencv/**";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -976,15 +969,9 @@
 					"\"${PODS_ROOT}/Headers/Public/cereal\"",
 					"\"${PODS_ROOT}/Headers/Public/eigen\"",
 					"\"${PODS_ROOT}/Headers/Public/picojson\"",
-					"\"/usr/local/Cellar/opencv/2.4.13/include/\"",
-					"\"/usr/local/Cellar/opencv/2.4.12_2/include/\"",
-					"\"/usr/local/Cellar/opencv/2.4.12/include/\"",
+					"\"/usr/local/Cellar/opencv/\"/**",
 				);
-				LIBRARY_SEARCH_PATHS = (
-					/usr/local/Cellar/opencv/2.4.13/lib,
-					/usr/local/Cellar/opencv/2.4.12_2/lib,
-					/usr/local/Cellar/opencv/2.4.12/lib,
-				);
+				LIBRARY_SEARCH_PATHS = "/usr/local/Cellar/opencv/**";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

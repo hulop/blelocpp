@@ -639,8 +639,8 @@ namespace loc{
                 LocException ex(std::string(e.what()));
                 BOOST_THROW_EXCEPTION(ex);
             } catch(const char* ch){
-                LocException ex((std::string(ch)));
-                BOOST_THROW_EXCEPTION(ex);
+                //LocException ex((std::string(ch)));
+                //BOOST_THROW_EXCEPTION(ex);
             } catch(...){
                 BOOST_THROW_EXCEPTION(LocException("..."));
             }
