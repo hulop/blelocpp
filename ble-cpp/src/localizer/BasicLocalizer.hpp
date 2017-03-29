@@ -258,6 +258,8 @@ namespace loc {
         bool usesAltimeterForFloorTransCheck = false;
         double coeffDiffFloorStdev = 5.0;
         
+        bool forceTraining = false;
+        
         // parameters
         OrientationMeterAverageParameters orientationMeterAverageParameters;
         std::shared_ptr<OrientationMeter> orientationMeter;

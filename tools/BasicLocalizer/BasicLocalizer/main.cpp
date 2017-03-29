@@ -48,6 +48,7 @@ typedef struct {
     double walkDetectSigmaThreshold = 0.6;
     bool usesReset = false;
     bool usesRestart = false;
+    bool forceTraining = false;
     std::string restartLogPath = "";
 } Option;
 
@@ -55,6 +56,7 @@ void printHelp() {
     std::cout << "Options for Basic Localizer" << std::endl;
     std::cout << " -h                  show this help" << std::endl;
     std::cout << " -m mapfile          set map data file" << std::endl;
+    std::cout << " --train             force training parameters" << std::endl;
     std::cout << " -t testfile         set test csv data file" << std::endl;
     std::cout << " -o output           set output file" << std::endl;
     std::cout << " -n                  use normal distribution" << std::endl;
@@ -85,6 +87,8 @@ Option parseArguments(int argc, char *argv[]){
         {"wc",         no_argument, NULL, 0},
         {"reset",      no_argument, NULL, 0},
         {"restart",    optional_argument , NULL, 0},
+        {"train",    no_argument , NULL, 0},
+        
         //{"stdY",            required_argument, NULL,  0 },
         {0,         0,                 0,  0 }
     };
@@ -135,6 +139,9 @@ Option parseArguments(int argc, char *argv[]){
                 }else{
                     std::cout << "restart log path is null." << std::endl;
                 }
+            }
+            if (strcmp(long_options[option_index].name, "train") == 0){
+                opt.forceTraining = true;
             }
             break;
         case 'h':
@@ -236,6 +243,7 @@ int main(int argc, char * argv[]) {
         localizer.walkDetectSigmaThreshold = opt.walkDetectSigmaThreshold;
         
         // Some parameters must be set before calling setModel function.
+        localizer.forceTraining = opt.forceTraining;
         localizer.setModel(opt.mapPath, "./");
         
         localizer.meanRssiBias(opt.meanRssiBias);

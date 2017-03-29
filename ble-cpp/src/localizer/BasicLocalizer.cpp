@@ -784,7 +784,7 @@ namespace loc{
         msec = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now()-s).count();
         std::cerr << "load beacon data: " << msec << "ms" << std::endl;
         
-        if(doTraining){
+        if(doTraining || forceTraining){
             std::cerr << "Training will be processed" << std::endl;
             // Train observation model
             std::shared_ptr<GaussianProcessLDPLMultiModelTrainer<State, Beacons>>obsModelTrainer( new GaussianProcessLDPLMultiModelTrainer<State, Beacons>());
