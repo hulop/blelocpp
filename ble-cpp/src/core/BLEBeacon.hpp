@@ -122,15 +122,22 @@ namespace loc{
     bool BLEBeacon::checkNoDuplication(const std::vector<Tbeacon>& beacons){
         std::set<long> ids;
         bool flag = true;
+        std::stringstream ss;
+        int count = 0;
         for(Tbeacon b: beacons){
             long id = Beacon::convertMajorMinorToId(b.major(), b.minor());
             if(ids.count(id)>0){
-                std::stringstream ss;
-                ss << "BLEBeacon(major=" << b.major() <<", minor=" << b.minor() << ") is duplicated";
+                ss << "BLEBeacon(major=" << b.major() <<", minor=" << b.minor() << ") is duplicated" << std::endl ;
                 flag = false;
-                BOOST_THROW_EXCEPTION(LocException(ss.str()));
+                count += 1;
             }
             ids.insert(id);
+        }
+        if(!flag){
+            std::stringstream ss2;
+            ss2 << "Total " << count << " registered beacons are duplicated." << std::endl;
+            ss2 << ss.str();
+            BOOST_THROW_EXCEPTION(LocException(ss2.str()));
         }
         return flag;
     }
