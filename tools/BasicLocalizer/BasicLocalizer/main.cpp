@@ -51,6 +51,7 @@ typedef struct {
     std::string restartLogPath = "";
     
     std::string localizerJSONPath = "";
+    std::string outputLocalizerJSONPath ="";
     
 } Option;
 
@@ -73,6 +74,7 @@ void printHelp() {
     std::cout << " --reset             use reset in log" << std::endl;
     std::cout << " --restart=<outputpath>  use restart in log (outputpath is optional argument)" << std::endl;
     std::cout << " --lj                set localizer config json" << std::endl;
+    std::cout << " --oj                output path for localizer config json" << std::endl;
 }
 
 Option parseArguments(int argc, char *argv[]){
@@ -90,6 +92,7 @@ Option parseArguments(int argc, char *argv[]){
         {"reset",      no_argument, NULL, 0},
         {"restart",    optional_argument , NULL, 0},
         {"lj",         required_argument , NULL, 0},
+        {"oj",         required_argument , NULL, 0},
         //{"stdY",            required_argument, NULL,  0 },
         {0,         0,                 0,  0 }
     };
@@ -143,6 +146,9 @@ Option parseArguments(int argc, char *argv[]){
             }
             if (strcmp(long_options[option_index].name, "lj") == 0){
                 opt.localizerJSONPath.assign(optarg);
+            }
+            if (strcmp(long_options[option_index].name, "oj") == 0){
+                opt.outputLocalizerJSONPath.assign(optarg);
             }
             break;
         case 'h':
@@ -249,11 +255,9 @@ int main(int argc, char * argv[]) {
             
         }else{
             localizer.localizeMode = opt.localizeMode;
-            
             localizer.nSmooth = opt.nSmooth;
             localizer.smoothType = opt.smoothType;
             localizer.nStates = opt.nStates;
-            
             // Some parameters must be set before calling setModel function.
             localizer.walkDetectSigmaThreshold = opt.walkDetectSigmaThreshold;
             
@@ -265,15 +269,13 @@ int main(int argc, char * argv[]) {
             localizer.headingConfidenceForOrientationInit(0.5);
         }
         
-        localizer.isVerboseLocalizer = true;
-
+        localizer.isVerboseLocalizer = false;
         localizer.updateHandler(functionCalledWhenUpdated, &ud);
         localizer.setModel(opt.mapPath, "./");
         ud.latLngConverter = localizer.latLngConverter();
         
-        bool doSerialize = false;
-        if(doSerialize){
-            std::string strPath = "basic_localizer_params.json";
+        if(opt.outputLocalizerJSONPath!=""){
+            std::string strPath = opt.outputLocalizerJSONPath;
             std::ofstream ofs(strPath);
             if(ofs.is_open()){
                 cereal::JSONOutputArchive oarchive(ofs);
