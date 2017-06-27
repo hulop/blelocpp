@@ -609,7 +609,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7E12B44B1D3473D100614DBB /* Build configuration list for PBXNativeTarget "BasicLocalizer" */;
 			buildPhases = (
-				88A4486BDD6C0D087B80C698 /* Check Pods Manifest.lock */,
+				88A4486BDD6C0D087B80C698 /* [CP] Check Pods Manifest.lock */,
 				7E12B4401D3473D100614DBB /* Sources */,
 				7E12B4411D3473D100614DBB /* Frameworks */,
 				7E12B4421D3473D100614DBB /* CopyFiles */,
@@ -629,12 +629,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7E9239071D53156400875766 /* Build configuration list for PBXNativeTarget "BasicLocalizerTest" */;
 			buildPhases = (
-				0E74348C11881DE10E17A2BC /* Check Pods Manifest.lock */,
+				0E74348C11881DE10E17A2BC /* [CP] Check Pods Manifest.lock */,
 				7E9238FE1D53156400875766 /* Sources */,
 				7E9238FF1D53156400875766 /* Frameworks */,
 				7E9239001D53156400875766 /* Resources */,
-				F81BFF9C52C1B540FA3EC0D8 /* Embed Pods Frameworks */,
-				E18A060AEEA348FEC8D39A72 /* Copy Pods Resources */,
+				F81BFF9C52C1B540FA3EC0D8 /* [CP] Embed Pods Frameworks */,
+				E18A060AEEA348FEC8D39A72 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -691,29 +691,29 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		0E74348C11881DE10E17A2BC /* Check Pods Manifest.lock */ = {
+		0E74348C11881DE10E17A2BC /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Check Pods Manifest.lock";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		2DBBF8E829A63D5832550FA3 /* Copy Pods Resources */ = {
+		2DBBF8E829A63D5832550FA3 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Copy Pods Resources";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -721,29 +721,29 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-BasicLocalizer/Pods-BasicLocalizer-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		88A4486BDD6C0D087B80C698 /* Check Pods Manifest.lock */ = {
+		88A4486BDD6C0D087B80C698 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Check Pods Manifest.lock";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		E18A060AEEA348FEC8D39A72 /* Copy Pods Resources */ = {
+		E18A060AEEA348FEC8D39A72 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Copy Pods Resources";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -751,14 +751,14 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-BasicLocalizerTest/Pods-BasicLocalizerTest-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		F81BFF9C52C1B540FA3EC0D8 /* Embed Pods Frameworks */ = {
+		F81BFF9C52C1B540FA3EC0D8 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Embed Pods Frameworks";
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -962,15 +962,9 @@
 					"\"${PODS_ROOT}/Headers/Public/cereal\"",
 					"\"${PODS_ROOT}/Headers/Public/eigen\"",
 					"\"${PODS_ROOT}/Headers/Public/picojson\"",
-					"\"/usr/local/Cellar/opencv/2.4.13/include/\"",
-					"\"/usr/local/Cellar/opencv/2.4.12_2/include/\"",
-					"\"/usr/local/Cellar/opencv/2.4.12/include/\"",
+					"\"/usr/local/Cellar/opencv/\"/**",
 				);
-				LIBRARY_SEARCH_PATHS = (
-					/usr/local/Cellar/opencv/2.4.13/lib,
-					/usr/local/Cellar/opencv/2.4.12_2/lib,
-					/usr/local/Cellar/opencv/2.4.12/lib,
-				);
+				LIBRARY_SEARCH_PATHS = "/usr/local/Cellar/opencv/**";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -989,15 +983,9 @@
 					"\"${PODS_ROOT}/Headers/Public/cereal\"",
 					"\"${PODS_ROOT}/Headers/Public/eigen\"",
 					"\"${PODS_ROOT}/Headers/Public/picojson\"",
-					"\"/usr/local/Cellar/opencv/2.4.13/include/\"",
-					"\"/usr/local/Cellar/opencv/2.4.12_2/include/\"",
-					"\"/usr/local/Cellar/opencv/2.4.12/include/\"",
+					"\"/usr/local/Cellar/opencv/\"/**",
 				);
-				LIBRARY_SEARCH_PATHS = (
-					/usr/local/Cellar/opencv/2.4.13/lib,
-					/usr/local/Cellar/opencv/2.4.12_2/lib,
-					/usr/local/Cellar/opencv/2.4.12/lib,
-				);
+				LIBRARY_SEARCH_PATHS = "/usr/local/Cellar/opencv/**";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

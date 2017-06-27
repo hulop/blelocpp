@@ -48,6 +48,7 @@ typedef struct {
     double walkDetectSigmaThreshold = 0.6;
     bool usesReset = false;
     bool usesRestart = false;
+    bool forceTraining = false;
     std::string restartLogPath = "";
     
     std::string localizerJSONPath = "";
@@ -59,6 +60,7 @@ void printHelp() {
     std::cout << "Options for Basic Localizer" << std::endl;
     std::cout << " -h                  show this help" << std::endl;
     std::cout << " -m mapfile          set map data file" << std::endl;
+    std::cout << " --train             force training parameters" << std::endl;
     std::cout << " -t testfile         set test csv data file" << std::endl;
     std::cout << " -o output           set output file" << std::endl;
     std::cout << " -n                  use normal distribution" << std::endl;
@@ -93,6 +95,7 @@ Option parseArguments(int argc, char *argv[]){
         {"restart",    optional_argument , NULL, 0},
         {"lj",         required_argument , NULL, 0},
         {"oj",         required_argument , NULL, 0},
+        {"train",    no_argument , NULL, 0},
         //{"stdY",            required_argument, NULL,  0 },
         {0,         0,                 0,  0 }
     };
@@ -149,6 +152,9 @@ Option parseArguments(int argc, char *argv[]){
             }
             if (strcmp(long_options[option_index].name, "oj") == 0){
                 opt.outputLocalizerJSONPath.assign(optarg);
+            }
+            if (strcmp(long_options[option_index].name, "train") == 0){
+                opt.forceTraining = true;
             }
             break;
         case 'h':
@@ -247,12 +253,10 @@ int main(int argc, char * argv[]) {
         }
         if(ifs.is_open()){
             std::cout << "localizerJSON=" << opt.localizerJSONPath << " is opened." << std::endl;
-            //std::cout << ""
             BasicLocalizerParameters localizerParams;
             cereal::JSONInputArchive iarchive(ifs);
             iarchive(localizerParams);
             localizer = BasicLocalizer(localizerParams);
-            
         }else{
             localizer.localizeMode = opt.localizeMode;
             localizer.nSmooth = opt.nSmooth;
@@ -271,6 +275,7 @@ int main(int argc, char * argv[]) {
         
         localizer.isVerboseLocalizer = false;
         localizer.updateHandler(functionCalledWhenUpdated, &ud);
+        localizer.forceTraining = opt.forceTraining;
         localizer.setModel(opt.mapPath, "./");
         ud.latLngConverter = localizer.latLngConverter();
         

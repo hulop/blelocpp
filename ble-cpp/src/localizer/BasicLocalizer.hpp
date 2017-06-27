@@ -366,6 +366,8 @@ namespace loc {
          */
         double estimatedRssiBias();
         
+        bool forceTraining = false;
+        
         OrientationMeterAverageParameters orientationMeterAverageParameters;
         std::shared_ptr<OrientationMeter> orientationMeter;
         

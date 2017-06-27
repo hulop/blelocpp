@@ -3,7 +3,7 @@ xcodeproj 'BasicLocalizer'
 target 'BasicLocalizer' do
   platform :osx
   pod 'boost', :podspec => '../../platform/ios/podspecs/boost.podspec.json'
-  pod 'eigen'
+  pod 'eigen', '3.2.5'
   pod 'picojson', :podspec => '../../platform/ios/podspecs/picojson.podspec'
   pod 'cereal', :podspec => '../../platform/ios/podspecs/cereal.podspec'
 end
@@ -12,7 +12,7 @@ end
 target 'BasicLocalizerTest' do
   platform :osx
   pod 'boost', :podspec => '../../platform/ios/podspecs/boost.podspec.json'
-  pod 'eigen'
+  pod 'eigen', '3.2.5'
   pod 'picojson', :podspec => '../../platform/ios/podspecs/picojson.podspec'
   pod 'cereal', :podspec => '../../platform/ios/podspecs/cereal.podspec'
 end
