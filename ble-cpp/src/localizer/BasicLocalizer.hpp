@@ -67,6 +67,7 @@
 namespace loc {
     
     class BasicLocalizerParameters;
+    class BasicLocalizerOptions;
     class BasicLocalizer;
     
     typedef struct {
@@ -295,6 +296,11 @@ namespace loc {
         
     };
     
+    class BasicLocalizerOptions{
+    public:
+        GPType gpType = GPNORMAL;
+    };
+    
     class BasicLocalizer: public StreamLocalizer, public BasicLocalizerParameters{
         
     private:
@@ -367,6 +373,7 @@ namespace loc {
         double estimatedRssiBias();
         
         bool forceTraining = false;
+        BasicLocalizerOptions basicLocalizerOptions;
         
         OrientationMeterAverageParameters orientationMeterAverageParameters;
         std::shared_ptr<OrientationMeter> orientationMeter;

@@ -54,6 +54,7 @@ typedef struct {
     std::string localizerJSONPath = "";
     std::string outputLocalizerJSONPath ="";
     
+    BasicLocalizerOptions basicLocalizerOptions;
 } Option;
 
 void printHelp() {
@@ -61,6 +62,7 @@ void printHelp() {
     std::cout << " -h                  show this help" << std::endl;
     std::cout << " -m mapfile          set map data file" << std::endl;
     std::cout << " --train             force training parameters" << std::endl;
+    std::cout << " --gptype <string>   set gptype [normal,light] for training" << std::endl;
     std::cout << " -t testfile         set test csv data file" << std::endl;
     std::cout << " -o output           set output file" << std::endl;
     std::cout << " -n                  use normal distribution" << std::endl;
@@ -97,6 +99,7 @@ Option parseArguments(int argc, char *argv[]){
         {"oj",         required_argument , NULL, 0},
         {"train",    no_argument , NULL, 0},
         //{"stdY",            required_argument, NULL,  0 },
+        {"gptype",   required_argument , NULL, 0},
         {0,         0,                 0,  0 }
     };
 
@@ -155,6 +158,17 @@ Option parseArguments(int argc, char *argv[]){
             }
             if (strcmp(long_options[option_index].name, "train") == 0){
                 opt.forceTraining = true;
+            }
+            if (strcmp(long_options[option_index].name, "gptype") == 0){
+                std::string str(optarg);
+                if(str=="normal"){
+                    opt.basicLocalizerOptions.gpType = GPNORMAL;
+                }else if(str=="light"){
+                    opt.basicLocalizerOptions.gpType = GPLIGHT;
+                }else{
+                    std::cerr << "Unknown gptype: " << optarg << std::endl;
+                    abort();
+                }
             }
             break;
         case 'h':
@@ -276,6 +290,7 @@ int main(int argc, char * argv[]) {
         localizer.isVerboseLocalizer = false;
         localizer.updateHandler(functionCalledWhenUpdated, &ud);
         localizer.forceTraining = opt.forceTraining;
+        localizer.basicLocalizerOptions = opt.basicLocalizerOptions;
         localizer.setModel(opt.mapPath, "./");
         ud.latLngConverter = localizer.latLngConverter();
         

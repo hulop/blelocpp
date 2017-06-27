@@ -788,6 +788,7 @@ namespace loc{
             std::cerr << "Training will be processed" << std::endl;
             // Train observation model
             std::shared_ptr<GaussianProcessLDPLMultiModelTrainer<State, Beacons>>obsModelTrainer( new GaussianProcessLDPLMultiModelTrainer<State, Beacons>());
+            obsModelTrainer->setGPType(basicLocalizerOptions.gpType);
             obsModelTrainer->dataStore(dataStore);
             std::shared_ptr<GaussianProcessLDPLMultiModel<State, Beacons>> obsModel( obsModelTrainer->train());
             //localizer->observationModel(obsModel);

@@ -184,11 +184,14 @@ namespace loc{
             mDataStore = dataStore;
             return *this;
         }
-        
-        GPType gpType = GPNORMAL;
+
+        void setGPType(GPType gt){
+            gpType = gt;
+        }
         
     private:
         std::shared_ptr<DataStore> mDataStore;
+        GPType gpType = GPNORMAL;
     };
     
 }
