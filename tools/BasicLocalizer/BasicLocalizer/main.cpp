@@ -283,7 +283,6 @@ int main(int argc, char * argv[]) {
             localizer.minRssiBias(opt.minRssiBias);
             localizer.maxRssiBias(opt.maxRssiBias);
             
-            localizer.normalFunction(opt.normFunc, opt.tDistNu);
             localizer.headingConfidenceForOrientationInit(0.5);
         }
         
@@ -292,6 +291,7 @@ int main(int argc, char * argv[]) {
         localizer.forceTraining = opt.forceTraining;
         localizer.basicLocalizerOptions = opt.basicLocalizerOptions;
         localizer.setModel(opt.mapPath, "./");
+        localizer.normalFunction(opt.normFunc, opt.tDistNu); // set after calling setModel
         ud.latLngConverter = localizer.latLngConverter();
         
         if(opt.outputLocalizerJSONPath!=""){
