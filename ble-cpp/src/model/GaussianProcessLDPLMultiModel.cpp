@@ -759,13 +759,13 @@ namespace loc{
     
     template<class Tstate, class Tinput>
     void GaussianProcessLDPLMultiModel<Tstate, Tinput>::save(std::ofstream& ofs) const{
-        cereal::JSONOutputArchive oarchive(ofs);
+        cereal::JSONOutputArchive oarchive(ofs, cereal::JSONOutputArchive::Options::NoIndent());
         oarchive(*this);
     }
     
     template<class Tstate, class Tinput>
     void GaussianProcessLDPLMultiModel<Tstate, Tinput>::save(std::ostringstream& oss) const{
-        cereal::JSONOutputArchive oarchive(oss);
+        cereal::JSONOutputArchive oarchive(oss, cereal::JSONOutputArchive::Options::NoIndent());
         oarchive(*this);
     }
     
