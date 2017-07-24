@@ -79,6 +79,7 @@ namespace loc {
     public:
         using Ptr = std::shared_ptr<LatLngConverter>;
         
+        LatLngConverter(const Anchor& anchor);
         void anchor(const Anchor& anchor);
         Anchor anchor() const;
         

@@ -343,8 +343,8 @@ namespace loc {
         void updateStateProperty();
         
         Anchor anchor;
-        LatLngConverter::Ptr latLngConverter_ = LatLngConverter::Ptr(new LatLngConverter());
-        
+        LatLngConverter::Ptr latLngConverter_;
+
         LocalHeadingBuffer mLocalHeadingBuffer = LocalHeadingBuffer(10); // buffer size 10 is not important.
         
         Status::LocationStatus mLocationStatus = Status::UNKNOWN;

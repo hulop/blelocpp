@@ -120,12 +120,6 @@ namespace loc{
     
     
     StreamLocalizer& BasicLocalizer::putHeading(const Heading heading) {
-        if (!isReady) {
-            return *this;
-        }
-        if (!isTrackingLocalizer()) {
-            return *this;
-        }
         auto cvt = latLngConverter();
         if(cvt){
             auto localHeading = cvt->headingGlobalToLocal(heading);
@@ -296,6 +290,8 @@ namespace loc{
                     double largeOridev = 10.0 * M_PI;
                     oridev = locHead.orientationDeviation()>0 ? locHead.orientationDeviation() : largeOridev;
                 }else{
+                    ori = std::numeric_limits<double>::quiet_NaN();
+                    oridev = std::numeric_limits<double>::infinity();
                     BOOST_THROW_EXCEPTION(LocException("Heading has not been input."));
                 }
             }
@@ -345,7 +341,7 @@ namespace loc{
                 RandomGenerator randGen;
                 double contamiRate =  std::max(1.0-headingConfidenceForOrientationInit_, 0.0);
                 for(auto& s: *states){
-                    if(randGen.nextDouble() < contamiRate){
+                    if(randGen.nextDouble() < contamiRate || std::isinf(wnp.stdev())){
                         s.orientation(Pose::normalizeOrientaion(2.0*M_PI*randGen.nextDouble()));
                     }else{
                         s.orientation(randGen.nextWrappedNormal(wnp.mean(), wnp.stdev()));
@@ -600,7 +596,7 @@ namespace loc{
         this->anchor.latlng.lat = getDouble(anchor, "latitude");
         this->anchor.latlng.lng = getDouble(anchor, "longitude");
         this->anchor.rotate = getDouble(anchor, "rotate");
-        latLngConverter()->anchor(this->anchor);
+        latLngConverter_ = std::make_shared<LatLngConverter>(this->anchor);
         
         deserializedModel = std::shared_ptr<GaussianProcessLDPLMultiModel<State, Beacons>> (new GaussianProcessLDPLMultiModel<State, Beacons>());
         

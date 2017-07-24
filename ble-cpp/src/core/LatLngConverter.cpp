@@ -26,6 +26,10 @@
 
 namespace loc{
     
+    LatLngConverter::LatLngConverter(const Anchor& anchor){
+        this->anchor(anchor);
+    }
+    
     void LatLngConverter::anchor(const Anchor& anchor){
         anchor_ = anchor;
     };
