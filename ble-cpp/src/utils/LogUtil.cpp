@@ -113,10 +113,12 @@ Altimeter LogUtil::toAltimeter(const std::string& str){
 
 //Heading
 string LogUtil::toString(const Heading& heading){
-    //"Heading",magneticHeading,trueHeading,headingAccuracy,timestamp
+    //"Heading",magneticHeading,trueHeading,headingAccuracy,mx,my,mz,timestamp
     std::stringstream ss;
     ss << "Heading," << heading.magneticHeading() << "," << heading.trueHeading() << ","
-    << heading.headingAccuracy() << "," << heading.timestamp();
+    << heading.headingAccuracy() << ","
+    << heading.x() << "," << heading.y() << "," << heading.z() << ","
+    << heading.timestamp();
     return ss.str();
 }
 Heading LogUtil::toHeading(const std::string& str){
@@ -125,12 +127,20 @@ Heading LogUtil::toHeading(const std::string& str){
     if(values.at(0).compare("Heading")!=0){
         BOOST_THROW_EXCEPTION(LocException("Log Heading is not correct. string="+str));
     }
-    //"Heading",magneticHeading,trueHeading,headingAccuracy,timestamp
-    long timestamp = stol(values.at(4));
+    //"Heading",magneticHeading,trueHeading,headingAccuracy,mx,my,mz,timestamp
+    long timestamp = stol(values.back());
     double magneticHeading = stod(values.at(1));
     double trueHeading = stod(values.at(2));
     double headingAccuracy = stod(values.at(3));
-    Heading head(timestamp, magneticHeading, trueHeading, headingAccuracy);
-    return head;
+    if(8<=values.size()){
+        double mx = stod(values.at(4));
+        double my = stod(values.at(5));
+        double mz = stod(values.at(6));
+        Heading head(timestamp, magneticHeading, trueHeading, headingAccuracy, mx, my, mz);
+        return head;
+    }else{
+        Heading head(timestamp, magneticHeading, trueHeading, headingAccuracy);
+        return head;
+    }
 }
 

@@ -35,9 +35,9 @@ namespace loc {
         double trueHeading_;
         double headingAccuracy_;
         
-        double x_ = 0;
-        double y_ = 0;
-        double z_ = 0;
+        double x_ = std::numeric_limits<double>::quiet_NaN();
+        double y_ = std::numeric_limits<double>::quiet_NaN();
+        double z_ = std::numeric_limits<double>::quiet_NaN();
     
     public:
         using Ptr = std::shared_ptr<Heading>;
