@@ -75,11 +75,11 @@ namespace loc {
     } UserData;
     
     typedef enum {
-        ONESHOT,
-        RANDOM_WALK,
-        RANDOM_WALK_ACC,
-        RANDOM_WALK_ACC_ATT,
-        WEAK_POSE_RANDOM_WALKER
+        ONESHOT = 0,
+        RANDOM_WALK = 1,
+        RANDOM_WALK_ACC = 2,
+        RANDOM_WALK_ACC_ATT = 3,
+        WEAK_POSE_RANDOM_WALKER = 4
     } LocalizeMode;
     
     /*
