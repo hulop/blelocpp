@@ -100,6 +100,8 @@ namespace loc{
             return strstream.str();
         }
         
+        static Beacons filter(const Beacons& beacons, const BLEBeacons& blebeacons);
+        
         template<class Tbeacon>
         static bool checkNoDuplication(const std::vector<Tbeacon>& beacons);
         

@@ -94,15 +94,19 @@ namespace loc{
         bool mVerbose = false;
         
         void floorUpdate(States& states, const Beacons& beacons){
+            const BLEBeacons& bleBeacons = mDataStore->getBLEBeacons();
+            auto knownBeacons = BLEBeacon::filter(beacons, bleBeacons);
+            
             if(mode==COUNT){
-                floorUpdateSimple(states, beacons);
+                floorUpdateSimple(states, knownBeacons);
             }else if(mode==WEIGHT){
-                floorUpdateUsingObservationModel(states,beacons);
+                floorUpdateUsingObservationModel(states,knownBeacons);
             }else{
                 BOOST_THROW_EXCEPTION(LocException("Unknown floor update mode."));
             }
         }
         
+    protected:
         /**
          * param beacons a vector of input beacons
          * param bleBeacons a vector of BLE beacons

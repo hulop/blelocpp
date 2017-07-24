@@ -44,4 +44,21 @@ namespace loc{
         os << bleBeacon.x() <<"," << bleBeacon.y() <<","<< bleBeacon.z()<<","<<bleBeacon.floor() << "," <<bleBeacon.major() <<","<< bleBeacon.minor();
         return os;
     }
+    
+    Beacons BLEBeacon::filter(const Beacons& beacons, const BLEBeacons& blebeacons){
+        std::set<long> idset;
+        for(const auto& reg: blebeacons){
+            idset.insert(reg.id());
+        }
+        Beacons os(beacons);
+        os.clear();
+        assert(os.size()==0);
+        for(const auto&obs: beacons){
+            if(idset.count(obs.id())!=0){
+                os.push_back(obs);
+            }
+        }
+        return os;
+    }
+    
 }
