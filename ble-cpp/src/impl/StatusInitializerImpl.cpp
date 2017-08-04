@@ -261,8 +261,13 @@ namespace loc{
                 double z = s.z() + stdevState.z()*rand.nextGaussian();
                 double floor = s.floor() + stdevState.floor()*rand.nextGaussian();
                 //double orientation = s.orientation() + stdevState.orientation()*rand.nextGaussian();
-                double orientationBias = orientationMeasured - s.orientation();
-                orientationBias += stdevState.orientationBias()*rand.nextGaussian();
+                double orientationBias;
+                if(std::isinf(stdevState.orientationBias())){
+                    orientationBias = 2.0*M_PI*rand.nextDouble();
+                }else{
+                    orientationBias = orientationMeasured - s.orientation();
+                    orientationBias += stdevState.orientationBias()*rand.nextGaussian();
+                }
                 double orientation = orientationMeasured - orientationBias;
                 orientation += stdevState.orientation()*rand.nextGaussian();
                 

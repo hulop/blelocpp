@@ -952,7 +952,7 @@ namespace loc{
                 auto statesTmp = mStatusInitializer->resetStates(mNumStates, meanPose, stdevPose, orientationMeasured);
                 for(auto& s: statesTmp){
                     double d = mRand->nextDouble();
-                    if(d<rateContami){
+                    if(d<rateContami || std::isinf(stdevPose.orientation())){
                         double orientationBias = 2.0*M_PI*mRand->nextDouble();
                         double orientation = orientationMeasured - orientationBias;
                         s.orientationBias(orientationBias);
