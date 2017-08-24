@@ -63,7 +63,10 @@ namespace loc{
         // Perturb variables in State
         if(nSteps>0 || mProperty->doesUpdateWhenStopping() ){
             state.orientationBias(state.orientationBias() + stateProperty->diffusionOrientationBias()*randomGenerator.nextGaussian()*dTime );
-            state.rssiBias(randomGenerator.nextTruncatedGaussian(state.rssiBias(), stateProperty->diffusionRssiBias()*dTime , stateProperty->minRssiBias(), stateProperty->maxRssiBias()));
+            state.rssiBias(randomGenerator.nextTruncatedGaussian(state.rssiBias(),
+                                                                 stateProperty->diffusionRssiBias()*dTime,
+                                                                 stateProperty->minRssiBias(),
+                                                                 stateProperty->maxRssiBias()));
         }
         
         // Update orientation
@@ -83,7 +86,7 @@ namespace loc{
         double nV = state.normalVelocity();
         if(nSteps >0 || mProperty->doesUpdateWhenStopping()){
             nV = randomGenerator.nextTruncatedGaussian(state.normalVelocity(),
-                                                          poseProperty->diffusionVelocity(),
+                                                          poseProperty->diffusionVelocity()*dTime,
                                                           poseProperty->minVelocity(),
                                                           poseProperty->maxVelocity());
             state.normalVelocity(nV);
