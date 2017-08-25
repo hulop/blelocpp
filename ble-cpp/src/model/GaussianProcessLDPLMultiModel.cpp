@@ -585,7 +585,6 @@ namespace loc{
         
         double jointLogLL = 0;
         double sumMahaDist = 0;
-        int i=0;
         for(auto iter=input.begin(); iter!=input.end(); iter++){
             const Beacon& b = *iter;
             double rssi = b.rssi();
@@ -607,10 +606,19 @@ namespace loc{
                 double logLL = normFunc(rssi, ypred, stdev);
                 double mahaDist = MathUtils::mahalanobisDistance(rssi, ypred, stdev);
                 
+                if(applyLowestLogLikelihood){
+                    double enlargedStdev = mStdevRssiForUnknownBeacon * mCoeffDiffFloorStdev;
+                    auto idx = mBeaconIdIndexMap[b.id()];
+                    auto ble = mBLEBeacons.at(idx);
+                    if(ble.floor()!=state.floor()){
+                        double lowestlogLL = normFunc(0, 0, enlargedStdev);
+                        logLL = lowestlogLL < logLL? logLL : lowestlogLL;
+                    }
+                }
+
                 jointLogLL += logLL;
                 sumMahaDist += mahaDist;
                 
-                i++;
             }
             // RSSI of unknown beacons are assumed to be minRssi.
             else if(mFillsUnknownBeaconRssi){

@@ -159,7 +159,8 @@ namespace loc{
         void save(std::ostringstream& oss) const;
         void load(std::ifstream& ifs);
         void load(std::istringstream& iss);
-
+        
+        bool applyLowestLogLikelihood = false;
     };
     
     
