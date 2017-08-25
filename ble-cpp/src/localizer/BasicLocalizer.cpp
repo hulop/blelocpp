@@ -960,6 +960,7 @@ namespace loc{
         msParams.initType = burnInInitType;
 
         obsDepInitializer->parameters(msParams);
+        obsDepInitializer->isVerbose = isVerboseLocalizer;
         mLocalizer->observationDependentInitializer(obsDepInitializer);
         
         // Mixture settings

@@ -53,6 +53,7 @@ typedef struct {
     
     std::string localizerJSONPath = "";
     std::string outputLocalizerJSONPath ="";
+    bool verbose = false;
     
     BasicLocalizerOptions basicLocalizerOptions;
 } Option;
@@ -79,6 +80,7 @@ void printHelp() {
     std::cout << " --restart=<outputpath>  use restart in log (outputpath is optional argument)" << std::endl;
     std::cout << " --lj                set localizer config json" << std::endl;
     std::cout << " --oj                output path for localizer config json" << std::endl;
+    std::cout << " -v                  set verbosity" << std::endl;
 }
 
 Option parseArguments(int argc, char *argv[]){
@@ -103,7 +105,7 @@ Option parseArguments(int argc, char *argv[]){
         {0,         0,                 0,  0 }
     };
 
-    while ((c = getopt_long(argc, argv, "m:t:ns:ho:rf", long_options, &option_index )) != -1)
+    while ((c = getopt_long(argc, argv, "m:t:ns:ho:rfv", long_options, &option_index )) != -1)
         switch (c)
     {
         case 0:
@@ -196,6 +198,9 @@ Option parseArguments(int argc, char *argv[]){
         case 'f':
             opt.findRssiBias = true;
             break;
+        case 'v':
+            opt.verbose = true;
+            break;
         default:
             abort();
     }
@@ -286,7 +291,7 @@ int main(int argc, char * argv[]) {
             localizer.headingConfidenceForOrientationInit(0.5);
         }
         
-        localizer.isVerboseLocalizer = false;
+        localizer.isVerboseLocalizer = opt.verbose;
         localizer.updateHandler(functionCalledWhenUpdated, &ud);
         localizer.forceTraining = opt.forceTraining;
         localizer.basicLocalizerOptions = opt.basicLocalizerOptions;

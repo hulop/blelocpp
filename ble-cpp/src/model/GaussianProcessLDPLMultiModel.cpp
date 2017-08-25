@@ -480,10 +480,14 @@ namespace loc{
     template<class Tstate, class Tinput>
     double GaussianProcessLDPLMultiModel<Tstate, Tinput>::computeNormalStandardDeviation(std::vector<double> standardDeviations){
         double sq = 0;
+        int countValid = 0;
         for(double stdev: standardDeviations){
-            sq += stdev*stdev;
+            if(!std::isnan(stdev)){
+                sq += stdev*stdev;
+                countValid+=1;
+            }
         }
-        sq/=(standardDeviations.size());
+        sq/=(countValid);
         return std::sqrt(sq);
     }
     
