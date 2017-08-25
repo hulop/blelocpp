@@ -51,7 +51,7 @@ namespace loc{
             bool withOrdering = false;
             InitType initType = INIT_WITH_SAMPLE_LOCATIONS;
         };
-        
+        bool isVerbose = false;
     private:
         Parameters mParams;
         RandomGenerator randGen;

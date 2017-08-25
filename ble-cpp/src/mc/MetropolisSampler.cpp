@@ -70,7 +70,10 @@ namespace loc{
         size_t index = std::distance(logLLs.begin(), iterMax);
         Tstate locMaxLL = states.at(index);
         
-        std::cout << "findInitialMaxLikelihoodState: states.size=" << states.size() << "max state=" << locMaxLL << std::endl;
+        if(isVerbose){
+            std::cout << "findInitialMaxLikelihoodState: states.size=" << states.size() << "max state=" << locMaxLL << std::endl;
+        }
+        
         return locMaxLL;
     }
     
@@ -192,7 +195,9 @@ namespace loc{
             }
         }
         
-        std::cout << "M-H acceptance rate = " << (double)countAccepted / (double) count << " (" << countAccepted << "/" << count << ")" << std::endl;
+        if(isVerbose){
+            std::cout << "M-H acceptance rate = " << (double)countAccepted / (double) count << " (" << countAccepted << "/" << count << ")" << std::endl;
+        }
         
         if(! withOrderging){
             return sampledStates;
