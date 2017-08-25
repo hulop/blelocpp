@@ -57,6 +57,9 @@ namespace loc {
         
         long monitorIntervalMS_ = 3000;
         
+        long unstableLoop_ = 5;
+        double disableStatusChangeOnHeightChanging_ = true;
+        
     public:
         using Ptr = std::shared_ptr<LocationStatusMonitorParameters>;
         double minimumWeightStable() const {return minimumWeightStable_;}
@@ -73,17 +76,26 @@ namespace loc {
         void monitorIntervalMS(long interval){monitorIntervalMS_ = interval;}
         long monitorIntervalMS() const{return monitorIntervalMS_;}
         
+        void disableStatusChangeOnHeightChanging(bool value){disableStatusChangeOnHeightChanging_=value;}
+        bool disableStatusChangeOnHeightChanging() const{return disableStatusChangeOnHeightChanging_;}
+        
+        void unstableLoop(long value){unstableLoop_=value;}
+        long unstableLoop() const{return unstableLoop_;}
+        
         template<class Archive>
         void serialize(Archive & ar, std::uint32_t const version)
         {
-            if (0 <= version) {
-                ar(CEREAL_NVP(minimumWeightStable_));
-                ar(CEREAL_NVP(stdev2DEnterStable_));
-                ar(CEREAL_NVP(stdev2DExitStable_));
-                ar(CEREAL_NVP(stdevFloorEnterStable_));
-                ar(CEREAL_NVP(stdev2DEnterLocating_));
-                ar(CEREAL_NVP(stdev2DExitLocating_));
-                ar(CEREAL_NVP(monitorIntervalMS_));
+            ar(CEREAL_NVP(minimumWeightStable_));
+            ar(CEREAL_NVP(stdev2DEnterStable_));
+            ar(CEREAL_NVP(stdev2DExitStable_));
+            ar(CEREAL_NVP(stdevFloorEnterStable_));
+            ar(CEREAL_NVP(stdev2DEnterLocating_));
+            ar(CEREAL_NVP(stdev2DExitLocating_));
+            ar(CEREAL_NVP(monitorIntervalMS_));
+            
+            if(1 <= version){
+                ar(CEREAL_NVP(disableStatusChangeOnHeightChanging_));
+                ar(CEREAL_NVP(unstableLoop_));
             }
         }
     };
@@ -195,6 +207,6 @@ namespace loc {
 }
 
 // assign version
-CEREAL_CLASS_VERSION(loc::LocationStatusMonitorParameters, 0);
+CEREAL_CLASS_VERSION(loc::LocationStatusMonitorParameters, 1);
 CEREAL_CLASS_VERSION(loc::StreamParticleFilter::FloorTransitionParameters, 0);
 #endif /* StreamParticleFilter_hpp */

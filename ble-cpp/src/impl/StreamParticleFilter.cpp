@@ -272,8 +272,10 @@ namespace loc{
         MixtureParameters mMixParams;
         FloorTransitionParameters::Ptr mFloorTransParams = std::make_shared<FloorTransitionParameters>();
         
+        // for status monitoring
         long previousTimestampMonitoring = 0;;
         LocationStatusMonitorParameters::Ptr mLocStatusMonitorParams = std::make_shared<LocationStatusMonitorParameters>();
+        long statusMonitorUnstableCounter = 0;
         
         //std::queue<Pose> posesForReset;
         std::queue<std::function<void()>> functionsForReset;
@@ -616,6 +618,12 @@ namespace loc{
                 mDists[i] = vLogLLsAndMDists.at(i).at(1);
             }
             
+            bool heightIsChanging = false;
+            if(mAltitudeManager){
+                auto heightChanged = mAltitudeManager->heightChange();
+                heightIsChanging = heightChanged > mFloorTransParams->heightChangedCriterion();
+            }
+            
             if(monitorsStatus){
                 // Update locationStatus by comparing likelihoods between states and one-shot states
                 
@@ -638,18 +646,30 @@ namespace loc{
                         std::cout << "Average logLikelihood (inStates,inMix)=(" << avgCurrentLogLL << "," << avgMixLogLL << "), weightAvgLogLL=" << weightAvgLogLL << ",wTol=" << wTol << std::endl;
                         std::cout << "Max logLikelihood (inStates,inMix)=(" << maxCurrentLogLL << "," << maxMixLogLL << "), weightMaxLogLL=" << weightMaxLogLL << ",wTol=" << wTol << std::endl;
                     }
-                    if(locationStatus==Status::STABLE){
-                        if(weightInStates < wTol){
-                            locationStatus=Status::UNSTABLE;
+                    
+                    if(! heightIsChanging || ! mLocStatusMonitorParams->disableStatusChangeOnHeightChanging()){
+                        if(locationStatus==Status::STABLE){
+                            statusMonitorUnstableCounter=0;
+                            if(weightInStates < wTol){
+                                locationStatus=Status::UNSTABLE;
+                                statusMonitorUnstableCounter++;
+                            }
+                        }else if(locationStatus==Status::UNSTABLE){
+                            if(weightInStates < wTol){
+                                if(mLocStatusMonitorParams->unstableLoop() < statusMonitorUnstableCounter){
+                                    locationStatus=Status::UNKNOWN;
+                                }
+                                statusMonitorUnstableCounter++;
+                            }else{
+                                locationStatus=Status::STABLE;
+                                statusMonitorUnstableCounter=0;
+                            }
                         }
-                    }else if(locationStatus==Status::UNSTABLE){
-                        if(weightInStates < wTol){
-                            locationStatus=Status::UNKNOWN;
-                        }else{
-                            locationStatus=Status::STABLE;
-                        }
+                        status->locationStatus(locationStatus);
+                    }else{
+                        statusMonitorUnstableCounter = 0;
+                        std::cout << "status update was skipped because height is changing." << std::endl;
                     }
-                    status->locationStatus(locationStatus);
                 }
             }
             
