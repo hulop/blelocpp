@@ -415,6 +415,9 @@ int main(int argc, char * argv[]) {
                     if (logString.compare(0, 6, "Beacon") == 0) {
                         Beacons beacons = LogUtil::toBeacons(logString);
                         //std::cout << "LogReplay:" << beacons.timestamp() << ",Beacon," << beacons.size() << std::endl;
+                        for(auto& b: beacons){
+                            b.rssi( b.rssi() < 0 ? b.rssi() : -100);
+                        }
                         localizer.putBeacons(beacons);
                         beaconsRecent = beacons;
                         // Compute likelihood at recent pose

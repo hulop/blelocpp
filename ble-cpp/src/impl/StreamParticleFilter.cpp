@@ -366,7 +366,7 @@ namespace loc{
 
             std::shared_ptr<States> states = status->states();
             
-            bool timestampIntervalIsValid = input.timestamp() - input.previousTimestamp() < timestampIntervalLimit;
+            bool timestampIntervalIsValid = (input.timestamp() - input.previousTimestamp()) < timestampIntervalLimit;
             
             if(timestampIntervalIsValid){
                 StatesPtr statesPredicted(new States(mRandomWalker->predict(*states.get(), input)));
