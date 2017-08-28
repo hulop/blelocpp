@@ -238,6 +238,7 @@
 		FB05F2691D8ADCCC003B472A /* WeakPoseRandomWalker.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WeakPoseRandomWalker.hpp; sourceTree = "<group>"; };
 		FB176CB31D78128B008C1745 /* LatLngConverter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LatLngConverter.cpp; sourceTree = "<group>"; };
 		FB176CB41D78128B008C1745 /* LatLngConverter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LatLngConverter.hpp; sourceTree = "<group>"; };
+		FB315CE21F53DDFE00681EAB /* OrientationAdjuster.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = OrientationAdjuster.hpp; sourceTree = "<group>"; };
 		FB3926EC1DF9B50F006B6ECB /* AltitudeManager.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AltitudeManager.hpp; sourceTree = "<group>"; };
 		FB3926EE1DF9B52A006B6ECB /* AltitudeManagerSimple.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AltitudeManagerSimple.cpp; sourceTree = "<group>"; };
 		FB3926EF1DF9B52A006B6ECB /* AltitudeManagerSimple.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AltitudeManagerSimple.hpp; sourceTree = "<group>"; };
@@ -546,6 +547,7 @@
 				FB3926EF1DF9B52A006B6ECB /* AltitudeManagerSimple.hpp */,
 				FB3926F41DF9B65C006B6ECB /* Altimeter.cpp */,
 				FB3926F51DF9B65C006B6ECB /* Altimeter.hpp */,
+				FB315CE21F53DDFE00681EAB /* OrientationAdjuster.hpp */,
 			);
 			name = sensor;
 			path = "../../ble-cpp/src/sensor";

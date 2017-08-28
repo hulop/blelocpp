@@ -43,6 +43,7 @@
 
 #include "OrientationMeterAverage.hpp"
 #include "PedometerWalkingState.hpp"
+#include "OrientationAdjuster.hpp"
 
 #include "GaussianProcessLDPLMultiModel.hpp"
 
@@ -198,7 +199,7 @@ namespace loc {
         StreamParticleFilter::FloorTransitionParameters::Ptr pfFloorTransParams = std::make_shared<StreamParticleFilter::FloorTransitionParameters>();
         LocationStatusMonitorParameters::Ptr locationStatusMonitorParameters = std::make_shared<LocationStatusMonitorParameters>();
         SystemModelInBuildingProperty::Ptr prwBuildingProperty = std::make_shared<SystemModelInBuildingProperty>();
-
+        
     protected:
         double meanRssiBias_ = 0.0;
         double minRssiBias_ = -10;
@@ -450,6 +451,10 @@ namespace loc {
         
         void updateLocationStatus(Status*);
         void overwriteLocationStatus(Status::LocationStatus);
+        
+        // for yaw drift adjuster
+        bool applysYawDriftAdjust = false;
+        OrientationDriftAdjuster::Ptr yawDriftAdjuster = std::make_shared<OrientationDriftAdjuster>();
         
     };
 }

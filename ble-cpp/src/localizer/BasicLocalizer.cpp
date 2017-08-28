@@ -88,11 +88,14 @@ namespace loc{
         if (mFunctionCalledToLog) {
             mFunctionCalledToLog(mUserDataToLog, LogUtil::toString(attitude));
         }
+        Attitude altTmp(attitude);
+        if(applysYawDriftAdjust){
+            altTmp = yawDriftAdjuster->adjustAttitude(attitude);
+        }
         if (!isTrackingLocalizer()) {
             return *this;
         }
-        
-        mLocalizer->putAttitude(attitude);
+        mLocalizer->putAttitude(altTmp);
         return *this;
     }
     StreamLocalizer& BasicLocalizer::putAcceleration(const Acceleration acceleration) {

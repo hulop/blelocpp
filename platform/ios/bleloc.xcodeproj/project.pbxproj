@@ -218,6 +218,7 @@
 		FB273EF51D22226B00F53CCB /* ExtendedDataUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB273EF31D22226B00F53CCB /* ExtendedDataUtils.cpp */; };
 		FB2E8B131C2404EA00C5C45C /* CoordinateSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB2E8B121C2404EA00C5C45C /* CoordinateSystem.cpp */; };
 		FB2E8B141C2404F600C5C45C /* CoordinateSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB2E8B121C2404EA00C5C45C /* CoordinateSystem.cpp */; };
+		FB315CE51F53DF4A00681EAB /* OrientationAdjuster.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FB315CE41F53DF4A00681EAB /* OrientationAdjuster.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		FB5B4BF11C7C41B600D00E8E /* MetropolisSampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB5B4BEE1C7C41B600D00E8E /* MetropolisSampler.cpp */; };
 		FB5B4BF21C7C41B600D00E8E /* MetropolisSampler.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FB5B4BEF1C7C41B600D00E8E /* MetropolisSampler.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		FB5B4BF31C7C41B600D00E8E /* ObservationDependentInitializer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FB5B4BF01C7C41B600D00E8E /* ObservationDependentInitializer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -394,6 +395,7 @@
 		FB273EF31D22226B00F53CCB /* ExtendedDataUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ExtendedDataUtils.cpp; sourceTree = "<group>"; };
 		FB273EF41D22226B00F53CCB /* ExtendedDataUtils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ExtendedDataUtils.hpp; sourceTree = "<group>"; };
 		FB2E8B121C2404EA00C5C45C /* CoordinateSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CoordinateSystem.cpp; sourceTree = "<group>"; };
+		FB315CE41F53DF4A00681EAB /* OrientationAdjuster.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = OrientationAdjuster.hpp; sourceTree = "<group>"; };
 		FB5B4BEE1C7C41B600D00E8E /* MetropolisSampler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = MetropolisSampler.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		FB5B4BEF1C7C41B600D00E8E /* MetropolisSampler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = MetropolisSampler.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		FB5B4BF01C7C41B600D00E8E /* ObservationDependentInitializer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = ObservationDependentInitializer.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -621,6 +623,7 @@
 				7E6F252C1C0F1D76007A97A1 /* PedometerWalkingState.hpp */,
 				FB6ADB411E2DE3A7009943C0 /* TransformedOrientationMeterAverage.cpp */,
 				FB6ADB421E2DE3A7009943C0 /* TransformedOrientationMeterAverage.hpp */,
+				FB315CE41F53DF4A00681EAB /* OrientationAdjuster.hpp */,
 			);
 			name = sensor;
 			path = "../../ble-cpp/src/sensor";
@@ -839,6 +842,7 @@
 				FBBA09F81DACB2DA00EB2553 /* Heading.hpp in Headers */,
 				FBE5831A1DF9BF1B00057DB5 /* AltitudeManager.hpp in Headers */,
 				FBE5831C1DF9BF1B00057DB5 /* AltitudeManagerSimple.hpp in Headers */,
+				FB315CE51F53DF4A00681EAB /* OrientationAdjuster.hpp in Headers */,
 				7E92393E1D54764000875766 /* LatLngUtil.hpp in Headers */,
 				FBE583191DF9BF1B00057DB5 /* Altimeter.hpp in Headers */,
 				7EDEDC121D1CCCD800AC111A /* BasicLocalizer.hpp in Headers */,
