@@ -89,8 +89,20 @@ namespace loc{
             mFunctionCalledToLog(mUserDataToLog, LogUtil::toString(attitude));
         }
         Attitude altTmp(attitude);
-        if(applysYawDriftAdjust){
-            altTmp = yawDriftAdjuster->adjustAttitude(attitude);
+        if(orientationMeterType==TRANSFORMED_AVERAGE){
+            double yawTransformed = TransformedOrientationMeterAverage::transformOrientation(attitude);
+            altTmp.yaw(yawTransformed);
+        }
+        if(yawDriftAdjuster){
+            auto altAdj = yawDriftAdjuster->adjustAttitude(altTmp);
+            double drift = yawDriftAdjuster->getCurrentDrift();
+            double driftRate = yawDriftAdjuster->getCurrentDriftRate();
+            if(isVerboseLocalizer){
+                std::cout << "EstimatedYawDrift(timestamp,drift,driftRate,isApplied): "<< attitude.timestamp() << "," << drift << "," << driftRate << "," << applysYawDriftAdjust << std::endl;
+            }
+            if(applysYawDriftAdjust){
+                altTmp = altAdj;
+            }
         }
         if (!isTrackingLocalizer()) {
             return *this;
@@ -127,6 +139,9 @@ namespace loc{
         if(cvt){
             auto localHeading = cvt->headingGlobalToLocal(heading);
             mLocalHeadingBuffer.push_back(localHeading);
+        }
+        if(yawDriftAdjuster){
+            yawDriftAdjuster->putHeading(heading);
         }
         return *this;
     }
@@ -810,10 +825,12 @@ namespace loc{
         if(orientationMeterType==RAW_AVERAGE){
             orientationMeter = std::make_shared<OrientationMeterAverage>(orientationMeterAverageParameters);
         }else if(orientationMeterType==TRANSFORMED_AVERAGE){
-            orientationMeter = std::make_shared<TransformedOrientationMeterAverage>(orientationMeterAverageParameters);
+            // TransformedOrientationMeterAverage is not used because drift adjustment may be applied before averaging attitudes.
+            orientationMeter = std::make_shared<OrientationMeterAverage>(orientationMeterAverageParameters);
         }else{
             BOOST_THROW_EXCEPTION(LocException("unsupported orientation meter type"));
         }
+        
         // Pedometer
         // TODO
         pedometerWSParams.updatePeriod(0.1);

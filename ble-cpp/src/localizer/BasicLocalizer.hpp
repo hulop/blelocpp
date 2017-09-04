@@ -454,7 +454,7 @@ namespace loc {
         
         // for yaw drift adjuster
         bool applysYawDriftAdjust = false;
-        OrientationDriftAdjuster::Ptr yawDriftAdjuster = std::make_shared<OrientationDriftAdjuster>();
+        OrientationDriftAdjusterSimple::Ptr yawDriftAdjuster = std::make_shared<OrientationDriftAdjusterSimple>();
         
     };
 }

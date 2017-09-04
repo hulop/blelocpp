@@ -84,7 +84,7 @@ namespace loc{
         return ratio;
     }
     
-    double TransformedOrientationMeterAverage::transformOrientation(const Attitude& attitude) const{
+    double TransformedOrientationMeterAverage::transformOrientation(const Attitude& attitude){
         RotationMatrix R(attitude.roll(),attitude.pitch(),attitude.yaw());
         double a0 = std::sqrt(R.m12*R.m12 + R.m22*R.m22);
         double a1 = R.m32;
@@ -102,7 +102,7 @@ namespace loc{
         
         long timestamp = attitude.timestamp();
         
-        double thetaNew =  this->transformOrientation(attitude);
+        double thetaNew =  TransformedOrientationMeterAverage::transformOrientation(attitude);
         
         if(prevTimestamp==0){
             prevTimestamp = timestamp;

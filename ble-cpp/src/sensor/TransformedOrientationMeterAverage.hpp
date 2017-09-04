@@ -60,7 +60,7 @@ namespace loc{
         double getYaw() override;
         void reset() override;
         
-        double transformOrientation(const Attitude& attitude) const;
+        static double transformOrientation(const Attitude& attitude);
     };
 }
 
