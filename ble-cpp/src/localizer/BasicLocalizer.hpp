@@ -350,6 +350,8 @@ namespace loc {
         
         Status::LocationStatus mLocationStatus = Status::UNKNOWN;
         
+        bool mDisableAcceleration = false;
+        
     public:
         BasicLocalizer();
         ~BasicLocalizer();
@@ -456,6 +458,8 @@ namespace loc {
         bool applysYawDriftAdjust = false;
         OrientationDriftAdjusterSimple::Ptr yawDriftAdjuster = std::make_shared<OrientationDriftAdjusterSimple>();
         
+        // control disable/enable acceleration
+        void disableAcceleration(bool);
     };
 }
 

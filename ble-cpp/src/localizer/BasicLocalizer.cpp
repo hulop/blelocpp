@@ -121,8 +121,12 @@ namespace loc{
             return *this;
         }
         else{
+            Acceleration accTmp = acceleration;
+            if(mDisableAcceleration){
+                accTmp.ax(0.0)->ay(0.0)->az(0.0);
+            }
             if(mLocationStatus==Status::STABLE or mLocationStatus==Status::UNSTABLE){
-                mLocalizer->putAcceleration(acceleration);
+                mLocalizer->putAcceleration(accTmp);
             }
         }
         return *this;
@@ -1059,6 +1063,10 @@ namespace loc{
 
     LatLngConverter::Ptr BasicLocalizer::latLngConverter(){
         return latLngConverter_;
+    }
+    
+    void BasicLocalizer::disableAcceleration(bool disable){
+        mDisableAcceleration = disable;
     }
     
     //LocalHeadingBuffer
