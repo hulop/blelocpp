@@ -26,7 +26,6 @@
 #include <stdio.h>
 #include <iostream>
 #include <memory>
-#include <opencv2/opencv.hpp>
 
 namespace loc {
 
@@ -66,8 +65,6 @@ namespace loc {
     }
         
     class ImageHolder{
-        std::string name_;
-        cv::Mat mat_;
         
         class Impl;
         class ImplHeavy;

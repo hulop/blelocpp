@@ -25,6 +25,7 @@
 #include "ImageHolder.hpp"
 #include "LocException.hpp"
 #include <opencv2/flann/flann.hpp>
+#include <opencv2/opencv.hpp>
 
 namespace loc{
     
