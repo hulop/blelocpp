@@ -200,6 +200,9 @@ namespace loc {
         LocationStatusMonitorParameters::Ptr locationStatusMonitorParameters = std::make_shared<LocationStatusMonitorParameters>();
         SystemModelInBuildingProperty::Ptr prwBuildingProperty = std::make_shared<SystemModelInBuildingProperty>();
         
+        // yaw drift adjuster
+        bool applysYawDriftAdjust = false;
+        
     protected:
         double meanRssiBias_ = 0.0;
         double minRssiBias_ = -10;
@@ -211,87 +214,89 @@ namespace loc {
         template<class Archive>
         void serialize(Archive & ar, std::uint32_t const version)
         {
-            if (0 <= version) {
-                ar(CEREAL_NVP(nStates));
-                ar(CEREAL_NVP(alphaWeaken));
-                ar(CEREAL_NVP(nSmooth));
-                ar(CEREAL_NVP(nSmoothTracking));
-                
-                ar(CEREAL_NVP(smoothType));
-                ar(CEREAL_NVP(localizeMode));
-                
-                ar(CEREAL_NVP(effectiveSampleSizeThreshold));
-                ar(CEREAL_NVP(nStrongest));
-                ar(CEREAL_NVP(enablesFloorUpdate));
-                
-                
-                ar(CEREAL_NVP(walkDetectSigmaThreshold));
-                ar(CEREAL_NVP(meanVelocity));
-                ar(CEREAL_NVP(stdVelocity));
-                ar(CEREAL_NVP(diffusionVelocity));
-                ar(CEREAL_NVP(minVelocity));
-                ar(CEREAL_NVP(maxVelocity));
-                
-                
-                ar(CEREAL_NVP(stdRssiBias));
-                ar(CEREAL_NVP(diffusionRssiBias));
-                ar(CEREAL_NVP(stdOrientation));
-                ar(CEREAL_NVP(diffusionOrientationBias));
-                
-                ar(CEREAL_NVP(angularVelocityLimit));
-                
-                // Parametes for PoseRandomWalker
-                ar(CEREAL_NVP(doesUpdateWhenStopping));
-                ar(CEREAL_NVP(maxIncidenceAngle));
-                ar(CEREAL_NVP(weightDecayHalfLife));
-                
-                // Parameters for RandomWalkerMotion and WeakPoseRandomWalker
-                ar(CEREAL_NVP(sigmaStop));
-                ar(CEREAL_NVP(sigmaMove));
-                
-                // Parameters for SystemModelInBuilding
-                ar(CEREAL_NVP(velocityRateFloor));
-                ar(CEREAL_NVP(velocityRateElevator));
-                ar(CEREAL_NVP(velocityRateStair));
-                ar(CEREAL_NVP(velocityRateEscalator));
-                ar(CEREAL_NVP(relativeVelocityEscalator));
-                
-                // Parameters for WeakPoseRandomWalker
-                ar(CEREAL_NVP(probabilityOrientationBiasJump));
-                ar(CEREAL_NVP(poseRandomWalkRate));
-                ar(CEREAL_NVP(randomWalkRate));
-                ar(CEREAL_NVP(probabilityBackwardMove));
-
-                ar(CEREAL_NVP(nBurnIn));
-                ar(CEREAL_NVP(burnInRadius2D));
-                ar(CEREAL_NVP(burnInInterval));
-                ar(CEREAL_NVP(burnInInitType));
-                
-                ar(CEREAL_NVP(mixProba));
-                ar(CEREAL_NVP(rejectDistance));
-                ar(CEREAL_NVP(rejectFloorDifference));
-                ar(CEREAL_NVP(nBeaconsMinimum));
-
-                ar(CEREAL_NVP(locLB));
-
-                ar(CEREAL_NVP(usesAltimeterForFloorTransCheck));
-                ar(CEREAL_NVP(coeffDiffFloorStdev));
-
-                ar(CEREAL_NVP(orientationMeterType));
-                
-                // parameter objects
-                ar(CEREAL_NVP(*poseProperty));
-                ar(CEREAL_NVP(*stateProperty));
-                
-                ar(CEREAL_NVP(*pfFloorTransParams));
-                ar(CEREAL_NVP(*locationStatusMonitorParameters));
-                ar(CEREAL_NVP(*prwBuildingProperty));
-                
-                // protected
-                ar(CEREAL_NVP(meanRssiBias_));
-                ar(CEREAL_NVP(minRssiBias_));
-                ar(CEREAL_NVP(maxRssiBias_));
-                ar(CEREAL_NVP(headingConfidenceForOrientationInit_));
+            ar(CEREAL_NVP(nStates));
+            ar(CEREAL_NVP(alphaWeaken));
+            ar(CEREAL_NVP(nSmooth));
+            ar(CEREAL_NVP(nSmoothTracking));
+            
+            ar(CEREAL_NVP(smoothType));
+            ar(CEREAL_NVP(localizeMode));
+            
+            ar(CEREAL_NVP(effectiveSampleSizeThreshold));
+            ar(CEREAL_NVP(nStrongest));
+            ar(CEREAL_NVP(enablesFloorUpdate));
+            
+            
+            ar(CEREAL_NVP(walkDetectSigmaThreshold));
+            ar(CEREAL_NVP(meanVelocity));
+            ar(CEREAL_NVP(stdVelocity));
+            ar(CEREAL_NVP(diffusionVelocity));
+            ar(CEREAL_NVP(minVelocity));
+            ar(CEREAL_NVP(maxVelocity));
+            
+            
+            ar(CEREAL_NVP(stdRssiBias));
+            ar(CEREAL_NVP(diffusionRssiBias));
+            ar(CEREAL_NVP(stdOrientation));
+            ar(CEREAL_NVP(diffusionOrientationBias));
+            
+            ar(CEREAL_NVP(angularVelocityLimit));
+            
+            // Parametes for PoseRandomWalker
+            ar(CEREAL_NVP(doesUpdateWhenStopping));
+            ar(CEREAL_NVP(maxIncidenceAngle));
+            ar(CEREAL_NVP(weightDecayHalfLife));
+            
+            // Parameters for RandomWalkerMotion and WeakPoseRandomWalker
+            ar(CEREAL_NVP(sigmaStop));
+            ar(CEREAL_NVP(sigmaMove));
+            
+            // Parameters for SystemModelInBuilding
+            ar(CEREAL_NVP(velocityRateFloor));
+            ar(CEREAL_NVP(velocityRateElevator));
+            ar(CEREAL_NVP(velocityRateStair));
+            ar(CEREAL_NVP(velocityRateEscalator));
+            ar(CEREAL_NVP(relativeVelocityEscalator));
+            
+            // Parameters for WeakPoseRandomWalker
+            ar(CEREAL_NVP(probabilityOrientationBiasJump));
+            ar(CEREAL_NVP(poseRandomWalkRate));
+            ar(CEREAL_NVP(randomWalkRate));
+            ar(CEREAL_NVP(probabilityBackwardMove));
+            
+            ar(CEREAL_NVP(nBurnIn));
+            ar(CEREAL_NVP(burnInRadius2D));
+            ar(CEREAL_NVP(burnInInterval));
+            ar(CEREAL_NVP(burnInInitType));
+            
+            ar(CEREAL_NVP(mixProba));
+            ar(CEREAL_NVP(rejectDistance));
+            ar(CEREAL_NVP(rejectFloorDifference));
+            ar(CEREAL_NVP(nBeaconsMinimum));
+            
+            ar(CEREAL_NVP(locLB));
+            
+            ar(CEREAL_NVP(usesAltimeterForFloorTransCheck));
+            ar(CEREAL_NVP(coeffDiffFloorStdev));
+            
+            ar(CEREAL_NVP(orientationMeterType));
+            
+            // parameter objects
+            ar(CEREAL_NVP(*poseProperty));
+            ar(CEREAL_NVP(*stateProperty));
+            
+            ar(CEREAL_NVP(*pfFloorTransParams));
+            ar(CEREAL_NVP(*locationStatusMonitorParameters));
+            ar(CEREAL_NVP(*prwBuildingProperty));
+            
+            // protected
+            ar(CEREAL_NVP(meanRssiBias_));
+            ar(CEREAL_NVP(minRssiBias_));
+            ar(CEREAL_NVP(maxRssiBias_));
+            ar(CEREAL_NVP(headingConfidenceForOrientationInit_));
+            
+            if(1<=version){
+                ar(CEREAL_NVP(applysYawDriftAdjust));
             }
         }
         
@@ -455,7 +460,6 @@ namespace loc {
         void overwriteLocationStatus(Status::LocationStatus);
         
         // for yaw drift adjuster
-        bool applysYawDriftAdjust = false;
         OrientationDriftAdjusterSimple::Ptr yawDriftAdjuster = std::make_shared<OrientationDriftAdjusterSimple>();
         
         // control disable/enable acceleration
@@ -464,5 +468,5 @@ namespace loc {
 }
 
 // assign version
-CEREAL_CLASS_VERSION(loc::BasicLocalizerParameters, 0);
+CEREAL_CLASS_VERSION(loc::BasicLocalizerParameters, 1);
 #endif /* BasicLocalizerBuilder_hpp */
