@@ -53,8 +53,8 @@ typedef struct {
     
     std::string localizerJSONPath = "";
     std::string outputLocalizerJSONPath ="";
+    double magneticDeclination = NAN;
     bool verbose = false;
-    
     BasicLocalizerOptions basicLocalizerOptions;
 } Option;
 
@@ -80,6 +80,7 @@ void printHelp() {
     std::cout << " --restart=<outputpath>  use restart in log (outputpath is optional argument)" << std::endl;
     std::cout << " --lj                set localizer config json" << std::endl;
     std::cout << " --oj                output path for localizer config json" << std::endl;
+    std::cout << " --declination       set magnetic declination to compute true north (east-positive, west-negative)" << std::endl;
     std::cout << " -v                  set verbosity" << std::endl;
 }
 
@@ -100,6 +101,7 @@ Option parseArguments(int argc, char *argv[]){
         {"lj",         required_argument , NULL, 0},
         {"oj",         required_argument , NULL, 0},
         {"train",    no_argument , NULL, 0},
+        {"declination",         required_argument , NULL, 0},
         //{"stdY",            required_argument, NULL,  0 },
         {"gptype",   required_argument , NULL, 0},
         {0,         0,                 0,  0 }
@@ -171,6 +173,9 @@ Option parseArguments(int argc, char *argv[]){
                     std::cerr << "Unknown gptype: " << optarg << std::endl;
                     abort();
                 }
+            }
+            if (strcmp(long_options[option_index].name, "declination") == 0){
+                opt.magneticDeclination = atof(optarg);
             }
             break;
         case 'h':
@@ -447,11 +452,20 @@ int main(int argc, char * argv[]) {
                     }
                     if (logString.compare(0, 7,"Heading") == 0){
                         Heading heading = LogUtil::toHeading(logString);
+                        if(heading.trueHeading() < 0){ // (trueHeading==-1 is invalid.)
+                            if(!isnan(opt.magneticDeclination)){
+                                double trueHeading = heading.magneticHeading() + opt.magneticDeclination;
+                                heading.trueHeading(trueHeading);
+                            }else{
+                                std::stringstream ss;
+                                ss << "True heading (trueHeading=" << heading.trueHeading() << ") is invalid. Input declination argument";
+                                BOOST_THROW_EXCEPTION(LocException(ss.str()));
+                            }
+                        }
                         localizer.putHeading(heading);
                         LocalHeading localHeading = ud.latLngConverter->headingGlobalToLocal(heading);
-                        //std::cout << "LogReplay:" << heading.timestamp() << ", Heading, " << heading.trueHeading() << "," << heading.magneticHeading() << "," << heading.headingAccuracy() << "(localHeading=" << localHeading.orientation() << ")" << std::endl;
+                        //std::cout << "LogReplay:" << heading.timestamp() << ", Heading, " << heading.magneticHeading() << "," << heading.trueHeading() << "," << heading.headingAccuracy() << "(localHeading=" << localHeading.orientation() << ")" << std::endl;
                     }
-                    
                     if (opt.usesReset && logString.compare(0, 5, "Reset") == 0) {
                         // "Reset",lat,lng,floor,heading,timestamp
                         std::vector<std::string> values;
