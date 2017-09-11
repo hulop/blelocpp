@@ -466,6 +466,17 @@ int main(int argc, char * argv[]) {
                         LocalHeading localHeading = ud.latLngConverter->headingGlobalToLocal(heading);
                         //std::cout << "LogReplay:" << heading.timestamp() << ", Heading, " << heading.magneticHeading() << "," << heading.trueHeading() << "," << heading.headingAccuracy() << "(localHeading=" << localHeading.orientation() << ")" << std::endl;
                     }
+                    if (logString.compare(0, 19, "DisableAcceleration") == 0){
+                        std::vector<std::string> values;
+                        boost::split(values, logString, boost::is_any_of(","));
+                        int da = stoi(values.at(1));
+                        if(da==1){
+                            localizer.disableAcceleration(true);
+                        }else{
+                            localizer.disableAcceleration(false);
+                        }
+                        std::cout << "LogReplay:" << logString << std::endl;
+                    }
                     if (opt.usesReset && logString.compare(0, 5, "Reset") == 0) {
                         // "Reset",lat,lng,floor,heading,timestamp
                         std::vector<std::string> values;
