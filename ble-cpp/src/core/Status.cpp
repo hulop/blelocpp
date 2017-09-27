@@ -185,4 +185,28 @@ namespace loc{
         return str;
     }
     
+    std::string Status::stepToString(const loc::Status::Step & step){
+        std::string str;
+        switch(step){
+            case(Status::PREDICTION):
+                str = "PREDICTION";
+                break;
+            case(Status::RESET):
+                str = "RESET";
+                break;
+            case(Status::FILTERING_WITH_RESAMPLING):
+                str = "FILTERING_WITH_RESAMPLING";
+                break;
+            case(Status::FILTERING_WITHOUT_RESAMPLING):
+                str = "FILTERING_WITHOUT_RESAMPLING";
+                break;
+            case(Status::OBSERVATION_WITHOUT_FILTERING):
+                str = "OBSERVATION_WITHOUT_FILTERING";
+                break;
+            case(Status::OTHER):
+                str = "OTHER";
+                break;
+        }
+        return str;
+    }
 }

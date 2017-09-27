@@ -219,6 +219,7 @@ typedef struct {
     LatLngConverter::Ptr latLngConverter;
     Pose recentPose;
     std::function<void(Status&)> func;
+    int writeCount = 0;
 } MyData;
 
 void functionCalledWhenUpdated(void *userData, loc::Status *pStatus){
@@ -226,20 +227,30 @@ void functionCalledWhenUpdated(void *userData, loc::Status *pStatus){
     if (ud->opt->findRssiBias) {
         ud->status_list.insert(ud->status_list.end(), pStatus);
     } else {
-        std::cout << "locationStatus=" << Status::locationStatusToString(pStatus->locationStatus()) << std::endl;
-        if(pStatus->step()==Status::FILTERING_WITH_RESAMPLING ||
-           pStatus->step()==Status::FILTERING_WITHOUT_RESAMPLING ||
-            pStatus->step()==Status::RESET){
+        auto locStatusStr = Status::locationStatusToString(pStatus->locationStatus());
+        auto stepString = Status::stepToString(pStatus->step());
+        //std::cout << "locationStatus=" << locStatusStr << std::endl;
+        //if(pStatus->step()==Status::FILTERING_WITH_RESAMPLING ||
+        //   pStatus->step()==Status::FILTERING_WITHOUT_RESAMPLING ||
+        //    pStatus->step()==Status::RESET){
+        //if(true){
+        if(pStatus->step()!=Status::OTHER){
             auto ts = pStatus->timestamp();
-            auto meanLoc = ud->latLngConverter->localToGlobal(*pStatus->meanLocation());
-            *ud->out << ts << "," << meanLoc << std::endl;
+            auto meanLocGlobal = ud->latLngConverter->localToGlobal(*pStatus->meanLocation());
+            auto meanPoseGlobal = ud->latLngConverter->localToGlobal(*pStatus->meanPose());
+            
+            if(ud->writeCount==0){
+                *ud->out << "timestamp," << Pose::header() << ",lat,lng,status,step" << std::endl;
+            }
+            *ud->out << ts << "," << meanPoseGlobal << "," << locStatusStr << "," << stepString << std::endl;
+            ud->writeCount = 1;
             ud->recentPose = *pStatus->meanPose();
             if(ud->func != NULL){
                 ud->func(*pStatus);
                 ud->func = NULL;
             }
         }
-
+        
         for(const State& s: *pStatus->states()) {
             auto gs = ud->latLngConverter->localToGlobal(s);
             assert(gs.lat() != 0);

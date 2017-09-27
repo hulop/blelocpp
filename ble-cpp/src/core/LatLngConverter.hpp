@@ -60,7 +60,7 @@ namespace loc {
         std::string toString() const{
             std::stringstream stream;
             stream << Tstate::toString() << ",";
-            stream << std::fixed << std::setprecision(8) << lat() << "," << lng() ;
+            stream << std::fixed << std::setprecision(10) << lat() << "," << lng() ;
             std::string str = stream.str();
             return str;
         }
@@ -69,7 +69,8 @@ namespace loc {
     // for string stream
     template <class Tstate>
     std::ostream& operator<<(std::ostream&os, const GlobalState<Tstate>& location){
-        os << location.toString();
+        os << static_cast<Tstate>(location) << ","
+        << std::fixed << std::setprecision(10) << location.lat() << "," << location.lng() ;
         return os;
     }
     

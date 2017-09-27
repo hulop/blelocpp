@@ -81,6 +81,7 @@ namespace loc{
         void wasFloorUpdated(bool);
         
         static std::string locationStatusToString(const LocationStatus&);
+        static std::string stepToString(const Step&);
         
     private:
         long timestamp_;
