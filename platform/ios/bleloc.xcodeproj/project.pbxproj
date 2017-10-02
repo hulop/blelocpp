@@ -232,6 +232,7 @@
 		FB71CE581C475F5C00A4DB67 /* BeaconFilterChain.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FB71CE551C475B4600A4DB67 /* BeaconFilterChain.hpp */; };
 		FB71CE591C475F6500A4DB67 /* BeaconFilterChain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB71CE541C475B4600A4DB67 /* BeaconFilterChain.cpp */; };
 		FB7B22921DE495E200FF8BF3 /* SystemModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB7B22911DE495E200FF8BF3 /* SystemModel.cpp */; };
+		FB83C25E1F82413B00D99713 /* libopencv2Static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FB83C2531F822B4500D99713 /* libopencv2Static.a */; };
 		FBBA09F71DACB2DA00EB2553 /* Heading.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBBA09F51DACB2DA00EB2553 /* Heading.cpp */; };
 		FBBA09F81DACB2DA00EB2553 /* Heading.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FBBA09F61DACB2DA00EB2553 /* Heading.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		FBC2B5091D956CE400E09B16 /* LocException.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FBC2B5081D956CE400E09B16 /* LocException.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -407,6 +408,7 @@
 		FB71CE541C475B4600A4DB67 /* BeaconFilterChain.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BeaconFilterChain.cpp; sourceTree = "<group>"; };
 		FB71CE551C475B4600A4DB67 /* BeaconFilterChain.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BeaconFilterChain.hpp; sourceTree = "<group>"; };
 		FB7B22911DE495E200FF8BF3 /* SystemModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SystemModel.cpp; sourceTree = "<group>"; };
+		FB83C2531F822B4500D99713 /* libopencv2Static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libopencv2Static.a; path = Pods/OpenCV/ios/libopencv2Static.a; sourceTree = "<group>"; };
 		FBBA09F51DACB2DA00EB2553 /* Heading.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Heading.cpp; sourceTree = "<group>"; };
 		FBBA09F61DACB2DA00EB2553 /* Heading.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Heading.hpp; sourceTree = "<group>"; };
 		FBC2B5081D956CE400E09B16 /* LocException.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LocException.hpp; sourceTree = "<group>"; };
@@ -427,6 +429,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A350205D9597EA9D7442790F /* libPods-bleloc.a in Frameworks */,
+				FB83C25E1F82413B00D99713 /* libopencv2Static.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -749,6 +752,7 @@
 		FCECB81158285F2B717D06A8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				FB83C2531F822B4500D99713 /* libopencv2Static.a */,
 				F52FFB791C08861800508330 /* libopencv_contrib.dylib */,
 				F52FFB7A1C08861800508330 /* libopencv_core.dylib */,
 				F52FFB7B1C08861800508330 /* libopencv_features2d.dylib */,
@@ -1281,7 +1285,10 @@
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 2;
-				GCC_PREPROCESSOR_DEFINITIONS = EIGEN_MPL2_ONLY;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					EIGEN_MPL2_ONLY,
+					"$(inherited)",
+				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -1303,6 +1310,10 @@
 			baseConfigurationReference = BD7721527FBC1489894D04B9 /* Pods-bleloc.debug.xcconfig */;
 			buildSettings = {
 				GCC_OPTIMIZATION_LEVEL = 3;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Pods/OpenCV/ios",
+				);
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1316,6 +1327,10 @@
 			baseConfigurationReference = 308D6E89343F046D8CCC70C3 /* Pods-bleloc.release.xcconfig */;
 			buildSettings = {
 				GCC_OPTIMIZATION_LEVEL = 3;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Pods/OpenCV/ios",
+				);
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
