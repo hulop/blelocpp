@@ -5,8 +5,8 @@ A BLE beacon-based localization library. This library is used as an iOS framewor
 - [cereal version 1.1.2](http://uscilab.github.io/cereal/) (BSD License)
 - [picojson version 1.3.0](https://github.com/kazuho/picojson) (BSD License)
 - [Boost version 1.61.0](http://www.boost.org) (Boost Software License)
-- [Eigen version 3.2.5](http://eigen.tuxfamily.org) (Mozilla Public License Version 2.0)
-- [OpenCV version 2.4.9](http://opencv.org/) (BSD License)
+- [Eigen version 3.2.5 (EIGEN_MPL2_ONLY)](http://eigen.tuxfamily.org) (Mozilla Public License Version 2.0)
+- [OpenCV version 3.2](http://opencv.org/) (BSD License)
 
 ## Build instructions
 ### Install CocoaPods (If you have not installed)
