@@ -1243,6 +1243,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					EIGEN_MPL2_ONLY,
+					"WITH_FFMPEG=OFF",
 					"$(inherited)",
 				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -1287,6 +1288,7 @@
 				GCC_OPTIMIZATION_LEVEL = 2;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					EIGEN_MPL2_ONLY,
+					"WITH_FFMPEG=OFF",
 					"$(inherited)",
 				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -1310,6 +1312,11 @@
 			baseConfigurationReference = BD7721527FBC1489894D04B9 /* Pods-bleloc.debug.xcconfig */;
 			buildSettings = {
 				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"COCOAPODS=1",
+					"WITH_FFMPEG=OFF",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Pods/OpenCV/ios",
@@ -1327,6 +1334,10 @@
 			baseConfigurationReference = 308D6E89343F046D8CCC70C3 /* Pods-bleloc.release.xcconfig */;
 			buildSettings = {
 				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"COCOAPODS=1",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Pods/OpenCV/ios",
