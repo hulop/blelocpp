@@ -17,4 +17,5 @@ This is a localization library for bluetooth le beacons.
   s.vendored_frameworks = "bleloc.framework"
   s.platforms = {:ios => "8.4"}
   s.requires_arc = false
+  s.ios.frameworks = 'AVFoundation', 'AssetsLibrary', 'CoreMedia'
 end
