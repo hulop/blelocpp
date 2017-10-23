@@ -52,6 +52,7 @@
 #include "RandomWalker.hpp"
 #include "RandomWalkerMotion.hpp"
 #include "SystemModelInBuilding.hpp"
+#include "AltitudeManagerSimple.hpp"
 
 #include "BeaconFilterChain.hpp"
 #include "CleansingBeaconFilter.hpp"
@@ -392,6 +393,7 @@ namespace loc {
         // parameter objects
         PoseRandomWalkerProperty::Ptr poseRandomWalkerProperty = std::make_shared<PoseRandomWalkerProperty>();
         WeakPoseRandomWalkerProperty::Ptr wPRWproperty = std::make_shared<WeakPoseRandomWalkerProperty>();
+        AltitudeManagerSimple::Parameters::Ptr altimeterManagerParameters = std::make_shared<AltitudeManagerSimple::Parameters>();
         
         // system models
         std::shared_ptr<RandomWalker<State, SystemModelInput>>randomWalker;
