@@ -122,6 +122,7 @@ namespace loc {
             double mixtureProbaTransArea_ = 0.0;
             double rejectDistance_ = 5.0;
             
+            long durationAllowForceFloorUpdate_ = 1;
         public:
             using Ptr = std::shared_ptr<FloorTransitionParameters>;
             double heightChangedCriterion() const;
@@ -133,6 +134,9 @@ namespace loc {
             double rejectDistance() const;
             FloorTransitionParameters& mixtureProbaTransArea(double);
             FloorTransitionParameters& rejectDistance(double);
+            
+            long durationAllowForceFloorUpdate() const;
+            FloorTransitionParameters& durationAllowForceFloorUpdate(long);
 
             template<class Archive>
             void serialize(Archive & ar, std::uint32_t const version)
@@ -142,6 +146,9 @@ namespace loc {
                     ar(CEREAL_NVP(weightTransitionArea_));
                     ar(CEREAL_NVP(mixtureProbaTransArea_));
                     ar(CEREAL_NVP(rejectDistance_));
+                }
+                if(1<=version){
+                    ar(CEREAL_NVP(durationAllowForceFloorUpdate_));
                 }
             }
         };
@@ -208,5 +215,5 @@ namespace loc {
 
 // assign version
 CEREAL_CLASS_VERSION(loc::LocationStatusMonitorParameters, 1);
-CEREAL_CLASS_VERSION(loc::StreamParticleFilter::FloorTransitionParameters, 0);
+CEREAL_CLASS_VERSION(loc::StreamParticleFilter::FloorTransitionParameters, 1);
 #endif /* StreamParticleFilter_hpp */

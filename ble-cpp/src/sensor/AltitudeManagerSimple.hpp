@@ -39,6 +39,8 @@ namespace loc{
         
         class Parameters{
         public:
+            using Ptr = std::shared_ptr<Parameters>;
+            
             long timestampIntervalLimit_ = 3000;
             int queueLimit_ = 60;
             int window_ = 3;
@@ -56,6 +58,19 @@ namespace loc{
             double stdThreshold() const{
                 return stdThreshold_;
             }
+            
+            void timestampIntervalLimit(long timestampInterval){
+                timestampIntervalLimit_ = timestampInterval;
+            }
+            void queueLimit(int queueLim){
+                queueLimit_ = queueLim;
+            }
+            void window(int win){
+                window_ = win;
+            }
+            void stdThreshold(double stdThresh){
+                stdThreshold_ = stdThresh;
+            }
         };
         
         AltitudeManagerSimple() = default;
@@ -68,7 +83,7 @@ namespace loc{
         bool verbose() const;
     
     protected:
-        std::shared_ptr<Parameters> mParams = std::shared_ptr<Parameters>(new Parameters);
+        Parameters::Ptr mParams = std::shared_ptr<Parameters>(new Parameters);
         std::deque<Altimeter> altimeterQueue;
         bool verbose_ = false;
     private:

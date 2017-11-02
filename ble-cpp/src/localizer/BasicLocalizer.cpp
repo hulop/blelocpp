@@ -848,7 +848,8 @@ namespace loc{
         
         // AltitudeManager
         if(usesAltimeterForFloorTransCheck){
-            AltitudeManagerSimple::Ptr altMgr(new AltitudeManagerSimple);
+            AltitudeManagerSimple::Ptr altMgr = std::make_shared<AltitudeManagerSimple>();
+            altMgr->parameters(altimeterManagerParameters);
             mLocalizer->altitudeManager(altMgr);
         }
         
