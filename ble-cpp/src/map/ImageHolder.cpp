@@ -124,11 +124,11 @@ namespace loc{
     
     class ImageHolder::Impl{
     protected:
-        mutable std::mutex mtx_;
         std::map<Color, ImageHolder::Points> mColorPointsMap;
         
-        mutable std::map<Color, std::shared_ptr<IndexWrapper>> mColorIndexMap;
         std::map<Color, cv::Mat> mColorDataMap;
+        mutable std::mutex mtx_;
+        mutable std::map<Color, std::shared_ptr<IndexWrapper>> mColorIndexMap;
         
     public:
         virtual ~Impl() = default;
@@ -183,12 +183,11 @@ namespace loc{
             
             {
                 if(ImageHolder::precomputesIndex){
-                    std::shared_ptr<IndexWrapper> idx = mColorIndexMap.at(c);
-                    if(idx){
-                        idx->knnSearch(query, indices, dists, k);
-                    }else{
+                    if(mColorIndexMap.count(c)==0){
                         cv::Mat data = mColorDataMap.at(c);
                         mColorIndexMap[c] = std::make_shared<IndexWrapper>(data, cv::flann::KDTreeIndexParams(), cvflann::FLANN_DIST_EUCLIDEAN);
+                    }else{
+                        mColorIndexMap.at(c)->knnSearch(query, indices, dists, k);
                     }
                 }else{
                     cv::Mat data = mColorDataMap.at(c);
