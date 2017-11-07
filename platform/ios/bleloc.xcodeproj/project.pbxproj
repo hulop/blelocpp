@@ -232,7 +232,6 @@
 		FB71CE581C475F5C00A4DB67 /* BeaconFilterChain.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FB71CE551C475B4600A4DB67 /* BeaconFilterChain.hpp */; };
 		FB71CE591C475F6500A4DB67 /* BeaconFilterChain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB71CE541C475B4600A4DB67 /* BeaconFilterChain.cpp */; };
 		FB7B22921DE495E200FF8BF3 /* SystemModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB7B22911DE495E200FF8BF3 /* SystemModel.cpp */; };
-		FB83C25E1F82413B00D99713 /* libopencv2Static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FB83C2531F822B4500D99713 /* libopencv2Static.a */; };
 		FBBA09F71DACB2DA00EB2553 /* Heading.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBBA09F51DACB2DA00EB2553 /* Heading.cpp */; };
 		FBBA09F81DACB2DA00EB2553 /* Heading.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FBBA09F61DACB2DA00EB2553 /* Heading.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		FBC2B5091D956CE400E09B16 /* LocException.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FBC2B5081D956CE400E09B16 /* LocException.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -429,7 +428,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				A350205D9597EA9D7442790F /* libPods-bleloc.a in Frameworks */,
-				FB83C25E1F82413B00D99713 /* libopencv2Static.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

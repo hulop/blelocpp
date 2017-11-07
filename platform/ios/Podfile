@@ -2,7 +2,7 @@ project 'bleloc'
 
 target 'bleloc' do
   platform :ios, '8.4'
-  pod 'OpenCV', '3.2'
+  pod 'OpenCV/Dynamic', '3.2.0'
   pod 'boost', :podspec => './podspecs/boost.podspec.json'
   pod 'eigen', '3.2.5'
   pod 'picojson', :podspec => './podspecs/picojson.podspec'
