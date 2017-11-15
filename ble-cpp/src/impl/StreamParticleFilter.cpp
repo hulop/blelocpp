@@ -81,11 +81,11 @@ namespace loc{
         return *this;
     }
     
-    long StreamParticleFilter::FloorTransitionParameters::durationAllowForceFloorUpdate() const{
+    int StreamParticleFilter::FloorTransitionParameters::durationAllowForceFloorUpdate() const{
         return durationAllowForceFloorUpdate_;
     }
 
-    StreamParticleFilter::FloorTransitionParameters& StreamParticleFilter::FloorTransitionParameters::durationAllowForceFloorUpdate(long window){
+    StreamParticleFilter::FloorTransitionParameters& StreamParticleFilter::FloorTransitionParameters::durationAllowForceFloorUpdate(int window){
         durationAllowForceFloorUpdate_ = window;
         return *this;
     }

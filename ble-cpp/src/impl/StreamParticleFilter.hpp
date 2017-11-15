@@ -55,9 +55,9 @@ namespace loc {
         double stdev2DEnterLocating_ = 8.0;
         double stdev2DExitLocating_ = 10.0;
         
-        long monitorIntervalMS_ = 3000;
+        int monitorIntervalMS_ = 3000; // [ms]
         
-        long unstableLoop_ = 5;
+        int unstableLoop_ = 5; // [beacon input]
         double disableStatusChangeOnHeightChanging_ = true;
         
     public:
@@ -73,14 +73,14 @@ namespace loc {
         void stdev2DEnterLocating(double stdev2D){stdev2DEnterLocating_ = stdev2D;}
         void stdev2DExitLocating(double stdev2D){stdev2DExitLocating_ = stdev2D; }
         
-        void monitorIntervalMS(long interval){monitorIntervalMS_ = interval;}
-        long monitorIntervalMS() const{return monitorIntervalMS_;}
+        void monitorIntervalMS(int interval){monitorIntervalMS_ = interval;}
+        int monitorIntervalMS() const{return monitorIntervalMS_;}
         
         void disableStatusChangeOnHeightChanging(bool value){disableStatusChangeOnHeightChanging_=value;}
         bool disableStatusChangeOnHeightChanging() const{return disableStatusChangeOnHeightChanging_;}
         
-        void unstableLoop(long value){unstableLoop_=value;}
-        long unstableLoop() const{return unstableLoop_;}
+        void unstableLoop(int value){unstableLoop_=value;}
+        int unstableLoop() const{return unstableLoop_;}
         
         template<class Archive>
         void serialize(Archive & ar, std::uint32_t const version)
@@ -122,7 +122,7 @@ namespace loc {
             double mixtureProbaTransArea_ = 0.0;
             double rejectDistance_ = 5.0;
             
-            long durationAllowForceFloorUpdate_ = 1;
+            int durationAllowForceFloorUpdate_ = 1; // [beacon input]
         public:
             using Ptr = std::shared_ptr<FloorTransitionParameters>;
             double heightChangedCriterion() const;
@@ -135,8 +135,8 @@ namespace loc {
             FloorTransitionParameters& mixtureProbaTransArea(double);
             FloorTransitionParameters& rejectDistance(double);
             
-            long durationAllowForceFloorUpdate() const;
-            FloorTransitionParameters& durationAllowForceFloorUpdate(long);
+            int durationAllowForceFloorUpdate() const;
+            FloorTransitionParameters& durationAllowForceFloorUpdate(int);
 
             template<class Archive>
             void serialize(Archive & ar, std::uint32_t const version)
