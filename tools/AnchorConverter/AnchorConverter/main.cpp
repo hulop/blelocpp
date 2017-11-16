@@ -134,8 +134,8 @@ Option parseArguments(int argc, char *argv[]){
 
 
 Location convertAnchorOrigin(Anchor from, Anchor to){
-    LatLngConverter converter_from;
-    LatLngConverter converter_to;
+    LatLngConverter converter_from(from);
+    LatLngConverter converter_to(to);
     converter_from.anchor(from);
     converter_to.anchor(to);
     Location loc(0,0,0,0);
@@ -146,10 +146,8 @@ Location convertAnchorOrigin(Anchor from, Anchor to){
 
 
 Samples convertSamples(const Samples& samples, Anchor from, Anchor to){
-    LatLngConverter converter_from;
-    LatLngConverter converter_to;
-    converter_from.anchor(from);
-    converter_to.anchor(to);
+    LatLngConverter converter_from(from);
+    LatLngConverter converter_to(to);
     
     Samples samplesNew;
     for(auto& s: samples){
@@ -164,8 +162,8 @@ Samples convertSamples(const Samples& samples, Anchor from, Anchor to){
 }
 
 BLEBeacons convertBLEBeacons(const BLEBeacons& bleBeacons, Anchor from, Anchor to){
-    LatLngConverter converter_from;
-    LatLngConverter converter_to;
+    LatLngConverter converter_from(from);
+    LatLngConverter converter_to(to);
     converter_from.anchor(from);
     converter_to.anchor(to);
     

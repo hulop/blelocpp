@@ -7,11 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		165DE464344BCA8D54755716 /* libPods-AnchorConverter.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E2FC09B7DCFCAB03FF0DF409 /* libPods-AnchorConverter.a */; };
 		FB4850431E6418CB0020ED8F /* Altimeter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB4850411E6418CB0020ED8F /* Altimeter.cpp */; };
 		FB4850461E6418E40020ED8F /* Heading.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB4850441E6418E40020ED8F /* Heading.cpp */; };
-		FBB76B6A1DB8F899003E6294 /* libopencv_flann.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FBB76B691DB8F899003E6294 /* libopencv_flann.dylib */; };
-		FBB76B6C1DB8F8A1003E6294 /* libopencv_core.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FBB76B6B1DB8F8A1003E6294 /* libopencv_core.dylib */; };
 		FBE0F1C01DA3528F006A7885 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBE0F1BF1DA3528F006A7885 /* main.cpp */; };
 		FBE0F1EC1DA36264006A7885 /* DataUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBE0F1E21DA36264006A7885 /* DataUtils.cpp */; };
 		FBE0F2091DA36274006A7885 /* Acceleration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBE0F1F01DA36274006A7885 /* Acceleration.cpp */; };
@@ -29,6 +26,8 @@
 		FBE0F21F1DA362A0006A7885 /* LogUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBE0F2171DA362A0006A7885 /* LogUtil.cpp */; };
 		FBE0F2201DA362A0006A7885 /* MathUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBE0F2191DA362A0006A7885 /* MathUtils.cpp */; };
 		FBE0F2211DA362A0006A7885 /* RandomGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBE0F21B1DA362A0006A7885 /* RandomGenerator.cpp */; };
+		FBFB61031FBD65A5000B850E /* libopencv_core.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FBFB61021FBD65A5000B850E /* libopencv_core.dylib */; };
+		FBFB61051FBD65C1000B850E /* libopencv_flann.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FBFB61041FBD65C1000B850E /* libopencv_flann.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -51,9 +50,6 @@
 		FB4850421E6418CB0020ED8F /* Altimeter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Altimeter.hpp; path = "../../ble-cpp/src/sensor/Altimeter.hpp"; sourceTree = "<group>"; };
 		FB4850441E6418E40020ED8F /* Heading.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Heading.cpp; path = "../../ble-cpp/src/core/Heading.cpp"; sourceTree = "<group>"; };
 		FB4850451E6418E40020ED8F /* Heading.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Heading.hpp; path = "../../ble-cpp/src/core/Heading.hpp"; sourceTree = "<group>"; };
-		FBB76B671DB8F88E003E6294 /* libopencv_core.2.4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_core.2.4.dylib; path = ../../../../../../usr/local/Cellar/opencv/2.4.13/lib/libopencv_core.2.4.dylib; sourceTree = "<group>"; };
-		FBB76B691DB8F899003E6294 /* libopencv_flann.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_flann.dylib; path = ../../../../../../usr/local/Cellar/opencv/2.4.13/lib/libopencv_flann.dylib; sourceTree = "<group>"; };
-		FBB76B6B1DB8F8A1003E6294 /* libopencv_core.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_core.dylib; path = ../../../../../../usr/local/Cellar/opencv/2.4.13/lib/libopencv_core.dylib; sourceTree = "<group>"; };
 		FBE0F1BC1DA3528F006A7885 /* AnchorConverter */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = AnchorConverter; sourceTree = BUILT_PRODUCTS_DIR; };
 		FBE0F1BF1DA3528F006A7885 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		FBE0F1E21DA36264006A7885 /* DataUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DataUtils.cpp; path = "../../ble-cpp/src/data/DataUtils.cpp"; sourceTree = "<group>"; };
@@ -91,6 +87,8 @@
 		FBE0F21B1DA362A0006A7885 /* RandomGenerator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RandomGenerator.cpp; path = "../../ble-cpp/src/utils/RandomGenerator.cpp"; sourceTree = "<group>"; };
 		FBE0F21C1DA362A0006A7885 /* RandomGenerator.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = RandomGenerator.hpp; path = "../../ble-cpp/src/utils/RandomGenerator.hpp"; sourceTree = "<group>"; };
 		FBE0F21D1DA362A0006A7885 /* SerializeUtils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SerializeUtils.hpp; path = "../../ble-cpp/src/utils/SerializeUtils.hpp"; sourceTree = "<group>"; };
+		FBFB61021FBD65A5000B850E /* libopencv_core.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_core.dylib; path = /usr/local/opt/opencv/lib/libopencv_core.dylib; sourceTree = "<group>"; };
+		FBFB61041FBD65C1000B850E /* libopencv_flann.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_flann.dylib; path = /usr/local/opt/opencv/lib/libopencv_flann.dylib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,9 +96,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				165DE464344BCA8D54755716 /* libPods-AnchorConverter.a in Frameworks */,
-				FBB76B6C1DB8F8A1003E6294 /* libopencv_core.dylib in Frameworks */,
-				FBB76B6A1DB8F899003E6294 /* libopencv_flann.dylib in Frameworks */,
+				FBFB61031FBD65A5000B850E /* libopencv_core.dylib in Frameworks */,
+				FBFB61051FBD65C1000B850E /* libopencv_flann.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -110,9 +107,8 @@
 		A7F68BDB45C0DC6D1FCAF993 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				FBB76B6B1DB8F8A1003E6294 /* libopencv_core.dylib */,
-				FBB76B691DB8F899003E6294 /* libopencv_flann.dylib */,
-				FBB76B671DB8F88E003E6294 /* libopencv_core.2.4.dylib */,
+				FBFB61041FBD65C1000B850E /* libopencv_flann.dylib */,
+				FBFB61021FBD65A5000B850E /* libopencv_core.dylib */,
 				E2FC09B7DCFCAB03FF0DF409 /* libPods-AnchorConverter.a */,
 			);
 			name = Frameworks;
@@ -389,8 +385,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = /usr/local/Cellar/opencv/2.4.13/include/;
-				LIBRARY_SEARCH_PATHS = /usr/local/Cellar/opencv/2.4.13/lib/;
+				HEADER_SEARCH_PATHS = /usr/local/opt/opencv/include/;
+				LIBRARY_SEARCH_PATHS = /usr/local/opt/opencv/lib/;
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -432,8 +428,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = /usr/local/Cellar/opencv/2.4.13/include/;
-				LIBRARY_SEARCH_PATHS = /usr/local/Cellar/opencv/2.4.13/lib/;
+				HEADER_SEARCH_PATHS = /usr/local/opt/opencv/include/;
+				LIBRARY_SEARCH_PATHS = /usr/local/opt/opencv/lib/;
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
@@ -444,10 +440,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 66690E4BF17C44941FD615B7 /* Pods-AnchorConverter.debug.xcconfig */;
 			buildSettings = {
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					/usr/local/Cellar/opencv/2.4.13/lib,
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -456,10 +449,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 7745DE82F9826069B3EF0CFE /* Pods-AnchorConverter.release.xcconfig */;
 			buildSettings = {
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					/usr/local/Cellar/opencv/2.4.13/lib,
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
