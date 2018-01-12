@@ -822,6 +822,32 @@ namespace loc{
             of.close();
         }
         
+        // finalize mapdata file
+        if(finalizeMapdata){
+            std::cerr << "Finalizing map data." << std::endl;
+            // convert unique locations to string
+            auto uniLocs = dataStore->getLocations();
+            std::stringstream ss;
+            for(const auto& uloc: uniLocs){
+                ss << "0,L," << uloc << std::endl;
+            }
+            auto uLocLine = ss.str();
+            
+            // modify json object
+            picojson::array locationsArray;
+            picojson::object locationsObj;
+            locationsObj.insert(std::make_pair("data", picojson::value(uLocLine)));
+            locationsArray.push_back(picojson::value(locationsObj));
+            json.insert(std::make_pair("locations", picojson::value(locationsArray)));
+            json.erase("samples");
+            
+            // output mapdata
+            std::ofstream of;
+            of.open(modelPath);
+            of << v.serialize();
+            of.close();
+        }
+        
         // Instantiate sensor data processors
         // Orientation
         orientationMeterAverageParameters.interval(0.1);

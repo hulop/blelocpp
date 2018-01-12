@@ -49,6 +49,7 @@ typedef struct {
     bool usesReset = false;
     bool usesRestart = false;
     bool forceTraining = false;
+    bool finalizeMapdata = false;
     std::string restartLogPath = "";
     
     std::string localizerJSONPath = "";
@@ -82,6 +83,7 @@ void printHelp() {
     std::cout << " --oj                output path for localizer config json" << std::endl;
     std::cout << " --declination       set magnetic declination to compute true north (east-positive, west-negative)" << std::endl;
     std::cout << " -v                  set verbosity" << std::endl;
+    std::cout << " --finalize          finalize map data file" << std::endl;
 }
 
 Option parseArguments(int argc, char *argv[]){
@@ -104,6 +106,7 @@ Option parseArguments(int argc, char *argv[]){
         {"declination",         required_argument , NULL, 0},
         //{"stdY",            required_argument, NULL,  0 },
         {"gptype",   required_argument , NULL, 0},
+        {"finalize",   required_argument , NULL, 0},
         {0,         0,                 0,  0 }
     };
 
@@ -176,6 +179,9 @@ Option parseArguments(int argc, char *argv[]){
             }
             if (strcmp(long_options[option_index].name, "declination") == 0){
                 opt.magneticDeclination = atof(optarg);
+            }
+            if (strcmp(long_options[option_index].name, "finalize") == 0){
+                opt.finalizeMapdata = true;
             }
             break;
         case 'h':
@@ -311,6 +317,7 @@ int main(int argc, char * argv[]) {
         localizer.updateHandler(functionCalledWhenUpdated, &ud);
         localizer.forceTraining = opt.forceTraining;
         localizer.basicLocalizerOptions = opt.basicLocalizerOptions;
+        localizer.finalizeMapdata = opt.finalizeMapdata;
         localizer.setModel(opt.mapPath, "./");
         localizer.normalFunction(opt.normFunc, opt.tDistNu); // set after calling setModel
         ud.latLngConverter = localizer.latLngConverter();

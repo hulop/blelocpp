@@ -384,6 +384,8 @@ namespace loc {
         bool forceTraining = false;
         BasicLocalizerOptions basicLocalizerOptions;
         
+        bool finalizeMapdata = false;
+        
         OrientationMeterAverageParameters orientationMeterAverageParameters;
         std::shared_ptr<OrientationMeter> orientationMeter;
         
