@@ -667,9 +667,6 @@ namespace loc{
             throw e;
         }
         
-        // update observation model
-        deserializedModel->coeffDiffFloorStdev(coeffDiffFloorStdev);
-        
         mLocalizer = std::shared_ptr<StreamParticleFilter>(new StreamParticleFilter());
         if (mFunctionCalledAfterUpdate2 && mUserData) {
             //mLocalizer->updateHandler(mFunctionCalledAfterUpdate2, mUserData);
@@ -821,6 +818,10 @@ namespace loc{
             of << v.serialize();
             of.close();
         }
+        
+        // update additional parameters in the observation model
+        deserializedModel->coeffDiffFloorStdev(coeffDiffFloorStdev);
+        deserializedModel->tDelay(tDelay);
         
         // finalize mapdata file
         if(finalizeMapdata){

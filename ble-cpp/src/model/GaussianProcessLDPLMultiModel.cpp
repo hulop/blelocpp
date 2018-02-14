@@ -572,7 +572,54 @@ namespace loc{
         
         std::vector<double> returnValues(4); // logLikelihood, mahalanobisDistance, #knownBeacons, #unknownBeacons
         
-        auto beaconIdRssiStatsMap = this->predict(state, input);
+        std::map<long, NormalParameter> beaconIdRssiStatsMap;
+        // delayed prdiction
+        int T = mTdelay;
+        double dT = mDTdelay; // ms
+        if(T==1){
+            beaconIdRssiStatsMap = this->predict(state, input);
+        }else{
+            long headTS = state.timestamp;
+            std::vector<State> statesConsider;
+            auto hsize = state.history.size();
+            for(int i=0; i<hsize; i++){
+                const State& hState = state.history.at(hsize-i-1);
+                long diffTS = headTS - hState.timestamp;
+                if( dT <= diffTS){
+                    headTS = hState.timestamp;
+                    statesConsider.push_back(hState);
+                    if((T-1)<= statesConsider.size()){
+                        break;
+                    }
+                }
+            }
+            
+            auto nConsidered = statesConsider.size() + 1;
+            auto cMap = this->predict(state, input);
+            std::map<long, double> meanPreds;
+            double avgWeight = 1.0/((double) nConsidered);
+            
+            for(auto iter = cMap.begin(); iter!= cMap.end() ; ++iter ) {
+                long id = iter->first;
+                meanPreds[id] = avgWeight * iter->second.mean();
+            }
+            for(int i=0; i<statesConsider.size(); i++){
+                const State& s = statesConsider.at(i);
+                auto tmpBMap = this->predict(s, input);
+                for(auto iter = tmpBMap.begin(); iter!= tmpBMap.end() ; ++iter ) {
+                    long id = iter->first;
+                    meanPreds[id] += avgWeight * iter->second.mean();
+                }
+            }
+            
+            std::map<long, NormalParameter> meanStatsMap;
+            for(auto iter = cMap.begin(); iter!= cMap.end() ; ++iter ) {
+                long id = iter->first;
+                NormalParameter np(meanPreds[id], iter->second.stdev());
+                meanStatsMap[id] = np;
+            }
+            beaconIdRssiStatsMap = meanStatsMap;
+        }
         
         std::vector<int> indices = extractKnownBeaconIndices(input);
         
@@ -688,6 +735,12 @@ namespace loc{
     template<class Tstate, class Tinput>
     GaussianProcessLDPLMultiModel<Tstate, Tinput>& GaussianProcessLDPLMultiModel<Tstate, Tinput>::coeffDiffFloorStdev(double coeff){
         mCoeffDiffFloorStdev = coeff;
+        return *this;
+    }
+    
+    template<class Tstate, class Tinput>
+    GaussianProcessLDPLMultiModel<Tstate, Tinput>& GaussianProcessLDPLMultiModel<Tstate, Tinput>::tDelay(int T){
+        mTdelay = T;
         return *this;
     }
     

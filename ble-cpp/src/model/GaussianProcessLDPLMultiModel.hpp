@@ -120,6 +120,10 @@ namespace loc{
         int version = 2;
         GPType gpType = GPNORMAL;
         
+        //parameters for delayed prediction
+        int mTdelay = 1;
+        double mDTdelay = 1000; //ms
+        
     public:
         GaussianProcessLDPLMultiModel() = default;
         ~GaussianProcessLDPLMultiModel() = default;
@@ -149,6 +153,7 @@ namespace loc{
         double rssiStandardDeviationForUnknownBeacons() const;
         
         GaussianProcessLDPLMultiModel& coeffDiffFloorStdev(double);
+        GaussianProcessLDPLMultiModel& tDelay(int);
         
         template<class Archive>
         void save(Archive& ar) const;

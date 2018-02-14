@@ -379,7 +379,22 @@ namespace loc{
             bool timestampIntervalIsValid = (input.timestamp() - input.previousTimestamp()) < timestampIntervalLimit;
             
             if(timestampIntervalIsValid){
-                StatesPtr statesPredicted(new States(mRandomWalker->predict(*states.get(), input)));
+                auto& statesObj = *states.get();
+                StatesPtr statesPredicted(new States(mRandomWalker->predict(statesObj, input)));
+                // move state history
+                for(int i=0; i<statesObj.size(); i++){
+                    State& sPre = statesObj.at(i);
+                    State& sNow = statesPredicted->at(i);
+                    sPre.timestamp = previousTimestampMotion;
+                    sNow.timestamp = timestamp;
+                    sNow.history = std::move(sPre.history);
+                    
+                    if(sNow.history.size()==0){
+                        sNow.history.set_capacity(100);
+                    }
+                    sNow.history.push_back(sPre);
+                    //std::cout << "state_now.history.size=" << sNow.history.size() << ", stete_pre.history.size=" << sPre.history.size() << std::endl;
+                }
                 status->states(statesPredicted, Status::PREDICTION);
             }else{
                 std::cout << "Interval between two timestamps is too large. The input at timestamp=" << timestamp << " was not used." << std::endl;

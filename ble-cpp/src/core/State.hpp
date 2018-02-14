@@ -28,6 +28,7 @@
 #include <vector>
 #include "Location.hpp"
 #include "Pose.hpp"
+#include <boost/circular_buffer.hpp>
 
 namespace loc{
     class State;
@@ -69,6 +70,11 @@ namespace loc{
         friend std::ostream& operator<<(std::ostream&os, const State& pose);
         
         std::string header() const;
+        
+        // experimental feature
+        long timestamp;
+        boost::circular_buffer<State> history;
+        //std::vector<State> history;
     };
     
     class StateProperty{
