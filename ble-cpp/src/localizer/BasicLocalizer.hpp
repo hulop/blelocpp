@@ -192,7 +192,7 @@ namespace loc {
         
         // for observation model
         double coeffDiffFloorStdev = 5.0;
-        int tDelay = 1;
+        int tDelay = -1; // 
         
         OrientationMeterType orientationMeterType = RAW_AVERAGE;
 
@@ -306,7 +306,7 @@ namespace loc {
             try{
                 ar(CEREAL_NVP(tDelay));
             }catch(cereal::Exception& e){
-                std::cerr << "tDelay is not found in config. (default value tDelay=" << tDelay << ")" << std::endl;
+                std::cerr << "tDelay is not found in config and not updated." << std::endl;
             }
         }
         

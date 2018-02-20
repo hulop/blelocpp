@@ -574,8 +574,8 @@ namespace loc{
         
         std::map<long, NormalParameter> beaconIdRssiStatsMap;
         // delayed prdiction
-        int T = mTdelay;
-        double dT = mDTdelay; // ms
+        int T = mTDelay;
+        double dT = mDTDelay; // ms
         if(T==1){
             beaconIdRssiStatsMap = this->predict(state, input);
         }else{
@@ -740,7 +740,7 @@ namespace loc{
     
     template<class Tstate, class Tinput>
     GaussianProcessLDPLMultiModel<Tstate, Tinput>& GaussianProcessLDPLMultiModel<Tstate, Tinput>::tDelay(int T){
-        mTdelay = T;
+        mTDelay = T;
         return *this;
     }
     
@@ -768,6 +768,8 @@ namespace loc{
             BOOST_THROW_EXCEPTION(LocException("unsupported version (version=" + std::to_string(version) +")"));
         }
         ar(CEREAL_NVP(mRssiStandardDeviations));
+        
+        ar(CEREAL_NVP(mTDelay));
     }
     
     template<class Tstate, class Tinput>
@@ -815,6 +817,13 @@ namespace loc{
         ar(CEREAL_NVP(mRssiStandardDeviations));
         mBeaconIdIndexMap = BLEBeacon::constructBeaconIdToIndexMap(mBLEBeacons);
         mStdevRssiForUnknownBeacon = computeNormalStandardDeviation(mRssiStandardDeviations);
+        
+        try{
+            ar(cereal::make_nvp("mTDelay", mTDelay));
+            //std::cerr << "mTDelay is found (mTDelay=" << mTDelay << std::endl;
+        }catch(cereal::Exception& e){
+            std::cerr << "mTDelay is not found (default value mTDelay=" << mTDelay << std::endl;
+        }
     }
     
     //explicit instantiation

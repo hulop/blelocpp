@@ -821,8 +821,10 @@ namespace loc{
         
         // update additional parameters in the observation model
         deserializedModel->coeffDiffFloorStdev(coeffDiffFloorStdev);
-        deserializedModel->tDelay(tDelay);
-        
+        if(1<=tDelay){
+            deserializedModel->tDelay(tDelay);
+        }
+
         // finalize mapdata file
         if(finalizeMapdata){
             std::cerr << "Finalizing map data." << std::endl;

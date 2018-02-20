@@ -121,8 +121,8 @@ namespace loc{
         GPType gpType = GPNORMAL;
         
         //parameters for delayed prediction
-        int mTdelay = 1;
-        double mDTdelay = 1000; //ms
+        int mTDelay = 1;
+        double mDTDelay = 1000; //ms
         
     public:
         GaussianProcessLDPLMultiModel() = default;
