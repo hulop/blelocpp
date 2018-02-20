@@ -288,7 +288,8 @@ namespace loc{
         
         std::string type;
         std::string data;
-        if( regex_match(dataStr, match, regex) ) {
+        std::string prefix = dataStr.substr(0,50);
+        if( regex_match(prefix, match, regex) ) {
             type = match[2];
             type = std::regex_replace( type, std::regex("^[^/]+/(x-)?"), "" );
             long begin = match[1].length();
