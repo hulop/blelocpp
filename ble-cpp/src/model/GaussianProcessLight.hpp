@@ -55,6 +55,7 @@ namespace loc{
         };
         ClusteringType clType = KMEANS;
         bool usesOverlap = true;
+        int mLocalsMixed_ = 3;
         
         // A function for serealization
         template<class Archive>
@@ -63,6 +64,22 @@ namespace loc{
             ar(CEREAL_NVP(centers_));
             ar(CEREAL_NVP(sigmaN_));
             ar(CEREAL_NVP(gaussianKernel_));
+            
+            std::vector<std::string> names;
+            try{
+                ar(CEREAL_NVP(mLocalsMixed_));
+            }catch(cereal::Exception& e){
+                names.push_back("mLocalMixed_");
+            }
+            
+            if(0<names.size()){
+                std::stringstream ss;
+                ss << "[notice] parameters not found: ";
+                for(const auto& name: names){
+                    ss << name << ",";
+                }
+                std::cerr << ss.str() << std::endl;
+            }
         }
         
         GaussianProcessLight& sigmaN(double sigmaN){
@@ -138,7 +155,7 @@ namespace loc{
         //TODO change return type: Eigen::VectorXd would be better
         std::vector<double> predict(double x[], const std::vector<int>& indices) const
         {
-            const size_t M = 3;
+            const size_t M = mLocalsMixed_;
             const size_t n = centers_.size();
             
             std::vector<double> weights(n);
