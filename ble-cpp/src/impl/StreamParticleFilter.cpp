@@ -380,6 +380,11 @@ namespace loc{
             
             if(timestampIntervalIsValid){
                 auto& statesObj = *states.get();
+                std::vector<boost::circular_buffer<State>> histories(statesObj.size());
+                for(int i=0; i<statesObj.size(); i++){
+                    State& sPre = statesObj.at(i);
+                    histories[i] = std::move(sPre.history);
+                }
                 StatesPtr statesPredicted(new States(mRandomWalker->predict(statesObj, input)));
                 // move state history
                 for(int i=0; i<statesObj.size(); i++){
@@ -387,10 +392,10 @@ namespace loc{
                     State& sNow = statesPredicted->at(i);
                     sPre.timestamp = previousTimestampMotion;
                     sNow.timestamp = timestamp;
-                    sNow.history = std::move(sPre.history);
+                    sNow.history = std::move(histories[i]);
                     
                     if(sNow.history.size()==0){
-                        sNow.history.set_capacity(100);
+                        sNow.history.set_capacity(State::history_capacity);
                     }
                     sNow.history.push_back(sPre);
                     //std::cout << "state_now.history.size=" << sNow.history.size() << ", stete_pre.history.size=" << sPre.history.size() << std::endl;

@@ -74,6 +74,7 @@ namespace loc{
         // experimental feature
         long timestamp;
         boost::circular_buffer<State> history;
+        static const size_t history_capacity = 50;
         //std::vector<State> history;
     };
     
