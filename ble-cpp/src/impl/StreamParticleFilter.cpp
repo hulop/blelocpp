@@ -380,6 +380,12 @@ namespace loc{
             
             if(timestampIntervalIsValid){
                 auto& statesObj = *states.get();
+                // move state history
+                std::vector<boost::circular_buffer<State>> histories(statesObj.size());
+                for(int i=0; i<statesObj.size(); i++){
+                    State& sPre = statesObj.at(i);
+                    histories[i] = std::move(sPre.history);
+                }
                 StatesPtr statesPredicted(new States(mRandomWalker->predict(statesObj, input)));
                 // move state history
                 for(int i=0; i<statesObj.size(); i++){
@@ -387,13 +393,7 @@ namespace loc{
                     State& sNow = statesPredicted->at(i);
                     sPre.timestamp = previousTimestampMotion;
                     sNow.timestamp = timestamp;
-                    sNow.history = std::move(sPre.history);
-                    
-                    if(sNow.history.size()==0){
-                        sNow.history.set_capacity(100);
-                    }
-                    sNow.history.push_back(sPre);
-                    //std::cout << "state_now.history.size=" << sNow.history.size() << ", stete_pre.history.size=" << sPre.history.size() << std::endl;
+                    sNow.history = std::move(histories[i]);
                 }
                 status->states(statesPredicted, Status::PREDICTION);
             }else{
@@ -905,6 +905,25 @@ namespace loc{
             }else{
                 status->step(Status::OBSERVATION_WITHOUT_FILTERING);
             }
+            
+            // manage state history
+            {
+                auto timestamp = beacons.timestamp();
+                std::shared_ptr<States> states = status->states();
+                auto& statesObj = *states.get();
+                // move state history
+                for(int i=0; i<statesObj.size(); i++){
+                    State& sNow = statesObj.at(i);
+                    sNow.timestamp = timestamp;
+                    if(sNow.history.empty()){
+                        sNow.history.set_capacity(State::history_capacity);
+                    }
+                    auto history = std::move(sNow.history);
+                    history.push_back(sNow);
+                    sNow.history = std::move(history);
+                }
+            }
+            
             status->timestamp(beacons.timestamp());
             callback(status.get());
         };

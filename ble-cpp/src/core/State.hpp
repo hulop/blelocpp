@@ -74,7 +74,7 @@ namespace loc{
         // experimental feature
         long timestamp;
         boost::circular_buffer<State> history;
-        //std::vector<State> history;
+        static size_t history_capacity;
     };
     
     class StateProperty{

@@ -575,7 +575,8 @@ namespace loc{
         std::map<long, NormalParameter> beaconIdRssiStatsMap;
         // delayed prdiction
         int T = mTDelay;
-        double dT = mDTDelay; // ms
+        double dTmin = mDTDelay - mDTDelayMargin; //ms
+        double dTmax = mDTDelay + mDTDelayMargin; //ms
         if(T==1){
             beaconIdRssiStatsMap = this->predict(state, input);
         }else{
@@ -585,7 +586,7 @@ namespace loc{
             for(int i=0; i<hsize; i++){
                 const State& hState = state.history.at(hsize-i-1);
                 long diffTS = headTS - hState.timestamp;
-                if( dT <= diffTS){
+                if( dTmin <= diffTS && diffTS<dTmax){
                     headTS = hState.timestamp;
                     statesConsider.push_back(hState);
                     if((T-1)<= statesConsider.size()){
@@ -741,6 +742,7 @@ namespace loc{
     template<class Tstate, class Tinput>
     GaussianProcessLDPLMultiModel<Tstate, Tinput>& GaussianProcessLDPLMultiModel<Tstate, Tinput>::tDelay(int T){
         mTDelay = T;
+        State::history_capacity = T;
         return *this;
     }
     
@@ -820,6 +822,7 @@ namespace loc{
         
         try{
             ar(cereal::make_nvp("mTDelay", mTDelay));
+            this->tDelay(mTDelay);
             //std::cerr << "mTDelay is found (mTDelay=" << mTDelay << std::endl;
         }catch(cereal::Exception& e){
             std::cerr << "mTDelay is not found (default value mTDelay=" << mTDelay << std::endl;

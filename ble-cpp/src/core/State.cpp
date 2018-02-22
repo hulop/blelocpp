@@ -27,6 +27,8 @@
 
 namespace  loc {
     
+    size_t State::history_capacity = 1;
+    
     State::State(const Pose& pose): Pose(pose){}
     
     double State::orientationBias() const{

@@ -123,6 +123,7 @@ namespace loc{
         //parameters for delayed prediction
         int mTDelay = 1;
         double mDTDelay = 1000; //ms
+        double mDTDelayMargin = 200; //ms
         
     public:
         GaussianProcessLDPLMultiModel() = default;
