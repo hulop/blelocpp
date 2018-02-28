@@ -69,7 +69,7 @@ namespace loc{
             try{
                 ar(CEREAL_NVP(mLocalsMixed_));
             }catch(cereal::Exception& e){
-                names.push_back("mLocalMixed_");
+                names.push_back("mLocalsMixed_");
             }
             
             if(0<names.size()){
