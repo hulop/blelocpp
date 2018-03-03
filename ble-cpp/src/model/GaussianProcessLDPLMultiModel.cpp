@@ -97,6 +97,8 @@ namespace loc{
     
     template void ITUModelFunction::serialize<cereal::JSONInputArchive> (cereal::JSONInputArchive& archive);
     template void ITUModelFunction::serialize<cereal::JSONOutputArchive> (cereal::JSONOutputArchive& archive);
+    template void ITUModelFunction::serialize<cereal::PortableBinaryInputArchive> (cereal::PortableBinaryInputArchive& archive);
+    template void ITUModelFunction::serialize<cereal::PortableBinaryOutputArchive> (cereal::PortableBinaryOutputArchive& archive);
     
     
     /**
@@ -750,20 +752,31 @@ namespace loc{
     template<class Tstate, class Tinput>
     template<class Archive>
     void GaussianProcessLDPLMultiModel<Tstate, Tinput>::save(Archive& ar) const{
-        //ar(CEREAL_NVP(mKernel));
+        // in order archive for binary support
+        // version 3 (since v1.3.3) : binary support
+        std::cout << "saving version = " << version << std::endl;
         ar(CEREAL_NVP(version));
-        
         ar(CEREAL_NVP(mBLEBeacons));
+        
         ar(CEREAL_NVP(mITUModelMap));
         ar(CEREAL_NVP(mITUParameters));
 
-        if(version<=1){
+        if(version <= 1){
             ar(cereal::make_nvp("mGP",*mGP));
         }else if(version == 2){
             auto lgp = std::dynamic_pointer_cast<GaussianProcessLight>(mGP);
             if(lgp){
                 ar(cereal::make_nvp("GaussianProcessLight", *lgp));
             }else{
+                ar(cereal::make_nvp("GaussianProcess", *mGP));
+            }
+        }else if(version >= 3){
+            // save model type first
+            ar(cereal::make_nvp("ModelType", gpType));
+            if(gpType == GPType::GPLIGHT){
+                auto lgp = std::dynamic_pointer_cast<GaussianProcessLight>(mGP);
+                ar(cereal::make_nvp("GaussianProcessLight", *lgp));
+            } else if (gpType == GPType::GPNORMAL) {
                 ar(cereal::make_nvp("GaussianProcess", *mGP));
             }
         }else{
@@ -777,14 +790,15 @@ namespace loc{
     template<class Tstate, class Tinput>
     template<class Archive>
     void GaussianProcessLDPLMultiModel<Tstate, Tinput>::load(Archive& ar){
-        //ar(CEREAL_NVP(mKernel));
-        ar(CEREAL_NVP(mBLEBeacons));
-        
+        // in order archive for binary support
         try{
             ar(CEREAL_NVP(version));
         }catch(cereal::Exception& e){
             version = 0;
         }
+        std::cout << "loading version = " << version << std::endl;
+        ar(CEREAL_NVP(mBLEBeacons));
+        
         if(version==0){
             ITUModelFunction mITUModel;
             ar(CEREAL_NVP(mITUModel));
@@ -799,16 +813,30 @@ namespace loc{
         ar(CEREAL_NVP(mITUParameters));
         
         // deserialize gp
-        if(version<=1){
+        if(version <= 1){
             GaussianProcess gp;
             ar(cereal::make_nvp("mGP", gp));
             this->mGP = std::make_shared<GaussianProcess>(gp);
-        }else if (version==2){
+            this->gpType = GPType::GPNORMAL;
+        }else if (version == 2){
             try{
                 GaussianProcessLight lgp;
                 ar(cereal::make_nvp("GaussianProcessLight", lgp));
                 this->mGP = std::make_shared<GaussianProcessLight>(lgp);
+                this->gpType = GPType::GPLIGHT;
             }catch(cereal::Exception& e){
+                GaussianProcess gp;
+                ar(cereal::make_nvp("GaussianProcess", gp));
+                this->mGP = std::make_shared<GaussianProcess>(gp);
+                this->gpType = GPType::GPNORMAL;
+            }
+        }else if (version == 3){
+            ar(cereal::make_nvp("ModelType", gpType));
+            if(gpType == GPType::GPLIGHT){
+                GaussianProcessLight lgp;
+                ar(cereal::make_nvp("GaussianProcessLight", lgp));
+                this->mGP = std::make_shared<GaussianProcessLight>(lgp);
+            }else if (gpType == GPType::GPNORMAL) {
                 GaussianProcess gp;
                 ar(cereal::make_nvp("GaussianProcess", gp));
                 this->mGP = std::make_shared<GaussianProcess>(gp);
@@ -832,30 +860,58 @@ namespace loc{
     //explicit instantiation
     template void GaussianProcessLDPLMultiModel<State, Beacons>::load<cereal::JSONInputArchive>(cereal::JSONInputArchive& archive);
     template void GaussianProcessLDPLMultiModel<State, Beacons>::save<cereal::JSONOutputArchive>(cereal::JSONOutputArchive& archive) const;
-    
+    template void GaussianProcessLDPLMultiModel<State, Beacons>::load<cereal::PortableBinaryInputArchive>(cereal::PortableBinaryInputArchive& archive);
+    template void GaussianProcessLDPLMultiModel<State, Beacons>::save<cereal::PortableBinaryOutputArchive>(cereal::PortableBinaryOutputArchive& archive) const;
+
     
     template<class Tstate, class Tinput>
-    void GaussianProcessLDPLMultiModel<Tstate, Tinput>::save(std::ofstream& ofs) const{
-        cereal::JSONOutputArchive oarchive(ofs, cereal::JSONOutputArchive::Options::NoIndent());
-        oarchive(*this);
+    void GaussianProcessLDPLMultiModel<Tstate, Tinput>::save(std::ofstream& ofs, bool binary) {
+        if (binary) {
+            if (version < BINARY_SUPPORTED_MIN_VERSION) {
+                version = BINARY_SUPPORTED_MIN_VERSION;
+            }
+            cereal::PortableBinaryOutputArchive oarchive(ofs);
+            oarchive(*this);
+        } else {
+            cereal::JSONOutputArchive oarchive(ofs, cereal::JSONOutputArchive::Options::NoIndent());
+            oarchive(*this);
+        }
     }
     
     template<class Tstate, class Tinput>
-    void GaussianProcessLDPLMultiModel<Tstate, Tinput>::save(std::ostringstream& oss) const{
-        cereal::JSONOutputArchive oarchive(oss, cereal::JSONOutputArchive::Options::NoIndent());
-        oarchive(*this);
+    void GaussianProcessLDPLMultiModel<Tstate, Tinput>::save(std::ostringstream& oss, bool binary) {
+        if (binary) {
+            if (version < BINARY_SUPPORTED_MIN_VERSION) {
+                version = BINARY_SUPPORTED_MIN_VERSION;
+            }
+            cereal::PortableBinaryOutputArchive oarchive(oss);
+            oarchive(*this);
+        } else {
+            cereal::JSONOutputArchive oarchive(oss, cereal::JSONOutputArchive::Options::NoIndent());
+            oarchive(*this);
+        }
     }
     
     template<class Tstate, class Tinput>
-    void GaussianProcessLDPLMultiModel<Tstate, Tinput>::load(std::ifstream& ifs){
-        cereal::JSONInputArchive iarchive(ifs);
-        iarchive(*this);
+    void GaussianProcessLDPLMultiModel<Tstate, Tinput>::load(std::ifstream& ifs, bool binary){
+        if (binary) {
+            cereal::PortableBinaryInputArchive iarchive(ifs);
+            iarchive(*this);
+        } else {
+            cereal::JSONInputArchive iarchive(ifs);
+            iarchive(*this);
+        }
     }
 
     template<class Tstate, class Tinput>
-    void GaussianProcessLDPLMultiModel<Tstate, Tinput>::load(std::istringstream& iss){
-        cereal::JSONInputArchive iarchive(iss);
-        iarchive(*this);
+    void GaussianProcessLDPLMultiModel<Tstate, Tinput>::load(std::istringstream& iss, bool binary){
+        if (binary) {
+            cereal::PortableBinaryInputArchive iarchive(iss);
+            iarchive(*this);
+        } else {
+            cereal::JSONInputArchive iarchive(iss);
+            iarchive(*this);
+        }
     }
     
     

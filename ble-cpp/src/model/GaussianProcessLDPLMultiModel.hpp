@@ -117,7 +117,8 @@ namespace loc{
         std::vector<int> extractKnownBeaconIndices(const Tinput& beacons) const;
         
         friend class GaussianProcessLDPLMultiModelTrainer<Tstate, Tinput>;
-        int version = 2;
+        int version = 3;
+        const int BINARY_SUPPORTED_MIN_VERSION = 3;
         GPType gpType = GPNORMAL;
         
         //parameters for delayed prediction
@@ -161,10 +162,10 @@ namespace loc{
         template<class Archive>
         void load(Archive& ar);
         
-        void save(std::ofstream& ofs) const;
-        void save(std::ostringstream& oss) const;
-        void load(std::ifstream& ifs);
-        void load(std::istringstream& iss);
+        void save(std::ofstream& ofs, bool binary);
+        void save(std::ostringstream& oss, bool binary);
+        void load(std::ifstream& ifs, bool binary);
+        void load(std::istringstream& iss, bool binary);
         
         bool applyLowestLogLikelihood = false;
     };

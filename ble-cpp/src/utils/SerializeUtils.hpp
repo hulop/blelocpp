@@ -34,6 +34,7 @@
 #include <cereal/types/memory.hpp>
 #include <cereal/types/polymorphic.hpp>
 #include <cereal/archives/json.hpp>
+#include <cereal/archives/portable_binary.hpp>
 
 namespace cereal{
     /**

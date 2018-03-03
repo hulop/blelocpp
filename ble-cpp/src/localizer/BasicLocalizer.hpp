@@ -391,6 +391,10 @@ namespace loc {
         double estimatedRssiBias();
         
         bool forceTraining = false;
+        bool binaryOutput = false;
+        std::string binaryFile = "";
+        std::string trainedFile = "";
+        std::string finalizedFile = "";
         BasicLocalizerOptions basicLocalizerOptions;
         
         bool finalizeMapdata = false;

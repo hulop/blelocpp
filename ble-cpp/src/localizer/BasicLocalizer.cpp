@@ -550,6 +550,11 @@ namespace loc{
         return ret;
     }
     
+    const bool has(const picojson::value::object &obj, std::string key) {
+        auto itr = obj.find(key);
+        return itr != obj.end();
+    }
+    
     const picojson::value &get(const picojson::value::object &obj, std::string key){
         auto itr = obj.find(key);
         if (itr != obj.end()) {
@@ -620,34 +625,90 @@ namespace loc{
         this->anchor.rotate = getDouble(anchor, "rotate");
         latLngConverter_ = std::make_shared<LatLngConverter>(this->anchor);
         
+        // Building - change read order to reduce memory usage peak
+        //ImageHolder::setMode(ImageHolderMode(heavy));
+        BuildingBuilder buildingBuilder;
+        
+        auto& buildings = getArray(json, "layers");
+        
+        for(int floor_num = 0; floor_num < buildings.size(); floor_num++) {
+            auto& building = buildings.at(floor_num).get<picojson::value::object>();
+            auto& param = getObject(building, "param");
+            double ppmx = getDouble(param, "ppmx");
+            double ppmy = getDouble(param, "ppmy");
+            double ppmz = getDouble(param, "ppmz");
+            double originx = getDouble(param, "originx");
+            double originy = getDouble(param, "originy");
+            double originz = getDouble(param, "originz");
+            CoordinateSystemParameters coordSysParams(ppmx, ppmy, ppmz, originx, originy, originz);
+
+            auto& data = getString(building, "data");
+            std::ostringstream ostr;
+            ostr << floor_num << "floor.png";
+            
+            std::string path = DataUtils::stringToFile(data, workingDir, ostr.str());
+            
+            int fn = floor_num;
+            if (!get(param, "floor").is<picojson::null>()) {
+                fn = (int)getDouble(param, "floor");
+            }
+            
+            buildingBuilder.addFloorCoordinateSystemParametersAndImagePath(fn, coordSysParams, path);
+            
+            msec = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now()-s).count();
+            std::cerr << "prepare floor model[" << floor_num << "]: " << msec << "ms" << std::endl;
+        }        
+        msec = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now()-s).count();
+        std::cerr << "build floor model: " << msec << "ms" << std::endl;
+        std::cout << "Create data store" << std::endl << std::endl;
+        // Create data store
+        dataStore = std::shared_ptr<DataStoreImpl> (new DataStoreImpl());
+        dataStore->building(buildingBuilder.build());
+        
         deserializedModel = std::shared_ptr<GaussianProcessLDPLMultiModel<State, Beacons>> (new GaussianProcessLDPLMultiModel<State, Beacons>());
         
         bool doTraining = true;
         try{
             try {
-                auto& str = getString(json, "ObservationModelParameters");
-                if (/* DISABLES CODE */ (false)) {
-                    std::string omppath = DataUtils::stringToFile(str, workingDir, "ObservationModelParameters");
+                
+                if (has(json, "ObservationModelParameters")) {
+                    auto& str = getString(json, "ObservationModelParameters");
                     
-                    msec = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now()-s).count();
-                    std::cerr << "save deserialized model: " << msec << "ms" << std::endl;
-                    
-                    std::cerr << omppath << std::endl;
-                    //std::istringstream ompss(str);
-                    std::ifstream ompss(omppath);
-                    //if (ompss) {
-                    std::cout << "loading" << std::endl;
-                    deserializedModel->load(ompss);
-                    std::cout << "loaded" << std::endl;
-                    //}
-                } else {
-                    std::istringstream ompss(str);
-                    if (ompss) {
+                    if (/* DISABLES CODE */ (false)) {
+                        std::string omppath = DataUtils::stringToFile(str, workingDir, "ObservationModelParameters");
+                        
+                        msec = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now()-s).count();
+                        std::cerr << "save deserialized model: " << msec << "ms" << std::endl;
+                        
+                        std::cerr << omppath << std::endl;
+                        //std::istringstream ompss(str);
+                        std::ifstream ompss(omppath);
+                        //if (ompss) {
                         std::cout << "loading" << std::endl;
-                        deserializedModel->load(ompss);
+                        deserializedModel->load(ompss, false);
                         std::cout << "loaded" << std::endl;
+                        //}
+                    } else {
+                        std::istringstream ompss(str);
+                        if (ompss) {
+                            std::cout << "loading" << std::endl;
+                            deserializedModel->load(ompss, false);
+                            std::cout << "loaded" << std::endl;
+                        }
                     }
                 }
+                
+                if (has(json, "BinaryObservationModelParameters")) {
+                    auto& binaryModelPath = getString(json, "BinaryObservationModelParameters");
+                    std::ifstream ifs(workingDir+"/"+binaryModelPath);
+                    std::cout << "loading" << std::endl;
+                    deserializedModel->load(ifs, true);
+                    std::cout << "loaded" << std::endl;
+                    msec = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now()-s).count();
+                    std::cerr << "load deserialized model: " << msec << "ms" << std::endl;
+                    doTraining = false;
+                }
+                
                 msec = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now()-s).count();
                 std::cerr << "load deserialized model: " << msec << "ms" << std::endl;
                 doTraining = false;
@@ -683,49 +744,8 @@ namespace loc{
         mLocalizer->optVerbose(isVerboseLocalizer);
         mLocalizer->effectiveSampleSizeThreshold(effectiveSampleSizeThreshold);
         mLocalizer->enablesFloorUpdate(enablesFloorUpdate);
-        
-        std::cout << "Create data store" << std::endl << std::endl;
-        // Create data store
-        dataStore = std::shared_ptr<DataStoreImpl> (new DataStoreImpl());
         mLocalizer->dataStore(dataStore);
         
-        // Building - change read order to reduce memory usage peak
-        //ImageHolder::setMode(ImageHolderMode(heavy));
-        BuildingBuilder buildingBuilder;
-        
-        auto& buildings = getArray(json, "layers");
-        
-        for(int floor_num = 0; floor_num < buildings.size(); floor_num++) {
-            auto& building = buildings.at(floor_num).get<picojson::value::object>();
-            auto& param = getObject(building, "param");
-            double ppmx = getDouble(param, "ppmx");
-            double ppmy = getDouble(param, "ppmy");
-            double ppmz = getDouble(param, "ppmz");
-            double originx = getDouble(param, "originx");
-            double originy = getDouble(param, "originy");
-            double originz = getDouble(param, "originz");
-            CoordinateSystemParameters coordSysParams(ppmx, ppmy, ppmz, originx, originy, originz);
-
-            auto& data = getString(building, "data");
-            std::ostringstream ostr;
-            ostr << floor_num << "floor.png";
-            
-            std::string path = DataUtils::stringToFile(data, workingDir, ostr.str());
-            
-            int fn = floor_num;
-            if (!get(param, "floor").is<picojson::null>()) {
-                fn = (int)getDouble(param, "floor");
-            }
-            
-            buildingBuilder.addFloorCoordinateSystemParametersAndImagePath(fn, coordSysParams, path);
-            
-            msec = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now()-s).count();
-            std::cerr << "prepare floor model[" << floor_num << "]: " << msec << "ms" << std::endl;
-        }
-        dataStore->building(buildingBuilder.build());
-        
-        msec = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now()-s).count();
-        std::cerr << "build floor model: " << msec << "ms" << std::endl;
         
         // Sampling data
         
@@ -809,12 +829,12 @@ namespace loc{
             //localizer->observationModel(obsModel);
             
             std::ostringstream oss;
-            obsModel->save(oss);
-            
+            obsModel->save(oss, binaryOutput);
             json["ObservationModelParameters"] = (picojson::value)oss.str();
+            json.erase("BinaryObservationModelParameters");
             
             std::ofstream of;
-            of.open(modelPath);
+            of.open(trainedFile);
             of << v.serialize();
             of.close();
         }
@@ -844,9 +864,18 @@ namespace loc{
             json.insert(std::make_pair("locations", picojson::value(locationsArray)));
             json.erase("samples");
             
+            if (binaryOutput) {
+                std::ofstream of;
+                of.open(workingDir+"/"+binaryFile);
+                deserializedModel->save(of, binaryOutput);
+                of.close();
+                json["BinaryObservationModelParameters"] = (picojson::value)binaryFile;
+                json.erase("ObservationModelParameters");
+            }
+            
             // output mapdata
             std::ofstream of;
-            of.open(modelPath);
+            of.open(finalizedFile);
             of << v.serialize();
             of.close();
         }
