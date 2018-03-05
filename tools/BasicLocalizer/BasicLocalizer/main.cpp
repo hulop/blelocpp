@@ -493,10 +493,11 @@ int main(int argc, char * argv[]) {
                             std::vector<std::string> values;
                             boost::split(values, logString, boost::is_any_of(","));
                             int da = stoi(values.at(1));
+                            long timestamp = stol(values.back());
                             if(da==1){
-                                localizer.disableAcceleration(true);
+                                localizer.disableAcceleration(true,timestamp);
                             }else{
-                                localizer.disableAcceleration(false);
+                                localizer.disableAcceleration(false,timestamp);
                             }
                             std::cout << "LogReplay:" << logString << std::endl;
                         }

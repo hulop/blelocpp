@@ -1101,7 +1101,11 @@ namespace loc{
         return latLngConverter_;
     }
     
-    void BasicLocalizer::disableAcceleration(bool disable){
+    void BasicLocalizer::disableAcceleration(bool disable, long timestamp){
+        if(mFunctionCalledToLog && mDisableAcceleration!=disable){
+            std::string str = "DisableAcceleration,"+std::to_string(disable)+","+std::to_string(timestamp);
+            mFunctionCalledToLog(mUserDataToLog, str);
+        }
         mDisableAcceleration = disable;
     }
     

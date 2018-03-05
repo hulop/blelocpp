@@ -476,7 +476,7 @@ namespace loc {
         OrientationDriftAdjusterSimple::Ptr yawDriftAdjuster = std::make_shared<OrientationDriftAdjusterSimple>();
         
         // control disable/enable acceleration
-        void disableAcceleration(bool);
+        void disableAcceleration(bool, long);
     };
 }
 
