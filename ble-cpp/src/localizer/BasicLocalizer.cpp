@@ -139,6 +139,9 @@ namespace loc{
     
     
     StreamLocalizer& BasicLocalizer::putHeading(const Heading heading) {
+        if (mFunctionCalledToLog) {
+            mFunctionCalledToLog(mUserDataToLog, LogUtil::toString(heading));
+        }
         auto cvt = latLngConverter();
         if(cvt){
             auto localHeading = cvt->headingGlobalToLocal(heading);
@@ -150,7 +153,10 @@ namespace loc{
         return *this;
     }
     
-    StreamLocalizer& BasicLocalizer::putAltimeter(const Altimeter altimeter) {
+    StreamLocalizer& BasicLocalizer::putAltimeter(const Altimeter altimeter){
+        if (mFunctionCalledToLog) {
+            mFunctionCalledToLog(mUserDataToLog, LogUtil::toString(altimeter));
+        }
         if (!isReady) {
             return *this;
         }
