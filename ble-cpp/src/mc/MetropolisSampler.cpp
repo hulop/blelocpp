@@ -55,6 +55,7 @@ namespace loc{
             BOOST_THROW_EXCEPTION(LocException("No location close to beacons was found in sampler."));
         }
         locations = Location::filterLocationsOnFlatFloor(locations); // Remove locations with an unusual z value.
+        locations = mStatusInitializer->extractMovableLocations(locations);
         if(locations.size()==0){
             std::cerr << "All locations were removed at filtering step in sampler.　Not filtered locations are used." << std::endl;
             if (mParams.initType == INIT_WITH_SAMPLE_LOCATIONS) {
