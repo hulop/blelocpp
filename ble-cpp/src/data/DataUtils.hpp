@@ -78,7 +78,7 @@ namespace loc{
         static Samples shortCsvSamplesToSamples(std::istream& istream);
         static std::string samplesToCsvSamples(const Samples& samples);
         
-        static BLEBeacon parseBLEBeaconCSV(const std::string& csvLine) throw (std::invalid_argument);
+        static BLEBeacon parseBLEBeaconCSV(const std::string& csvLine) throw(...);
         static BLEBeacons csvBLEBeaconsToBLEBeacons(std::istream&);
         static std::string BLEBeaconsToCSV(const BLEBeacons& bleBeacons);
         

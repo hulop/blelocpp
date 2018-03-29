@@ -498,7 +498,7 @@ namespace loc{
         return ss.str();
     }
 
-    BLEBeacon DataUtils::parseBLEBeaconCSV(const std::string& csvLine) throw (std::invalid_argument){
+    BLEBeacon DataUtils::parseBLEBeaconCSV(const std::string& csvLine) throw(...){
         std::list<std::string> stringList = splitAndTrimCSV(csvLine);
         std::list<std::string>::iterator iter;
         // uuid, major, minor, x, y, z, floor
@@ -531,6 +531,8 @@ namespace loc{
             }catch(std::invalid_argument e){
                 std::cout << "Invalid csv line was found. line=" <<strBuffer << std::endl;
                 //std::cout << "Header line is found in csv BLEBeacons." << std::endl;
+            }catch(std::out_of_range& e){
+                std::cout << "Invalid csv line was found. line=" <<strBuffer << std::endl;
             }
         }
         
