@@ -57,6 +57,7 @@ typedef struct {
     double magneticDeclination = NAN;
     bool verbose = false;
     BasicLocalizerOptions basicLocalizerOptions;
+    int skipBeacon = 0;
 } Option;
 
 void printHelp() {
@@ -84,6 +85,7 @@ void printHelp() {
     std::cout << " --declination       set magnetic declination to compute true north (east-positive, west-negative)" << std::endl;
     std::cout << " -v                  set verbosity" << std::endl;
     std::cout << " --finalize          finalize map data file" << std::endl;
+    std::cout << " --skip              set skip count of initial beacon inputs" << std::endl;
 }
 
 Option parseArguments(int argc, char *argv[]){
@@ -107,6 +109,7 @@ Option parseArguments(int argc, char *argv[]){
         //{"stdY",            required_argument, NULL,  0 },
         {"gptype",   required_argument , NULL, 0},
         {"finalize",   required_argument , NULL, 0},
+        {"skip",         required_argument , NULL, 0},
         {0,         0,                 0,  0 }
     };
 
@@ -182,6 +185,9 @@ Option parseArguments(int argc, char *argv[]){
             }
             if (strcmp(long_options[option_index].name, "finalize") == 0){
                 opt.finalizeMapdata = true;
+            }
+            if (strcmp(long_options[option_index].name, "skip") == 0){
+                opt.skipBeacon = atoi(optarg);
             }
             break;
         case 'h':
@@ -432,6 +438,7 @@ int main(int argc, char * argv[]) {
             Beacons beaconsRecent;
             std::vector<double> errorsAtMarkers;
             
+            int beaconReceiveCount = 0;
             while (getline(ifs, str))
             {
                 try {
@@ -446,16 +453,21 @@ int main(int argc, char * argv[]) {
                             for(auto& b: beacons){
                                 b.rssi( b.rssi() < 0 ? b.rssi() : -100);
                             }
-                            localizer.putBeacons(beacons);
-                            beaconsRecent = beacons;
-                            // Compute likelihood at recent pose
-                            {
-                                auto recentPose = ud.recentPose;
-                                auto obsModel = localizer.observationModel();
-                                State sTmp(recentPose);
-                                auto logLikelihood = obsModel->computeLogLikelihood(sTmp, beaconsRecent);
-                            }
                             
+                            beaconReceiveCount++;
+                            if(opt.skipBeacon<beaconReceiveCount){
+                                localizer.putBeacons(beacons);
+                                beaconsRecent = beacons;
+                            }else{
+                                std::cout << "First "<< beaconReceiveCount << " beacon input was skipped." << std::endl;
+                            }
+                            // Compute likelihood at recent pose
+                            //{
+                            //    auto recentPose = ud.recentPose;
+                            //    auto obsModel = localizer.observationModel();
+                            //    State sTmp(recentPose);
+                            //    auto logLikelihood = obsModel->computeLogLikelihood(sTmp, beaconsRecent);
+                            //}
                         }
                         // Parsing acceleration values
                         if (logString.compare(0, 3, "Acc") == 0) {
