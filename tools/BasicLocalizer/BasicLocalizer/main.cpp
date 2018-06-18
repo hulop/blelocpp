@@ -447,7 +447,7 @@ int main(int argc, char * argv[]) {
                     if(v.size() > 3){
                         std::string logString = v.at(3);
                         // Parsing beacons values
-                        if (logString.compare(0, 6, "Beacon") == 0) {
+                        if (logString.compare(0, 7, "Beacon,") == 0) {
                             Beacons beacons = LogUtil::toBeacons(logString);
                             //std::cout << "LogReplay:" << beacons.timestamp() << ",Beacon," << beacons.size() << std::endl;
                             for(auto& b: beacons){
@@ -470,22 +470,22 @@ int main(int argc, char * argv[]) {
                             //}
                         }
                         // Parsing acceleration values
-                        if (logString.compare(0, 3, "Acc") == 0) {
+                        if (logString.compare(0, 4, "Acc,") == 0) {
                             Acceleration acc = LogUtil::toAcceleration(logString);
                             localizer.putAcceleration(acc);
                         }
                         // Parsing motion values
-                        if (logString.compare(0, 6, "Motion") == 0) {
+                        if (logString.compare(0, 7, "Motion,") == 0) {
                             Attitude att = LogUtil::toAttitude(logString);
                             localizer.putAttitude(att);
                         }
                         
-                        if (logString.compare(0, 9,"Altimeter") == 0){
+                        if (logString.compare(0, 10,"Altimeter,") == 0){
                             Altimeter alt = LogUtil::toAltimeter(logString);
                             localizer.putAltimeter(alt);
                             //std::cout << "LogReplay:" << alt.timestamp() << ", Altimeter, " << alt.relativeAltitude() << "," << alt.pressure() << std::endl;
                         }
-                        if (logString.compare(0, 7,"Heading") == 0){
+                        if (logString.compare(0, 8,"Heading,") == 0){
                             Heading heading = LogUtil::toHeading(logString);
                             if(heading.trueHeading() < 0){ // (trueHeading==-1 is invalid.)
                                 if(!isnan(opt.magneticDeclination)){
@@ -501,7 +501,7 @@ int main(int argc, char * argv[]) {
                             LocalHeading localHeading = ud.latLngConverter->headingGlobalToLocal(heading);
                             //std::cout << "LogReplay:" << heading.timestamp() << ", Heading, " << heading.magneticHeading() << "," << heading.trueHeading() << "," << heading.headingAccuracy() << "(localHeading=" << localHeading.orientation() << ")" << std::endl;
                         }
-                        if (logString.compare(0, 19, "DisableAcceleration") == 0){
+                        if (logString.compare(0, 20, "DisableAcceleration,") == 0){
                             std::vector<std::string> values;
                             boost::split(values, logString, boost::is_any_of(","));
                             int da = stoi(values.at(1));
@@ -513,7 +513,7 @@ int main(int argc, char * argv[]) {
                             }
                             std::cout << "LogReplay:" << logString << std::endl;
                         }
-                        if (opt.usesReset && logString.compare(0, 5, "Reset") == 0) {
+                        if (opt.usesReset && logString.compare(0, 6, "Reset,") == 0) {
                             // "Reset",lat,lng,floor,heading,timestamp
                             std::vector<std::string> values;
                             boost::split(values, logString, boost::is_any_of(","));
@@ -547,7 +547,7 @@ int main(int argc, char * argv[]) {
                             
                             localizer.resetStatus(newPose, stdevPose);
                         }
-                        if (opt.usesRestart && logString.compare(0, 7, "Restart") == 0){
+                        if (opt.usesRestart && logString.compare(0, 8, "Restart,") == 0){
                             // "Restart",timestamp
                             std::vector<std::string> values;
                             boost::split(values, logString, boost::is_any_of(","));
@@ -557,7 +557,7 @@ int main(int argc, char * argv[]) {
                             restarter.reset();
                             restarter.counter=1;
                         }
-                        if (logString.compare(0, 6, "Marker") == 0){
+                        if (logString.compare(0, 7, "Marker,") == 0){
                             // "Marker",lat,lng,floor,timestamp
                             std::vector<std::string> values;
                             boost::split(values, logString, boost::is_any_of(","));
@@ -625,7 +625,7 @@ int main(int argc, char * argv[]) {
                                 std::cout << std::endl;
                             }
                         }
-                        if (logString.compare(0, 4, "Note") == 0){
+                        if (logString.compare(0, 5, "Note,") == 0){
                             // "Note", note_string
                             std::stringstream ss;
                             ss << "LogReplay: " << logString;
