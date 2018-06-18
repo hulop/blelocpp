@@ -244,6 +244,8 @@
 		FBEB01E81D756F1300CB808D /* RandomWalkerMotion.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FBEB01E41D756F1300CB808D /* RandomWalkerMotion.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		FBEB01E91D756F1300CB808D /* SystemModelInBuilding.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBEB01E51D756F1300CB808D /* SystemModelInBuilding.cpp */; };
 		FBEB01EA1D756F1300CB808D /* SystemModelInBuilding.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FBEB01E61D756F1300CB808D /* SystemModelInBuilding.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		FBFF263420D79D9600DD3645 /* RegisteredBeaconFilter.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FBFF263220D79D9500DD3645 /* RegisteredBeaconFilter.hpp */; };
+		FBFF263520D79D9600DD3645 /* RegisteredBeaconFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBFF263320D79D9500DD3645 /* RegisteredBeaconFilter.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -420,6 +422,8 @@
 		FBEB01E41D756F1300CB808D /* RandomWalkerMotion.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = RandomWalkerMotion.hpp; sourceTree = "<group>"; };
 		FBEB01E51D756F1300CB808D /* SystemModelInBuilding.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SystemModelInBuilding.cpp; sourceTree = "<group>"; };
 		FBEB01E61D756F1300CB808D /* SystemModelInBuilding.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SystemModelInBuilding.hpp; sourceTree = "<group>"; };
+		FBFF263220D79D9500DD3645 /* RegisteredBeaconFilter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = RegisteredBeaconFilter.hpp; sourceTree = "<group>"; };
+		FBFF263320D79D9500DD3645 /* RegisteredBeaconFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RegisteredBeaconFilter.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -469,6 +473,8 @@
 				7E6F24CB1C0F1D76007A97A1 /* StrongestBeaconFilter.hpp */,
 				FB71CE551C475B4600A4DB67 /* BeaconFilterChain.hpp */,
 				FB71CE541C475B4600A4DB67 /* BeaconFilterChain.cpp */,
+				FBFF263320D79D9500DD3645 /* RegisteredBeaconFilter.cpp */,
+				FBFF263220D79D9500DD3645 /* RegisteredBeaconFilter.hpp */,
 			);
 			name = beacon;
 			path = "../../ble-cpp/src/beacon";
@@ -787,6 +793,7 @@
 				7E6F25E31C0F1D78007A97A1 /* OrientationMeter.hpp in Headers */,
 				7E6F25511C0F1D76007A97A1 /* BLEBeacon.hpp in Headers */,
 				FB176CBB1D7824A0008C1745 /* ExtendedDataUtils.hpp in Headers */,
+				FBFF263420D79D9600DD3645 /* RegisteredBeaconFilter.hpp in Headers */,
 				FB6ADB441E2DE3A7009943C0 /* TransformedOrientationMeterAverage.hpp in Headers */,
 				7E6F25531C0F1D76007A97A1 /* bleloc.h in Headers */,
 				7E6F25BF1C0F1D77007A97A1 /* ObservationModel.hpp in Headers */,
@@ -1112,6 +1119,7 @@
 				FB71CE4F1C46889F00A4DB67 /* MathUtils.cpp in Sources */,
 				7E6F254B1C0F1D76007A97A1 /* Beacon.cpp in Sources */,
 				FBE5831B1DF9BF1B00057DB5 /* AltitudeManagerSimple.cpp in Sources */,
+				FBFF263520D79D9600DD3645 /* RegisteredBeaconFilter.cpp in Sources */,
 				FBEB01E71D756F1300CB808D /* RandomWalkerMotion.cpp in Sources */,
 				7E6F25E51C0F1D78007A97A1 /* OrientationMeterAverage.cpp in Sources */,
 				FB176CB91D7823D1008C1745 /* LatLngConverter.cpp in Sources */,

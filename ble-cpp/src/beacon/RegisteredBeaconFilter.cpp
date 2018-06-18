@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2015  IBM Corporation and others
+ * Copyright (c) 2014, 2016  IBM Corporation and others
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,26 +20,23 @@
  * THE SOFTWARE.
  *******************************************************************************/
 
-#ifndef StrongestBeaconFilter_hpp
-#define StrongestBeaconFilter_hpp
-
-#include <stdio.h>
-#include "BeaconFilter.hpp"
+#include "RegisteredBeaconFilter.hpp"
 
 namespace loc{
+    RegisteredBeaconFilter::RegisteredBeaconFilter(const BLEBeacons& bleBeacons){
+        for(const auto& ble: bleBeacons){
+            registeredIDs.insert(ble.id());
+        }
+    }
     
-    class StrongestBeaconFilter : public BeaconFilter{
-    private:
-        double cutoffRssi_ = -100;
-        int nStrongest_ = 10;
-    public:
-        StrongestBeaconFilter() = default;
-        StrongestBeaconFilter(int nStrongest);
-        ~StrongestBeaconFilter() = default;
-        
-        Beacons filter(const Beacons& beacons) const;
-        StrongestBeaconFilter& nStrongest(int nStrongest);
-        StrongestBeaconFilter& cutoffRssi(double cutoffRssi);
-    };
+    Beacons RegisteredBeaconFilter::filter(const Beacons& beacons) const{
+        Beacons filteredBeacons;
+        filteredBeacons.timestamp(beacons.timestamp());
+        for(const auto& b: beacons){
+            if(0<registeredIDs.count(b.id())){
+                filteredBeacons.push_back(b);
+            }
+        }
+        return filteredBeacons;
+    }
 }
-#endif /* StrongestBeaconFilter_hpp */

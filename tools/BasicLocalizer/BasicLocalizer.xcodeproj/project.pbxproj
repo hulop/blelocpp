@@ -79,6 +79,7 @@
 		FBF93E441FB19D0600815833 /* libopencv_core.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FBF93E3F1FB19D0600815833 /* libopencv_core.dylib */; };
 		FBF93E491FB1A5F200815833 /* libopencv_flann.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FBF93E421FB19D0600815833 /* libopencv_flann.dylib */; };
 		FBF93E4A1FB1A5FC00815833 /* libopencv_imgcodecs.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FBF93E401FB19D0600815833 /* libopencv_imgcodecs.dylib */; };
+		FBFF263120D7965200DD3645 /* RegisteredBeaconFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBFF262F20D7965200DD3645 /* RegisteredBeaconFilter.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -228,6 +229,8 @@
 		FBF93E3F1FB19D0600815833 /* libopencv_core.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_core.dylib; path = /usr/local/opt/opencv/lib/libopencv_core.dylib; sourceTree = "<group>"; };
 		FBF93E401FB19D0600815833 /* libopencv_imgcodecs.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_imgcodecs.dylib; path = /usr/local/opt/opencv/lib/libopencv_imgcodecs.dylib; sourceTree = "<group>"; };
 		FBF93E421FB19D0600815833 /* libopencv_flann.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_flann.dylib; path = /usr/local/opt/opencv/lib/libopencv_flann.dylib; sourceTree = "<group>"; };
+		FBFF262F20D7965200DD3645 /* RegisteredBeaconFilter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RegisteredBeaconFilter.cpp; sourceTree = "<group>"; };
+		FBFF263020D7965200DD3645 /* RegisteredBeaconFilter.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = RegisteredBeaconFilter.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -335,6 +338,8 @@
 				7E12B4551D3474B900614DBB /* CleansingBeaconFilter.hpp */,
 				7E12B4561D3474B900614DBB /* StrongestBeaconFilter.cpp */,
 				7E12B4571D3474B900614DBB /* StrongestBeaconFilter.hpp */,
+				FBFF262F20D7965200DD3645 /* RegisteredBeaconFilter.cpp */,
+				FBFF263020D7965200DD3645 /* RegisteredBeaconFilter.hpp */,
 			);
 			name = beacon;
 			path = "../../ble-cpp/src/beacon";
@@ -559,7 +564,7 @@
 				7E12B4401D3473D100614DBB /* Sources */,
 				7E12B4411D3473D100614DBB /* Frameworks */,
 				7E12B4421D3473D100614DBB /* CopyFiles */,
-				2DBBF8E829A63D5832550FA3 /* Copy Pods Resources */,
+				2DBBF8E829A63D5832550FA3 /* [CP] Copy Pods Resources */,
 				FB0CDF721E51637C0014E104 /* ShellScript */,
 			);
 			buildRules = (
@@ -747,6 +752,7 @@
 				7E12B4EE1D34767500614DBB /* Sample.cpp in Sources */,
 				7E12B4EF1D34767500614DBB /* State.cpp in Sources */,
 				7E12B4F01D34767500614DBB /* Status.cpp in Sources */,
+				FBFF263120D7965200DD3645 /* RegisteredBeaconFilter.cpp in Sources */,
 				7E12B4F11D34767500614DBB /* DataLogger.cpp in Sources */,
 				FBBA09FB1DACB89000EB2553 /* Heading.cpp in Sources */,
 				7E12B4F21D34767500614DBB /* DataStoreImpl.cpp in Sources */,

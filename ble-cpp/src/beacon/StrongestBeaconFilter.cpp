@@ -24,6 +24,10 @@
 
 namespace loc{
     
+    StrongestBeaconFilter::StrongestBeaconFilter(int nStrongest){
+        nStrongest_ = nStrongest;
+    }
+    
     Beacons StrongestBeaconFilter::filter(const Beacons& beacons) const{
         Beacons beaconsSorted = Beacon::sortByRssi(beacons);
         Beacons beaconsFiltered(beaconsSorted);

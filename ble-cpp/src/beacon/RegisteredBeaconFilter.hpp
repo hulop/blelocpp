@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2015  IBM Corporation and others
+ * Copyright (c) 2014, 2016  IBM Corporation and others
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,26 +20,25 @@
  * THE SOFTWARE.
  *******************************************************************************/
 
-#ifndef StrongestBeaconFilter_hpp
-#define StrongestBeaconFilter_hpp
+#ifndef RegisteredBeaconFilter_hpp
+#define RegisteredBeaconFilter_hpp
 
 #include <stdio.h>
+#include <set>
 #include "BeaconFilter.hpp"
+#include "BLEBeacon.hpp"
 
 namespace loc{
     
-    class StrongestBeaconFilter : public BeaconFilter{
+    class RegisteredBeaconFilter : public BeaconFilter{
     private:
-        double cutoffRssi_ = -100;
-        int nStrongest_ = 10;
+        std::set<long> registeredIDs;
     public:
-        StrongestBeaconFilter() = default;
-        StrongestBeaconFilter(int nStrongest);
-        ~StrongestBeaconFilter() = default;
+        RegisteredBeaconFilter(const BLEBeacons& bleBeacons);
+        ~RegisteredBeaconFilter() = default;
         
         Beacons filter(const Beacons& beacons) const;
-        StrongestBeaconFilter& nStrongest(int nStrongest);
-        StrongestBeaconFilter& cutoffRssi(double cutoffRssi);
     };
 }
-#endif /* StrongestBeaconFilter_hpp */
+
+#endif /* RegisteredBeaconFilter_hpp */

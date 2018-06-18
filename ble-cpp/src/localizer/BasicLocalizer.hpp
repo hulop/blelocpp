@@ -415,7 +415,7 @@ namespace loc {
         
         std::shared_ptr<StatusInitializerImpl> statusInitializer;
         
-        std::shared_ptr<StrongestBeaconFilter> beaconFilter;
+        std::shared_ptr<BeaconFilter> beaconFilter;
         
         loc::Pose stdevPose;
         

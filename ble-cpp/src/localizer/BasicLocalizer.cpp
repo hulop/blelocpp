@@ -31,6 +31,8 @@
 #include "AltitudeManagerSimple.hpp"
 
 #include "TransformedOrientationMeterAverage.hpp"
+#include "BeaconFilterChain.hpp"
+#include "RegisteredBeaconFilter.hpp"
 
 namespace loc{
     // BasicLocalizer
@@ -998,9 +1000,12 @@ namespace loc{
         mLocalizer->observationModel(deserializedModel);
         
         // Beacon filter
-        beaconFilter = std::shared_ptr<StrongestBeaconFilter>(new StrongestBeaconFilter());
-        beaconFilter->nStrongest(nStrongest);
-        mLocalizer->beaconFilter(beaconFilter);
+        auto registeredBeaconFilter = std::make_shared<RegisteredBeaconFilter>(bleBeacons);
+        auto strongestBeaconFilter = std::make_shared<StrongestBeaconFilter>(nStrongest);
+        auto filterChain = std::make_shared<BeaconFilterChain>();
+        filterChain->addFilter(registeredBeaconFilter).addFilter(strongestBeaconFilter);
+        beaconFilter = filterChain;
+        mLocalizer->beaconFilter(filterChain);
         
         // Set standard deviation of Pose
         double stdevX = 0.25;
