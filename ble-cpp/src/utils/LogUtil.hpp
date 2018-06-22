@@ -58,6 +58,12 @@ namespace loc {
         static Altimeter toAltimeter(const std::string& str);
         
         /*
+         * "Image",timestamp
+         */
+        static std::string toString(long timestamp);
+        static long toImage(const std::string& str);
+        
+        /*
          * "Heading",magneticHeading,trueHeading,headingAccuracy,timestamp
          */
         static std::string toString(const Heading& head);

@@ -107,6 +107,16 @@ namespace loc{
         if (!isTrackingLocalizer()) {
             return *this;
         }
+        if (isnan(altTmp.yaw())) {
+            std::cerr << "Warning!!! : skip NaN yaw input from Motion value" << std::endl;
+            return *this;
+        }
+        auto startWait = std::chrono::system_clock::now();
+        std::lock_guard<std::mutex> lock(mStatusMutex);
+        auto timeWait = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now()-startWait).count();
+        if (timeWait>mMaxWaitMutex) {
+            return *this;
+        }
         mLocalizer->putAttitude(altTmp);
         return *this;
     }
@@ -126,6 +136,12 @@ namespace loc{
                 accTmp.ax(0.0)->ay(0.0)->az(0.0);
             }
             if(mLocationStatus==Status::STABLE or mLocationStatus==Status::UNSTABLE){
+                auto startWait = std::chrono::system_clock::now();
+                std::lock_guard<std::mutex> lock(mStatusMutex);
+                auto timeWait = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now()-startWait).count();
+                if (timeWait>mMaxWaitMutex) {
+                    return *this;
+                }
                 mLocalizer->putAcceleration(accTmp);
             }
         }
@@ -165,9 +181,75 @@ namespace loc{
         }
         else{
             if(mLocationStatus==Status::STABLE or mLocationStatus==Status::UNSTABLE){
+                auto startWait = std::chrono::system_clock::now();
+                std::lock_guard<std::mutex> lock(mStatusMutex);
+                auto timeWait = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now()-startWait).count();
+                if (timeWait>mMaxWaitMutex) {
+                    return *this;
+                }
                 mLocalizer->putAltimeter(altimeter);
             }
         }
+        return *this;
+    }
+    
+    StreamLocalizer& BasicLocalizer::putImageLocalizedPose(long timestamp, const Pose pose) {
+        if (!isReady) {
+            return *this;
+        }
+        if (mFunctionCalledToLog) {
+            mFunctionCalledToLog(mUserDataToLog, LogUtil::toString(timestamp));
+        }
+        
+        if(isVerboseLocalizer){
+            if(mTrackedStatus){
+                std::cout << "mTrackedStatus exists" << std::endl;
+            }else{
+                std::cout << "mTrackedStatus does not exist" << std::endl;
+            }
+        }
+        
+        auto startWait = std::chrono::system_clock::now();
+        std::lock_guard<std::mutex> lock(mStatusMutex);
+        auto timeWait = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now()-startWait).count();
+        if (timeWait>mMaxWaitMutex) {
+            return *this;
+        }
+        mLocalizer->getStatus()->locationStatus(mLocationStatus); // ensure innerStatus == mLocationStatus before put method
+        
+        if(isTrackingLocalizer()){
+            switch(mLocationStatus){
+                case(Status::UNKNOWN): case(Status::LOCATING):
+                    mLocalizer->resetStatus(pose);
+                    break;
+                case(Status::STABLE): case(Status::UNSTABLE):
+                    mLocalizer->putImageLocalizedPose(timestamp, pose);
+                    if(!mTrackedStatus){
+                        mTrackedStatus = std::make_shared<Status>();
+                    }
+                    *mTrackedStatus = *mLocalizer->getStatus();
+                    break;
+                case(Status::NIL):
+                    BOOST_THROW_EXCEPTION(LocException("location status is not set (NIL)"));
+                    break;
+            }
+        }else{
+            switch(mLocationStatus){
+                case(Status::UNKNOWN): case(Status::LOCATING): case(Status::STABLE): case(Status::UNSTABLE):
+                    mLocalizer->resetStatus(pose);
+                    break;
+                case(Status::NIL):
+                    BOOST_THROW_EXCEPTION(LocException("location status is not set (NIL)"));
+                    break;
+            }
+        }
+        
+        if(smoothType == SMOOTH_LOCATION
+           && (mLocationStatus==Status::STABLE || mLocationStatus==Status::UNSTABLE )
+           && isTrackingLocalizer()){
+            return *this; // SMOOTH_LOCATION & TRACKING ends here.
+        }
+        
         return *this;
     }
     
@@ -261,6 +343,12 @@ namespace loc{
             }
         }
         
+        auto startWait = std::chrono::system_clock::now();
+        std::lock_guard<std::mutex> lock(mStatusMutex);
+        auto timeWait = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now()-startWait).count();
+        if (timeWait>mMaxWaitMutex) {
+            return *this;
+        }
         mLocalizer->getStatus()->locationStatus(mLocationStatus); // ensure innerStatus == mLocationStatus before put method
         
         if(isTrackingLocalizer()){
@@ -943,7 +1031,6 @@ namespace loc{
         randomWalkerProperty->sigma = 0.25;
         randomWalker.reset(new RandomWalker<State, SystemModelInput>());
         randomWalker->setProperty(randomWalkerProperty);
-
         
         // Setup RandomWalkerMotion
         RandomWalkerMotionProperty::Ptr randomWalkerMotionProperty(new RandomWalkerMotionProperty);
@@ -996,7 +1083,15 @@ namespace loc{
         
         // Set localizer
         mLocalizer->observationModel(deserializedModel);
-        
+
+        // Set image localize observation model
+        mImageLocalizeObservationModel = std::shared_ptr<ImageLocalizeObservationModel<State, Pose>> (new ImageLocalizeObservationModel<State, Pose>());
+        mImageLocalizeObservationModel->sigmaDistImageLikelihood(sigmaDistImageLikelihood);
+        mImageLocalizeObservationModel->sigmaAngleImageLikelihood(sigmaAngleImageLikelihood);
+        mLocalizer->imageLocalizeObservationModel(mImageLocalizeObservationModel);
+        mLocalizer->imageUpdateDistThreshold(imageUpdateDistThreshold);
+        mLocalizer->imageUpdateAngleLB(imageUpdateAngleLB);
+
         // Beacon filter
         beaconFilter = std::shared_ptr<StrongestBeaconFilter>(new StrongestBeaconFilter());
         beaconFilter->nStrongest(nStrongest);
@@ -1010,7 +1105,7 @@ namespace loc{
         
         // ObservationDependentInitializer
         obsDepInitializer = std::shared_ptr<MetropolisSampler<State, Beacons>>(new MetropolisSampler<State, Beacons>());
-        
+
         obsDepInitializer->observationModel(deserializedModel);
         obsDepInitializer->statusInitializer(statusInitializer);
         msParams.burnIn = nBurnIn;
@@ -1023,6 +1118,19 @@ namespace loc{
         obsDepInitializer->isVerbose = isVerboseLocalizer;
         mLocalizer->observationDependentInitializer(obsDepInitializer);
         
+        // ObservationDependentInitializer
+        imageLocalizedPoseObsDepInitializer = std::shared_ptr<ImageLocalizedPoseMetropolisSampler<State, Pose>>(new ImageLocalizedPoseMetropolisSampler<State, Pose>());
+        imageLocalizedPoseObsDepInitializer->observationModel(mImageLocalizeObservationModel);
+        imageLocalizedPoseObsDepInitializer->statusInitializer(statusInitializer);
+        imageLocalizedPoseMsParams.burnIn = nBurnIn;
+        imageLocalizedPoseMsParams.radius2D = burnInRadius2D; // 10[m]
+        imageLocalizedPoseMsParams.interval = burnInInterval;
+        imageLocalizedPoseMsParams.withOrdering = true;
+        
+        imageLocalizedPoseObsDepInitializer->parameters(imageLocalizedPoseMsParams);
+        imageLocalizedPoseObsDepInitializer->isVerbose = isVerboseLocalizer;
+        mLocalizer->imageLocalizePoseObservationDependentInitializer(imageLocalizedPoseObsDepInitializer);
+
         // Mixture settings
         // double mixProba = 0.001;
 

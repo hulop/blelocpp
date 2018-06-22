@@ -60,6 +60,7 @@
 
 #include "ObservationDependentInitializer.hpp"
 #include "MetropolisSampler.hpp"
+#include "ImageLocalizedPoseMetropolisSampler.hpp"
 
 #include "SerializeUtils.hpp"
 #include "LatLngConverter.hpp"
@@ -196,6 +197,12 @@ namespace loc {
         
         OrientationMeterType orientationMeterType = RAW_AVERAGE;
 
+        // parameters for ImageLocalizeObservationModel
+        double sigmaDistImageLikelihood = 3.0;
+        double sigmaAngleImageLikelihood = 45.0;
+        double imageUpdateDistThreshold = 5.0;
+        double imageUpdateAngleLB = 5.0;
+        
         // parameter objects
         PoseProperty::Ptr poseProperty = std::make_shared<PoseProperty>();
         StateProperty::Ptr stateProperty = std::make_shared<StateProperty>();
@@ -284,6 +291,12 @@ namespace loc {
             ar(CEREAL_NVP(coeffDiffFloorStdev));
             
             ar(CEREAL_NVP(orientationMeterType));
+
+            // parameters for ImageLocalizeObservationModel
+            ar(CEREAL_NVP(sigmaDistImageLikelihood));
+            ar(CEREAL_NVP(sigmaAngleImageLikelihood));
+            ar(CEREAL_NVP(imageUpdateDistThreshold));
+            ar(CEREAL_NVP(imageUpdateAngleLB));
             
             // parameter objects
             ar(CEREAL_NVP(*poseProperty));
@@ -322,6 +335,7 @@ namespace loc {
     private:
         std::shared_ptr<StreamParticleFilter> mLocalizer;
         std::shared_ptr<GaussianProcessLDPLMultiModel<State, Beacons>> deserializedModel;
+        std::shared_ptr<ImageLocalizeObservationModel<State, Pose>> mImageLocalizeObservationModel;
         UserData userData;
         double isReady = false;
         
@@ -336,6 +350,8 @@ namespace loc {
         
         //std::shared_ptr<loc::Status> mResult;
         std::shared_ptr<Status> mTrackedStatus;
+        std::mutex mStatusMutex; // TODO : this mutex block update process, remove
+        long long mMaxWaitMutex = 500; // maximum wait time for mutex in millisec
         
         std::vector<loc::State> status_list[N_SMOOTH_MAX];
         std::vector<loc::Beacon> beacons_list[N_SMOOTH_MAX];
@@ -420,9 +436,13 @@ namespace loc {
         loc::Pose stdevPose;
         
         std::shared_ptr<MetropolisSampler<State, Beacons>> obsDepInitializer;
-        
+
         MetropolisSampler<State, Beacons>::Parameters msParams;
         
+        std::shared_ptr<ImageLocalizedPoseMetropolisSampler<State, Pose>> imageLocalizedPoseObsDepInitializer;
+        
+        ImageLocalizedPoseMetropolisSampler<State, Pose>::Parameters imageLocalizedPoseMsParams;
+
         LatLngConverter::Ptr latLngConverter();
 
         StreamLocalizer& updateHandler(void (*functionCalledAfterUpdate)(Status*)) override;
@@ -437,8 +457,9 @@ namespace loc {
         StreamLocalizer& putLocalHeading(const LocalHeading heading) override;
         StreamLocalizer& putHeading(const Heading heading);
         StreamLocalizer& putAltimeter(const Altimeter altimeter) override;
+        StreamLocalizer& putImageLocalizedPose(long timestamp, const Pose pose) override;
         Status* getStatus() override;
-                                 
+        
         bool resetStatus() override;
         bool resetStatus(Pose pose) override;
         bool resetStatus(Pose meanPose, Pose stdevPose) override;
@@ -464,6 +485,10 @@ namespace loc {
         
         std::shared_ptr<GaussianProcessLDPLMultiModel<State, Beacons>> observationModel() const{
             return deserializedModel;
+        };
+
+        std::shared_ptr<ImageLocalizeObservationModel<State, Pose>> imageLocalizeObservationModel() const{
+            return mImageLocalizeObservationModel;
         };
         
         // for orientation initialization

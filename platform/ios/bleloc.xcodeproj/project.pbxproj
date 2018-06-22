@@ -22,6 +22,18 @@
 
 /* Begin PBXBuildFile section */
 		634B3C690684C08A0572FBE0 /* libPods-blelocjni.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BC1A73BB7CF5381110A675C3 /* libPods-blelocjni.a */; };
+		6626636B2037950A006AC08B /* CnnPoseUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 662663692037950A006AC08B /* CnnPoseUtil.cpp */; };
+		6626636C2037950A006AC08B /* CnnPoseUtil.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6626636A2037950A006AC08B /* CnnPoseUtil.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		66266372203A2C80006AC08B /* ImageLocalizeObservationModel.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6626636E203A0743006AC08B /* ImageLocalizeObservationModel.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		66266373203A2C9C006AC08B /* ImageLocalizeObservationModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6626636D203A0743006AC08B /* ImageLocalizeObservationModel.cpp */; };
+		66266376203B52C1006AC08B /* ImageLocalizedPoseMetropolisSampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 66266374203B52C1006AC08B /* ImageLocalizedPoseMetropolisSampler.cpp */; };
+		66266377203B52C1006AC08B /* ImageLocalizedPoseMetropolisSampler.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 66266375203B52C1006AC08B /* ImageLocalizedPoseMetropolisSampler.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		6626637E203DE689006AC08B /* CnnManager.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 66FC68D7203224100056F30E /* CnnManager.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		66FC68E2203224E40056F30E /* CnnManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 66FC68D6203224100056F30E /* CnnManager.cpp */; };
+		66FC68E52032260A0056F30E /* TensorFlowUtil.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 66FC68D9203224100056F30E /* TensorFlowUtil.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		66FC68E820322A260056F30E /* TensorFlowUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 66FC68D8203224100056F30E /* TensorFlowUtil.cpp */; };
+		66FC690A203505FF0056F30E /* CnnFileUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 66FC6908203505FF0056F30E /* CnnFileUtil.cpp */; };
+		66FC690B203505FF0056F30E /* CnnFileUtil.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 66FC6909203505FF0056F30E /* CnnFileUtil.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E6F25371C0F1D76007A97A1 /* BaseBeaconFilter.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24C61C0F1D76007A97A1 /* BaseBeaconFilter.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E6F25381C0F1D76007A97A1 /* BaseBeaconFilter.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24C61C0F1D76007A97A1 /* BaseBeaconFilter.hpp */; };
 		7E6F25391C0F1D76007A97A1 /* BeaconFilter.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24C71C0F1D76007A97A1 /* BeaconFilter.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -261,6 +273,18 @@
 /* Begin PBXFileReference section */
 		308D6E89343F046D8CCC70C3 /* Pods-bleloc.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bleloc.release.xcconfig"; path = "Pods/Target Support Files/Pods-bleloc/Pods-bleloc.release.xcconfig"; sourceTree = "<group>"; };
 		5D651D528829A828244BD797 /* libPods-bleloc.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-bleloc.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		662663692037950A006AC08B /* CnnPoseUtil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CnnPoseUtil.cpp; sourceTree = "<group>"; };
+		6626636A2037950A006AC08B /* CnnPoseUtil.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CnnPoseUtil.hpp; sourceTree = "<group>"; };
+		6626636D203A0743006AC08B /* ImageLocalizeObservationModel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ImageLocalizeObservationModel.cpp; sourceTree = "<group>"; };
+		6626636E203A0743006AC08B /* ImageLocalizeObservationModel.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ImageLocalizeObservationModel.hpp; sourceTree = "<group>"; };
+		66266374203B52C1006AC08B /* ImageLocalizedPoseMetropolisSampler.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ImageLocalizedPoseMetropolisSampler.cpp; sourceTree = "<group>"; };
+		66266375203B52C1006AC08B /* ImageLocalizedPoseMetropolisSampler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ImageLocalizedPoseMetropolisSampler.hpp; sourceTree = "<group>"; };
+		66FC68D6203224100056F30E /* CnnManager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CnnManager.cpp; sourceTree = "<group>"; };
+		66FC68D7203224100056F30E /* CnnManager.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CnnManager.hpp; sourceTree = "<group>"; };
+		66FC68D8203224100056F30E /* TensorFlowUtil.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TensorFlowUtil.cpp; sourceTree = "<group>"; };
+		66FC68D9203224100056F30E /* TensorFlowUtil.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TensorFlowUtil.hpp; sourceTree = "<group>"; };
+		66FC6908203505FF0056F30E /* CnnFileUtil.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CnnFileUtil.cpp; sourceTree = "<group>"; };
+		66FC6909203505FF0056F30E /* CnnFileUtil.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CnnFileUtil.hpp; sourceTree = "<group>"; };
 		7654A1CA9FFCCD15F8AD65D2 /* Pods-blelocjni.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-blelocjni.release.xcconfig"; path = "Pods/Target Support Files/Pods-blelocjni/Pods-blelocjni.release.xcconfig"; sourceTree = "<group>"; };
 		7E6F24C61C0F1D76007A97A1 /* BaseBeaconFilter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BaseBeaconFilter.hpp; sourceTree = "<group>"; };
 		7E6F24C71C0F1D76007A97A1 /* BeaconFilter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BeaconFilter.hpp; sourceTree = "<group>"; };
@@ -398,7 +422,7 @@
 		FB315CE41F53DF4A00681EAB /* OrientationAdjuster.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = OrientationAdjuster.hpp; sourceTree = "<group>"; };
 		FB5B4BEE1C7C41B600D00E8E /* MetropolisSampler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = MetropolisSampler.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		FB5B4BEF1C7C41B600D00E8E /* MetropolisSampler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = MetropolisSampler.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		FB5B4BF01C7C41B600D00E8E /* ObservationDependentInitializer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = ObservationDependentInitializer.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		FB5B4BF01C7C41B600D00E8E /* ObservationDependentInitializer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = ObservationDependentInitializer.hpp; sourceTree = "<group>"; };
 		FB6ADB411E2DE3A7009943C0 /* TransformedOrientationMeterAverage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TransformedOrientationMeterAverage.cpp; sourceTree = "<group>"; };
 		FB6ADB421E2DE3A7009943C0 /* TransformedOrientationMeterAverage.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = TransformedOrientationMeterAverage.hpp; sourceTree = "<group>"; };
 		FB6ADB541E2F5CCD009943C0 /* GaussianProcessLight.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GaussianProcessLight.cpp; sourceTree = "<group>"; };
@@ -458,6 +482,34 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6677AD9A201FBE3E00DE55F8 /* image */ = {
+			isa = PBXGroup;
+			children = (
+				6626636D203A0743006AC08B /* ImageLocalizeObservationModel.cpp */,
+				6626636E203A0743006AC08B /* ImageLocalizeObservationModel.hpp */,
+				66266374203B52C1006AC08B /* ImageLocalizedPoseMetropolisSampler.cpp */,
+				66266375203B52C1006AC08B /* ImageLocalizedPoseMetropolisSampler.hpp */,
+			);
+			name = image;
+			path = "../../ble-cpp/src/image";
+			sourceTree = SOURCE_ROOT;
+		};
+		66FC68D5203224100056F30E /* cnn */ = {
+			isa = PBXGroup;
+			children = (
+				662663692037950A006AC08B /* CnnPoseUtil.cpp */,
+				6626636A2037950A006AC08B /* CnnPoseUtil.hpp */,
+				66FC68D6203224100056F30E /* CnnManager.cpp */,
+				66FC68D7203224100056F30E /* CnnManager.hpp */,
+				66FC6908203505FF0056F30E /* CnnFileUtil.cpp */,
+				66FC6909203505FF0056F30E /* CnnFileUtil.hpp */,
+				66FC68D8203224100056F30E /* TensorFlowUtil.cpp */,
+				66FC68D9203224100056F30E /* TensorFlowUtil.hpp */,
+			);
+			name = cnn;
+			path = "../../ble-cpp/src/cnn";
+			sourceTree = SOURCE_ROOT;
+		};
 		7E6F24C51C0F1D76007A97A1 /* beacon */ = {
 			isa = PBXGroup;
 			children = (
@@ -676,6 +728,8 @@
 				7E6F24CC1C0F1D76007A97A1 /* core */,
 				7E6F24E91C0F1D76007A97A1 /* data */,
 				7E6F24F51C0F1D76007A97A1 /* filter */,
+				66FC68D5203224100056F30E /* cnn */,
+				6677AD9A201FBE3E00DE55F8 /* image */,
 				7E6F24F91C0F1D76007A97A1 /* impl */,
 				7E6F25011C0F1D76007A97A1 /* map */,
 				7E6F25091C0F1D76007A97A1 /* model */,
@@ -780,6 +834,12 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				66266377203B52C1006AC08B /* ImageLocalizedPoseMetropolisSampler.hpp in Headers */,
+				66266372203A2C80006AC08B /* ImageLocalizeObservationModel.hpp in Headers */,
+				6626637E203DE689006AC08B /* CnnManager.hpp in Headers */,
+				66FC690B203505FF0056F30E /* CnnFileUtil.hpp in Headers */,
+				6626636C2037950A006AC08B /* CnnPoseUtil.hpp in Headers */,
+				66FC68E52032260A0056F30E /* TensorFlowUtil.hpp in Headers */,
 				7E6F25451C0F1D76007A97A1 /* Acceleration.hpp in Headers */,
 				7E6F25771C0F1D76007A97A1 /* Status.hpp in Headers */,
 				7E6F257F1C0F1D76007A97A1 /* DataStore.hpp in Headers */,
@@ -787,7 +847,6 @@
 				7E6F25E31C0F1D78007A97A1 /* OrientationMeter.hpp in Headers */,
 				7E6F25511C0F1D76007A97A1 /* BLEBeacon.hpp in Headers */,
 				FB176CBB1D7824A0008C1745 /* ExtendedDataUtils.hpp in Headers */,
-				FB6ADB441E2DE3A7009943C0 /* TransformedOrientationMeterAverage.hpp in Headers */,
 				7E6F25531C0F1D76007A97A1 /* bleloc.h in Headers */,
 				7E6F25BF1C0F1D77007A97A1 /* ObservationModel.hpp in Headers */,
 				7E6F25A91C0F1D77007A97A1 /* CoordinateSystem.hpp in Headers */,
@@ -806,7 +865,6 @@
 				7E6F25491C0F1D76007A97A1 /* Attitude.hpp in Headers */,
 				7E6F25F91C0F1D79007A97A1 /* ArrayUtils.hpp in Headers */,
 				7E6F25A31C0F1D77007A97A1 /* StreamParticleFilter.hpp in Headers */,
-				FB6ADB571E2F5CCD009943C0 /* GaussianProcessLight.hpp in Headers */,
 				7E6F25B51C0F1D77007A97A1 /* GaussianProcess.hpp in Headers */,
 				7E6F25871C0F1D76007A97A1 /* DataUtils.hpp in Headers */,
 				7E6F25A71C0F1D77007A97A1 /* Building.hpp in Headers */,
@@ -848,6 +906,8 @@
 				7E92393E1D54764000875766 /* LatLngUtil.hpp in Headers */,
 				FBE583191DF9BF1B00057DB5 /* Altimeter.hpp in Headers */,
 				7EDEDC121D1CCCD800AC111A /* BasicLocalizer.hpp in Headers */,
+				FB6ADB571E2F5CCD009943C0 /* GaussianProcessLight.hpp in Headers */,
+				FB6ADB441E2DE3A7009943C0 /* TransformedOrientationMeterAverage.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -918,7 +978,6 @@
 				7E8A887C1C071C2F00C32E70 /* Sources */,
 				7E8A887D1C071C2F00C32E70 /* Frameworks */,
 				7E8A887E1C071C2F00C32E70 /* CopyFiles */,
-				9434ED5E19CFC706D080F6FF /* [CP] Copy Pods Resources */,
 				7E8A89231C072C7B00C32E70 /* Headers */,
 				7E8A89881C073E8400C32E70 /* ShellScript */,
 			);
@@ -939,7 +998,6 @@
 				F5013CCB1C08799F007B6557 /* Sources */,
 				F5013CCC1C08799F007B6557 /* Frameworks */,
 				F5013CCD1C08799F007B6557 /* Headers */,
-				B617C1E9455C5C8A81BBF662 /* [CP] Copy Pods Resources */,
 				F5027DAA1C0BEE9F0027329C /* ShellScript */,
 			);
 			buildRules = (
@@ -1023,43 +1081,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-bleloc-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		9434ED5E19CFC706D080F6FF /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-bleloc/Pods-bleloc-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		B617C1E9455C5C8A81BBF662 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-blelocjni/Pods-blelocjni-resources.sh\"\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		D49FB588BA5AA206EE4EFAF3 /* [CP] Check Pods Manifest.lock */ = {
@@ -1068,13 +1099,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-blelocjni-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		F5027DAA1C0BEE9F0027329C /* ShellScript */ = {
@@ -1097,6 +1131,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				66266376203B52C1006AC08B /* ImageLocalizedPoseMetropolisSampler.cpp in Sources */,
+				66266373203A2C9C006AC08B /* ImageLocalizeObservationModel.cpp in Sources */,
+				66FC68E2203224E40056F30E /* CnnManager.cpp in Sources */,
+				66FC690A203505FF0056F30E /* CnnFileUtil.cpp in Sources */,
+				66FC68E820322A260056F30E /* TensorFlowUtil.cpp in Sources */,
+				6626636B2037950A006AC08B /* CnnPoseUtil.cpp in Sources */,
 				7EDEDC111D1CCCBB00AC111A /* BasicLocalizer.cpp in Sources */,
 				7E6F25DB1C0F1D78007A97A1 /* StatusInitializerStub.cpp in Sources */,
 				7E6F25B71C0F1D77007A97A1 /* GaussianProcessLDPLMultiModel.cpp in Sources */,
@@ -1250,11 +1290,31 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(TF_ROOT)",
+					"$(TF_ROOT)/tensorflow/contrib/makefile/downloads",
+					"$(TF_ROOT)/tensorflow/contrib/makefile/downloads/protobuf/src",
+					"$(TF_ROOT)/tensorflow/contrib/makefile/gen/proto",
+					"$(TF_ROOT)/tensorflow/contrib/makefile/downloads/nsync/public",
+					"$(TF_ROOT)/tensorflow/contrib/makefile/downloads/eigen",
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				LIBRARY_SEARCH_PATHS = (
+					"$(TF_ROOT)/tensorflow/contrib/makefile/gen/protobuf_ios/lib",
+					"$(TF_ROOT)/tensorflow/contrib/makefile/gen/lib",
+				);
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"$(TF_ROOT)/tensorflow/contrib/makefile/downloads/nsync/builds/lipo.ios.c++11/nsync.a",
+					"-lprotobuf",
+					"-lprotobuf-lite",
+					"-force_load",
+					"$(TF_ROOT)/tensorflow/contrib/makefile/gen/lib/libtensorflow-core.a",
+				);
 				SDKROOT = iphoneos;
+				TF_ROOT = "/Users/ishihara/Documents/package/tensorflow-1.4.1/";
 				VALID_ARCHS = "arm64 x86_64";
 			};
 			name = Debug;
@@ -1295,11 +1355,31 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(TF_ROOT)",
+					"$(TF_ROOT)/tensorflow/contrib/makefile/downloads",
+					"$(TF_ROOT)/tensorflow/contrib/makefile/downloads/protobuf/src",
+					"$(TF_ROOT)/tensorflow/contrib/makefile/gen/proto",
+					"$(TF_ROOT)/tensorflow/contrib/makefile/downloads/nsync/public",
+					"$(TF_ROOT)/tensorflow/contrib/makefile/downloads/eigen",
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				LIBRARY_SEARCH_PATHS = (
+					"$(TF_ROOT)/tensorflow/contrib/makefile/gen/protobuf_ios/lib",
+					"$(TF_ROOT)/tensorflow/contrib/makefile/gen/lib",
+				);
 				MTL_ENABLE_DEBUG_INFO = NO;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"$(TF_ROOT)/tensorflow/contrib/makefile/downloads/nsync/builds/lipo.ios.c++11/nsync.a",
+					"-lprotobuf",
+					"-lprotobuf-lite",
+					"-force_load",
+					"$(TF_ROOT)/tensorflow/contrib/makefile/gen/lib/libtensorflow-core.a",
+				);
 				SDKROOT = iphoneos;
+				TF_ROOT = "/Users/ishihara/Documents/package/tensorflow-1.4.1/";
 				VALIDATE_PRODUCT = YES;
 				VALID_ARCHS = "arm64 x86_64";
 			};

@@ -1,38 +1,39 @@
-/*******************************************************************************
- * Copyright (c) 2014, 2016  IBM Corporation and others
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- *******************************************************************************/
+//
+//  main.cpp
+//  CnnBasicLocalizer
+//
+//  Created by 石原辰也 on 2018/03/01.
+//  Copyright © 2018 com.ibm.research.tokyo.ar. All rights reserved.
+//
 
 #include <iostream>
+#include "CnnManager.hpp"
 #include "BasicLocalizer.hpp"
+#include "CnnFileUtil.hpp"
+#include "CnnPoseUtil.hpp"
 #include "MathUtils.hpp"
 #include "DataUtils.hpp"
 #include "LogUtil.hpp"
 #include <getopt.h>
 #include <boost/program_options.hpp>
+#include <opencv2/imgcodecs/imgcodecs.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
 
 using namespace loc;
 
+// These dimensions need to match those the model was trained with.
+const int wanted_input_width = 224;
+const int wanted_input_height = 224;
+const int wanted_input_channels = 3;
+
+const float input_mean = 128.0f;
+const float input_std = 1.0f;
+const float input_beacon_mean = 0.0f;
+const float input_beacon_std = 1.0f;
 
 typedef struct {
     std::string mapPath = "";
+    std::string cnnSettingPath = "";
     std::string testPath = "";
     std::string outputPath = "";
     double meanRssiBias = 0.0;
@@ -57,13 +58,17 @@ typedef struct {
     double magneticDeclination = NAN;
     bool verbose = false;
     BasicLocalizerOptions basicLocalizerOptions;
-    int skipBeacon = 0;
+
+    ImageLocalizeMode imageLocalizeMode = IMAGE_BEACON;
+    bool useImageMobilenet = false;
+    bool useImageLstm = false;
 } Option;
 
 void printHelp() {
     std::cout << "Options for Basic Localizer" << std::endl;
     std::cout << " -h                  show this help" << std::endl;
     std::cout << " -m mapfile          set map data file" << std::endl;
+    std::cout << " -c cnnfile          set CNN setting file" << std::endl;
     std::cout << " --train             force training parameters" << std::endl;
     std::cout << " --gptype <string>   set gptype [normal,light] for training" << std::endl;
     std::cout << " -t testfile         set test csv data file" << std::endl;
@@ -85,7 +90,8 @@ void printHelp() {
     std::cout << " --declination       set magnetic declination to compute true north (east-positive, west-negative)" << std::endl;
     std::cout << " -v                  set verbosity" << std::endl;
     std::cout << " --finalize          finalize map data file" << std::endl;
-    std::cout << " --skip              set skip count of initial beacon inputs" << std::endl;
+    std::cout << " --mobilenet          use MobileNet" << std::endl;
+    std::cout << " --lstm              use LSTM" << std::endl;
 }
 
 Option parseArguments(int argc, char *argv[]){
@@ -109,11 +115,12 @@ Option parseArguments(int argc, char *argv[]){
         //{"stdY",            required_argument, NULL,  0 },
         {"gptype",   required_argument , NULL, 0},
         {"finalize",   required_argument , NULL, 0},
-        {"skip",         required_argument , NULL, 0},
+        {"mobilenet",      no_argument, NULL, 0},
+        {"lstm",      no_argument, NULL, 0},
         {0,         0,                 0,  0 }
     };
-
-    while ((c = getopt_long(argc, argv, "m:t:ns:ho:rfv", long_options, &option_index )) != -1)
+    
+    while ((c = getopt_long(argc, argv, "m:c:t:ns:ho:rfv", long_options, &option_index )) != -1)
         switch (c)
     {
         case 0:
@@ -186,8 +193,11 @@ Option parseArguments(int argc, char *argv[]){
             if (strcmp(long_options[option_index].name, "finalize") == 0){
                 opt.finalizeMapdata = true;
             }
-            if (strcmp(long_options[option_index].name, "skip") == 0){
-                opt.skipBeacon = atoi(optarg);
+            if (strcmp(long_options[option_index].name, "mobilenet") == 0){
+                opt.useImageMobilenet = true;
+            }
+            if (strcmp(long_options[option_index].name, "lstm") == 0){
+                opt.useImageLstm = true;
             }
             break;
         case 'h':
@@ -195,6 +205,9 @@ Option parseArguments(int argc, char *argv[]){
             abort();
         case 'm':
             opt.mapPath.assign(optarg);
+            break;
+        case 'c':
+            opt.cnnSettingPath.assign(optarg);
             break;
         case 't':
             opt.testPath.assign(optarg);
@@ -232,6 +245,12 @@ typedef struct {
     Pose recentPose;
     std::function<void(Status&)> func;
     int writeCount = 0;
+    
+    std::map<int, std::string> imageCnnModelPathDict;
+    std::map<int, std::string> imageBeaconSettingPathDict;
+    std::map<std::pair<int,int>,int> beaconid_index_map;
+    std::vector<float> beacon_rssis;
+    std::shared_ptr<loc::CnnManager> cnnManager;
 } MyData;
 
 void functionCalledWhenUpdated(void *userData, loc::Status *pStatus){
@@ -239,6 +258,31 @@ void functionCalledWhenUpdated(void *userData, loc::Status *pStatus){
     if (ud->opt->findRssiBias) {
         ud->status_list.insert(ud->status_list.end(), pStatus);
     } else {
+        bool wasFloorUpdated = pStatus->wasFloorUpdated();
+        auto refPose = pStatus->meanPose();
+        int currentFloor = std::round(refPose->floor());
+        auto recentPose = ud->recentPose;
+        int recentFloor = std::round(recentPose.floor());
+        if (wasFloorUpdated && !isnan(currentFloor) && recentFloor!=currentFloor) {
+            if (ud->imageCnnModelPathDict.find(currentFloor)!=ud->imageCnnModelPathDict.end()
+                && ud->imageBeaconSettingPathDict.find(currentFloor)!=ud->imageBeaconSettingPathDict.end()) {
+                std::string imageCnnModelPath = ud->imageCnnModelPathDict[currentFloor];
+                std::string imageBeaconSettingPath = ud->imageBeaconSettingPathDict[currentFloor];
+                std::cout << "Load CNN model from " << imageCnnModelPath << std::endl;
+                std::cout << "Load image beacon setting from " << imageBeaconSettingPath << std::endl;
+                ud->cnnManager->init(imageCnnModelPath, ud->opt->imageLocalizeMode);
+                
+                ud->beaconid_index_map = loc::CnnFileUtil::parseBeaconSettingFile(imageBeaconSettingPath);
+                ud->beacon_rssis.resize(ud->beaconid_index_map.size(), 0);
+            } else {
+                std::cout << "Cannot find CNN model, image beacon setting for the floor " << currentFloor << std::endl;
+                ud->cnnManager->close();
+                
+                ud->beaconid_index_map.clear();
+                ud->beacon_rssis.clear();
+            }
+        }
+        
         auto locStatusStr = Status::locationStatusToString(pStatus->locationStatus());
         auto stepString = Status::stepToString(pStatus->step());
         //std::cout << "locationStatus=" << locStatusStr << std::endl;
@@ -290,7 +334,8 @@ int main(int argc, char * argv[]) {
     } else {
         ud.out = &std::cout;
     }
-
+    ud.cnnManager = std::shared_ptr<loc::CnnManager>(new loc::CnnManager());
+    
     auto resetBasicLocalizer = [](Option& opt, MyData& ud){
         std::shared_ptr<BasicLocalizer> localizer;
         
@@ -338,6 +383,14 @@ int main(int argc, char * argv[]) {
                 oarchive(localizerParams);
             }
         }
+
+        std::size_t cnnSettingPathParentPos = opt.cnnSettingPath.find_last_of("/");
+        std::string cnnSettingPathParent = "";
+        if (cnnSettingPathParentPos!=std::string::npos) {
+            cnnSettingPathParent = opt.cnnSettingPath.substr(0, cnnSettingPathParentPos);
+        }
+        CnnFileUtil::parseCnnSettingJsonFile(opt.cnnSettingPath, cnnSettingPathParent, opt.imageLocalizeMode,
+                                             ud.imageCnnModelPathDict, ud.imageBeaconSettingPathDict);
         
         return localizer;
     };
@@ -438,8 +491,10 @@ int main(int argc, char * argv[]) {
             
             Beacons beaconsRecent;
             std::vector<double> errorsAtMarkers;
+
+            assert(opt.testPath.length()>4 && boost::algorithm::ends_with(opt.testPath, ".log"));
+            std::string testImageDir = opt.testPath.substr(0, opt.testPath.length()-4);
             
-            int beaconReceiveCount = 0;
             while (getline(ifs, str))
             {
                 try {
@@ -448,45 +503,147 @@ int main(int argc, char * argv[]) {
                     if(v.size() > 3){
                         std::string logString = v.at(3);
                         // Parsing beacons values
-                        if (logString.compare(0, 7, "Beacon,") == 0) {
+                        if (logString.compare(0, 6, "Beacon") == 0) {
                             Beacons beacons = LogUtil::toBeacons(logString);
                             //std::cout << "LogReplay:" << beacons.timestamp() << ",Beacon," << beacons.size() << std::endl;
                             for(auto& b: beacons){
                                 b.rssi( b.rssi() < 0 ? b.rssi() : -100);
                             }
-                            
-                            beaconReceiveCount++;
-                            if(opt.skipBeacon<beaconReceiveCount){
-                                localizer->putBeacons(beacons);
-                                beaconsRecent = beacons;
-                            }else{
-                                std::cout << "First "<< beaconReceiveCount << " beacon input was skipped." << std::endl;
-                            }
+                            localizer->putBeacons(beacons);
+                            beaconsRecent = beacons;
                             // Compute likelihood at recent pose
-                            //{
-                            //    auto recentPose = ud.recentPose;
-                            //    auto obsModel = localizer.observationModel();
-                            //    State sTmp(recentPose);
-                            //    auto logLikelihood = obsModel->computeLogLikelihood(sTmp, beaconsRecent);
-                            //}
+                            {
+                                auto recentPose = ud.recentPose;
+                                auto obsModel = localizer->observationModel();
+                                State sTmp(recentPose);
+                                auto logLikelihood = obsModel->computeLogLikelihood(sTmp, beaconsRecent);
+                            }
+                            
+                        }
+                        // Parsing image values
+                        if (logString.compare(0, 5, "Image") == 0 && beaconsRecent.size()>0) {
+                            {
+                                ud.beacon_rssis.resize(ud.beaconid_index_map.size(), 0);
+                                for (int i=0; i<beaconsRecent.size(); i++) {
+                                    loc::Beacon beacon = beaconsRecent[i];
+                                    long rssi = -100;
+                                    if (beacon.rssi() < 0) {
+                                        rssi = beacon.rssi();
+                                    }
+                                    int major = beacon.major();
+                                    int minor = beacon.minor();
+                                    if (ud.beaconid_index_map.find(std::make_pair(major,minor))!=ud.beaconid_index_map.end()) {
+                                        int beaconIndex = ud.beaconid_index_map[std::make_pair(major,minor)];
+                                        float norm_rssi = rssi + 100;
+                                        ud.beacon_rssis[beaconIndex] = (norm_rssi-input_beacon_mean)/input_beacon_std;
+                                    }
+                                }
+                            }
+                            
+                            static const int resizeInputWidth = 455;
+                            static const int resizeInputHeight = 256;
+                            static const int cropInputSize = 224;
+                            
+                            long imageTimestamp = LogUtil::toImage(logString);
+                            std::stringstream sstream;
+                            sstream << testImageDir << "/" << imageTimestamp << ".jpg";
+                            std::string imageFilePath = sstream.str();
+                            cv::Mat image = cv::imread(imageFilePath);
+                            assert(!image.empty());
+                            
+                            cv::Mat resizeImage;
+                            cv::resize(image, resizeImage, cv::Size(resizeInputWidth, resizeInputHeight));
+                            
+                            int widthOffset = (resizeInputWidth - cropInputSize) / 2;
+                            int heightOffset = (resizeInputHeight - cropInputSize) / 2;
+                            cv::Mat cropImage = resizeImage(cv::Rect(widthOffset, heightOffset, cropInputSize, cropInputSize)).clone();
+                            
+                            {
+                                const int image_channels = 4;
+                                
+                                assert(image_channels >= wanted_input_channels);
+                                tensorflow::Tensor image_tensor;
+                                float *out;
+                                if (!opt.useImageLstm) {
+                                    image_tensor = tensorflow::Tensor(tensorflow::DT_FLOAT,
+                                                                      tensorflow::TensorShape({1, wanted_input_height, wanted_input_width, wanted_input_channels}));
+                                    auto image_tensor_mapped = image_tensor.tensor<float, 4>();
+                                    out = image_tensor_mapped.data();
+                                } else {
+                                    image_tensor = tensorflow::Tensor(tensorflow::DT_FLOAT,
+                                                                    tensorflow::TensorShape({1, 1, wanted_input_height, wanted_input_width, wanted_input_channels}));
+                                    auto image_tensor_mapped = image_tensor.tensor<float, 5>();
+                                    out = image_tensor_mapped.data();
+                                }
+                                for (int y = 0; y < wanted_input_height; ++y) {
+                                    float *out_row = out + (y * wanted_input_width * wanted_input_channels);
+                                    for (int x = 0; x < wanted_input_width; ++x) {
+                                        cv::Vec3b in_pixel = cropImage.at<cv::Vec3b>(y, x);
+                                        float *out_pixel = out_row + (x * wanted_input_channels);
+                                        for (int c = 0; c < wanted_input_channels; ++c) {
+                                            out_pixel[c] = (in_pixel[c] - input_mean) / input_std;
+                                        }
+                                    }
+                                }
+                                
+                                tensorflow::Tensor beacon_tensor;
+                                float *beacon_out;
+                                if (!opt.useImageLstm) {
+                                    beacon_tensor = tensorflow::Tensor(tensorflow::DT_FLOAT,
+                                                                       tensorflow::TensorShape({1, static_cast<long long>(ud.beaconid_index_map.size()), 1, 1}));
+                                    auto beacon_tensor_mapped = beacon_tensor.tensor<float, 4>();
+                                    beacon_out = beacon_tensor_mapped.data();
+                                } else {
+                                    beacon_tensor = tensorflow::Tensor(tensorflow::DT_FLOAT,
+                                                                     tensorflow::TensorShape({1, 1, static_cast<long long>(ud.beaconid_index_map.size()), 1, 1}));
+                                    auto beacon_tensor_mapped = beacon_tensor.tensor<float, 5>();
+                                    beacon_out = beacon_tensor_mapped.data();
+                                }
+                                for (int i = 0; i < ud.beaconid_index_map.size(); i++) {
+                                    beacon_out[i] = ud.beacon_rssis[i];
+                                }
+                                
+                                auto startCnn = std::chrono::system_clock::now();
+                                std::vector<double> result = ud.cnnManager->runCnn(image_tensor, beacon_tensor, opt.useImageMobilenet, opt.useImageLstm);
+                                auto timeCnn = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now()-startCnn).count();
+                                std::cerr << "Time to run CNN: " << timeCnn << "ms" << std::endl;
+                                if (result.size()>0) {
+                                    std::cerr << "CNN Estimation : " << result[0] << "," << result[1] << "," << result[2] << std::endl;
+                                    
+                                    auto status = localizer->getStatus();
+                                    auto meanPose = status->meanPose();
+                                    Pose estimatePose(*meanPose);
+                                    estimatePose.x(result[0]).y(result[1]).z(result[2]);
+                                    Eigen::Quaternion<double> estimateQ(result[3], result[4], result[5], result[6]);
+                                    double estimateYaw = CnnPoseUtil::convertQuaternion2Yaw(estimateQ);
+                                    estimatePose.orientation(estimateYaw);
+                                    
+                                    auto startPutImage = std::chrono::system_clock::now();
+                                    localizer->putImageLocalizedPose(imageTimestamp, estimatePose);
+                                    auto timePutImage = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now()-startPutImage).count();
+                                    std::cerr << "Time to update PF by image : " << timePutImage << "ms" << std::endl;
+                                } else {
+                                    std::cerr << "CNN Estimation failed." << std::endl;
+                                }
+                            }
                         }
                         // Parsing acceleration values
-                        if (logString.compare(0, 4, "Acc,") == 0) {
+                        if (logString.compare(0, 3, "Acc") == 0) {
                             Acceleration acc = LogUtil::toAcceleration(logString);
                             localizer->putAcceleration(acc);
                         }
                         // Parsing motion values
-                        if (logString.compare(0, 7, "Motion,") == 0) {
+                        if (logString.compare(0, 6, "Motion") == 0) {
                             Attitude att = LogUtil::toAttitude(logString);
                             localizer->putAttitude(att);
                         }
                         
-                        if (logString.compare(0, 10,"Altimeter,") == 0){
+                        if (logString.compare(0, 9,"Altimeter") == 0){
                             Altimeter alt = LogUtil::toAltimeter(logString);
                             localizer->putAltimeter(alt);
                             //std::cout << "LogReplay:" << alt.timestamp() << ", Altimeter, " << alt.relativeAltitude() << "," << alt.pressure() << std::endl;
                         }
-                        if (logString.compare(0, 8,"Heading,") == 0){
+                        if (logString.compare(0, 7,"Heading") == 0){
                             Heading heading = LogUtil::toHeading(logString);
                             if(heading.trueHeading() < 0){ // (trueHeading==-1 is invalid.)
                                 if(!isnan(opt.magneticDeclination)){
@@ -502,7 +659,7 @@ int main(int argc, char * argv[]) {
                             LocalHeading localHeading = ud.latLngConverter->headingGlobalToLocal(heading);
                             //std::cout << "LogReplay:" << heading.timestamp() << ", Heading, " << heading.magneticHeading() << "," << heading.trueHeading() << "," << heading.headingAccuracy() << "(localHeading=" << localHeading.orientation() << ")" << std::endl;
                         }
-                        if (logString.compare(0, 20, "DisableAcceleration,") == 0){
+                        if (logString.compare(0, 19, "DisableAcceleration") == 0){
                             std::vector<std::string> values;
                             boost::split(values, logString, boost::is_any_of(","));
                             int da = stoi(values.at(1));
@@ -514,7 +671,7 @@ int main(int argc, char * argv[]) {
                             }
                             std::cout << "LogReplay:" << logString << std::endl;
                         }
-                        if (opt.usesReset && logString.compare(0, 6, "Reset,") == 0) {
+                        if (opt.usesReset && logString.compare(0, 5, "Reset") == 0) {
                             // "Reset",lat,lng,floor,heading,timestamp
                             std::vector<std::string> values;
                             boost::split(values, logString, boost::is_any_of(","));
@@ -548,7 +705,7 @@ int main(int argc, char * argv[]) {
                             
                             localizer->resetStatus(newPose, stdevPose);
                         }
-                        if (opt.usesRestart && logString.compare(0, 8, "Restart,") == 0){
+                        if (opt.usesRestart && logString.compare(0, 7, "Restart") == 0){
                             // "Restart",timestamp
                             std::vector<std::string> values;
                             boost::split(values, logString, boost::is_any_of(","));
@@ -558,7 +715,7 @@ int main(int argc, char * argv[]) {
                             restarter.reset();
                             restarter.counter=1;
                         }
-                        if (logString.compare(0, 7, "Marker,") == 0){
+                        if (logString.compare(0, 6, "Marker") == 0){
                             // "Marker",lat,lng,floor,timestamp
                             std::vector<std::string> values;
                             boost::split(values, logString, boost::is_any_of(","));
@@ -626,7 +783,7 @@ int main(int argc, char * argv[]) {
                                 std::cout << std::endl;
                             }
                         }
-                        if (logString.compare(0, 5, "Note,") == 0){
+                        if (logString.compare(0, 4, "Note") == 0){
                             // "Note", note_string
                             std::stringstream ss;
                             ss << "LogReplay: " << logString;
@@ -699,3 +856,4 @@ int main(int argc, char * argv[]) {
     
     return 0;
 }
+

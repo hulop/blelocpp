@@ -203,6 +203,15 @@ namespace loc{
             case(Status::OBSERVATION_WITHOUT_FILTERING):
                 str = "OBSERVATION_WITHOUT_FILTERING";
                 break;
+            case(Status::IMAGE_FILTERING_WITH_RESAMPLING):
+                str = "IMAGE_FILTERING_WITH_RESAMPLING";
+                break;
+            case(Status::IMAGE_FILTERING_WITHOUT_RESAMPLING):
+                str = "IMAGE_FILTERING_WITHOUT_RESAMPLING";
+                break;
+            case(Status::IMAGE_OBSERVATION_WITHOUT_FILTERING):
+                str = "IMAGE_OBSERVATION_WITHOUT_FILTERING";
+                break;
             case(Status::OTHER):
                 str = "OTHER";
                 break;

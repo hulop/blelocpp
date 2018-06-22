@@ -369,5 +369,15 @@ namespace loc{
         return selectedLocations;
     }
     
+    Locations StatusInitializerImpl::generateLocationsCloseToPoseWithPerturbation(const Pose &pose, double radius2D) {
+        std::vector<Location> selectedLocations;
+        
+        for(int i = 0; i < nPerturbationMax; i++) {
+            Location newLoc = perturbLocation(pose, radius2D, radius2D);
+            selectedLocations.push_back(newLoc);
+        }
+        
+        return selectedLocations;
+    }
     
 }

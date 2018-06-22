@@ -41,6 +41,7 @@ namespace loc {
         virtual StreamLocalizer& putBeacons(const Beacons beacons) = 0;
         virtual StreamLocalizer& putLocalHeading(const LocalHeading heading) = 0;
         virtual StreamLocalizer& putAltimeter(const Altimeter altimeter) = 0;
+        virtual StreamLocalizer& putImageLocalizedPose(long timestamp, const Pose pose) = 0;
         virtual Status* getStatus() = 0;
         
         virtual bool resetStatus() = 0;

@@ -27,6 +27,7 @@
 #include "StreamParticleFilter.hpp"
 #include "StreamLocalizer.hpp"
 #include "ObservationModel.hpp"
+#include "ImageLocalizeObservationModel.hpp"
 #include "SystemModel.hpp"
 
 #include "Resampler.hpp"
@@ -295,13 +296,17 @@ namespace loc{
         std::shared_ptr<AltitudeManager> mAltitudeManager;
 
         std::shared_ptr<SystemModel<State, SystemModelInput>> mRandomWalker;
-
+        
         std::shared_ptr<ObservationModel<State, Beacons>> mObservationModel;
+        std::shared_ptr<ImageLocalizeObservationModel<State, Pose>> mImageLocalizeObservationModel;
+        double mImageUpdateDistThreshold = 5.0;
+        double mImageUpdateAngleLB = 5.0;
         std::shared_ptr<Resampler<State>> mResampler;
         std::shared_ptr<StatusInitializer> mStatusInitializer;
         std::shared_ptr<BeaconFilter> mBeaconFilter;
 
         std::shared_ptr<ObservationDependentInitializer<State, Beacons>> mMetro;
+        std::shared_ptr<ObservationDependentInitializer<State, Pose>> mImageLocalizedPoseMetro;
         std::shared_ptr<PosteriorResampler<State>> mPostResampler;
         std::shared_ptr<RandomGenerator> mRand;
         
@@ -360,6 +365,250 @@ namespace loc{
             attitudeIsUpdated = mOrientationmeter->isUpdated();
 
             processResetStatus();
+        }
+        
+        States generateStatesForMixByImageLocalizedPose(int nGen, const Pose& pose, const MixtureParameters& mixParams,
+                                                        std::vector<State>& allGeneratedStates, std::vector<double>& allGeneratedStatesLogLLs){
+            // Generate states
+            int burnInLight = mixParams.burnInQuick;
+            States statesGen;
+            if(mImageLocalizedPoseMetro){
+                mImageLocalizedPoseMetro->input(pose);
+                mImageLocalizedPoseMetro->startBurnIn(burnInLight);
+                statesGen = mImageLocalizedPoseMetro->sampling(nGen);
+                //mImageLocalizedPoseMetro->print();
+                auto allStates =  mImageLocalizedPoseMetro->getAllStates();
+                auto allLogLLs = mImageLocalizedPoseMetro->getAllLogLLs();
+                allGeneratedStates = allStates;
+                allGeneratedStatesLogLLs = allLogLLs;
+                //double avgLogLL = std::accumulate(allLogLLs.begin(), allLogLLs.end(), 0.0)/allLogLLs.size();
+                //std::cout << "avgLogLL=" << avgLogLL << std::endl;
+            }else{
+                statesGen = mStatusInitializer->resetStates(nGen, pose, pose.orientation());
+            }
+            return statesGen;
+        }
+        
+        States mixStatesByImageLocalizedPose(const States& states, const Pose& pose, const MixtureParameters& mixParams, bool evaluatesLLs,
+                                             std::vector<State>& allGeneratedStates, std::vector<double>& allGeneratedStatesLogLLs){
+            loc::Building building = mDataStore->getBuilding();
+            if (!building.isMovable(pose)) {
+                return states;
+            }
+            size_t nStates = states.size();
+            std::vector<int> indices;
+            // Select particles that will be removed randomly.
+            for(int i=0; i<nStates; i++){
+                double u = mRand->nextDouble();
+                if(u< mixParams.mixtureProbability){
+                    indices.push_back(i);
+                }
+            }
+            int nGen = static_cast<int>(indices.size());
+            
+            //// do burn-in even if nGen==0 to evaluate likelihood
+            if(nGen==0 && !evaluatesLLs){
+                return states;
+            }
+            
+            States statesGen = generateStatesForMixByImageLocalizedPose(nGen, pose, mixParams, allGeneratedStates, allGeneratedStatesLogLLs);
+            
+            States statesMixed(states);
+            //Location locMean = Location::mean(states);
+            // Copy location of generated states to the existing states.
+            for(int i=0; i<nGen; i++){
+                auto& st = statesGen.at(i);
+                //double p = computeStateAcceptProbability(locMean, st); //compate mean state and new state.
+                double p = computeStateAcceptProbability(states, st); //compare all states and new state.
+                if(mRand->nextDouble() < p ){
+                    int idx = indices.at(i);
+                    statesMixed.at(idx).copyLocation(st);
+                }
+            }
+            
+            return statesMixed;
+        }
+        
+        void updateStatusByImageLocalizedPose(long timestamp, const Pose& pose, const bool& doesFiltering){
+            loc::Building building = mDataStore->getBuilding();
+            if (!building.isMovable(pose)) {
+                return;
+            }
+            
+            status->timestamp(timestamp);
+            std::shared_ptr<States> states = status->states();
+            
+            bool passedMonitoringInterval = false;
+            if(timestamp - previousTimestampMonitoring > mLocStatusMonitorParams->monitorIntervalMS() ){
+                passedMonitoringInterval = true;
+                previousTimestampMonitoring = timestamp;
+            }
+            
+            // Compute states mixed with states generated from observations
+            std::vector<State> allMixStates;
+            std::vector<double> allMixLogLLs;
+            States statesMixed;
+            if(passedMonitoringInterval || mMixParams.mixtureProbability>0){
+                statesMixed = mixStatesByImageLocalizedPose(*states, pose, mMixParams, passedMonitoringInterval, allMixStates, allMixLogLLs);
+            }else{
+                statesMixed = *states;
+            }
+            if(doesFiltering){
+                // Logging before weights updated
+                logStates(*states, "before_image_likelihood_states_"+std::to_string(timestamp)+".csv");
+                // Copy mixed states when apply filtering
+                *states = statesMixed;
+            }
+            
+            // Compute log likelihood
+            std::vector<std::vector<double>> vLogLLsAndMDists = mImageLocalizeObservationModel->computeLogLikelihoodRelatedValues(*states, pose);
+            std::vector<double> vLogLLs(states->size());
+            std::vector<double> mDists(states->size());
+            for(int i=0; i<states->size(); i++){
+                vLogLLs[i] = vLogLLsAndMDists.at(i).at(0);
+                mDists[i] = vLogLLsAndMDists.at(i).at(1);
+            }
+            
+            if(doesFiltering){
+                // Apply alpha-weaken
+                vLogLLs = weakenLogLikelihoods(vLogLLs, mAlphaWeaken);
+                
+                // Set negative log-likelihoods
+                for(int i=0; i<vLogLLs.size(); i++){
+                    State& s = states->at(i);
+                    s.negativeLogLikelihood(-vLogLLs.at(i));
+                    s.mahalanobisDistance(mDists.at(i));
+                }
+                
+                std::vector<double> weights = ArrayUtils::computeWeightsFromLogLikelihood(vLogLLs);
+                double sumWeights = 0;
+                // Multiply loglikelihood-based weights and particle weights.
+                for(int i=0; i<weights.size(); i++){
+                    weights[i] = weights[i] * (states->at(i).weight());
+                    sumWeights += weights[i];
+                }
+                if(sumWeights<=0){
+                    LocException ex("sum(weights) <= 0");
+                    for(auto logLL: vLogLLs){
+                        if(logLL == 0){
+                            ex << boost::error_info<struct error_info, std::string>("logLikelihood == 0. (Probably, input beacons are unknown.)");
+                            break;
+                        }
+                    }
+                    BOOST_THROW_EXCEPTION(ex);
+                }
+                // Renormalized
+                for(int i=0; i<weights.size(); i++){
+                    weights[i] = weights[i]/sumWeights;
+                    states->at(i).weight(weights[i]);
+                }
+                
+                // Logging after weights updated
+                logStates(*states, "after_image_likelihood_states_"+std::to_string(timestamp)+".csv");
+                
+                // Resampling step
+                double ess = computeESS(weights);
+                if(mOptVerbose){
+                    std::cout << "ESS=" << ess << std::endl;
+                }
+                StatesPtr statesNew;
+                Status::Step step;
+                
+                if(ess<=mEssThreshold){
+                    statesNew.reset(mResampler->resample(*states, &weights[0]));
+                    // Assign equal weights after resampling
+                    for(int i=0; i<weights.size(); i++){
+                        double weight = 1.0/(weights.size());
+                        statesNew->at(i).weight(weight);
+                    }
+                    step = Status::IMAGE_FILTERING_WITH_RESAMPLING;
+                }else{
+                    statesNew.reset(new States(*states));
+                    step = Status::IMAGE_FILTERING_WITHOUT_RESAMPLING;
+                }
+                
+                // Posterior-resampling
+                if(mPostResampler){
+                    *statesNew = mPostResampler->resample(*statesNew);
+                }
+                
+                status->states(statesNew, step);
+                if(mOptVerbose){
+                    std::cout << "resampling at t=" << timestamp << std::endl;
+                }
+                // Logging after resampling
+                logStates(*statesNew, "resampled_states_"+std::to_string(timestamp)+".csv");
+                
+                // Notify registered instances of the update of particle fiter
+                this->notifyObservationUpdated();
+            }else{
+                return;
+            }
+        }
+        
+        void putImageLocalizedPose(long timestamp, const Pose pose) {
+            initializeStatusIfZero();
+            status->step(Status::OTHER);
+            
+            // do not update if image localized pose is far from mean states, or is not movable
+            loc::Building building = mDataStore->getBuilding();
+            
+            std::shared_ptr<States> states = status->states();
+            Location locMean = Location::mean(*states);
+            Eigen::VectorXd meanPosition(2);
+            meanPosition << locMean.x(), locMean.y();
+            Eigen::VectorXd position(2);
+            position << pose.x(), pose.y();
+            float positionDiff = (meanPosition - position).norm();
+            if (building.isMovable(pose) && positionDiff < mImageUpdateDistThreshold) {
+                // filtering
+                bool doesFiltering = checkIfDoFiltering(*states);
+                
+                // check image specific conditions to update or not
+                if (!doesFiltering) {
+                    // update if heading variance is large
+                    DirectionalStatistics directStats = Pose::computeDirectionalStatistics(*states);
+                    //std::cout<<"circularMean="<<directStats.circularMean()<<","
+                    //<<"circularVariance="<<directStats.circularVariance()<<","
+                    //<<"circularStdDev="<<sqrt(directStats.circularVariance())<< std::endl;
+                    if (sqrt(directStats.circularVariance())>M_PI*mImageUpdateAngleLB/180.0) {
+                        doesFiltering = true;
+                    }
+                }
+                
+                if(doesFiltering){
+                    updateStatusByImageLocalizedPose(timestamp, pose, doesFiltering);
+                    assert( status->step()==Status::IMAGE_FILTERING_WITH_RESAMPLING || status->step()==Status::IMAGE_FILTERING_WITHOUT_RESAMPLING );
+                }else{
+                    updateStatusByImageLocalizedPose(timestamp, pose, doesFiltering);
+                    if(mOptVerbose){
+                        std::cout<<"filtering step was not applied."<<std::endl;
+                    }
+                    status->step(Status::IMAGE_OBSERVATION_WITHOUT_FILTERING);
+                }
+            } else {
+                status->step(Status::IMAGE_OBSERVATION_WITHOUT_FILTERING);
+            }
+            
+            // manage state history
+            {
+                std::shared_ptr<States> states = status->states();
+                auto& statesObj = *states.get();
+                // move state history
+                for(int i=0; i<statesObj.size(); i++){
+                    State& sNow = statesObj.at(i);
+                    sNow.timestamp = timestamp;
+                    if(sNow.history.empty()){
+                        sNow.history.set_capacity(State::history_capacity);
+                    }
+                    auto history = std::move(sNow.history);
+                    history.push_back(sNow);
+                    sNow.history = std::move(history);
+                }
+            }
+            
+            status->timestamp(timestamp);
+            callback(status.get());
         }
         
         void predictMotionState(long timestamp){
@@ -1032,7 +1281,8 @@ namespace loc{
                 auto statesTmp = mStatusInitializer->resetStates(mNumStates, meanPose, stdevPose, orientationMeasured);
                 for(auto& s: statesTmp){
                     double d = mRand->nextDouble();
-                    if(d<rateContami || std::isinf(stdevPose.orientation())){
+                    if(d<rateContami || std::isinf(stdevPose.orientation())
+                       || std::isnan(s.orientation()) || std::isnan(s.orientationBias())){
                         double orientationBias = 2.0*M_PI*mRand->nextDouble();
                         double orientation = orientationMeasured - orientationBias;
                         s.orientationBias(orientationBias);
@@ -1234,6 +1484,18 @@ namespace loc{
             mObservationModel = observationModel;
         }
 
+        void imageLocalizeObservationModel(std::shared_ptr<ImageLocalizeObservationModel<State, Pose>> imageLocalizeObservationModel){
+            mImageLocalizeObservationModel = imageLocalizeObservationModel;
+        }
+
+        void imageUpdateDistThreshold(double imageUpdateDistThreshold){
+            mImageUpdateDistThreshold = imageUpdateDistThreshold;
+        }
+
+        void imageUpdateAngleLB(double imageUpdateAngleLB){
+            mImageUpdateAngleLB = imageUpdateAngleLB;
+        }
+        
         void resampler(std::shared_ptr<Resampler<State>> resampler){
             mResampler = resampler;
         }
@@ -1248,6 +1510,10 @@ namespace loc{
 
         void observationDependentInitializer(std::shared_ptr<ObservationDependentInitializer<State, Beacons>> metro){
             mMetro = metro;
+        }
+        
+        void imageLocalizePoseObservationDependentInitializer(std::shared_ptr<ObservationDependentInitializer<State, Pose>> imageLocalizePoseMetro){
+            mImageLocalizedPoseMetro = imageLocalizePoseMetro;
         }
         
         void posteriorResampler(std::shared_ptr<PosteriorResampler<State>> postRes){
@@ -1284,6 +1550,11 @@ namespace loc{
         return *this;
     }
 
+    StreamParticleFilter& StreamParticleFilter::putImageLocalizedPose(long timestamp, const Pose pose) {
+        impl->putImageLocalizedPose(timestamp, pose);
+        return *this;
+    }
+    
     StreamParticleFilter& StreamParticleFilter::putBeacons(const Beacons beacons) {
         impl->putBeacons(beacons);
         return *this;
@@ -1393,9 +1664,24 @@ namespace loc{
         impl->systemModel(randomWalker);
         return *this;
     }
-
+    
     StreamParticleFilter& StreamParticleFilter::observationModel(std::shared_ptr<ObservationModel<State, Beacons>> observationModel){
         impl->observationModel(observationModel);
+        return *this;
+    }
+    
+    StreamParticleFilter& StreamParticleFilter::imageLocalizeObservationModel(std::shared_ptr<ImageLocalizeObservationModel<State, Pose>> imageLocalizeObservationModel){
+        impl->imageLocalizeObservationModel(imageLocalizeObservationModel);
+        return *this;
+    }
+    
+    StreamParticleFilter& StreamParticleFilter::imageUpdateDistThreshold(double imageUpdateDistThreshold){
+        impl->imageUpdateDistThreshold(imageUpdateDistThreshold);
+        return *this;
+    }
+    
+    StreamParticleFilter& StreamParticleFilter::imageUpdateAngleLB(double imageUpdateAngleLB){
+        impl->imageUpdateAngleLB(imageUpdateAngleLB);
         return *this;
     }
 
@@ -1416,6 +1702,11 @@ namespace loc{
 
     StreamParticleFilter& StreamParticleFilter::observationDependentInitializer(std::shared_ptr<ObservationDependentInitializer<State, Beacons>> metro){
         impl->observationDependentInitializer(metro);
+        return * this;
+    }
+    
+    StreamParticleFilter& StreamParticleFilter::imageLocalizePoseObservationDependentInitializer(std::shared_ptr<ObservationDependentInitializer<State, Pose>> imageLocalizedPoseMetro){
+        impl->imageLocalizePoseObservationDependentInitializer(imageLocalizedPoseMetro);
         return * this;
     }
     

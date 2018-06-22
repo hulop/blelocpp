@@ -62,6 +62,13 @@ string LogUtil::toString(const Altimeter& alt) {
     return buffer.str();
 }
 
+string LogUtil::toString(long timestamp) {
+    std::stringbuf buffer;
+    std::ostream os (&buffer);
+    os << "Image," << timestamp;
+    return buffer.str();
+}
+
 Beacons LogUtil::toBeacons(std::string str){
     return DataUtils::parseLogBeaconsCSV(str);
 }
@@ -109,6 +116,17 @@ Altimeter LogUtil::toAltimeter(const std::string& str){
     double pressure = stod(values.at(2));
     Altimeter alt(timestamp,relAlt,pressure);
     return alt;
+}
+
+long LogUtil::toImage(const std::string& str){
+    std::vector<std::string> values;
+    boost::split(values, str, boost::is_any_of(","));
+    if(values.at(0).compare("Image")!=0){
+        BOOST_THROW_EXCEPTION(LocException("Log Image is not correct. string="+str));
+    }
+    // "Image",timestamp
+    long timestamp = stol(values.at(1));
+    return timestamp;
 }
 
 //Heading

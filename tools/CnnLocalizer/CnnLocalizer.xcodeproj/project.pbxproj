@@ -1,0 +1,959 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 48;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		662C95D22048C5BA00E3EBEB /* CnnPoseUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 662663662037925C006AC08B /* CnnPoseUtil.cpp */; };
+		662C95D32048C5BA00E3EBEB /* CnnFileUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 66FC69FA20353E470056F30E /* CnnFileUtil.cpp */; };
+		662C95D42048C5BA00E3EBEB /* CnnManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 66FC69FC20353E470056F30E /* CnnManager.cpp */; };
+		662C95D52048C5BA00E3EBEB /* TensorFlowUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 66FC69FE20353E470056F30E /* TensorFlowUtil.cpp */; };
+		662C95D62048C5BA00E3EBEB /* ImageLocalizedPoseMetropolisSampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 669802482048C12D00E7FF5C /* ImageLocalizedPoseMetropolisSampler.cpp */; };
+		662C95D72048C5BA00E3EBEB /* ImageLocalizeObservationModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6698024A2048C12D00E7FF5C /* ImageLocalizeObservationModel.cpp */; };
+		662C95D82048C5BA00E3EBEB /* BeaconFilterChain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 66FC6A0D20353E880056F30E /* BeaconFilterChain.cpp */; };
+		662C95D92048C5BA00E3EBEB /* CleansingBeaconFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 66FC6A0F20353E880056F30E /* CleansingBeaconFilter.cpp */; };
+		662C95DA2048C5BA00E3EBEB /* StrongestBeaconFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 66FC6A1120353E880056F30E /* StrongestBeaconFilter.cpp */; };
+		662C95DB2048C5BA00E3EBEB /* Acceleration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 66FC6A1720353EAB0056F30E /* Acceleration.cpp */; };
+		662C95DC2048C5BA00E3EBEB /* Attitude.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 66FC6A1920353EAB0056F30E /* Attitude.cpp */; };
+		662C95DD2048C5BA00E3EBEB /* Beacon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 66FC6A1B20353EAB0056F30E /* Beacon.cpp */; };
+		662C95DE2048C5BA00E3EBEB /* BLEBeacon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 66FC6A1D20353EAB0056F30E /* BLEBeacon.cpp */; };
+		662C95DF2048C5BA00E3EBEB /* Heading.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 66FC6A2020353EAB0056F30E /* Heading.cpp */; };
+		662C95E02048C5BA00E3EBEB /* LatLngConverter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 66FC6A2220353EAB0056F30E /* LatLngConverter.cpp */; };
+		662C95E12048C5BA00E3EBEB /* LatLngUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 66FC6A2420353EAB0056F30E /* LatLngUtil.cpp */; };
+		662C95E22048C5BA00E3EBEB /* Location.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 66FC6A2620353EAB0056F30E /* Location.cpp */; };
+		662C95E32048C5BA00E3EBEB /* Pose.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 66FC6A2920353EAB0056F30E /* Pose.cpp */; };
+		662C95E42048C5BA00E3EBEB /* Sample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 66FC6A2B20353EAB0056F30E /* Sample.cpp */; };
+		662C95E52048C5BA00E3EBEB /* State.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 66FC6A2D20353EAB0056F30E /* State.cpp */; };
+		662C95E62048C5BA00E3EBEB /* Status.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 66FC6A2F20353EAB0056F30E /* Status.cpp */; };
+		662C95E72048C5BA00E3EBEB /* DataLogger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 66FC6A4D20353F420056F30E /* DataLogger.cpp */; };
+		662C95E82048C5BA00E3EBEB /* DataStoreImpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 66FC6A5020353F420056F30E /* DataStoreImpl.cpp */; };
+		662C95E92048C5BA00E3EBEB /* DataUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 66FC6A5220353F420056F30E /* DataUtils.cpp */; };
+		662C95EA2048C5BA00E3EBEB /* ExtendedDataUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 66FC6A5420353F420056F30E /* ExtendedDataUtils.cpp */; };
+		662C95EB2048C5BA00E3EBEB /* LazyDataStore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 66FC6A5620353F420056F30E /* LazyDataStore.cpp */; };
+		662C95EC2048C5BA00E3EBEB /* VirtualDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 66FC6A5820353F420056F30E /* VirtualDevice.cpp */; };
+		662C95ED2048C5BA00E3EBEB /* GridResampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 662F9A4A20353FB10001428A /* GridResampler.cpp */; };
+		662C95EE2048C5BA00E3EBEB /* StatusInitializerImpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 662F9A0820353FB10001428A /* StatusInitializerImpl.cpp */; };
+		662C95EF2048C5BA00E3EBEB /* StatusInitializerStub.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 662F9A0A20353FB10001428A /* StatusInitializerStub.cpp */; };
+		662C95F02048C5BA00E3EBEB /* StreamLocalizerStub.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 662F9A0C20353FB10001428A /* StreamLocalizerStub.cpp */; };
+		662C95F12048C5BA00E3EBEB /* StreamParticleFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 662F9A0E20353FB10001428A /* StreamParticleFilter.cpp */; };
+		662C95F22048C5BA00E3EBEB /* BasicLocalizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 662F9A3D20353FB10001428A /* BasicLocalizer.cpp */; };
+		662C95F32048C5BA00E3EBEB /* Building.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 662F9A4E20353FB10001428A /* Building.cpp */; };
+		662C95F42048C5BA00E3EBEB /* CoordinateSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 662F9A5020353FB10001428A /* CoordinateSystem.cpp */; };
+		662C95F52048C5BA00E3EBEB /* FloorMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 662F9A5220353FB10001428A /* FloorMap.cpp */; };
+		662C95F62048C5BA00E3EBEB /* ImageHolder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 662F9A5420353FB10001428A /* ImageHolder.cpp */; };
+		662C95F72048C5BA00E3EBEB /* MetropolisSampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 662F9A2A20353FB10001428A /* MetropolisSampler.cpp */; };
+		662C95F82048C5BA00E3EBEB /* GaussianProcess.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 662F9A1120353FB10001428A /* GaussianProcess.cpp */; };
+		662C95F92048C5BA00E3EBEB /* GaussianProcessLDPLMultiModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 662F9A1320353FB10001428A /* GaussianProcessLDPLMultiModel.cpp */; };
+		662C95FA2048C5BA00E3EBEB /* GaussianProcessLight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 662F9A1520353FB10001428A /* GaussianProcessLight.cpp */; };
+		662C95FB2048C5BA00E3EBEB /* KernelFunction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 662F9A1720353FB10001428A /* KernelFunction.cpp */; };
+		662C95FC2048C5BA00E3EBEB /* PoseRandomWalker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 662F9A1B20353FB10001428A /* PoseRandomWalker.cpp */; };
+		662C95FD2048C5BA00E3EBEB /* PosteriorResampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 662F9A1D20353FB10001428A /* PosteriorResampler.cpp */; };
+		662C95FE2048C5BA00E3EBEB /* RandomWalker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 662F9A1F20353FB10001428A /* RandomWalker.cpp */; };
+		662C95FF2048C5BA00E3EBEB /* RandomWalkerMotion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 662F9A2120353FB10001428A /* RandomWalkerMotion.cpp */; };
+		662C96002048C5BA00E3EBEB /* SystemModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 662F9A2320353FB10001428A /* SystemModel.cpp */; };
+		662C96012048C5BA00E3EBEB /* SystemModelInBuilding.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 662F9A2520353FB10001428A /* SystemModelInBuilding.cpp */; };
+		662C96022048C5BA00E3EBEB /* WeakPoseRandomWalker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 662F9A2720353FB10001428A /* WeakPoseRandomWalker.cpp */; };
+		662C96032048C5BA00E3EBEB /* Altimeter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 662F9A2E20353FB10001428A /* Altimeter.cpp */; };
+		662C96042048C5BA00E3EBEB /* AltitudeManagerSimple.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 662F9A3120353FB10001428A /* AltitudeManagerSimple.cpp */; };
+		662C96052048C5BA00E3EBEB /* OrientationMeterAverage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 662F9A3520353FB10001428A /* OrientationMeterAverage.cpp */; };
+		662C96062048C5BA00E3EBEB /* PedometerWalkingState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 662F9A3820353FB10001428A /* PedometerWalkingState.cpp */; };
+		662C96072048C5BA00E3EBEB /* TransformedOrientationMeterAverage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 662F9A3A20353FB10001428A /* TransformedOrientationMeterAverage.cpp */; };
+		662C96082048C5BA00E3EBEB /* ArrayUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 662F9A4020353FB10001428A /* ArrayUtils.cpp */; };
+		662C96092048C5BA00E3EBEB /* LogUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 662F9A4220353FB10001428A /* LogUtil.cpp */; };
+		662C960A2048C5BA00E3EBEB /* MathUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 662F9A4420353FB10001428A /* MathUtils.cpp */; };
+		662C960B2048C5BA00E3EBEB /* RandomGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 662F9A4620353FB10001428A /* RandomGenerator.cpp */; };
+		662C960D2048C5F200E3EBEB /* libopencv_core.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 662C960C2048C5F200E3EBEB /* libopencv_core.dylib */; };
+		662C960F2048C60300E3EBEB /* libopencv_imgcodecs.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 662C960E2048C60300E3EBEB /* libopencv_imgcodecs.dylib */; };
+		662C96112048C60D00E3EBEB /* libopencv_imgproc.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 662C96102048C60D00E3EBEB /* libopencv_imgproc.dylib */; };
+		662C96132048C61500E3EBEB /* libopencv_highgui.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 662C96122048C61500E3EBEB /* libopencv_highgui.dylib */; };
+		662C96152048C61E00E3EBEB /* libopencv_flann.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 662C96142048C61E00E3EBEB /* libopencv_flann.dylib */; };
+		66528C71208A45B200A4755D /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66528C6F208A45AD00A4755D /* Accelerate.framework */; };
+		669802552048C46A00E7FF5C /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 669802542048C46A00E7FF5C /* main.cpp */; };
+		D8827437A6F175B4FEC95602 /* libPods-CnnBasicLocalizer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9D6B537DF74286F5D5D42EFD /* libPods-CnnBasicLocalizer.a */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		669802502048C46900E7FF5C /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		018776328FDDC5F275201DD1 /* Pods-CnnManagerTest.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CnnManagerTest.release.xcconfig"; path = "Pods/Target Support Files/Pods-CnnManagerTest/Pods-CnnManagerTest.release.xcconfig"; sourceTree = "<group>"; };
+		27194A7CF93B41D575D88BAA /* Pods-CnnLocalizer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CnnLocalizer.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CnnLocalizer/Pods-CnnLocalizer.debug.xcconfig"; sourceTree = "<group>"; };
+		4AFB2F97E884E57E8B1A0D1B /* Pods-CnnLocalizer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CnnLocalizer.release.xcconfig"; path = "Pods/Target Support Files/Pods-CnnLocalizer/Pods-CnnLocalizer.release.xcconfig"; sourceTree = "<group>"; };
+		662663662037925C006AC08B /* CnnPoseUtil.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CnnPoseUtil.cpp; sourceTree = "<group>"; };
+		662663672037925C006AC08B /* CnnPoseUtil.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CnnPoseUtil.hpp; sourceTree = "<group>"; };
+		662C960C2048C5F200E3EBEB /* libopencv_core.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_core.dylib; path = ../../../../../../usr/local/lib/libopencv_core.dylib; sourceTree = "<group>"; };
+		662C960E2048C60300E3EBEB /* libopencv_imgcodecs.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_imgcodecs.dylib; path = ../../../../../../usr/local/lib/libopencv_imgcodecs.dylib; sourceTree = "<group>"; };
+		662C96102048C60D00E3EBEB /* libopencv_imgproc.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_imgproc.dylib; path = ../../../../../../usr/local/lib/libopencv_imgproc.dylib; sourceTree = "<group>"; };
+		662C96122048C61500E3EBEB /* libopencv_highgui.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_highgui.dylib; path = ../../../../../../usr/local/lib/libopencv_highgui.dylib; sourceTree = "<group>"; };
+		662C96142048C61E00E3EBEB /* libopencv_flann.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_flann.dylib; path = ../../../../../../usr/local/lib/libopencv_flann.dylib; sourceTree = "<group>"; };
+		662F9A0720353FB10001428A /* StatusInitializer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = StatusInitializer.hpp; sourceTree = "<group>"; };
+		662F9A0820353FB10001428A /* StatusInitializerImpl.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StatusInitializerImpl.cpp; sourceTree = "<group>"; };
+		662F9A0920353FB10001428A /* StatusInitializerImpl.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = StatusInitializerImpl.hpp; sourceTree = "<group>"; };
+		662F9A0A20353FB10001428A /* StatusInitializerStub.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StatusInitializerStub.cpp; sourceTree = "<group>"; };
+		662F9A0B20353FB10001428A /* StatusInitializerStub.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = StatusInitializerStub.hpp; sourceTree = "<group>"; };
+		662F9A0C20353FB10001428A /* StreamLocalizerStub.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StreamLocalizerStub.cpp; sourceTree = "<group>"; };
+		662F9A0D20353FB10001428A /* StreamLocalizerStub.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = StreamLocalizerStub.hpp; sourceTree = "<group>"; };
+		662F9A0E20353FB10001428A /* StreamParticleFilter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StreamParticleFilter.cpp; sourceTree = "<group>"; };
+		662F9A0F20353FB10001428A /* StreamParticleFilter.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = StreamParticleFilter.hpp; sourceTree = "<group>"; };
+		662F9A1120353FB10001428A /* GaussianProcess.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GaussianProcess.cpp; sourceTree = "<group>"; };
+		662F9A1220353FB10001428A /* GaussianProcess.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GaussianProcess.hpp; sourceTree = "<group>"; };
+		662F9A1320353FB10001428A /* GaussianProcessLDPLMultiModel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GaussianProcessLDPLMultiModel.cpp; sourceTree = "<group>"; };
+		662F9A1420353FB10001428A /* GaussianProcessLDPLMultiModel.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GaussianProcessLDPLMultiModel.hpp; sourceTree = "<group>"; };
+		662F9A1520353FB10001428A /* GaussianProcessLight.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GaussianProcessLight.cpp; sourceTree = "<group>"; };
+		662F9A1620353FB10001428A /* GaussianProcessLight.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GaussianProcessLight.hpp; sourceTree = "<group>"; };
+		662F9A1720353FB10001428A /* KernelFunction.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = KernelFunction.cpp; sourceTree = "<group>"; };
+		662F9A1820353FB10001428A /* KernelFunction.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = KernelFunction.hpp; sourceTree = "<group>"; };
+		662F9A1920353FB10001428A /* ObservationModel.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ObservationModel.hpp; sourceTree = "<group>"; };
+		662F9A1A20353FB10001428A /* ObservationModelTrainer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ObservationModelTrainer.hpp; sourceTree = "<group>"; };
+		662F9A1B20353FB10001428A /* PoseRandomWalker.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PoseRandomWalker.cpp; sourceTree = "<group>"; };
+		662F9A1C20353FB10001428A /* PoseRandomWalker.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PoseRandomWalker.hpp; sourceTree = "<group>"; };
+		662F9A1D20353FB10001428A /* PosteriorResampler.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PosteriorResampler.cpp; sourceTree = "<group>"; };
+		662F9A1E20353FB10001428A /* PosteriorResampler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PosteriorResampler.hpp; sourceTree = "<group>"; };
+		662F9A1F20353FB10001428A /* RandomWalker.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RandomWalker.cpp; sourceTree = "<group>"; };
+		662F9A2020353FB10001428A /* RandomWalker.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = RandomWalker.hpp; sourceTree = "<group>"; };
+		662F9A2120353FB10001428A /* RandomWalkerMotion.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RandomWalkerMotion.cpp; sourceTree = "<group>"; };
+		662F9A2220353FB10001428A /* RandomWalkerMotion.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = RandomWalkerMotion.hpp; sourceTree = "<group>"; };
+		662F9A2320353FB10001428A /* SystemModel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SystemModel.cpp; sourceTree = "<group>"; };
+		662F9A2420353FB10001428A /* SystemModel.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SystemModel.hpp; sourceTree = "<group>"; };
+		662F9A2520353FB10001428A /* SystemModelInBuilding.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SystemModelInBuilding.cpp; sourceTree = "<group>"; };
+		662F9A2620353FB10001428A /* SystemModelInBuilding.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SystemModelInBuilding.hpp; sourceTree = "<group>"; };
+		662F9A2720353FB10001428A /* WeakPoseRandomWalker.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = WeakPoseRandomWalker.cpp; sourceTree = "<group>"; };
+		662F9A2820353FB10001428A /* WeakPoseRandomWalker.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = WeakPoseRandomWalker.hpp; sourceTree = "<group>"; };
+		662F9A2A20353FB10001428A /* MetropolisSampler.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MetropolisSampler.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		662F9A2B20353FB10001428A /* MetropolisSampler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MetropolisSampler.hpp; sourceTree = "<group>"; };
+		662F9A2C20353FB10001428A /* ObservationDependentInitializer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ObservationDependentInitializer.hpp; sourceTree = "<group>"; };
+		662F9A2E20353FB10001428A /* Altimeter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Altimeter.cpp; sourceTree = "<group>"; };
+		662F9A2F20353FB10001428A /* Altimeter.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Altimeter.hpp; sourceTree = "<group>"; };
+		662F9A3020353FB10001428A /* AltitudeManager.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AltitudeManager.hpp; sourceTree = "<group>"; };
+		662F9A3120353FB10001428A /* AltitudeManagerSimple.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AltitudeManagerSimple.cpp; sourceTree = "<group>"; };
+		662F9A3220353FB10001428A /* AltitudeManagerSimple.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AltitudeManagerSimple.hpp; sourceTree = "<group>"; };
+		662F9A3320353FB10001428A /* OrientationAdjuster.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = OrientationAdjuster.hpp; sourceTree = "<group>"; };
+		662F9A3420353FB10001428A /* OrientationMeter.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = OrientationMeter.hpp; sourceTree = "<group>"; };
+		662F9A3520353FB10001428A /* OrientationMeterAverage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = OrientationMeterAverage.cpp; sourceTree = "<group>"; };
+		662F9A3620353FB10001428A /* OrientationMeterAverage.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = OrientationMeterAverage.hpp; sourceTree = "<group>"; };
+		662F9A3720353FB10001428A /* Pedometer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Pedometer.hpp; sourceTree = "<group>"; };
+		662F9A3820353FB10001428A /* PedometerWalkingState.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PedometerWalkingState.cpp; sourceTree = "<group>"; };
+		662F9A3920353FB10001428A /* PedometerWalkingState.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PedometerWalkingState.hpp; sourceTree = "<group>"; };
+		662F9A3A20353FB10001428A /* TransformedOrientationMeterAverage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TransformedOrientationMeterAverage.cpp; sourceTree = "<group>"; };
+		662F9A3B20353FB10001428A /* TransformedOrientationMeterAverage.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TransformedOrientationMeterAverage.hpp; sourceTree = "<group>"; };
+		662F9A3D20353FB10001428A /* BasicLocalizer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BasicLocalizer.cpp; sourceTree = "<group>"; };
+		662F9A3E20353FB10001428A /* BasicLocalizer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BasicLocalizer.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		662F9A4020353FB10001428A /* ArrayUtils.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ArrayUtils.cpp; sourceTree = "<group>"; };
+		662F9A4120353FB10001428A /* ArrayUtils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ArrayUtils.hpp; sourceTree = "<group>"; };
+		662F9A4220353FB10001428A /* LogUtil.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LogUtil.cpp; sourceTree = "<group>"; };
+		662F9A4320353FB10001428A /* LogUtil.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LogUtil.hpp; sourceTree = "<group>"; };
+		662F9A4420353FB10001428A /* MathUtils.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MathUtils.cpp; sourceTree = "<group>"; };
+		662F9A4520353FB10001428A /* MathUtils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MathUtils.hpp; sourceTree = "<group>"; };
+		662F9A4620353FB10001428A /* RandomGenerator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RandomGenerator.cpp; sourceTree = "<group>"; };
+		662F9A4720353FB10001428A /* RandomGenerator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = RandomGenerator.hpp; sourceTree = "<group>"; };
+		662F9A4820353FB10001428A /* SerializeUtils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SerializeUtils.hpp; sourceTree = "<group>"; };
+		662F9A4A20353FB10001428A /* GridResampler.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GridResampler.cpp; sourceTree = "<group>"; };
+		662F9A4B20353FB10001428A /* GridResampler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GridResampler.hpp; sourceTree = "<group>"; };
+		662F9A4C20353FB10001428A /* Resampler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Resampler.hpp; sourceTree = "<group>"; };
+		662F9A4E20353FB10001428A /* Building.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Building.cpp; sourceTree = "<group>"; };
+		662F9A4F20353FB10001428A /* Building.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Building.hpp; sourceTree = "<group>"; };
+		662F9A5020353FB10001428A /* CoordinateSystem.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CoordinateSystem.cpp; sourceTree = "<group>"; };
+		662F9A5120353FB10001428A /* CoordinateSystem.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CoordinateSystem.hpp; sourceTree = "<group>"; };
+		662F9A5220353FB10001428A /* FloorMap.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FloorMap.cpp; sourceTree = "<group>"; };
+		662F9A5320353FB10001428A /* FloorMap.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = FloorMap.hpp; sourceTree = "<group>"; };
+		662F9A5420353FB10001428A /* ImageHolder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ImageHolder.cpp; sourceTree = "<group>"; };
+		662F9A5520353FB10001428A /* ImageHolder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ImageHolder.hpp; sourceTree = "<group>"; };
+		662F9A75203541930001428A /* libopencv_core.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_core.dylib; path = ../../../../../../usr/local/Cellar/opencv/3.4.0_1/lib/libopencv_core.dylib; sourceTree = "<group>"; };
+		662F9A772035419D0001428A /* libopencv_imgcodecs.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_imgcodecs.dylib; path = ../../../../../../usr/local/Cellar/opencv/3.4.0_1/lib/libopencv_imgcodecs.dylib; sourceTree = "<group>"; };
+		662F9A79203541A50001428A /* libopencv_flann.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_flann.dylib; path = ../../../../../../usr/local/Cellar/opencv/3.4.0_1/lib/libopencv_flann.dylib; sourceTree = "<group>"; };
+		662F9A7C2035D5120001428A /* libopencv_imgproc.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_imgproc.dylib; path = ../../../../../../usr/local/Cellar/opencv/3.4.0_1/lib/libopencv_imgproc.dylib; sourceTree = "<group>"; };
+		662F9A7E203636E60001428A /* libopencv_highgui.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_highgui.dylib; path = ../../../../../../usr/local/Cellar/opencv/3.4.0_1/lib/libopencv_highgui.dylib; sourceTree = "<group>"; };
+		66528C6F208A45AD00A4755D /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
+		669802482048C12D00E7FF5C /* ImageLocalizedPoseMetropolisSampler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ImageLocalizedPoseMetropolisSampler.cpp; sourceTree = "<group>"; };
+		669802492048C12D00E7FF5C /* ImageLocalizedPoseMetropolisSampler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ImageLocalizedPoseMetropolisSampler.hpp; sourceTree = "<group>"; };
+		6698024A2048C12D00E7FF5C /* ImageLocalizeObservationModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ImageLocalizeObservationModel.cpp; sourceTree = "<group>"; };
+		6698024B2048C12E00E7FF5C /* ImageLocalizeObservationModel.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ImageLocalizeObservationModel.hpp; sourceTree = "<group>"; };
+		669802522048C46900E7FF5C /* CnnBasicLocalizer */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = CnnBasicLocalizer; sourceTree = BUILT_PRODUCTS_DIR; };
+		669802542048C46A00E7FF5C /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		66FC69FA20353E470056F30E /* CnnFileUtil.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CnnFileUtil.cpp; sourceTree = "<group>"; };
+		66FC69FB20353E470056F30E /* CnnFileUtil.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CnnFileUtil.hpp; sourceTree = "<group>"; };
+		66FC69FC20353E470056F30E /* CnnManager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CnnManager.cpp; sourceTree = "<group>"; };
+		66FC69FD20353E470056F30E /* CnnManager.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CnnManager.hpp; sourceTree = "<group>"; };
+		66FC69FE20353E470056F30E /* TensorFlowUtil.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TensorFlowUtil.cpp; sourceTree = "<group>"; };
+		66FC69FF20353E470056F30E /* TensorFlowUtil.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TensorFlowUtil.hpp; sourceTree = "<group>"; };
+		66FC6A0B20353E880056F30E /* BaseBeaconFilter.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BaseBeaconFilter.hpp; sourceTree = "<group>"; };
+		66FC6A0C20353E880056F30E /* BeaconFilter.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BeaconFilter.hpp; sourceTree = "<group>"; };
+		66FC6A0D20353E880056F30E /* BeaconFilterChain.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BeaconFilterChain.cpp; sourceTree = "<group>"; };
+		66FC6A0E20353E880056F30E /* BeaconFilterChain.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BeaconFilterChain.hpp; sourceTree = "<group>"; };
+		66FC6A0F20353E880056F30E /* CleansingBeaconFilter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CleansingBeaconFilter.cpp; sourceTree = "<group>"; };
+		66FC6A1020353E880056F30E /* CleansingBeaconFilter.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CleansingBeaconFilter.hpp; sourceTree = "<group>"; };
+		66FC6A1120353E880056F30E /* StrongestBeaconFilter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StrongestBeaconFilter.cpp; sourceTree = "<group>"; };
+		66FC6A1220353E880056F30E /* StrongestBeaconFilter.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = StrongestBeaconFilter.hpp; sourceTree = "<group>"; };
+		66FC6A1720353EAB0056F30E /* Acceleration.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Acceleration.cpp; sourceTree = "<group>"; };
+		66FC6A1820353EAB0056F30E /* Acceleration.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Acceleration.hpp; sourceTree = "<group>"; };
+		66FC6A1920353EAB0056F30E /* Attitude.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Attitude.cpp; sourceTree = "<group>"; };
+		66FC6A1A20353EAB0056F30E /* Attitude.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Attitude.hpp; sourceTree = "<group>"; };
+		66FC6A1B20353EAB0056F30E /* Beacon.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Beacon.cpp; sourceTree = "<group>"; };
+		66FC6A1C20353EAB0056F30E /* Beacon.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Beacon.hpp; sourceTree = "<group>"; };
+		66FC6A1D20353EAB0056F30E /* BLEBeacon.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BLEBeacon.cpp; sourceTree = "<group>"; };
+		66FC6A1E20353EAB0056F30E /* BLEBeacon.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BLEBeacon.hpp; sourceTree = "<group>"; };
+		66FC6A1F20353EAB0056F30E /* bleloc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = bleloc.h; sourceTree = "<group>"; };
+		66FC6A2020353EAB0056F30E /* Heading.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Heading.cpp; sourceTree = "<group>"; };
+		66FC6A2120353EAB0056F30E /* Heading.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Heading.hpp; sourceTree = "<group>"; };
+		66FC6A2220353EAB0056F30E /* LatLngConverter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LatLngConverter.cpp; sourceTree = "<group>"; };
+		66FC6A2320353EAB0056F30E /* LatLngConverter.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LatLngConverter.hpp; sourceTree = "<group>"; };
+		66FC6A2420353EAB0056F30E /* LatLngUtil.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LatLngUtil.cpp; sourceTree = "<group>"; };
+		66FC6A2520353EAB0056F30E /* LatLngUtil.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LatLngUtil.hpp; sourceTree = "<group>"; };
+		66FC6A2620353EAB0056F30E /* Location.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Location.cpp; sourceTree = "<group>"; };
+		66FC6A2720353EAB0056F30E /* Location.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Location.hpp; sourceTree = "<group>"; };
+		66FC6A2820353EAB0056F30E /* LocException.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LocException.hpp; sourceTree = "<group>"; };
+		66FC6A2920353EAB0056F30E /* Pose.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Pose.cpp; sourceTree = "<group>"; };
+		66FC6A2A20353EAB0056F30E /* Pose.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Pose.hpp; sourceTree = "<group>"; };
+		66FC6A2B20353EAB0056F30E /* Sample.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Sample.cpp; sourceTree = "<group>"; };
+		66FC6A2C20353EAB0056F30E /* Sample.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Sample.hpp; sourceTree = "<group>"; };
+		66FC6A2D20353EAB0056F30E /* State.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = State.cpp; sourceTree = "<group>"; };
+		66FC6A2E20353EAB0056F30E /* State.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = State.hpp; sourceTree = "<group>"; };
+		66FC6A2F20353EAB0056F30E /* Status.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Status.cpp; sourceTree = "<group>"; };
+		66FC6A3020353EAB0056F30E /* Status.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Status.hpp; sourceTree = "<group>"; };
+		66FC6A3120353EAB0056F30E /* StreamLocalizer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = StreamLocalizer.hpp; sourceTree = "<group>"; };
+		66FC6A4D20353F420056F30E /* DataLogger.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DataLogger.cpp; sourceTree = "<group>"; };
+		66FC6A4E20353F420056F30E /* DataLogger.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DataLogger.hpp; sourceTree = "<group>"; };
+		66FC6A4F20353F420056F30E /* DataStore.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DataStore.hpp; sourceTree = "<group>"; };
+		66FC6A5020353F420056F30E /* DataStoreImpl.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DataStoreImpl.cpp; sourceTree = "<group>"; };
+		66FC6A5120353F420056F30E /* DataStoreImpl.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DataStoreImpl.hpp; sourceTree = "<group>"; };
+		66FC6A5220353F420056F30E /* DataUtils.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DataUtils.cpp; sourceTree = "<group>"; };
+		66FC6A5320353F420056F30E /* DataUtils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DataUtils.hpp; sourceTree = "<group>"; };
+		66FC6A5420353F420056F30E /* ExtendedDataUtils.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ExtendedDataUtils.cpp; sourceTree = "<group>"; };
+		66FC6A5520353F420056F30E /* ExtendedDataUtils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ExtendedDataUtils.hpp; sourceTree = "<group>"; };
+		66FC6A5620353F420056F30E /* LazyDataStore.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LazyDataStore.cpp; sourceTree = "<group>"; };
+		66FC6A5720353F420056F30E /* LazyDataStore.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LazyDataStore.hpp; sourceTree = "<group>"; };
+		66FC6A5820353F420056F30E /* VirtualDevice.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VirtualDevice.cpp; sourceTree = "<group>"; };
+		66FC6A5920353F420056F30E /* VirtualDevice.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = VirtualDevice.hpp; sourceTree = "<group>"; };
+		69FC8C8EC4816A85CAD12DBE /* Pods-CnnBasicLocalizer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CnnBasicLocalizer.release.xcconfig"; path = "Pods/Target Support Files/Pods-CnnBasicLocalizer/Pods-CnnBasicLocalizer.release.xcconfig"; sourceTree = "<group>"; };
+		6DD91F024EE6EFAA00454B22 /* libPods-CnnLocalizer.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CnnLocalizer.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		9D6B537DF74286F5D5D42EFD /* libPods-CnnBasicLocalizer.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CnnBasicLocalizer.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A160E561BA237F8156809F97 /* Pods-CnnManagerTest.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CnnManagerTest.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CnnManagerTest/Pods-CnnManagerTest.debug.xcconfig"; sourceTree = "<group>"; };
+		DBC415F5BA680F1BEEA9E492 /* Pods-CnnBasicLocalizer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CnnBasicLocalizer.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CnnBasicLocalizer/Pods-CnnBasicLocalizer.debug.xcconfig"; sourceTree = "<group>"; };
+		E22A92C04DF67CA818BA98B4 /* libPods-CnnManagerTest.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CnnManagerTest.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		6698024F2048C46900E7FF5C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				66528C71208A45B200A4755D /* Accelerate.framework in Frameworks */,
+				662C960D2048C5F200E3EBEB /* libopencv_core.dylib in Frameworks */,
+				662C960F2048C60300E3EBEB /* libopencv_imgcodecs.dylib in Frameworks */,
+				662C96112048C60D00E3EBEB /* libopencv_imgproc.dylib in Frameworks */,
+				662C96132048C61500E3EBEB /* libopencv_highgui.dylib in Frameworks */,
+				662C96152048C61E00E3EBEB /* libopencv_flann.dylib in Frameworks */,
+				D8827437A6F175B4FEC95602 /* libPods-CnnBasicLocalizer.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		5228B72CCE49CD465A21C8CC /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				66528C6F208A45AD00A4755D /* Accelerate.framework */,
+				662C96142048C61E00E3EBEB /* libopencv_flann.dylib */,
+				662C96122048C61500E3EBEB /* libopencv_highgui.dylib */,
+				662C96102048C60D00E3EBEB /* libopencv_imgproc.dylib */,
+				662C960E2048C60300E3EBEB /* libopencv_imgcodecs.dylib */,
+				662C960C2048C5F200E3EBEB /* libopencv_core.dylib */,
+				662F9A7E203636E60001428A /* libopencv_highgui.dylib */,
+				662F9A7C2035D5120001428A /* libopencv_imgproc.dylib */,
+				662F9A79203541A50001428A /* libopencv_flann.dylib */,
+				662F9A772035419D0001428A /* libopencv_imgcodecs.dylib */,
+				662F9A75203541930001428A /* libopencv_core.dylib */,
+				6DD91F024EE6EFAA00454B22 /* libPods-CnnLocalizer.a */,
+				E22A92C04DF67CA818BA98B4 /* libPods-CnnManagerTest.a */,
+				9D6B537DF74286F5D5D42EFD /* libPods-CnnBasicLocalizer.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		5F91C883CDA5C64B95610839 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				27194A7CF93B41D575D88BAA /* Pods-CnnLocalizer.debug.xcconfig */,
+				4AFB2F97E884E57E8B1A0D1B /* Pods-CnnLocalizer.release.xcconfig */,
+				A160E561BA237F8156809F97 /* Pods-CnnManagerTest.debug.xcconfig */,
+				018776328FDDC5F275201DD1 /* Pods-CnnManagerTest.release.xcconfig */,
+				DBC415F5BA680F1BEEA9E492 /* Pods-CnnBasicLocalizer.debug.xcconfig */,
+				69FC8C8EC4816A85CAD12DBE /* Pods-CnnBasicLocalizer.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		662F9A0620353FB10001428A /* impl */ = {
+			isa = PBXGroup;
+			children = (
+				662F9A0720353FB10001428A /* StatusInitializer.hpp */,
+				662F9A0820353FB10001428A /* StatusInitializerImpl.cpp */,
+				662F9A0920353FB10001428A /* StatusInitializerImpl.hpp */,
+				662F9A0A20353FB10001428A /* StatusInitializerStub.cpp */,
+				662F9A0B20353FB10001428A /* StatusInitializerStub.hpp */,
+				662F9A0C20353FB10001428A /* StreamLocalizerStub.cpp */,
+				662F9A0D20353FB10001428A /* StreamLocalizerStub.hpp */,
+				662F9A0E20353FB10001428A /* StreamParticleFilter.cpp */,
+				662F9A0F20353FB10001428A /* StreamParticleFilter.hpp */,
+			);
+			name = impl;
+			path = "../../ble-cpp/src/impl";
+			sourceTree = "<group>";
+		};
+		662F9A1020353FB10001428A /* model */ = {
+			isa = PBXGroup;
+			children = (
+				662F9A1120353FB10001428A /* GaussianProcess.cpp */,
+				662F9A1220353FB10001428A /* GaussianProcess.hpp */,
+				662F9A1320353FB10001428A /* GaussianProcessLDPLMultiModel.cpp */,
+				662F9A1420353FB10001428A /* GaussianProcessLDPLMultiModel.hpp */,
+				662F9A1520353FB10001428A /* GaussianProcessLight.cpp */,
+				662F9A1620353FB10001428A /* GaussianProcessLight.hpp */,
+				662F9A1720353FB10001428A /* KernelFunction.cpp */,
+				662F9A1820353FB10001428A /* KernelFunction.hpp */,
+				662F9A1920353FB10001428A /* ObservationModel.hpp */,
+				662F9A1A20353FB10001428A /* ObservationModelTrainer.hpp */,
+				662F9A1B20353FB10001428A /* PoseRandomWalker.cpp */,
+				662F9A1C20353FB10001428A /* PoseRandomWalker.hpp */,
+				662F9A1D20353FB10001428A /* PosteriorResampler.cpp */,
+				662F9A1E20353FB10001428A /* PosteriorResampler.hpp */,
+				662F9A1F20353FB10001428A /* RandomWalker.cpp */,
+				662F9A2020353FB10001428A /* RandomWalker.hpp */,
+				662F9A2120353FB10001428A /* RandomWalkerMotion.cpp */,
+				662F9A2220353FB10001428A /* RandomWalkerMotion.hpp */,
+				662F9A2320353FB10001428A /* SystemModel.cpp */,
+				662F9A2420353FB10001428A /* SystemModel.hpp */,
+				662F9A2520353FB10001428A /* SystemModelInBuilding.cpp */,
+				662F9A2620353FB10001428A /* SystemModelInBuilding.hpp */,
+				662F9A2720353FB10001428A /* WeakPoseRandomWalker.cpp */,
+				662F9A2820353FB10001428A /* WeakPoseRandomWalker.hpp */,
+			);
+			name = model;
+			path = "../../ble-cpp/src/model";
+			sourceTree = "<group>";
+		};
+		662F9A2920353FB10001428A /* mc */ = {
+			isa = PBXGroup;
+			children = (
+				662F9A2A20353FB10001428A /* MetropolisSampler.cpp */,
+				662F9A2B20353FB10001428A /* MetropolisSampler.hpp */,
+				662F9A2C20353FB10001428A /* ObservationDependentInitializer.hpp */,
+			);
+			name = mc;
+			path = "../../ble-cpp/src/mc";
+			sourceTree = "<group>";
+		};
+		662F9A2D20353FB10001428A /* sensor */ = {
+			isa = PBXGroup;
+			children = (
+				662F9A2E20353FB10001428A /* Altimeter.cpp */,
+				662F9A2F20353FB10001428A /* Altimeter.hpp */,
+				662F9A3020353FB10001428A /* AltitudeManager.hpp */,
+				662F9A3120353FB10001428A /* AltitudeManagerSimple.cpp */,
+				662F9A3220353FB10001428A /* AltitudeManagerSimple.hpp */,
+				662F9A3320353FB10001428A /* OrientationAdjuster.hpp */,
+				662F9A3420353FB10001428A /* OrientationMeter.hpp */,
+				662F9A3520353FB10001428A /* OrientationMeterAverage.cpp */,
+				662F9A3620353FB10001428A /* OrientationMeterAverage.hpp */,
+				662F9A3720353FB10001428A /* Pedometer.hpp */,
+				662F9A3820353FB10001428A /* PedometerWalkingState.cpp */,
+				662F9A3920353FB10001428A /* PedometerWalkingState.hpp */,
+				662F9A3A20353FB10001428A /* TransformedOrientationMeterAverage.cpp */,
+				662F9A3B20353FB10001428A /* TransformedOrientationMeterAverage.hpp */,
+			);
+			name = sensor;
+			path = "../../ble-cpp/src/sensor";
+			sourceTree = "<group>";
+		};
+		662F9A3C20353FB10001428A /* localizer */ = {
+			isa = PBXGroup;
+			children = (
+				662F9A3D20353FB10001428A /* BasicLocalizer.cpp */,
+				662F9A3E20353FB10001428A /* BasicLocalizer.hpp */,
+			);
+			name = localizer;
+			path = "../../ble-cpp/src/localizer";
+			sourceTree = "<group>";
+		};
+		662F9A3F20353FB10001428A /* utils */ = {
+			isa = PBXGroup;
+			children = (
+				662F9A4020353FB10001428A /* ArrayUtils.cpp */,
+				662F9A4120353FB10001428A /* ArrayUtils.hpp */,
+				662F9A4220353FB10001428A /* LogUtil.cpp */,
+				662F9A4320353FB10001428A /* LogUtil.hpp */,
+				662F9A4420353FB10001428A /* MathUtils.cpp */,
+				662F9A4520353FB10001428A /* MathUtils.hpp */,
+				662F9A4620353FB10001428A /* RandomGenerator.cpp */,
+				662F9A4720353FB10001428A /* RandomGenerator.hpp */,
+				662F9A4820353FB10001428A /* SerializeUtils.hpp */,
+			);
+			name = utils;
+			path = "../../ble-cpp/src/utils";
+			sourceTree = "<group>";
+		};
+		662F9A4920353FB10001428A /* filter */ = {
+			isa = PBXGroup;
+			children = (
+				662F9A4A20353FB10001428A /* GridResampler.cpp */,
+				662F9A4B20353FB10001428A /* GridResampler.hpp */,
+				662F9A4C20353FB10001428A /* Resampler.hpp */,
+			);
+			name = filter;
+			path = "../../ble-cpp/src/filter";
+			sourceTree = "<group>";
+		};
+		662F9A4D20353FB10001428A /* map */ = {
+			isa = PBXGroup;
+			children = (
+				662F9A4E20353FB10001428A /* Building.cpp */,
+				662F9A4F20353FB10001428A /* Building.hpp */,
+				662F9A5020353FB10001428A /* CoordinateSystem.cpp */,
+				662F9A5120353FB10001428A /* CoordinateSystem.hpp */,
+				662F9A5220353FB10001428A /* FloorMap.cpp */,
+				662F9A5320353FB10001428A /* FloorMap.hpp */,
+				662F9A5420353FB10001428A /* ImageHolder.cpp */,
+				662F9A5520353FB10001428A /* ImageHolder.hpp */,
+			);
+			name = map;
+			path = "../../ble-cpp/src/map";
+			sourceTree = "<group>";
+		};
+		669802532048C46A00E7FF5C /* CnnBasicLocalizer */ = {
+			isa = PBXGroup;
+			children = (
+				669802542048C46A00E7FF5C /* main.cpp */,
+			);
+			path = CnnBasicLocalizer;
+			sourceTree = "<group>";
+		};
+		66FC690C203511240056F30E = {
+			isa = PBXGroup;
+			children = (
+				66FC69F820353E3A0056F30E /* localization-library */,
+				669802532048C46A00E7FF5C /* CnnBasicLocalizer */,
+				66FC6916203511240056F30E /* Products */,
+				5F91C883CDA5C64B95610839 /* Pods */,
+				5228B72CCE49CD465A21C8CC /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		66FC6916203511240056F30E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				669802522048C46900E7FF5C /* CnnBasicLocalizer */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		66FC69F820353E3A0056F30E /* localization-library */ = {
+			isa = PBXGroup;
+			children = (
+				66FC69F920353E470056F30E /* cnn */,
+				66FC6A0020353E640056F30E /* image */,
+				66FC6A0A20353E880056F30E /* beacon */,
+				66FC6A1620353EAB0056F30E /* core */,
+				66FC6A4C20353F420056F30E /* data */,
+				662F9A4920353FB10001428A /* filter */,
+				662F9A0620353FB10001428A /* impl */,
+				662F9A3C20353FB10001428A /* localizer */,
+				662F9A4D20353FB10001428A /* map */,
+				662F9A2920353FB10001428A /* mc */,
+				662F9A1020353FB10001428A /* model */,
+				662F9A2D20353FB10001428A /* sensor */,
+				662F9A3F20353FB10001428A /* utils */,
+			);
+			name = "localization-library";
+			sourceTree = "<group>";
+		};
+		66FC69F920353E470056F30E /* cnn */ = {
+			isa = PBXGroup;
+			children = (
+				662663662037925C006AC08B /* CnnPoseUtil.cpp */,
+				662663672037925C006AC08B /* CnnPoseUtil.hpp */,
+				66FC69FA20353E470056F30E /* CnnFileUtil.cpp */,
+				66FC69FB20353E470056F30E /* CnnFileUtil.hpp */,
+				66FC69FC20353E470056F30E /* CnnManager.cpp */,
+				66FC69FD20353E470056F30E /* CnnManager.hpp */,
+				66FC69FE20353E470056F30E /* TensorFlowUtil.cpp */,
+				66FC69FF20353E470056F30E /* TensorFlowUtil.hpp */,
+			);
+			name = cnn;
+			path = "../../ble-cpp/src/cnn";
+			sourceTree = "<group>";
+		};
+		66FC6A0020353E640056F30E /* image */ = {
+			isa = PBXGroup;
+			children = (
+				669802482048C12D00E7FF5C /* ImageLocalizedPoseMetropolisSampler.cpp */,
+				669802492048C12D00E7FF5C /* ImageLocalizedPoseMetropolisSampler.hpp */,
+				6698024A2048C12D00E7FF5C /* ImageLocalizeObservationModel.cpp */,
+				6698024B2048C12E00E7FF5C /* ImageLocalizeObservationModel.hpp */,
+			);
+			name = image;
+			path = "../../ble-cpp/src/image";
+			sourceTree = "<group>";
+		};
+		66FC6A0A20353E880056F30E /* beacon */ = {
+			isa = PBXGroup;
+			children = (
+				66FC6A0B20353E880056F30E /* BaseBeaconFilter.hpp */,
+				66FC6A0C20353E880056F30E /* BeaconFilter.hpp */,
+				66FC6A0D20353E880056F30E /* BeaconFilterChain.cpp */,
+				66FC6A0E20353E880056F30E /* BeaconFilterChain.hpp */,
+				66FC6A0F20353E880056F30E /* CleansingBeaconFilter.cpp */,
+				66FC6A1020353E880056F30E /* CleansingBeaconFilter.hpp */,
+				66FC6A1120353E880056F30E /* StrongestBeaconFilter.cpp */,
+				66FC6A1220353E880056F30E /* StrongestBeaconFilter.hpp */,
+			);
+			name = beacon;
+			path = "../../ble-cpp/src/beacon";
+			sourceTree = "<group>";
+		};
+		66FC6A1620353EAB0056F30E /* core */ = {
+			isa = PBXGroup;
+			children = (
+				66FC6A1720353EAB0056F30E /* Acceleration.cpp */,
+				66FC6A1820353EAB0056F30E /* Acceleration.hpp */,
+				66FC6A1920353EAB0056F30E /* Attitude.cpp */,
+				66FC6A1A20353EAB0056F30E /* Attitude.hpp */,
+				66FC6A1B20353EAB0056F30E /* Beacon.cpp */,
+				66FC6A1C20353EAB0056F30E /* Beacon.hpp */,
+				66FC6A1D20353EAB0056F30E /* BLEBeacon.cpp */,
+				66FC6A1E20353EAB0056F30E /* BLEBeacon.hpp */,
+				66FC6A1F20353EAB0056F30E /* bleloc.h */,
+				66FC6A2020353EAB0056F30E /* Heading.cpp */,
+				66FC6A2120353EAB0056F30E /* Heading.hpp */,
+				66FC6A2220353EAB0056F30E /* LatLngConverter.cpp */,
+				66FC6A2320353EAB0056F30E /* LatLngConverter.hpp */,
+				66FC6A2420353EAB0056F30E /* LatLngUtil.cpp */,
+				66FC6A2520353EAB0056F30E /* LatLngUtil.hpp */,
+				66FC6A2620353EAB0056F30E /* Location.cpp */,
+				66FC6A2720353EAB0056F30E /* Location.hpp */,
+				66FC6A2820353EAB0056F30E /* LocException.hpp */,
+				66FC6A2920353EAB0056F30E /* Pose.cpp */,
+				66FC6A2A20353EAB0056F30E /* Pose.hpp */,
+				66FC6A2B20353EAB0056F30E /* Sample.cpp */,
+				66FC6A2C20353EAB0056F30E /* Sample.hpp */,
+				66FC6A2D20353EAB0056F30E /* State.cpp */,
+				66FC6A2E20353EAB0056F30E /* State.hpp */,
+				66FC6A2F20353EAB0056F30E /* Status.cpp */,
+				66FC6A3020353EAB0056F30E /* Status.hpp */,
+				66FC6A3120353EAB0056F30E /* StreamLocalizer.hpp */,
+			);
+			name = core;
+			path = "../../ble-cpp/src/core";
+			sourceTree = "<group>";
+		};
+		66FC6A4C20353F420056F30E /* data */ = {
+			isa = PBXGroup;
+			children = (
+				66FC6A4D20353F420056F30E /* DataLogger.cpp */,
+				66FC6A4E20353F420056F30E /* DataLogger.hpp */,
+				66FC6A4F20353F420056F30E /* DataStore.hpp */,
+				66FC6A5020353F420056F30E /* DataStoreImpl.cpp */,
+				66FC6A5120353F420056F30E /* DataStoreImpl.hpp */,
+				66FC6A5220353F420056F30E /* DataUtils.cpp */,
+				66FC6A5320353F420056F30E /* DataUtils.hpp */,
+				66FC6A5420353F420056F30E /* ExtendedDataUtils.cpp */,
+				66FC6A5520353F420056F30E /* ExtendedDataUtils.hpp */,
+				66FC6A5620353F420056F30E /* LazyDataStore.cpp */,
+				66FC6A5720353F420056F30E /* LazyDataStore.hpp */,
+				66FC6A5820353F420056F30E /* VirtualDevice.cpp */,
+				66FC6A5920353F420056F30E /* VirtualDevice.hpp */,
+			);
+			name = data;
+			path = "../../ble-cpp/src/data";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		669802512048C46900E7FF5C /* CnnBasicLocalizer */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 669802562048C46A00E7FF5C /* Build configuration list for PBXNativeTarget "CnnBasicLocalizer" */;
+			buildPhases = (
+				370AE82BCBBD2C5DE079F378 /* [CP] Check Pods Manifest.lock */,
+				6698024E2048C46900E7FF5C /* Sources */,
+				6698024F2048C46900E7FF5C /* Frameworks */,
+				669802502048C46900E7FF5C /* CopyFiles */,
+				669A42B42053893800A11A2C /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CnnBasicLocalizer;
+			productName = CnnBasicLocalizer;
+			productReference = 669802522048C46900E7FF5C /* CnnBasicLocalizer */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		66FC690D203511240056F30E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0920;
+				ORGANIZATIONNAME = com.ibm.research.tokyo.ar;
+				TargetAttributes = {
+					669802512048C46900E7FF5C = {
+						CreatedOnToolsVersion = 9.2;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 66FC6910203511240056F30E /* Build configuration list for PBXProject "CnnLocalizer" */;
+			compatibilityVersion = "Xcode 8.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 66FC690C203511240056F30E;
+			productRefGroup = 66FC6916203511240056F30E /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				669802512048C46900E7FF5C /* CnnBasicLocalizer */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		370AE82BCBBD2C5DE079F378 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-CnnBasicLocalizer-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		669A42B42053893800A11A2C /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# echo ${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}\n# echo ${SRCROOT}\ncp ${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME} ${SRCROOT}/${PRODUCT_NAME}.exec";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		6698024E2048C46900E7FF5C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				662C95D22048C5BA00E3EBEB /* CnnPoseUtil.cpp in Sources */,
+				662C95D32048C5BA00E3EBEB /* CnnFileUtil.cpp in Sources */,
+				662C95D42048C5BA00E3EBEB /* CnnManager.cpp in Sources */,
+				662C95D52048C5BA00E3EBEB /* TensorFlowUtil.cpp in Sources */,
+				662C95D62048C5BA00E3EBEB /* ImageLocalizedPoseMetropolisSampler.cpp in Sources */,
+				662C95D72048C5BA00E3EBEB /* ImageLocalizeObservationModel.cpp in Sources */,
+				662C95D82048C5BA00E3EBEB /* BeaconFilterChain.cpp in Sources */,
+				662C95D92048C5BA00E3EBEB /* CleansingBeaconFilter.cpp in Sources */,
+				662C95DA2048C5BA00E3EBEB /* StrongestBeaconFilter.cpp in Sources */,
+				662C95DB2048C5BA00E3EBEB /* Acceleration.cpp in Sources */,
+				662C95DC2048C5BA00E3EBEB /* Attitude.cpp in Sources */,
+				662C95DD2048C5BA00E3EBEB /* Beacon.cpp in Sources */,
+				662C95DE2048C5BA00E3EBEB /* BLEBeacon.cpp in Sources */,
+				662C95DF2048C5BA00E3EBEB /* Heading.cpp in Sources */,
+				662C95E02048C5BA00E3EBEB /* LatLngConverter.cpp in Sources */,
+				662C95E12048C5BA00E3EBEB /* LatLngUtil.cpp in Sources */,
+				662C95E22048C5BA00E3EBEB /* Location.cpp in Sources */,
+				662C95E32048C5BA00E3EBEB /* Pose.cpp in Sources */,
+				662C95E42048C5BA00E3EBEB /* Sample.cpp in Sources */,
+				662C95E52048C5BA00E3EBEB /* State.cpp in Sources */,
+				662C95E62048C5BA00E3EBEB /* Status.cpp in Sources */,
+				662C95E72048C5BA00E3EBEB /* DataLogger.cpp in Sources */,
+				662C95E82048C5BA00E3EBEB /* DataStoreImpl.cpp in Sources */,
+				662C95E92048C5BA00E3EBEB /* DataUtils.cpp in Sources */,
+				662C95EA2048C5BA00E3EBEB /* ExtendedDataUtils.cpp in Sources */,
+				662C95EB2048C5BA00E3EBEB /* LazyDataStore.cpp in Sources */,
+				662C95EC2048C5BA00E3EBEB /* VirtualDevice.cpp in Sources */,
+				662C95ED2048C5BA00E3EBEB /* GridResampler.cpp in Sources */,
+				662C95EE2048C5BA00E3EBEB /* StatusInitializerImpl.cpp in Sources */,
+				662C95EF2048C5BA00E3EBEB /* StatusInitializerStub.cpp in Sources */,
+				662C95F02048C5BA00E3EBEB /* StreamLocalizerStub.cpp in Sources */,
+				662C95F12048C5BA00E3EBEB /* StreamParticleFilter.cpp in Sources */,
+				662C95F22048C5BA00E3EBEB /* BasicLocalizer.cpp in Sources */,
+				662C95F32048C5BA00E3EBEB /* Building.cpp in Sources */,
+				662C95F42048C5BA00E3EBEB /* CoordinateSystem.cpp in Sources */,
+				662C95F52048C5BA00E3EBEB /* FloorMap.cpp in Sources */,
+				662C95F62048C5BA00E3EBEB /* ImageHolder.cpp in Sources */,
+				662C95F72048C5BA00E3EBEB /* MetropolisSampler.cpp in Sources */,
+				662C95F82048C5BA00E3EBEB /* GaussianProcess.cpp in Sources */,
+				662C95F92048C5BA00E3EBEB /* GaussianProcessLDPLMultiModel.cpp in Sources */,
+				662C95FA2048C5BA00E3EBEB /* GaussianProcessLight.cpp in Sources */,
+				662C95FB2048C5BA00E3EBEB /* KernelFunction.cpp in Sources */,
+				662C95FC2048C5BA00E3EBEB /* PoseRandomWalker.cpp in Sources */,
+				662C95FD2048C5BA00E3EBEB /* PosteriorResampler.cpp in Sources */,
+				662C95FE2048C5BA00E3EBEB /* RandomWalker.cpp in Sources */,
+				662C95FF2048C5BA00E3EBEB /* RandomWalkerMotion.cpp in Sources */,
+				662C96002048C5BA00E3EBEB /* SystemModel.cpp in Sources */,
+				662C96012048C5BA00E3EBEB /* SystemModelInBuilding.cpp in Sources */,
+				662C96022048C5BA00E3EBEB /* WeakPoseRandomWalker.cpp in Sources */,
+				662C96032048C5BA00E3EBEB /* Altimeter.cpp in Sources */,
+				662C96042048C5BA00E3EBEB /* AltitudeManagerSimple.cpp in Sources */,
+				662C96052048C5BA00E3EBEB /* OrientationMeterAverage.cpp in Sources */,
+				662C96062048C5BA00E3EBEB /* PedometerWalkingState.cpp in Sources */,
+				662C96072048C5BA00E3EBEB /* TransformedOrientationMeterAverage.cpp in Sources */,
+				662C96082048C5BA00E3EBEB /* ArrayUtils.cpp in Sources */,
+				662C96092048C5BA00E3EBEB /* LogUtil.cpp in Sources */,
+				662C960A2048C5BA00E3EBEB /* MathUtils.cpp in Sources */,
+				662C960B2048C5BA00E3EBEB /* RandomGenerator.cpp in Sources */,
+				669802552048C46A00E7FF5C /* main.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		669802572048C46A00E7FF5C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = DBC415F5BA680F1BEEA9E492 /* Pods-CnnBasicLocalizer.debug.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_ROOT}/boost\"",
+					"\"${PODS_ROOT}/cereal/include\"",
+					"\"${PODS_ROOT}/eigen\"",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/boost\"",
+					"\"${PODS_ROOT}/Headers/Public/cereal\"",
+					"\"${PODS_ROOT}/Headers/Public/eigen\"",
+					"\"${PODS_ROOT}/Headers/Public/picojson\"",
+					/usr/local/opt/opencv/include,
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/usr/local/opt/opencv/lib,
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		669802582048C46A00E7FF5C /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 69FC8C8EC4816A85CAD12DBE /* Pods-CnnBasicLocalizer.release.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_ROOT}/boost\"",
+					"\"${PODS_ROOT}/cereal/include\"",
+					"\"${PODS_ROOT}/eigen\"",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/boost\"",
+					"\"${PODS_ROOT}/Headers/Public/cereal\"",
+					"\"${PODS_ROOT}/Headers/Public/eigen\"",
+					"\"${PODS_ROOT}/Headers/Public/picojson\"",
+					/usr/local/opt/opencv/include,
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/usr/local/opt/opencv/lib,
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		66FC691A203511240056F30E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(TF_ROOT)",
+					"$(TF_ROOT)/tensorflow/contrib/makefile/downloads",
+					"$(TF_ROOT)/tensorflow/contrib/makefile/downloads/protobuf/src",
+					"$(TF_ROOT)/tensorflow/contrib/makefile/gen/proto",
+					"$(TF_ROOT)/tensorflow/contrib/makefile/downloads/nsync/public",
+					"$(TF_ROOT)/tensorflow/contrib/makefile/downloads/eigen",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(TF_ROOT)/tensorflow/contrib/makefile/gen/protobuf_ios/lib",
+					"$(TF_ROOT)/tensorflow/contrib/makefile/gen/lib",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = (
+					"$(TF_ROOT)/tensorflow/contrib/makefile/downloads/nsync/builds/lipo.ios.c++11/nsync.a",
+					"-lprotobuf",
+					"-lprotobuf-lite",
+					"-force_load",
+					"$(TF_ROOT)/tensorflow/contrib/makefile/gen/lib/libtensorflow-core.a",
+				);
+				SDKROOT = macosx;
+				TF_ROOT = "/Users/ishihara/Documents/package/tensorflow-1.4.1/";
+			};
+			name = Debug;
+		};
+		66FC691B203511240056F30E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(TF_ROOT)",
+					"$(TF_ROOT)/tensorflow/contrib/makefile/downloads",
+					"$(TF_ROOT)/tensorflow/contrib/makefile/downloads/protobuf/src",
+					"$(TF_ROOT)/tensorflow/contrib/makefile/gen/proto",
+					"$(TF_ROOT)/tensorflow/contrib/makefile/downloads/nsync/public",
+					"$(TF_ROOT)/tensorflow/contrib/makefile/downloads/eigen",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(TF_ROOT)/tensorflow/contrib/makefile/gen/protobuf_ios/lib",
+					"$(TF_ROOT)/tensorflow/contrib/makefile/gen/lib",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = (
+					"$(TF_ROOT)/tensorflow/contrib/makefile/downloads/nsync/builds/lipo.ios.c++11/nsync.a",
+					"-lprotobuf",
+					"-lprotobuf-lite",
+					"-force_load",
+					"$(TF_ROOT)/tensorflow/contrib/makefile/gen/lib/libtensorflow-core.a",
+				);
+				SDKROOT = macosx;
+				TF_ROOT = "/Users/ishihara/Documents/package/tensorflow-1.4.1/";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		669802562048C46A00E7FF5C /* Build configuration list for PBXNativeTarget "CnnBasicLocalizer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				669802572048C46A00E7FF5C /* Debug */,
+				669802582048C46A00E7FF5C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		66FC6910203511240056F30E /* Build configuration list for PBXProject "CnnLocalizer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				66FC691A203511240056F30E /* Debug */,
+				66FC691B203511240056F30E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 66FC690D203511240056F30E /* Project object */;
+}

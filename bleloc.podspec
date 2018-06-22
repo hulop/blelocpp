@@ -9,12 +9,12 @@ This is a localization library for bluetooth le beacons.
 
   s.license      = "MIT"
   s.author    = "HULOP"
-#  s.source       = { :git => "https://github.com/hulop/blelocpp.git", :tag => "v1.3.3-beta" }
-#  s.preserve_path = "platform/ios/bleloc.framework"
-#  s.vendored_frameworks = "platform/ios/bleloc.framework"
-  s.source       = { :http => "http://github.com/hulop/blelocpp/releases/download/v1.3.3-beta/bleloc.framework.zip" }
-  s.preserve_path = "bleloc.framework"
-  s.vendored_frameworks = "bleloc.framework"
+  s.source       = { :git => "https://github.com/hulop/blelocpp.git", :tag => "v1.3.3-beta" }
+  s.preserve_path = "platform/ios/bleloc.framework"
+  s.vendored_frameworks = "platform/ios/bleloc.framework"
+#  s.source       = { :http => "http://github.com/hulop/blelocpp/releases/download/v1.3.3-beta/bleloc.framework.zip" }
+#  s.preserve_path = "bleloc.framework"
+#  s.vendored_frameworks = "bleloc.framework"
   s.platforms = {:ios => "8.4"}
   s.requires_arc = false
   s.ios.frameworks = 'AVFoundation', 'AssetsLibrary', 'CoreMedia'

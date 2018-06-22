@@ -30,6 +30,7 @@
 #include "StatusInitializer.hpp"
 #include "PoseRandomWalker.hpp"
 #include "ObservationModel.hpp"
+#include "ImageLocalizeObservationModel.hpp"
 #include "Resampler.hpp"
 #include "ObservationDependentInitializer.hpp"
 #include "PosteriorResampler.hpp"
@@ -175,11 +176,15 @@ namespace loc {
         StreamParticleFilter& statusInitializer(std::shared_ptr<StatusInitializer> statusInitializer);
         StreamParticleFilter& systemModel(std::shared_ptr<SystemModel<State, SystemModelInput>> poseRandomWalker);
         StreamParticleFilter& observationModel(std::shared_ptr<ObservationModel<State, Beacons>> observationModel);
+        StreamParticleFilter& imageLocalizeObservationModel(std::shared_ptr<ImageLocalizeObservationModel<State, Pose>> imageLocalizeObservationModel);
+        StreamParticleFilter& imageUpdateDistThreshold(double imageUpdateDistThreshold);
+        StreamParticleFilter& imageUpdateAngleLB(double imageUpdateAngleLB);
         StreamParticleFilter& resampler(std::shared_ptr<Resampler<State>> resampler);
         
         StreamParticleFilter& beaconFilter(std::shared_ptr<BeaconFilter> beaconFilter);
         
         StreamParticleFilter& observationDependentInitializer(std::shared_ptr<ObservationDependentInitializer<State, Beacons>> metro);
+        StreamParticleFilter& imageLocalizePoseObservationDependentInitializer(std::shared_ptr<ObservationDependentInitializer<State, Pose>> imageLocalizedPoseMetro);
         StreamParticleFilter& posteriorResampler(PosteriorResampler<State>::Ptr);
         StreamParticleFilter& dataStore(DataStore::Ptr);
         
@@ -193,6 +198,7 @@ namespace loc {
         StreamParticleFilter& putBeacons(const Beacons beacons) override;
         StreamParticleFilter& putLocalHeading(const LocalHeading heading) override;
         StreamParticleFilter& putAltimeter(const Altimeter altimeter) override;
+        StreamParticleFilter& putImageLocalizedPose(long timestamp, const Pose pose) override;
         Status* getStatus() override;
         
         // optional methods

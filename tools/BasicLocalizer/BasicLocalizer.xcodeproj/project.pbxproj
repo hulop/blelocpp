@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6626637C203B9132006AC08B /* ImageLocalizedPoseMetropolisSampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 66266378203B9132006AC08B /* ImageLocalizedPoseMetropolisSampler.cpp */; };
+		6626637D203B9132006AC08B /* ImageLocalizeObservationModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6626637A203B9132006AC08B /* ImageLocalizeObservationModel.cpp */; };
+		66528C6E208A450E00A4755D /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66528C6D208A450E00A4755D /* Accelerate.framework */; };
+		66FC68F52034CD870056F30E /* CnnManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 66FC68F12034CD870056F30E /* CnnManager.cpp */; };
+		66FC68F62034CD870056F30E /* TensorFlowUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 66FC68F32034CD870056F30E /* TensorFlowUtil.cpp */; };
+		66FC68F72034CDC40056F30E /* CnnManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 66FC68F12034CD870056F30E /* CnnManager.cpp */; };
+		66FC68F82034CDC40056F30E /* TensorFlowUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 66FC68F32034CD870056F30E /* TensorFlowUtil.cpp */; };
 		7E12B4481D3473D100614DBB /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E12B4471D3473D100614DBB /* main.cpp */; };
 		7E12B4E51D34767500614DBB /* BeaconFilterChain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E12B4521D3474B900614DBB /* BeaconFilterChain.cpp */; };
 		7E12B4E61D34767500614DBB /* CleansingBeaconFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E12B4541D3474B900614DBB /* CleansingBeaconFilter.cpp */; };
@@ -96,6 +103,16 @@
 /* Begin PBXFileReference section */
 		1B58F964D9021FEA7FB72F78 /* Pods-BasicLocalizerTest.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BasicLocalizerTest.release.xcconfig"; path = "Pods/Target Support Files/Pods-BasicLocalizerTest/Pods-BasicLocalizerTest.release.xcconfig"; sourceTree = "<group>"; };
 		4F67493B6BCE17ED3C1E9133 /* libPods-BasicLocalizerTest.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BasicLocalizerTest.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		66266378203B9132006AC08B /* ImageLocalizedPoseMetropolisSampler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ImageLocalizedPoseMetropolisSampler.cpp; sourceTree = "<group>"; };
+		66266379203B9132006AC08B /* ImageLocalizedPoseMetropolisSampler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ImageLocalizedPoseMetropolisSampler.hpp; sourceTree = "<group>"; };
+		6626637A203B9132006AC08B /* ImageLocalizeObservationModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ImageLocalizeObservationModel.cpp; sourceTree = "<group>"; };
+		6626637B203B9132006AC08B /* ImageLocalizeObservationModel.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ImageLocalizeObservationModel.hpp; sourceTree = "<group>"; };
+		66528C6D208A450E00A4755D /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
+		66FC68F12034CD870056F30E /* CnnManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CnnManager.cpp; sourceTree = "<group>"; };
+		66FC68F22034CD870056F30E /* CnnManager.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CnnManager.hpp; sourceTree = "<group>"; };
+		66FC68F32034CD870056F30E /* TensorFlowUtil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TensorFlowUtil.cpp; sourceTree = "<group>"; };
+		66FC68F42034CD870056F30E /* TensorFlowUtil.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = TensorFlowUtil.hpp; sourceTree = "<group>"; };
+		66FC68FB2034D2240056F30E /* tensorflow_experimental.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = tensorflow_experimental.framework; sourceTree = "<group>"; };
 		7176A219FD2710CA723BF68F /* Pods-BasicLocalizerTest.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BasicLocalizerTest.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BasicLocalizerTest/Pods-BasicLocalizerTest.debug.xcconfig"; sourceTree = "<group>"; };
 		7A6816C23FFCCD44FD1F0490 /* Pods-BasicLocalizer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BasicLocalizer.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BasicLocalizer/Pods-BasicLocalizer.debug.xcconfig"; sourceTree = "<group>"; };
 		7E12B4441D3473D100614DBB /* BasicLocalizer */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = BasicLocalizer; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -165,7 +182,7 @@
 		7E12B49C1D3474B900614DBB /* ImageHolder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ImageHolder.hpp; sourceTree = "<group>"; };
 		7E12B49E1D3474B900614DBB /* MetropolisSampler.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = MetropolisSampler.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		7E12B49F1D3474B900614DBB /* MetropolisSampler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = MetropolisSampler.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		7E12B4A01D3474B900614DBB /* ObservationDependentInitializer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = ObservationDependentInitializer.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		7E12B4A01D3474B900614DBB /* ObservationDependentInitializer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = ObservationDependentInitializer.hpp; sourceTree = "<group>"; };
 		7E12B4A21D3474B900614DBB /* GaussianProcess.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GaussianProcess.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		7E12B4A31D3474B900614DBB /* GaussianProcess.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GaussianProcess.hpp; sourceTree = "<group>"; };
 		7E12B4A41D3474B900614DBB /* GaussianProcessLDPLMultiModel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GaussianProcessLDPLMultiModel.cpp; sourceTree = "<group>"; };
@@ -235,6 +252,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				66528C6E208A450E00A4755D /* Accelerate.framework in Frameworks */,
 				916257440C884FB7A77F40E3 /* libPods-BasicLocalizer.a in Frameworks */,
 				FBF93E441FB19D0600815833 /* libopencv_core.dylib in Frameworks */,
 				FBF93E4A1FB1A5FC00815833 /* libopencv_imgcodecs.dylib in Frameworks */,
@@ -256,6 +274,8 @@
 		15143BD69BDE75B4BEBF884C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				66528C6D208A450E00A4755D /* Accelerate.framework */,
+				66FC68FB2034D2240056F30E /* tensorflow_experimental.framework */,
 				FBF93E3F1FB19D0600815833 /* libopencv_core.dylib */,
 				FBF93E421FB19D0600815833 /* libopencv_flann.dylib */,
 				FBF93E401FB19D0600815833 /* libopencv_imgcodecs.dylib */,
@@ -274,6 +294,30 @@
 				1B58F964D9021FEA7FB72F78 /* Pods-BasicLocalizerTest.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		66FC68E92034CD7C0056F30E /* image */ = {
+			isa = PBXGroup;
+			children = (
+				66266378203B9132006AC08B /* ImageLocalizedPoseMetropolisSampler.cpp */,
+				66266379203B9132006AC08B /* ImageLocalizedPoseMetropolisSampler.hpp */,
+				6626637A203B9132006AC08B /* ImageLocalizeObservationModel.cpp */,
+				6626637B203B9132006AC08B /* ImageLocalizeObservationModel.hpp */,
+			);
+			name = image;
+			path = "../../ble-cpp/src/image";
+			sourceTree = "<group>";
+		};
+		66FC68F02034CD870056F30E /* cnn */ = {
+			isa = PBXGroup;
+			children = (
+				66FC68F12034CD870056F30E /* CnnManager.cpp */,
+				66FC68F22034CD870056F30E /* CnnManager.hpp */,
+				66FC68F32034CD870056F30E /* TensorFlowUtil.cpp */,
+				66FC68F42034CD870056F30E /* TensorFlowUtil.hpp */,
+			);
+			name = cnn;
+			path = "../../ble-cpp/src/cnn";
 			sourceTree = "<group>";
 		};
 		7E12B43B1D3473D000614DBB = {
@@ -309,6 +353,8 @@
 		7E12B44E1D34749000614DBB /* localization-library */ = {
 			isa = PBXGroup;
 			children = (
+				66FC68F02034CD870056F30E /* cnn */,
+				66FC68E92034CD7C0056F30E /* image */,
 				7E12B44F1D3474B900614DBB /* beacon */,
 				7E12B4581D3474B900614DBB /* core */,
 				7E12B46D1D3474B900614DBB /* data */,
@@ -559,7 +605,6 @@
 				7E12B4401D3473D100614DBB /* Sources */,
 				7E12B4411D3473D100614DBB /* Frameworks */,
 				7E12B4421D3473D100614DBB /* CopyFiles */,
-				2DBBF8E829A63D5832550FA3 /* Copy Pods Resources */,
 				FB0CDF721E51637C0014E104 /* ShellScript */,
 			);
 			buildRules = (
@@ -579,8 +624,6 @@
 				7E9238FE1D53156400875766 /* Sources */,
 				7E9238FF1D53156400875766 /* Frameworks */,
 				7E9239001D53156400875766 /* Resources */,
-				F81BFF9C52C1B540FA3EC0D8 /* [CP] Embed Pods Frameworks */,
-				E18A060AEEA348FEC8D39A72 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -643,28 +686,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-BasicLocalizerTest-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		2DBBF8E829A63D5832550FA3 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-BasicLocalizer/Pods-BasicLocalizer-resources.sh\"\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		88A4486BDD6C0D087B80C698 /* [CP] Check Pods Manifest.lock */ = {
@@ -673,43 +704,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-BasicLocalizer-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		E18A060AEEA348FEC8D39A72 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-BasicLocalizerTest/Pods-BasicLocalizerTest-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		F81BFF9C52C1B540FA3EC0D8 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-BasicLocalizerTest/Pods-BasicLocalizerTest-frameworks.sh\"\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		FB0CDF721E51637C0014E104 /* ShellScript */ = {
@@ -732,6 +736,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6626637C203B9132006AC08B /* ImageLocalizedPoseMetropolisSampler.cpp in Sources */,
+				6626637D203B9132006AC08B /* ImageLocalizeObservationModel.cpp in Sources */,
+				66FC68F72034CDC40056F30E /* CnnManager.cpp in Sources */,
+				66FC68F82034CDC40056F30E /* TensorFlowUtil.cpp in Sources */,
 				FBEB01F11D7588F200CB808D /* SystemModelInBuilding.cpp in Sources */,
 				7E12B4E51D34767500614DBB /* BeaconFilterChain.cpp in Sources */,
 				7E12B4E61D34767500614DBB /* CleansingBeaconFilter.cpp in Sources */,
@@ -806,6 +814,8 @@
 				7E9239341D53178600875766 /* State.cpp in Sources */,
 				7E9239351D53178600875766 /* Status.cpp in Sources */,
 				7E92392B1D53177300875766 /* BasicLocalizerTest.mm in Sources */,
+				66FC68F62034CD870056F30E /* TensorFlowUtil.cpp in Sources */,
+				66FC68F52034CD870056F30E /* CnnManager.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -851,10 +861,30 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(TF_ROOT)",
+					"$(TF_ROOT)/tensorflow/contrib/makefile/downloads",
+					"$(TF_ROOT)/tensorflow/contrib/makefile/downloads/eigen",
+					"$(TF_ROOT)/tensorflow/contrib/makefile/downloads/protobuf/src",
+					"$(TF_ROOT)/tensorflow/contrib/makefile/gen/proto",
+					"$(TF_ROOT)/tensorflow/contrib/makefile/downloads/nsync/public",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(TF_ROOT)/tensorflow/contrib/makefile/gen/protobuf_ios/lib",
+					"$(TF_ROOT)/tensorflow/contrib/makefile/gen/lib",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = (
+					"$(TF_ROOT)/tensorflow/contrib/makefile/downloads/nsync/builds/lipo.ios.c++11/nsync.a",
+					"-lprotobuf",
+					"-lprotobuf-lite",
+					"-force_load",
+					"$(TF_ROOT)/tensorflow/contrib/makefile/gen/lib/libtensorflow-core.a",
+				);
 				SDKROOT = macosx;
+				TF_ROOT = "/Users/ishihara/Documents/package/tensorflow-1.4.1/";
 			};
 			name = Debug;
 		};
@@ -894,9 +924,29 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(TF_ROOT)",
+					"$(TF_ROOT)/tensorflow/contrib/makefile/downloads",
+					"$(TF_ROOT)/tensorflow/contrib/makefile/downloads/eigen",
+					"$(TF_ROOT)/tensorflow/contrib/makefile/downloads/protobuf/src",
+					"$(TF_ROOT)/tensorflow/contrib/makefile/gen/proto",
+					"$(TF_ROOT)/tensorflow/contrib/makefile/downloads/nsync/public",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(TF_ROOT)/tensorflow/contrib/makefile/gen/protobuf_ios/lib",
+					"$(TF_ROOT)/tensorflow/contrib/makefile/gen/lib",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = (
+					"$(TF_ROOT)/tensorflow/contrib/makefile/downloads/nsync/builds/lipo.ios.c++11/nsync.a",
+					"-lprotobuf",
+					"-lprotobuf-lite",
+					"-force_load",
+					"$(TF_ROOT)/tensorflow/contrib/makefile/gen/lib/libtensorflow-core.a",
+				);
 				SDKROOT = macosx;
+				TF_ROOT = "/Users/ishihara/Documents/package/tensorflow-1.4.1/";
 			};
 			name = Release;
 		};
@@ -904,6 +954,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 7A6816C23FFCCD44FD1F0490 /* Pods-BasicLocalizer.debug.xcconfig */;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				GCC_OPTIMIZATION_LEVEL = 2;
 				HEADER_SEARCH_PATHS = (
 					"\"${PODS_ROOT}/boost\"",
@@ -917,7 +971,10 @@
 					"\"${PODS_ROOT}/Headers/Public/picojson\"",
 					"\"/usr/local/Cellar/opencv/\"/**",
 				);
-				LIBRARY_SEARCH_PATHS = "/usr/local/Cellar/opencv/**";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"/usr/local/Cellar/opencv/**",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -926,6 +983,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 933F9624F4C8E35E8227C48B /* Pods-BasicLocalizer.release.xcconfig */;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				HEADER_SEARCH_PATHS = (
 					"\"${PODS_ROOT}/boost\"",
 					"\"${PODS_ROOT}/cereal/include\"",
@@ -938,7 +999,10 @@
 					"\"${PODS_ROOT}/Headers/Public/picojson\"",
 					"\"/usr/local/Cellar/opencv/\"/**",
 				);
-				LIBRARY_SEARCH_PATHS = "/usr/local/Cellar/opencv/**";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"/usr/local/Cellar/opencv/**",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
