@@ -61,5 +61,15 @@ namespace cereal{
         archive(CEREAL_NVP(elements));
         X = Eigen::Map<Eigen::Matrix<_Scalar, _Rows, _Cols, _Options, _MaxRows, _MaxCols>>(&elements[0], rows, cols);
     }
+    
+    template <class Archive, class T>
+    void make_optional_nvp(Archive &ar, const std::string &name, T &value) {
+        try {
+            ar(cereal::make_nvp(name, value));
+        } catch (cereal::Exception& e) {
+            std::cerr << "NOTICE: provided NVP not found (name=" << name << ")" << std::endl;
+        }
+    }
+    #define     OPTIONAL_NVP(A, T)   make_optional_nvp(A, #T, T)
 }
 #endif /* EigenSerializeUtils_h */

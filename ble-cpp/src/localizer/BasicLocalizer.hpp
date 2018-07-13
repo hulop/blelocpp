@@ -215,92 +215,93 @@ namespace loc {
         double headingConfidenceForOrientationInit_ = 0.0;
         
     public:
+                
         template<class Archive>
         void serialize(Archive & ar, std::uint32_t const version)
         {
-            ar(CEREAL_NVP(nStates));
-            ar(CEREAL_NVP(alphaWeaken));
-            ar(CEREAL_NVP(nSmooth));
-            ar(CEREAL_NVP(nSmoothTracking));
+            OPTIONAL_NVP(ar,nStates);
+            OPTIONAL_NVP(ar,alphaWeaken);
+            OPTIONAL_NVP(ar,nSmooth);
+            OPTIONAL_NVP(ar,nSmoothTracking);
             
-            ar(CEREAL_NVP(smoothType));
-            ar(CEREAL_NVP(localizeMode));
+            OPTIONAL_NVP(ar,smoothType);
+            OPTIONAL_NVP(ar,localizeMode);
             
-            ar(CEREAL_NVP(effectiveSampleSizeThreshold));
-            ar(CEREAL_NVP(nStrongest));
-            ar(CEREAL_NVP(enablesFloorUpdate));
-            
-            
-            ar(CEREAL_NVP(walkDetectSigmaThreshold));
-            ar(CEREAL_NVP(meanVelocity));
-            ar(CEREAL_NVP(stdVelocity));
-            ar(CEREAL_NVP(diffusionVelocity));
-            ar(CEREAL_NVP(minVelocity));
-            ar(CEREAL_NVP(maxVelocity));
+            OPTIONAL_NVP(ar,effectiveSampleSizeThreshold);
+            OPTIONAL_NVP(ar,nStrongest);
+            OPTIONAL_NVP(ar,enablesFloorUpdate);
             
             
-            ar(CEREAL_NVP(stdRssiBias));
-            ar(CEREAL_NVP(diffusionRssiBias));
-            ar(CEREAL_NVP(stdOrientation));
-            ar(CEREAL_NVP(diffusionOrientationBias));
+            OPTIONAL_NVP(ar,walkDetectSigmaThreshold);
+            OPTIONAL_NVP(ar,meanVelocity);
+            OPTIONAL_NVP(ar,stdVelocity);
+            OPTIONAL_NVP(ar,diffusionVelocity);
+            OPTIONAL_NVP(ar,minVelocity);
+            OPTIONAL_NVP(ar,maxVelocity);
             
-            ar(CEREAL_NVP(angularVelocityLimit));
+            
+            OPTIONAL_NVP(ar,stdRssiBias);
+            OPTIONAL_NVP(ar,diffusionRssiBias);
+            OPTIONAL_NVP(ar,stdOrientation);
+            OPTIONAL_NVP(ar,diffusionOrientationBias);
+            
+            OPTIONAL_NVP(ar,angularVelocityLimit);
             
             // Parametes for PoseRandomWalker
-            ar(CEREAL_NVP(doesUpdateWhenStopping));
-            ar(CEREAL_NVP(maxIncidenceAngle));
-            ar(CEREAL_NVP(weightDecayHalfLife));
+            OPTIONAL_NVP(ar,doesUpdateWhenStopping);
+            OPTIONAL_NVP(ar,maxIncidenceAngle);
+            OPTIONAL_NVP(ar,weightDecayHalfLife);
             
             // Parameters for RandomWalkerMotion and WeakPoseRandomWalker
-            ar(CEREAL_NVP(sigmaStop));
-            ar(CEREAL_NVP(sigmaMove));
+            OPTIONAL_NVP(ar,sigmaStop);
+            OPTIONAL_NVP(ar,sigmaMove);
             
             // Parameters for SystemModelInBuilding
-            ar(CEREAL_NVP(velocityRateFloor));
-            ar(CEREAL_NVP(velocityRateElevator));
-            ar(CEREAL_NVP(velocityRateStair));
-            ar(CEREAL_NVP(velocityRateEscalator));
-            ar(CEREAL_NVP(relativeVelocityEscalator));
+            OPTIONAL_NVP(ar,velocityRateFloor);
+            OPTIONAL_NVP(ar,velocityRateElevator);
+            OPTIONAL_NVP(ar,velocityRateStair);
+            OPTIONAL_NVP(ar,velocityRateEscalator);
+            OPTIONAL_NVP(ar,relativeVelocityEscalator);
             
             // Parameters for WeakPoseRandomWalker
-            ar(CEREAL_NVP(probabilityOrientationBiasJump));
-            ar(CEREAL_NVP(poseRandomWalkRate));
-            ar(CEREAL_NVP(randomWalkRate));
-            ar(CEREAL_NVP(probabilityBackwardMove));
+            OPTIONAL_NVP(ar,probabilityOrientationBiasJump);
+            OPTIONAL_NVP(ar,poseRandomWalkRate);
+            OPTIONAL_NVP(ar,randomWalkRate);
+            OPTIONAL_NVP(ar,probabilityBackwardMove);
             
-            ar(CEREAL_NVP(nBurnIn));
-            ar(CEREAL_NVP(burnInRadius2D));
-            ar(CEREAL_NVP(burnInInterval));
-            ar(CEREAL_NVP(burnInInitType));
+            OPTIONAL_NVP(ar,nBurnIn);
+            OPTIONAL_NVP(ar,burnInRadius2D);
+            OPTIONAL_NVP(ar,burnInInterval);
+            OPTIONAL_NVP(ar,burnInInitType);
             
-            ar(CEREAL_NVP(mixProba));
-            ar(CEREAL_NVP(rejectDistance));
-            ar(CEREAL_NVP(rejectFloorDifference));
-            ar(CEREAL_NVP(nBeaconsMinimum));
+            OPTIONAL_NVP(ar,mixProba);
+            OPTIONAL_NVP(ar,rejectDistance);
+            OPTIONAL_NVP(ar,rejectFloorDifference);
+            OPTIONAL_NVP(ar,nBeaconsMinimum);
             
-            ar(CEREAL_NVP(locLB));
+            OPTIONAL_NVP(ar,locLB);
             
-            ar(CEREAL_NVP(usesAltimeterForFloorTransCheck));
-            ar(CEREAL_NVP(coeffDiffFloorStdev));
+            OPTIONAL_NVP(ar,usesAltimeterForFloorTransCheck);
+            OPTIONAL_NVP(ar,coeffDiffFloorStdev);
             
-            ar(CEREAL_NVP(orientationMeterType));
+            OPTIONAL_NVP(ar,orientationMeterType);
             
             // parameter objects
-            ar(CEREAL_NVP(*poseProperty));
-            ar(CEREAL_NVP(*stateProperty));
+            OPTIONAL_NVP(ar,*poseProperty);
+            OPTIONAL_NVP(ar,*stateProperty);
             
-            ar(CEREAL_NVP(*pfFloorTransParams));
-            ar(CEREAL_NVP(*locationStatusMonitorParameters));
-            ar(CEREAL_NVP(*prwBuildingProperty));
+            OPTIONAL_NVP(ar,*pfFloorTransParams);
+            OPTIONAL_NVP(ar,*locationStatusMonitorParameters);
+            OPTIONAL_NVP(ar,*prwBuildingProperty);
             
             // protected
-            ar(CEREAL_NVP(meanRssiBias_));
-            ar(CEREAL_NVP(minRssiBias_));
-            ar(CEREAL_NVP(maxRssiBias_));
-            ar(CEREAL_NVP(headingConfidenceForOrientationInit_));
+            OPTIONAL_NVP(ar,meanRssiBias_);
+            OPTIONAL_NVP(ar,minRssiBias_);
+            OPTIONAL_NVP(ar,maxRssiBias_);
+            OPTIONAL_NVP(ar,headingConfidenceForOrientationInit_);
             
             if(1<=version){
-                ar(CEREAL_NVP(applysYawDriftAdjust));
+                OPTIONAL_NVP(ar,applysYawDriftAdjust);
             }
             
             try{
