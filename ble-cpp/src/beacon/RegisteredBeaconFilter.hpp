@@ -34,6 +34,7 @@ namespace loc{
     private:
         std::set<long> registeredIDs;
     public:
+        RegisteredBeaconFilter() = delete;
         RegisteredBeaconFilter(const BLEBeacons& bleBeacons);
         ~RegisteredBeaconFilter() = default;
         
