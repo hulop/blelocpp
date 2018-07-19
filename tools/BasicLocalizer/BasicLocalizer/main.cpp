@@ -241,6 +241,8 @@ void functionCalledWhenUpdated(void *userData, loc::Status *pStatus){
     } else {
         auto locStatusStr = Status::locationStatusToString(pStatus->locationStatus());
         auto stepString = Status::stepToString(pStatus->step());
+        double wscore = pStatus->wscore;
+        double ascore = pStatus->ascore;
         //std::cout << "locationStatus=" << locStatusStr << std::endl;
         //if(pStatus->step()==Status::FILTERING_WITH_RESAMPLING ||
         //   pStatus->step()==Status::FILTERING_WITHOUT_RESAMPLING ||
@@ -252,10 +254,14 @@ void functionCalledWhenUpdated(void *userData, loc::Status *pStatus){
             auto meanPoseGlobal = ud->latLngConverter->localToGlobal(*pStatus->meanPose());
             
             if(ud->writeCount==0){
-                *ud->out << "timestamp," << Pose::header() << ",lat,lng,status,step" << std::endl;
+                *ud->out << "timestamp," << Pose::header() << ",lat,lng,status,step,wscore,ascore,status_num"<< std::endl;
+                ud->writeCount = 1;
             }
-            *ud->out << ts << "," << meanPoseGlobal << "," << locStatusStr << "," << stepString << std::endl;
-            ud->writeCount = 1;
+            
+            *ud->out << ts << "," << meanPoseGlobal << "," << locStatusStr << "," << stepString << ","
+                << wscore << "," << ascore << "," << pStatus->locationStatus()
+                << std::endl;
+            
             ud->recentPose = *pStatus->meanPose();
             if(ud->func != NULL){
                 ud->func(*pStatus);

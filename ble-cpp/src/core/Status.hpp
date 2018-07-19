@@ -53,11 +53,11 @@ namespace loc{
         };
         
         enum LocationStatus{
-            UNKNOWN,
-            LOCATING,
-            STABLE,
-            UNSTABLE,
-            NIL
+            UNKNOWN = 0,
+            LOCATING = 1,
+            STABLE = 2,
+            UNSTABLE = 3,
+            NIL = -1
         };
         
         std::shared_ptr<Location> meanLocation() const;
@@ -82,6 +82,9 @@ namespace loc{
         
         static std::string locationStatusToString(const LocationStatus&);
         static std::string stepToString(const Step&);
+        
+        double ascore = std::numeric_limits<double>::quiet_NaN();
+        double wscore = std::numeric_limits<double>::quiet_NaN();
         
     private:
         long timestamp_;

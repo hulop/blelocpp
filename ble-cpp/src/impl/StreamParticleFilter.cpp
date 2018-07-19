@@ -656,22 +656,23 @@ namespace loc{
                 heightIsChanging = heightChanged > mFloorTransParams->heightChangedCriterion();
             }
             
-            if(monitorsStatus){
-                // Update locationStatus by comparing likelihoods between states and one-shot states
+            // Status monitoring
+            double avgCurrentLogLL = std::accumulate(vLogLLs.begin(), vLogLLs.end(), 0.0)/vLogLLs.size();
+            double avgMixLogLL = std::accumulate(allMixLogLLs.begin(), allMixLogLLs.end(), 0.0)/allMixLogLLs.size();
+            
+            if(!isnan(avgMixLogLL)){
+                double maxCurrentLogLL = *std::max_element(vLogLLs.begin(), vLogLLs.end());
+                double maxMixLogLL = *std::max_element(allMixLogLLs.begin(), allMixLogLLs.end());
                 
-                double avgCurrentLogLL = std::accumulate(vLogLLs.begin(), vLogLLs.end(), 0.0)/vLogLLs.size();
-                double avgMixLogLL = std::accumulate(allMixLogLLs.begin(), allMixLogLLs.end(), 0.0)/allMixLogLLs.size();
+                double weightAvgLogLL = std::exp(avgCurrentLogLL)/(std::exp(avgCurrentLogLL)+std::exp(avgMixLogLL));
+                double weightMaxLogLL = std::exp(maxCurrentLogLL)/(std::exp(maxCurrentLogLL)+std::exp(maxMixLogLL));
+                double wTol = mLocStatusMonitorParams->minimumWeightStable();
                 
-                if(!isnan(avgMixLogLL)){
-                    double maxCurrentLogLL = *std::max_element(vLogLLs.begin(), vLogLLs.end());
-                    double maxMixLogLL = *std::max_element(allMixLogLLs.begin(), allMixLogLLs.end());
-                    
-                    double weightAvgLogLL = std::exp(avgCurrentLogLL)/(std::exp(avgCurrentLogLL)+std::exp(avgMixLogLL));
-                    double weightMaxLogLL = std::exp(maxCurrentLogLL)/(std::exp(maxCurrentLogLL)+std::exp(maxMixLogLL));
-                    double wTol = mLocStatusMonitorParams->minimumWeightStable();
-                    
-                    double weightInStates = weightMaxLogLL;
-                    
+                double weightInStates = weightMaxLogLL;
+                status->ascore = std::exp(maxCurrentLogLL-maxMixLogLL);
+                status->wscore = weightInStates;
+                
+                if(monitorsStatus){
                     auto locationStatus = status->locationStatus();
                     if(mOptVerbose){
                         std::cout << "locationStatus = " << Status::locationStatusToString(locationStatus) << std::endl;
@@ -703,6 +704,9 @@ namespace loc{
                         std::cout << "status update was skipped because height is changing." << std::endl;
                     }
                 }
+            }else{
+                status->ascore = std::numeric_limits<double>::quiet_NaN();
+                status->wscore = std::numeric_limits<double>::quiet_NaN();
             }
             
             if(doesFiltering){
