@@ -51,6 +51,7 @@ typedef struct {
     bool forceTraining = false;
     bool finalizeMapdata = false;
     std::string restartLogPath = "";
+    bool longLog = false;
     
     std::string localizerJSONPath = "";
     std::string outputLocalizerJSONPath ="";
@@ -110,6 +111,7 @@ Option parseArguments(int argc, char *argv[]){
         {"gptype",   required_argument , NULL, 0},
         {"finalize",   required_argument , NULL, 0},
         {"skip",         required_argument , NULL, 0},
+        {"vl",         required_argument , NULL, 0},
         {0,         0,                 0,  0 }
     };
 
@@ -189,6 +191,9 @@ Option parseArguments(int argc, char *argv[]){
             if (strcmp(long_options[option_index].name, "skip") == 0){
                 opt.skipBeacon = atoi(optarg);
             }
+            if (strcmp(long_options[option_index].name, "vl") == 0){
+                opt.longLog = true;
+            }
             break;
         case 'h':
             printHelp();
@@ -232,6 +237,7 @@ typedef struct {
     Pose recentPose;
     std::function<void(Status&)> func;
     int writeCount = 0;
+    Beacons recentBeacons;
 } MyData;
 
 void functionCalledWhenUpdated(void *userData, loc::Status *pStatus){
@@ -243,24 +249,48 @@ void functionCalledWhenUpdated(void *userData, loc::Status *pStatus){
         auto stepString = Status::stepToString(pStatus->step());
         double wscore = pStatus->wscore;
         double ascore = pStatus->ascore;
+        
+        // information about beacons
+        auto bs = ud->recentBeacons;
+        size_t nBeacons = bs.size();
+        size_t nStrong = 0;
+        for(const auto& b: bs){
+            if(-100 < b.rssi() && b.rssi() < 0){
+                nStrong++;
+            }
+        }
+        std::stringstream ssBeacons;
+        ssBeacons << nBeacons << "," << nStrong;
+        for(const auto& b: bs){
+            ssBeacons << "," << b.major() << "," << b.minor() << "," << b.rssi();
+        }
+        auto strBeacons = ssBeacons.str();
+        
         //std::cout << "locationStatus=" << locStatusStr << std::endl;
         //if(pStatus->step()==Status::FILTERING_WITH_RESAMPLING ||
         //   pStatus->step()==Status::FILTERING_WITHOUT_RESAMPLING ||
         //    pStatus->step()==Status::RESET){
         //if(true){
+        
         if(pStatus->step()!=Status::OTHER){
             auto ts = pStatus->timestamp();
             auto meanLocGlobal = ud->latLngConverter->localToGlobal(*pStatus->meanLocation());
             auto meanPoseGlobal = ud->latLngConverter->localToGlobal(*pStatus->meanPose());
             
             if(ud->writeCount==0){
-                *ud->out << "timestamp," << Pose::header() << ",lat,lng,status,step,wscore,ascore,status_num"<< std::endl;
+                *ud->out << "timestamp," << Pose::header() << ",lat,lng,status,step";
+                if(ud->opt->longLog){
+                    *ud->out <<",wscore,ascore,status_num,nBeacons,nStrong";
+                }
+                *ud->out << std::endl;
                 ud->writeCount = 1;
             }
             
-            *ud->out << ts << "," << meanPoseGlobal << "," << locStatusStr << "," << stepString << ","
-                << wscore << "," << ascore << "," << pStatus->locationStatus()
-                << std::endl;
+            *ud->out << ts << "," << meanPoseGlobal << "," << locStatusStr << "," << stepString;
+            if(ud->opt->longLog){
+                *ud->out << "," << wscore << "," << ascore << "," << pStatus->locationStatus() << "," << strBeacons;
+            }
+            *ud->out << std::endl;
             
             ud->recentPose = *pStatus->meanPose();
             if(ud->func != NULL){
@@ -462,6 +492,7 @@ int main(int argc, char * argv[]) {
                             
                             beaconReceiveCount++;
                             if(opt.skipBeacon<beaconReceiveCount){
+                                ud.recentBeacons = beacons;
                                 localizer.putBeacons(beacons);
                                 beaconsRecent = beacons;
                             }else{
