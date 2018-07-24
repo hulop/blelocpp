@@ -117,31 +117,31 @@ namespace loc{
         void serialize(Archive & ar, std::uint32_t const version)
         {
             if (0 <= version) {
-                ar(CEREAL_NVP(probabilityUpStair_));
-                ar(CEREAL_NVP(probabilityDownStair_));
-                ar(CEREAL_NVP(probabilityStayStair_));
+                OPTIONAL_NVP(ar, probabilityUpStair_);
+                OPTIONAL_NVP(ar, probabilityDownStair_);
+                OPTIONAL_NVP(ar, probabilityStayStair_);
 
-                ar(CEREAL_NVP(probabilityUpElevator_));
-                ar(CEREAL_NVP(probabilityDownElevator_));
-                ar(CEREAL_NVP(probabilityStayElevator_));
+                OPTIONAL_NVP(ar, probabilityUpElevator_);
+                OPTIONAL_NVP(ar, probabilityDownElevator_);
+                OPTIONAL_NVP(ar, probabilityStayElevator_);
 
-                ar(CEREAL_NVP(probabilityUpEscalator_));
-                ar(CEREAL_NVP(probabilityDownEscalator_));
-                ar(CEREAL_NVP(probabilityStayEscalator_));
+                OPTIONAL_NVP(ar, probabilityUpEscalator_);
+                OPTIONAL_NVP(ar, probabilityDownEscalator_);
+                OPTIONAL_NVP(ar, probabilityStayEscalator_);
 
-                ar(CEREAL_NVP(probabilityFloorJump_));
+                OPTIONAL_NVP(ar, probabilityFloorJump_);
 
-                ar(CEREAL_NVP(wallCrossingAliveRate_));
-                ar(CEREAL_NVP(maxIncidenceAngle_));
+                OPTIONAL_NVP(ar, wallCrossingAliveRate_);
+                OPTIONAL_NVP(ar, maxIncidenceAngle_);
 
-                ar(CEREAL_NVP(velocityRateFloor_));
-                ar(CEREAL_NVP(velocityRateStair_));
-                ar(CEREAL_NVP(velocityRateElevator_));
-                ar(CEREAL_NVP(velocityRateEscalator_));
+                OPTIONAL_NVP(ar, velocityRateFloor_);
+                OPTIONAL_NVP(ar, velocityRateStair_);
+                OPTIONAL_NVP(ar, velocityRateElevator_);
+                OPTIONAL_NVP(ar, velocityRateEscalator_);
 
-                ar(CEREAL_NVP(relativeVelocityEscalator_));
+                OPTIONAL_NVP(ar, relativeVelocityEscalator_);
 
-                ar(CEREAL_NVP(weightDecayRate_));
+                OPTIONAL_NVP(ar, weightDecayRate_);
             }
         }
     };
