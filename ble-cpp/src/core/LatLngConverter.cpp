@@ -83,6 +83,16 @@ namespace loc{
         long ts = heading.timestamp();
         double trueHeading = heading.trueHeading(); // deg
         double headingAcc = heading.headingAccuracy(); // deg
+        
+        if(trueHeading < 0){ // if trueHeading == -1, the value is invalid
+            // update trueHeading value here immediately before creating locHead
+            if(!std::isnan(anchor_.magneticDeclination)){
+                trueHeading = heading.magneticHeading() + anchor_.magneticDeclination;
+            }else{
+                std::cerr << "trueHeading is uncertain. magneticHeading is used instead." << std::endl;
+                trueHeading = heading.magneticHeading();
+            }
+        }
 
         double ori = this->headingGlobalToLocal(trueHeading);
         double oriDev = headingAcc/180.0*M_PI;

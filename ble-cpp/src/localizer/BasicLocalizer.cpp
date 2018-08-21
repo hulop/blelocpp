@@ -626,6 +626,14 @@ namespace loc{
         this->anchor.latlng.lat = getDouble(anchor, "latitude");
         this->anchor.latlng.lng = getDouble(anchor, "longitude");
         this->anchor.rotate = getDouble(anchor, "rotate");
+        
+        try{
+            this->anchor.magneticDeclination = getDouble(anchor, "declination");
+        }catch(char const* e){
+            std::cerr << "declination is not set because it was not found in the anchor." << std::endl;
+            this->anchor.magneticDeclination = std::numeric_limits<double>::quiet_NaN();
+        }
+        
         latLngConverter_ = std::make_shared<LatLngConverter>(this->anchor);
         
         deserializedModel = std::shared_ptr<GaussianProcessLDPLMultiModel<State, Beacons>> (new GaussianProcessLDPLMultiModel<State, Beacons>());

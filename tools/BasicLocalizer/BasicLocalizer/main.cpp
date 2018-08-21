@@ -524,18 +524,25 @@ int main(int argc, char * argv[]) {
                         }
                         if (logString.compare(0, 8,"Heading,") == 0){
                             Heading heading = LogUtil::toHeading(logString);
+                            
+                            // do not update the trueHeading value in this block because heading.trueHeading() < 0 is checked later.
                             if(heading.trueHeading() < 0){ // (trueHeading==-1 is invalid.)
-                                if(!isnan(opt.magneticDeclination)){
-                                    double trueHeading = heading.magneticHeading() + opt.magneticDeclination;
-                                    heading.trueHeading(trueHeading);
-                                }else{
-                                    std::stringstream ss;
-                                    ss << "True heading (trueHeading=" << heading.trueHeading() << ") is invalid. Input declination argument";
-                                    BOOST_THROW_EXCEPTION(LocException(ss.str()));
+                                Anchor anchor = ud.latLngConverter->anchor();
+                                if(std::isnan(anchor.magneticDeclination)){
+                                    if(!isnan(opt.magneticDeclination)){
+                                        // overwrite declination to the anchor if it is set as an argument value.
+                                        anchor.magneticDeclination = opt.magneticDeclination;
+                                        ud.latLngConverter->anchor(anchor);
+                                    }else{
+                                        // if declination is not set in the anchor and the argument value.
+                                        std::stringstream ss;
+                                        ss << "True heading (trueHeading=" << heading.trueHeading() << ") is invalid. Input declination argument";
+                                        BOOST_THROW_EXCEPTION(LocException(ss.str())); // a valid declination value is required in the command line tool.
+                                    }
                                 }
                             }
                             localizer.putHeading(heading);
-                            LocalHeading localHeading = ud.latLngConverter->headingGlobalToLocal(heading);
+                            //LocalHeading localHeading = ud.latLngConverter->headingGlobalToLocal(heading);
                             //std::cout << "LogReplay:" << heading.timestamp() << ", Heading, " << heading.magneticHeading() << "," << heading.trueHeading() << "," << heading.headingAccuracy() << "(localHeading=" << localHeading.orientation() << ")" << std::endl;
                         }
                         if (logString.compare(0, 20, "DisableAcceleration,") == 0){

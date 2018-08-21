@@ -41,6 +41,7 @@ namespace loc {
     typedef struct {
         LatLng latlng;
         double rotate = 0; //Degree
+        double magneticDeclination = std::numeric_limits<double>::quiet_NaN();
     } Anchor;
 
     class LatLngUtil {
