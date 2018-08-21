@@ -2,7 +2,7 @@
 
 if [ $# -eq 0 ]
  then
-  CONFIG="Debug"
+  CONFIG="Release"
 elif [ $1 = "Release" -o $1 = "Debug" ]
  then
   CONFIG=$1
