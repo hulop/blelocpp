@@ -33,6 +33,7 @@
 #include <cereal/types/map.hpp>
 #include <cereal/types/memory.hpp>
 #include <cereal/types/polymorphic.hpp>
+#include <cereal/types/string.hpp>
 #include <cereal/archives/json.hpp>
 
 namespace cereal{

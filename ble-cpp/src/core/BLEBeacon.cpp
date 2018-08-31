@@ -46,7 +46,7 @@ namespace loc{
     }
     
     Beacons BLEBeacon::filter(const Beacons& beacons, const BLEBeacons& blebeacons){
-        std::set<long> idset;
+        std::set<Beacon::Id> idset;
         for(const auto& reg: blebeacons){
             idset.insert(reg.id());
         }

@@ -94,13 +94,13 @@ namespace loc{
         BLEBeacons mBLEBeacons;
         
         //ITUModelFunction mITUModel;
-        std::map<int64_t, ITUModelFunction> mITUModelMap;
+        std::map<Beacon::Id, ITUModelFunction> mITUModelMap;
         
         std::vector<std::vector<double>> mITUParameters;
         
         //GaussianProcess mGP;
         std::shared_ptr<GaussianProcess> mGP;
-        std::map<long, int> mBeaconIdIndexMap;
+        std::map<Beacon::Id, int> mBeaconIdIndexMap;
         //boost::bimaps::bimap<long, int> mBeaconIdIndexBimap;
         std::vector<double> mRssiStandardDeviations;
         bool mFillsUnknownBeaconRssi = false;
@@ -117,7 +117,7 @@ namespace loc{
         std::vector<int> extractKnownBeaconIndices(const Tinput& beacons) const;
         
         friend class GaussianProcessLDPLMultiModelTrainer<Tstate, Tinput>;
-        int version = 2;
+        int version = 3;
         GPType gpType = GPNORMAL;
         
         //parameters for delayed prediction
@@ -139,7 +139,7 @@ namespace loc{
         
         Tinput convertInput(const Tinput& input);
         // predict mean and stdev given state for input beacon id
-        std::map<long, NormalParameter> predict(const Tstate& state, const Tinput& input) const;
+        std::map<Beacon::Id, NormalParameter> predict(const Tstate& state, const Tinput& input) const;
         
         double computeLogLikelihood(const Tstate& state, const Tinput& input);
         std::vector<double> computeLogLikelihood(const std::vector<Tstate> & states, const Tinput& input) override;

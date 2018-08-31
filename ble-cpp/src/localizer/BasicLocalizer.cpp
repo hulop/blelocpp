@@ -174,7 +174,7 @@ namespace loc{
     }
     
     Beacons smoothBeaconsList(const std::vector<Beacon>* beacons_list , int smooth_count, int nSmooth){
-        std::map<long, loc::Beacons> allBeacons;
+        std::map<Beacon::Id, loc::Beacons> allBeacons;
         
         for(int i = 0; i < N_SMOOTH_MAX && i < smooth_count+1 && i < nSmooth; i++) {
             for(auto& b: beacons_list[i]) {
@@ -194,9 +194,10 @@ namespace loc{
         
         Beacons beaconsAveraged;
         for(auto itr = allBeacons.begin(); itr != allBeacons.end(); ++itr) {
-            long id = itr->first;
-            auto major = Beacon::convertIdToMajor(id);
-            auto minor = Beacon::convertIdToMinor(id);
+            auto id = itr->first;
+            auto uuid = id.uuid();
+            auto major = id.major();
+            auto minor = id.minor();
             auto& bs = itr->second;
             int c = 0;
             double rssi = 0;
@@ -204,7 +205,7 @@ namespace loc{
                 rssi += b.rssi();
                 c++;
             }
-            beaconsAveraged.insert(beaconsAveraged.end(), loc::Beacon(major, minor, rssi/c));
+            beaconsAveraged.insert(beaconsAveraged.end(), loc::Beacon(uuid, major, minor, rssi/c));
         }
         return beaconsAveraged;
     }

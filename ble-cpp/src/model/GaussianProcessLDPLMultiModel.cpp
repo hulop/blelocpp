@@ -111,7 +111,7 @@ namespace loc{
         mBeaconIdIndexMap = BLEBeacon::constructBeaconIdToIndexMap(mBLEBeacons);
         
         for(const auto& bleBeacon:mBLEBeacons){
-            long id = bleBeacon.id();
+            auto id = bleBeacon.id();
             mITUModelMap[id] = ITUModelFunction();
         }
         return *this;
@@ -157,7 +157,7 @@ namespace loc{
             }
             // Assign active rssi values to Y matrix.
             for(Beacon b: beacons){
-                long id = b.id();
+                auto id = b.id();
                 int index = mBeaconIdIndexMap.at(id);
                 Y(i, index) = b.rssi();
                 // Active matrix
@@ -204,7 +204,7 @@ namespace loc{
                         bIsActive = true;
                     }
                     if(bIsActive){
-                        long id = b.id();
+                        auto id = b.id();
                         int index = mBeaconIdIndexMap.at(id);
                         BLEBeacon bleBeacon = mBLEBeacons.at(index);
                         auto features = mITUModelMap[id].transformFeature(loc, bleBeacon);
@@ -241,7 +241,7 @@ namespace loc{
                 Eigen::VectorXd Ymat(n);
                 BLEBeacon bleBeacon = mBLEBeacons.at(j);
                 for(int i=0; i<n; i++){
-                    long id = bleBeacon.id();
+                    auto id = bleBeacon.id();
                     Location loc(X(i,0), X(i,1), X(i,2), X(i,3));
                     auto features = mITUModelMap[id].transformFeature(loc, bleBeacon);
                     for(int k = 0; k<ndim;k++){
@@ -372,7 +372,7 @@ namespace loc{
             }
             // Assign active rssi values to Y matrix.
             for(Beacon b: beacons){
-                long id = b.id();
+                auto id = b.id();
                 int index = mBeaconIdIndexMap.at(id);
                 Y(i, index) = b.rssi();
                 // Active matrix
@@ -394,7 +394,7 @@ namespace loc{
             Location loc = smp.location();
             for(int j=0; j<m; j++){
                 BLEBeacon bleBeacon = mBLEBeacons.at(j);
-                long id = bleBeacon.id();
+                auto id = bleBeacon.id();
                 auto features = mITUModelMap[id].transformFeature(loc, bleBeacon);
                 std::vector<double> params = mITUParameters.at(j);
                 double ymean = mITUModelMap[id].predict(params, features);
@@ -408,7 +408,7 @@ namespace loc{
         // Estimate variance parameter (sigma_n) by using raw (=not averaged) data
         mRssiStandardDeviations = computeRssiStandardDeviations(samples);
         for(auto& ble: mBLEBeacons){
-            long id = ble.id();
+            auto id = ble.id();
             int index = mBeaconIdIndexMap.at(id);
             std::cout << "stdev(" <<ble.major() << "," << ble.minor() << ") = " << mRssiStandardDeviations.at(index) <<std::endl;
         }
@@ -442,7 +442,7 @@ namespace loc{
             
             int i = 0;
             for(const Beacon& b: bs){
-                long id = b.id();
+                auto id = b.id();
                 int index = mBeaconIdIndexMap.at(id);
                 BLEBeacon ble = mBLEBeacons.at(index);
                 std::vector<double> features = mITUModelMap[id].transformFeature(loc, ble);
@@ -464,7 +464,7 @@ namespace loc{
         
         std::vector<double> stdevs;
         for(auto& ble: mBLEBeacons){
-            long id = ble.id();
+            auto id = ble.id();
             int index = mBeaconIdIndexMap.at(id);
             double var = indexRssiSum[index] /(indexCount[index]);
             if (isnan(var)) {
@@ -496,7 +496,7 @@ namespace loc{
     Tinput GaussianProcessLDPLMultiModel<Tstate, Tinput>::convertInput(const Tinput& input){
         Tinput inputConverted;
         for(auto iter=input.begin(); iter!=input.end(); iter++){
-            long id = iter->id();
+            auto id = iter->id();
             if(mBeaconIdIndexMap.count(id)==1){
                 inputConverted.push_back(*iter);
             }
@@ -509,7 +509,7 @@ namespace loc{
         std::vector<int> indices;
         for(auto iter=input.begin(); iter!=input.end(); iter++){
             Beacon b = *iter;
-            long id = b.id();
+            auto id = b.id();
             if(mBeaconIdIndexMap.count(id)==1){
                 int index = mBeaconIdIndexMap.at(id);
                 indices.push_back(index);
@@ -519,9 +519,9 @@ namespace loc{
     }
     
     template<class Tstate, class Tinput>
-    std::map<long, NormalParameter>  GaussianProcessLDPLMultiModel<Tstate, Tinput>::predict(const Tstate& state, const Tinput& input) const{
+    std::map<Beacon::Id, NormalParameter>  GaussianProcessLDPLMultiModel<Tstate, Tinput>::predict(const Tstate& state, const Tinput& input) const{
         //Assuming Tinput = Beacons
-        std::map<long, NormalParameter> beaconIdRssiStatsMap;
+        std::map<Beacon::Id, NormalParameter> beaconIdRssiStatsMap;
         
         std::vector<double> xvec = MLAdapter::locationToVec(state);
         std::vector<int> indices = extractKnownBeaconIndices(input);
@@ -530,7 +530,7 @@ namespace loc{
         int idx_local=0;
         for(auto iter=input.begin(); iter!=input.end(); iter++){
             auto b = *iter;
-            long id = b.id();
+            auto id = b.id();
             // RSSI of known beacons are predicted by a model.
             if(mBeaconIdIndexMap.count(id)==1){
                 int idx_global = mBeaconIdIndexMap.at(id);
@@ -572,7 +572,7 @@ namespace loc{
         
         std::vector<double> returnValues(4); // logLikelihood, mahalanobisDistance, #knownBeacons, #unknownBeacons
         
-        std::map<long, NormalParameter> beaconIdRssiStatsMap;
+        std::map<Beacon::Id, NormalParameter> beaconIdRssiStatsMap;
         // delayed prdiction
         int T = mTDelay;
         double dTmin = mDTDelay - mDTDelayMargin; //ms
@@ -597,25 +597,25 @@ namespace loc{
             
             auto nConsidered = statesConsider.size() + 1;
             auto cMap = this->predict(state, input);
-            std::map<long, double> meanPreds;
+            std::map<Beacon::Id, double> meanPreds;
             double avgWeight = 1.0/((double) nConsidered);
             
             for(auto iter = cMap.begin(); iter!= cMap.end() ; ++iter ) {
-                long id = iter->first;
+                auto id = iter->first;
                 meanPreds[id] = avgWeight * iter->second.mean();
             }
             for(int i=0; i<statesConsider.size(); i++){
                 const State& s = statesConsider.at(i);
                 auto tmpBMap = this->predict(s, input);
                 for(auto iter = tmpBMap.begin(); iter!= tmpBMap.end() ; ++iter ) {
-                    long id = iter->first;
+                    auto id = iter->first;
                     meanPreds[id] += avgWeight * iter->second.mean();
                 }
             }
             
-            std::map<long, NormalParameter> meanStatsMap;
+            std::map<Beacon::Id, NormalParameter> meanStatsMap;
             for(auto iter = cMap.begin(); iter!= cMap.end() ; ++iter ) {
-                long id = iter->first;
+                auto id = iter->first;
                 NormalParameter np(meanPreds[id], iter->second.stdev());
                 meanStatsMap[id] = np;
             }
@@ -642,7 +642,7 @@ namespace loc{
                 double rssiBias = pState->rssiBias();
                 rssi = rssi - rssiBias;
             }
-            long id = b.id();
+            auto id = b.id();
             
             // RSSI of known beacons are predicted by a model.
             if(mBeaconIdIndexMap.count(id)==1){
@@ -759,7 +759,7 @@ namespace loc{
 
         if(version<=1){
             ar(cereal::make_nvp("mGP",*mGP));
-        }else if(version == 2){
+        }else if(version <= 3){
             auto lgp = std::dynamic_pointer_cast<GaussianProcessLight>(mGP);
             if(lgp){
                 ar(cereal::make_nvp("GaussianProcessLight", *lgp));
@@ -789,11 +789,24 @@ namespace loc{
             ITUModelFunction mITUModel;
             ar(CEREAL_NVP(mITUModel));
             for(const auto& bleBeacon:mBLEBeacons){
-                long id = bleBeacon.id();
+                auto id = bleBeacon.id();
                 mITUModelMap[id] = mITUModel;
             }
-        }else{
+        }else if(version<=2){
+            // key: long, value: ITUModelFunction
+            std::map<long, ITUModelFunction> ITUModelMapV2;
+            ar(cereal::make_nvp("mITUModelMap", ITUModelMapV2));
+            for(auto iter = ITUModelMapV2.begin(); iter!=ITUModelMapV2.end(); iter++){
+                auto key = iter->first;
+                auto value = iter->second;
+                auto id = Beacon::Id::convertLongIdToId(key);
+                mITUModelMap[id] = value;
+            }
+        }else if(version<=3){
+            // key: Beacon::Id, value: ITUModelFunction
             ar(CEREAL_NVP(mITUModelMap));
+        }else{
+            BOOST_THROW_EXCEPTION(LocException("unsupported version (version=" + std::to_string(version) +")"));
         }
             
         ar(CEREAL_NVP(mITUParameters));
@@ -803,7 +816,7 @@ namespace loc{
             GaussianProcess gp;
             ar(cereal::make_nvp("mGP", gp));
             this->mGP = std::make_shared<GaussianProcess>(gp);
-        }else if (version==2){
+        }else if (version<=3){
             try{
                 GaussianProcessLight lgp;
                 ar(cereal::make_nvp("GaussianProcessLight", lgp));

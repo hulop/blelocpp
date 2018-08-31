@@ -90,8 +90,8 @@ namespace loc{
             return minor_;
         }
         
-        long id() const{
-            return Beacon::convertMajorMinorToId(major(), minor());
+        Beacon::Id id() const{
+            return Beacon::Id(uuid_, major_, minor_);
         }
         
         std::string toString() const{
@@ -106,10 +106,10 @@ namespace loc{
         static bool checkNoDuplication(const std::vector<Tbeacon>& beacons);
         
         template<class Tbeacon>
-        static std::map<long, int> constructBeaconIdToIndexMap(std::vector<Tbeacon> beacons);
+        static std::map<Beacon::Id, int> constructBeaconIdToIndexMap(std::vector<Tbeacon> beacons);
         
         template<class Tbeacon>
-        static boost::bimaps::bimap<long, int> constructBeaconIdToIndexBimap(std::vector<Tbeacon> beacons);
+        static boost::bimaps::bimap<Beacon::Id, int> constructBeaconIdToIndexBimap(std::vector<Tbeacon> beacons);
         
         template<class Tin, class Tout>
         static Tout find(const Tin& beacon, const std::vector<Tout>& beacons);
@@ -122,12 +122,12 @@ namespace loc{
     // Definition of template method
     template<class Tbeacon>
     bool BLEBeacon::checkNoDuplication(const std::vector<Tbeacon>& beacons){
-        std::set<long> ids;
+        std::set<Beacon::Id> ids;
         bool flag = true;
         std::stringstream ss;
         int count = 0;
         for(Tbeacon b: beacons){
-            long id = Beacon::convertMajorMinorToId(b.major(), b.minor());
+            auto id = b.id();
             if(ids.count(id)>0){
                 ss << "BLEBeacon(major=" << b.major() <<", minor=" << b.minor() << ") is duplicated" << std::endl ;
                 flag = false;
@@ -145,19 +145,17 @@ namespace loc{
     }
     
     template<class Tbeacon>
-    std::map<long, int> BLEBeacon::constructBeaconIdToIndexMap(std::vector<Tbeacon> beacons){
+    std::map<Beacon::Id, int> BLEBeacon::constructBeaconIdToIndexMap(std::vector<Tbeacon> beacons){
         try{
             checkNoDuplication(beacons);
         }catch(LocException& ex){
             ex << boost::error_info<struct err_info, std::string>("Found duplication of beacon identifiers.");
             throw ex;
         }
-        std::map<long, int> beaconIdIndexMap;
+        std::map<Beacon::Id, int> beaconIdIndexMap;
         int i = 0;
         for(Tbeacon b: beacons){
-            int major = b.major();
-            int minor = b.minor();
-            long id = Beacon::convertMajorMinorToId(major, minor);
+            auto id = b.id();
             beaconIdIndexMap[id] = i;
             i++;
         }
@@ -165,18 +163,16 @@ namespace loc{
     }
     
     template<class Tbeacon>
-    boost::bimaps::bimap<long, int> BLEBeacon::constructBeaconIdToIndexBimap(std::vector<Tbeacon> beacons){
+    boost::bimaps::bimap<Beacon::Id, int> BLEBeacon::constructBeaconIdToIndexBimap(std::vector<Tbeacon> beacons){
         
-        typedef boost::bimaps::bimap<long, int> bimap_type;
+        typedef boost::bimaps::bimap<Beacon::Id, int> bimap_type;
         typedef bimap_type::value_type bimap_value_type;
         
         bimap_type beaconIdIndexMap;
         
         int i = 0;
         for(Tbeacon b: beacons){
-            int major = b.major();
-            int minor = b.minor();
-            long id = Beacon::convertMajorMinorToId(major, minor);
+            auto id = b.id();
             beaconIdIndexMap.insert( bimap_value_type(id, i) );
             i++;
         }
@@ -185,7 +181,7 @@ namespace loc{
     
     template<class Tin, class Tout>
     Tout BLEBeacon::find(const Tin& beacon, const std::vector<Tout>& beacons){
-        long id = beacon.id();
+        Beacon::Id id = beacon.id();
         for(const Tout& b: beacons){
             if(id == b.id()){
                 return b;

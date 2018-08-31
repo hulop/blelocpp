@@ -317,12 +317,12 @@ namespace loc{
         auto& uniqueLocations = mDataStore->getLocations();
         auto& bleBeacons = mDataStore->getBLEBeacons();
         
-        std::map<long, int> idToIndexMap = BLEBeacon::constructBeaconIdToIndexMap(bleBeacons);
+        auto idToIndexMap = BLEBeacon::constructBeaconIdToIndexMap(bleBeacons);
         std::vector<Location> selectedLocations;
         
         std::vector<BLEBeacon> observedBLEBeacons;
         for(auto& b: beacons){
-            long id = b.id();
+            auto id = b.id();
             if(idToIndexMap.count(id)>0){
                 observedBLEBeacons.push_back(bleBeacons.at(idToIndexMap.at(id)));
             }
@@ -347,12 +347,12 @@ namespace loc{
         
         auto& bleBeacons = mDataStore->getBLEBeacons();
         
-        std::map<long, int> idToIndexMap = BLEBeacon::constructBeaconIdToIndexMap(bleBeacons);
+        auto idToIndexMap = BLEBeacon::constructBeaconIdToIndexMap(bleBeacons);
         std::vector<Location> selectedLocations;
 
         std::vector<BLEBeacon> observedBLEBeacons;
         for(auto& b: beacons){
-            long id = b.id();
+            auto id = b.id();
             if(idToIndexMap.count(id)>0){
                 observedBLEBeacons.push_back(bleBeacons.at(idToIndexMap.at(id)));
             }

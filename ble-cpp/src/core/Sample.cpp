@@ -150,13 +150,13 @@ namespace loc{
     
     Samples Sample::filterUnregisteredBeacons(const Samples &samples, const BLEBeacons& bleBeacons){
         Samples smps;
-        std::map<long, int> indexMap = BLEBeacon::constructBeaconIdToIndexMap(bleBeacons);
+        auto indexMap = BLEBeacon::constructBeaconIdToIndexMap(bleBeacons);
         for(Sample s: samples){
             Beacons bs = s.beacons();
             Beacons bsnew;
             bsnew.timestamp(bs.timestamp());
             for(Beacon b: bs){
-                long id = b.id();
+                auto id = b.id();
                 if(indexMap.count(id)>0){
                     bsnew.push_back(b);
                 }

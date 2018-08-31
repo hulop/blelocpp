@@ -26,14 +26,19 @@
 #include <stdio.h>
 #include <iostream>
 #include <vector>
+#include <cctype>
+#include <clocale>
+#include <algorithm>
+
+#include "SerializeUtils.hpp"
 
 namespace loc{
     
     class Beacon;
     class Beacons;
-
+    
     class Beacon{
-        
+    
     private:
         std::string uuid_;
         int major_;
@@ -42,7 +47,10 @@ namespace loc{
         class Impl;
         
     public:
+        class Id;
+        
         Beacon(int major, int minor, double rssi);
+        Beacon(std::string uuid, int major, int minor, double rssi);
         ~Beacon();
         
         std::string uuid() const;
@@ -50,7 +58,7 @@ namespace loc{
         int minor() const;
         double rssi() const;
         
-        long id() const;
+        Id id() const;
         
         Beacon& uuid(std::string uuid);
         Beacon& major(int major);
@@ -61,10 +69,6 @@ namespace loc{
         
         template<class Tbeacons>
         static Tbeacons meanBeaconsVector(std::vector<Tbeacons> beaconsVector);
-        
-        static long convertMajorMinorToId(int major, int minor);
-        static int convertIdToMajor(long id);
-        static int convertIdToMinor(long id);
         
         static Beacons filter(const Beacons& beacons, double minRssi, double maxRssi);
         static Beacons sortByRssi(const Beacons& beacons);
@@ -103,7 +107,39 @@ namespace loc{
             }
         }
     };
+    
+    // Beacon Id class
+    class Beacon::Id{
+        std::string uuid_;
+        int major_;
+        int minor_;
+        
+        static int convertIdToMajor(long id);
+        static int convertIdToMinor(long id);
+        
+    public:
+        Id() = default;
+        Id(const std::string& uuid, int major, int minor);
+        
+        std::string uuid() const;
+        int major() const;
+        int minor() const;
+        
+        bool operator==(const Id& id) const;
+        bool operator<(const Id& id) const;
+        
+        static Id convertLongIdToId(long long_id); // for backward compatibility
+        
+        template<class Archive>
+        void serialize(Archive& ar, std::uint32_t const version){
+            ar(CEREAL_NVP(uuid_));
+            ar(CEREAL_NVP(major_));
+            ar(CEREAL_NVP(minor_));
+        }
+    };
 
 }
 
+// assign version
+CEREAL_CLASS_VERSION(loc::Beacon::Id, 0);
 #endif /* Beacon_hpp */
