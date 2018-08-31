@@ -35,6 +35,7 @@ namespace loc{
     class Beacon{
         
     private:
+        std::string uuid_;
         int major_;
         int minor_;
         double rssi_;
@@ -44,12 +45,14 @@ namespace loc{
         Beacon(int major, int minor, double rssi);
         ~Beacon();
         
+        std::string uuid() const;
         int major() const;
         int minor() const;
         double rssi() const;
         
         long id() const;
         
+        Beacon& uuid(std::string uuid);
         Beacon& major(int major);
         Beacon& minor(int minor);
         Beacon& rssi(double rssi);

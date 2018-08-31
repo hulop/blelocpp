@@ -357,10 +357,38 @@ namespace loc{
             double rssi;
             Beacons beacons;
             beacons.timestamp(timestamp);
-            for(int i = 0; i < num; i++) {
-                sscanf(buffer, "%d,%d,%lf,%n", &major, &minor, &rssi, &n);
-                buffer += n;
-                beacons.push_back(Beacon(major, minor, rssi));
+            
+            std::istringstream iss(buffer);
+            std::string newCell;
+            std::vector<std::string> csvTokens;
+            while( std::getline( iss, newCell, ',' ) ) {
+                csvTokens.push_back(newCell);
+            }
+            if(csvTokens.size() == 2*num ){ // "uuid-major-minor,rssi" format
+                for(int i=0; i<num; i++){
+                    std::istringstream iss(csvTokens[2*i]);
+                    std::string newCell;
+                    std::vector<std::string> tokens2;
+                    while( std::getline( iss, newCell, '-' ) ) {
+                        tokens2.push_back(newCell);
+                    }
+                    auto uuid = tokens2[0]+"-"+tokens2[1]+"-"+tokens2[2]+"-"+tokens2[3]+"-"+tokens2[4];
+                    major = stoi(tokens2[5]);
+                    minor = stoi(tokens2[6]);
+                    rssi = stod(csvTokens[2*i+1]);
+                    Beacon b(major, minor, rssi);
+                    b.uuid(uuid);
+                    std::cout << "uuid,major,minor,rssi=" << uuid << "," << major << "," << minor << "," << rssi << std::endl;
+                    beacons.push_back(b);
+                }
+            }else if(csvTokens.size() == 3*num ){ // "major,minor,rssi" format
+                for(int i = 0; i < num; i++) {
+                    sscanf(buffer, "%d,%d,%lf,%n", &major, &minor, &rssi, &n);
+                    buffer += n;
+                    beacons.push_back(Beacon(major, minor, rssi));
+                }
+            }else{
+                throw std::invalid_argument("Invalid csv line was found.");
             }
             sample.beacons(beacons);
         }

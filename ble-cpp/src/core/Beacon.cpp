@@ -35,7 +35,16 @@ namespace loc{
     }
     
     Beacon::~Beacon(){}
-    
+
+    std::string Beacon::uuid() const{
+        return uuid_;
+    }
+
+    Beacon& Beacon::uuid(std::string uuid){
+        this->uuid_ = uuid;
+        return *this;
+    }
+
     int Beacon::major() const{
         return major_;
     }
