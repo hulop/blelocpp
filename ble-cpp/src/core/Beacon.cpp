@@ -26,6 +26,8 @@
 #include <set>
 #include <algorithm>
 
+#include <boost/uuid/uuid_io.hpp>
+
 namespace loc{
     
     Beacon::Beacon(int major, int minor, double rssi){
@@ -181,13 +183,36 @@ namespace loc{
     
     BeaconId::BeaconId(const std::string& uuid, int major, int minor){
         uuid_ = uuid;
-        std::transform(uuid_.begin(), uuid_.end(), uuid_.begin(), ::toupper);
         major_ = major;
         minor_ = minor;
+        setuuid(uuid_);
+    }
+    
+    template<class Archive>
+    void BeaconId::serialize(Archive& ar, std::uint32_t const version){
+        ar(CEREAL_NVP(uuid_));
+        ar(CEREAL_NVP(major_));
+        ar(CEREAL_NVP(minor_));
+        setuuid(uuid_);
+    }
+    
+    template void BeaconId::serialize<cereal::JSONOutputArchive> (cereal::JSONOutputArchive& archive, std::uint32_t const version);
+    template void BeaconId::serialize<cereal::JSONInputArchive> (cereal::JSONInputArchive& archive, std::uint32_t const version);
+    
+    void BeaconId::setuuid(const std::string& uuid){
+        if(!uuid.empty()){
+            buuid_ = boost::uuids::string_generator()(uuid);
+        }else{
+            buuid_ = boost::uuids::nil_uuid();
+        }
     }
     
     const std::string& BeaconId::uuid() const{
         return uuid_;
+    }
+    
+    const boost::uuids::uuid& BeaconId::buuid() const{
+        return buuid_;
     }
     
     int BeaconId::major() const{
@@ -199,29 +224,29 @@ namespace loc{
     }
     
     bool BeaconId::operator==(const BeaconId& id) const{
-        if(this->uuid_.length()==0 || id.uuid_.length()==0){
+        if(this->buuid_.is_nil() || id.buuid_.is_nil()){
             return this->major_ == id.major_ && this->minor_ == id.minor_;
         }else{
-            return this->major_ == id.major_ && this->minor_ == id.minor_ && this->uuid_ == id.uuid_;
+            return this->major_ == id.major_ && this->minor_ == id.minor_ && this->buuid_ == id.buuid_;
         }
     }
     
     bool BeaconId::operator<(const BeaconId& id) const{
-        if(this->uuid_.length()==0 || id.uuid_.length()==0){
+        if(this->buuid_.is_nil() || id.buuid_.is_nil()){
             if (this->major_ == id.major_){
                 return this->minor_ < id.minor_;
             }else{
                 return this->major_ < id.major_;
             }
         }else{
-            if( this->uuid_ == id.uuid_ ){
+            if( this->buuid_ == id.buuid_ ){
                 if (this->major_ == id.major_){
                     return this->minor_ < id.minor_;
                 }else{
                     return this->major_ < id.major_;
                 }
             }else{
-                return this->uuid_ < id.uuid_;
+                return this->buuid_ < id.buuid_;
             }
         }
     }

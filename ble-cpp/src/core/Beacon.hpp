@@ -30,23 +30,29 @@
 #include <clocale>
 #include <algorithm>
 
+#include <boost/uuid/uuid.hpp>
+#include <boost/uuid/uuid_generators.hpp>
+
 #include "SerializeUtils.hpp"
 
 namespace loc{
     
     class BeaconId{
-        class Impl;
-        static int convertIdToMajor(long id);
-        static int convertIdToMinor(long id);
-    protected:
         std::string uuid_;
+        boost::uuids::uuid buuid_ = boost::uuids::nil_uuid();
         int major_;
         int minor_;
+        
+        class Impl;
+        void setuuid(const std::string& uuid);
+        static int convertIdToMajor(long id);
+        static int convertIdToMinor(long id);
     public:
         BeaconId() = default;
         BeaconId(const std::string& uuid, int major, int minor);
         
         const std::string& uuid() const;
+        const boost::uuids::uuid& buuid() const;
         int major() const;
         int minor() const;
         
@@ -56,12 +62,10 @@ namespace loc{
         static BeaconId convertLongIdToId(long long_id); // for backward compatibility
         
         template<class Archive>
-        void serialize(Archive& ar, std::uint32_t const version){
-            ar(CEREAL_NVP(uuid_));
-            ar(CEREAL_NVP(major_));
-            ar(CEREAL_NVP(minor_));
-        }
+        void serialize(Archive& ar, std::uint32_t const version);
     };
+    
+    
     
     class Beacon;
     class Beacons;
