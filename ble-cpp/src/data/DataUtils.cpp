@@ -376,9 +376,7 @@ namespace loc{
                     major = stoi(tokens2[5]);
                     minor = stoi(tokens2[6]);
                     rssi = stod(csvTokens[2*i+1]);
-                    Beacon b(major, minor, rssi);
-                    b.uuid(uuid);
-                    std::cout << "uuid,major,minor,rssi=" << uuid << "," << major << "," << minor << "," << rssi << std::endl;
+                    Beacon b(uuid, major, minor, rssi);
                     beacons.push_back(b);
                 }
             }else if(csvTokens.size() == 3*num ){ // "major,minor,rssi" format

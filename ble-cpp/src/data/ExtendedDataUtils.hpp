@@ -35,12 +35,12 @@ namespace loc{
     class ExtendedDataUtils{
         public:
         
-        static picojson::array beaconIdRssiStatsToJSONArray(const std::map<Beacon::Id, NormalParameter>& beaconIdRssiStats){
+        static picojson::array beaconIdRssiStatsToJSONArray(const std::map<BeaconId, NormalParameter>& beaconIdRssiStats){
             picojson::array array;
             for(auto it=beaconIdRssiStats.begin(); it!=beaconIdRssiStats.end(); ++it){
                 picojson::object obj;
-                auto id = it->first;
-                auto uuid = id.uuid();
+                const auto& id = it->first;
+                const auto& uuid = id.uuid();
                 auto maj = id.major();
                 auto min = id.minor();
                 double pred = it->second.mean();
@@ -55,7 +55,7 @@ namespace loc{
             return array;
         }
         
-        static picojson::object predictionDataToJSONObject(const State& state, const Beacons& beacons, const std::map<Beacon::Id, NormalParameter> beaconIdRssiStats){
+        static picojson::object predictionDataToJSONObject(const State& state, const Beacons& beacons, const std::map<BeaconId, NormalParameter> beaconIdRssiStats){
             picojson::object obj;
             picojson::object stateObj = DataUtils::stateToJSONObject(state);
             picojson::array beaconsArray = DataUtils::beaconsToJSONArray(beacons);

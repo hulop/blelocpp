@@ -34,33 +34,56 @@
 
 namespace loc{
     
+    class BeaconId{
+        class Impl;
+        static int convertIdToMajor(long id);
+        static int convertIdToMinor(long id);
+    protected:
+        std::string uuid_;
+        int major_;
+        int minor_;
+    public:
+        BeaconId() = default;
+        BeaconId(const std::string& uuid, int major, int minor);
+        
+        const std::string& uuid() const;
+        int major() const;
+        int minor() const;
+        
+        bool operator==(const BeaconId& id) const;
+        bool operator<(const BeaconId& id) const;
+        
+        static BeaconId convertLongIdToId(long long_id); // for backward compatibility
+        
+        template<class Archive>
+        void serialize(Archive& ar, std::uint32_t const version){
+            ar(CEREAL_NVP(uuid_));
+            ar(CEREAL_NVP(major_));
+            ar(CEREAL_NVP(minor_));
+        }
+    };
+    
     class Beacon;
     class Beacons;
     
     class Beacon{
-    
     private:
-        std::string uuid_;
-        int major_;
-        int minor_;
+        BeaconId id_;
         double rssi_;
-        class Impl;
-        
     public:
-        class Id;
         
         Beacon(int major, int minor, double rssi);
-        Beacon(std::string uuid, int major, int minor, double rssi);
+        Beacon(const std::string& uuid, int major, int minor, double rssi);
         ~Beacon();
         
-        std::string uuid() const;
+        const std::string& uuid() const;
         int major() const;
         int minor() const;
         double rssi() const;
         
-        Id id() const;
+        const BeaconId& id() const;
         
-        Beacon& uuid(std::string uuid);
+        Beacon& uuid(const std::string& uuid);
         Beacon& major(int major);
         Beacon& minor(int minor);
         Beacon& rssi(double rssi);
@@ -108,38 +131,8 @@ namespace loc{
         }
     };
     
-    // Beacon Id class
-    class Beacon::Id{
-        std::string uuid_;
-        int major_;
-        int minor_;
-        
-        static int convertIdToMajor(long id);
-        static int convertIdToMinor(long id);
-        
-    public:
-        Id() = default;
-        Id(const std::string& uuid, int major, int minor);
-        
-        std::string uuid() const;
-        int major() const;
-        int minor() const;
-        
-        bool operator==(const Id& id) const;
-        bool operator<(const Id& id) const;
-        
-        static Id convertLongIdToId(long long_id); // for backward compatibility
-        
-        template<class Archive>
-        void serialize(Archive& ar, std::uint32_t const version){
-            ar(CEREAL_NVP(uuid_));
-            ar(CEREAL_NVP(major_));
-            ar(CEREAL_NVP(minor_));
-        }
-    };
-
 }
 
 // assign version
-CEREAL_CLASS_VERSION(loc::Beacon::Id, 0);
+CEREAL_CLASS_VERSION(loc::BeaconId, 0);
 #endif /* Beacon_hpp */

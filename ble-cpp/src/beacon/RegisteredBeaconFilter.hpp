@@ -32,7 +32,7 @@ namespace loc{
     
     class RegisteredBeaconFilter : public BeaconFilter{
     private:
-        std::set<Beacon::Id> registeredIDs;
+        std::set<BeaconId> registeredIDs;
     public:
         RegisteredBeaconFilter() = delete;
         RegisteredBeaconFilter(const BLEBeacons& bleBeacons);

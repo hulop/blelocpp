@@ -25,20 +25,67 @@
 #include "SerializeUtils.hpp"
 
 namespace loc{
-    
+        
     template<class Archive>
     void BLEBeacon::serialize(Archive& ar){
         ar(CEREAL_NVP(x_));
         ar(CEREAL_NVP(y_));
         ar(CEREAL_NVP(z_));
         ar(CEREAL_NVP(floor_));
-        ar(CEREAL_NVP(uuid_));
-        ar(CEREAL_NVP(major_));
-        ar(CEREAL_NVP(minor_));
+        
+        std::string uuid = id_.uuid();
+        int major = id_.major();
+        int minor = id_.minor();
+        ar(cereal::make_nvp("uuid_", uuid));
+        ar(cereal::make_nvp("major_", major));
+        ar(cereal::make_nvp("minor_", minor));
+        id_ = BeaconId(uuid, major, minor);
     }
     
-    template void BLEBeacon::serialize<cereal::JSONInputArchive> (cereal::JSONInputArchive& archive);
-    template void BLEBeacon::serialize<cereal::JSONOutputArchive> (cereal::JSONOutputArchive& archive);
+    BLEBeacon::BLEBeacon(const std::string& uuid, int major, int minor, double x, double y, double z, double floor){
+        this->x(x);
+        this->y(y);
+        this->z(z);
+        this->floor(floor);
+        this->id_ = BeaconId(uuid, major, minor);
+    }
+    
+    BLEBeacon& BLEBeacon::uuid(const std::string& uuid){
+        id_ = BeaconId(uuid, id_.major(), id_.minor());
+        return *this;
+    }
+    
+    BLEBeacon& BLEBeacon::major(int major){
+        id_ = BeaconId(id_.uuid(), major, id_.minor());
+        return *this;
+    }
+    
+    BLEBeacon& BLEBeacon::minor(int minor){
+        id_ = BeaconId(id_.uuid(), id_.major(), minor);
+        return *this;
+    }
+    
+    const std::string& BLEBeacon::uuid() const{
+        return id_.uuid();
+    }
+    
+    int BLEBeacon::major() const{
+        return id_.major();
+    }
+    
+    int BLEBeacon::minor() const{
+        return id_.minor();
+    }
+    
+    const BeaconId& BLEBeacon::id() const{
+        return id_;
+    }
+    
+    std::string BLEBeacon::toString() const{
+        std::stringstream strstream;
+        strstream << uuid()  << "," << major() << "," << minor() << "," << this->Location::toString();
+        return strstream.str();
+    }
     
     std::ostream& operator<<(std::ostream& os, const BLEBeacon& bleBeacon){
         os << bleBeacon.x() <<"," << bleBeacon.y() <<","<< bleBeacon.z()<<","<<bleBeacon.floor() << "," <<bleBeacon.major() <<","<< bleBeacon.minor();
@@ -46,7 +93,7 @@ namespace loc{
     }
     
     Beacons BLEBeacon::filter(const Beacons& beacons, const BLEBeacons& blebeacons){
-        std::set<Beacon::Id> idset;
+        std::set<BeaconId> idset;
         for(const auto& reg: blebeacons){
             idset.insert(reg.id());
         }
@@ -61,4 +108,6 @@ namespace loc{
         return os;
     }
     
+    template void BLEBeacon::serialize<cereal::JSONOutputArchive> (cereal::JSONOutputArchive& archive);
+    template void BLEBeacon::serialize<cereal::JSONInputArchive> (cereal::JSONInputArchive& archive);
 }

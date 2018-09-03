@@ -156,7 +156,7 @@ namespace loc{
             Beacons bsnew;
             bsnew.timestamp(bs.timestamp());
             for(Beacon b: bs){
-                auto id = b.id();
+                const auto& id = b.id();
                 if(indexMap.count(id)>0){
                     bsnew.push_back(b);
                 }

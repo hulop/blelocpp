@@ -29,44 +29,42 @@
 namespace loc{
     
     Beacon::Beacon(int major, int minor, double rssi){
-        major_ = major;
-        minor_ = minor;
+        std::string uuid = "";
+        id_ = BeaconId(uuid, major, minor);
         rssi_ = rssi;
     }
     
-    Beacon::Beacon(std::string uuid, int major, int minor, double rssi){
-        uuid_ = uuid;
-        major_ = major;
-        minor_ = minor;
+    Beacon::Beacon(const std::string& uuid, int major, int minor, double rssi){
+        id_ = BeaconId(uuid, major, minor);
         rssi_ = rssi;
     }
     
     Beacon::~Beacon(){}
 
-    std::string Beacon::uuid() const{
-        return uuid_;
+    const std::string& Beacon::uuid() const{
+        return id_.uuid();
     }
 
-    Beacon& Beacon::uuid(std::string uuid){
-        this->uuid_ = uuid;
+    Beacon& Beacon::uuid(const std::string& uuid){
+        id_ = BeaconId(uuid, id_.major(), id_.minor());
         return *this;
     }
 
     int Beacon::major() const{
-        return major_;
+        return id_.major();
     }
     
     Beacon& Beacon::major(int major){
-        this->major_ = major;
+        id_ = BeaconId(id_.uuid(), major, id_.minor());
         return *this;
     }
     
     int Beacon::minor() const{
-        return minor_;
+        return id_.minor();
     }
     
     Beacon& Beacon::minor(int minor){
-        this->minor_ = minor;
+        id_ = BeaconId(id_.uuid(), id_.major(), id_.minor());
         return *this;
     }
     
@@ -79,26 +77,26 @@ namespace loc{
         return *this;
     }
     
-    Beacon::Id Beacon::id() const{
-        return Beacon::Id(uuid_,major_,minor_);
+    const BeaconId& Beacon::id() const{
+        return id_;
     }
     
     std::string Beacon::toString(){
         std::stringstream stream;
-        stream << major_ << "," << minor_ << "," << rssi_;
+        stream << id_.major() << "," << id_.minor() << "," << rssi_;
         return stream.str();
     }
     
     template<class Tbeacons>
     Tbeacons Beacon::meanBeaconsVector(std::vector<Tbeacons> beaconsVector){
-        std::map<Beacon::Id, int> id_count;
-        std::map<Beacon::Id, double> id_rssiSum;
+        std::map<BeaconId, int> id_count;
+        std::map<BeaconId, double> id_rssiSum;
         
         for(int i=0; i<beaconsVector.size(); i++){
             Tbeacons beacons = beaconsVector.at(i);
             for(int j=0; j<beacons.size(); j++){
                 Beacon b = beacons.at(j);
-                Beacon::Id id(b.uuid(), b.major(), b.minor());
+                const auto& id = b.id();
                 if(id_count.count(id)==0){
                     id_count[id]=1;
                     id_rssiSum[id] = b.rssi();
@@ -111,9 +109,9 @@ namespace loc{
         
         Tbeacons beaconsAveraged;
         for(auto iter=id_count.begin(); iter!=id_count.end(); iter++){
-            auto id = iter->first;
+            const auto& id = iter->first;
             
-            auto uuid = id.uuid();
+            const auto& uuid = id.uuid();
             int major = id.major();
             int minor = id.minor();
             
@@ -125,7 +123,7 @@ namespace loc{
         
     }
     
-    class Beacon::Impl{
+    class BeaconId::Impl{
     public:
         static const long large_value = 100000;
     };
@@ -181,26 +179,26 @@ namespace loc{
     
     // Beacon Id class
     
-    Beacon::Id::Id(const std::string& uuid, int major, int minor){
+    BeaconId::BeaconId(const std::string& uuid, int major, int minor){
         uuid_ = uuid;
-        std::transform(uuid_.begin(), uuid_.end(), uuid_.begin(), ::tolower);
+        std::transform(uuid_.begin(), uuid_.end(), uuid_.begin(), ::toupper);
         major_ = major;
         minor_ = minor;
     }
     
-    std::string Beacon::Id::uuid() const{
+    const std::string& BeaconId::uuid() const{
         return uuid_;
     }
     
-    int Beacon::Id::major() const{
+    int BeaconId::major() const{
         return major_;
     }
     
-    int Beacon::Id::minor() const{
+    int BeaconId::minor() const{
         return minor_;
     }
     
-    bool Beacon::Id::operator==(const Id& id) const{
+    bool BeaconId::operator==(const BeaconId& id) const{
         if(this->uuid_.length()==0 || id.uuid_.length()==0){
             return this->major_ == id.major_ && this->minor_ == id.minor_;
         }else{
@@ -208,7 +206,7 @@ namespace loc{
         }
     }
     
-    bool Beacon::Id::operator<(const Id& id) const{
+    bool BeaconId::operator<(const BeaconId& id) const{
         if(this->uuid_.length()==0 || id.uuid_.length()==0){
             if (this->major_ == id.major_){
                 return this->minor_ < id.minor_;
@@ -228,10 +226,10 @@ namespace loc{
         }
     }
         
-    Beacon::Id Beacon::Id::convertLongIdToId(long long_id){
+    BeaconId BeaconId::convertLongIdToId(long long_id){
         int major = convertIdToMajor(long_id);
         int minor = convertIdToMinor(long_id);
-        Id id;
+        BeaconId id;
         id.major_ = major;
         id.minor_ = minor;
         return id;
@@ -243,20 +241,20 @@ namespace loc{
     // minor = id%large_value;
     
     /*
-     Beacon::Id Beacon::convertMajorMinorToId(int major, int minor){
+     BeaconId Beacon::convertMajorMinorToId(int major, int minor){
      long large_value = Impl::large_value;
      long id = major*large_value + minor;
      return id;
      }
      */
     
-    int Beacon::Id::convertIdToMajor(long id){
+    int BeaconId::convertIdToMajor(long id){
         long large_value = Impl::large_value;
         int major = static_cast<int>(id/large_value);
         return major;
     }
     
-    int Beacon::Id::convertIdToMinor(long id){
+    int BeaconId::convertIdToMinor(long id){
         long large_value = Impl::large_value;
         int minor = static_cast<int>(id%large_value);
         return minor;

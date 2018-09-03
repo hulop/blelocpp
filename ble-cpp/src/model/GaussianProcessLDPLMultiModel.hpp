@@ -94,13 +94,13 @@ namespace loc{
         BLEBeacons mBLEBeacons;
         
         //ITUModelFunction mITUModel;
-        std::map<Beacon::Id, ITUModelFunction> mITUModelMap;
+        std::map<BeaconId, ITUModelFunction> mITUModelMap;
         
         std::vector<std::vector<double>> mITUParameters;
         
         //GaussianProcess mGP;
         std::shared_ptr<GaussianProcess> mGP;
-        std::map<Beacon::Id, int> mBeaconIdIndexMap;
+        std::map<BeaconId, int> mBeaconIdIndexMap;
         //boost::bimaps::bimap<long, int> mBeaconIdIndexBimap;
         std::vector<double> mRssiStandardDeviations;
         bool mFillsUnknownBeaconRssi = false;
@@ -139,7 +139,7 @@ namespace loc{
         
         Tinput convertInput(const Tinput& input);
         // predict mean and stdev given state for input beacon id
-        std::map<Beacon::Id, NormalParameter> predict(const Tstate& state, const Tinput& input) const;
+        std::map<BeaconId, NormalParameter> predict(const Tstate& state, const Tinput& input) const;
         
         double computeLogLikelihood(const Tstate& state, const Tinput& input);
         std::vector<double> computeLogLikelihood(const std::vector<Tstate> & states, const Tinput& input) override;
