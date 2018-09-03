@@ -154,8 +154,31 @@ namespace loc{
         return beacons;
     }
     
+    // param (str) "uuid-major-minor" or "uuid[0]-uuid[1]-uuid[2]-uuid[3]-uuid[4]-major-minor"
+    // return BeaconId
+    BeaconId parseBeaconIdString(const std::string& str){
+        std::istringstream iss(str);
+        std::string newCell;
+        std::vector<std::string> tokens;
+        while( std::getline( iss, newCell, '-' ) ) {
+            tokens.push_back(newCell);
+        }
+        
+        auto n = tokens.size();
+        std::string uuid;
+        for(int i=0; i<n-3; i++){
+            uuid += tokens[i] + "-";
+        }
+        uuid += tokens[n-3];
+        
+        int major = stoi(tokens.at(n-2));
+        int minor = stoi(tokens.at(n-1));
+        return BeaconId(uuid, major, minor);
+    }
+    
     Beacons DataUtils::parseLogBeaconsCSV(const std::string& str){
-        // Beacon, nBeacon, major, minor, rssi, ...., timestamp
+        // "Beacon",nBeacon,major,minor,rssi,....,timestamp
+        // or "Beacon",nBeacon,uuid-major-minor,rssi,....,timestamp
         Beacons beacons;
         
         std::list<std::string> stringList = splitAndTrimCSV(str);
@@ -165,6 +188,7 @@ namespace loc{
         long timestamp = std::stol(stringList.back());
         beacons.timestamp(timestamp);
         int nBeacons = 0;
+        std::string uuid;
         int major=0;
         int minor=0;
         double rssi = -100;
@@ -176,13 +200,34 @@ namespace loc{
                 }
             }
             if(i==1) nBeacons = std::stoi(*iter);
-            if(i>1 && (i-2)/3 < nBeacons){
-                if(i%3==2) major = std::stoi(*iter);
-                if(i%3==0) minor = std::stoi(*iter);
-                if(i%3==1){
-                    rssi = std::stod(*iter);
-                    Beacon b(major, minor, rssi);
-                    beacons.push_back(b);
+            if(1<i){
+                if( stringList.size() == 2*nBeacons + 3 ){
+                    // "Beacon",nBeacon,uuid-major-minor,rssi,....,timestamp
+                    if(i>1 && i-2 < 2*nBeacons){
+                        if(i%2==0){
+                            std::string idStr = *iter;
+                            auto bId = parseBeaconIdString(idStr);
+                            uuid = bId.uuid();
+                            major = bId.major();
+                            minor = bId.minor();
+                        }
+                        if(i%2==1){
+                            rssi = std::stod(*iter);
+                            Beacon b(uuid, major, minor, rssi);
+                            beacons.push_back(b);
+                        }
+                    }
+                }else if(stringList.size() == 3*nBeacons + 3) {
+                    // "Beacon",nBeacon,major,minor,rssi,....,timestamp
+                    if(i>1 && i-2 < 3*nBeacons){
+                        if(i%3==2) major = std::stoi(*iter);
+                        if(i%3==0) minor = std::stoi(*iter);
+                        if(i%3==1){
+                            rssi = std::stod(*iter);
+                            Beacon b(major, minor, rssi);
+                            beacons.push_back(b);
+                        }
+                    }
                 }
             }
             i++;
@@ -366,17 +411,9 @@ namespace loc{
             }
             if(csvTokens.size() == 2*num ){ // "uuid-major-minor,rssi" format
                 for(int i=0; i<num; i++){
-                    std::istringstream iss(csvTokens[2*i]);
-                    std::string newCell;
-                    std::vector<std::string> tokens2;
-                    while( std::getline( iss, newCell, '-' ) ) {
-                        tokens2.push_back(newCell);
-                    }
-                    auto uuid = tokens2[0]+"-"+tokens2[1]+"-"+tokens2[2]+"-"+tokens2[3]+"-"+tokens2[4];
-                    major = stoi(tokens2[5]);
-                    minor = stoi(tokens2[6]);
+                    auto beaconId = parseBeaconIdString(csvTokens[2*i]);
                     rssi = stod(csvTokens[2*i+1]);
-                    Beacon b(uuid, major, minor, rssi);
+                    Beacon b(beaconId.uuid(), beaconId.major(), beaconId.minor(), rssi);
                     beacons.push_back(b);
                 }
             }else if(csvTokens.size() == 3*num ){ // "major,minor,rssi" format
