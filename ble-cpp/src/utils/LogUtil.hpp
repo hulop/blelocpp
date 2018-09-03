@@ -36,7 +36,7 @@ namespace loc {
         /*
          * "Beacon",number_of_beacons,major0,minor0,rssi0,...,majorN,minorN,rssiN
          */
-        static std::string toString(const Beacons& beacons);
+        static std::string toString(const Beacons& beacons, const std::uint32_t version = 1);
         static Beacons toBeacons(std::string str);
         
         /*

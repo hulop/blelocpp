@@ -30,15 +30,26 @@
 using namespace std;
 using namespace loc;
 
-string LogUtil::toString(const Beacons& beacons) {
-    std::stringbuf buffer;
-    std::ostream os (&buffer);
-    os << "Beacon," << beacons.size() << ",";
-    for(const Beacon&b: beacons) {
-        os << b.major() << "," << b.minor() << "," << b.rssi() << ",";
+string LogUtil::toString(const Beacons& beacons, const std::uint32_t version) {
+    if(version==0){
+        std::stringbuf buffer;
+        std::ostream os (&buffer);
+        os << "Beacon," << beacons.size() << ",";
+        for(const Beacon&b: beacons) {
+            os << b.major() << "," << b.minor() << "," << b.rssi() << ",";
+        }
+        os << beacons.timestamp();
+        return buffer.str();
+    }else{
+        std::stringbuf buffer;
+        std::ostream os (&buffer);
+        os << "Beacon," << beacons.size() << ",";
+        for(const Beacon&b: beacons) {
+            os << b.uuid() << "-" << b.major() << "-" << b.minor() << "," << b.rssi() << ",";
+        }
+        os << beacons.timestamp();
+        return buffer.str();
     }
-    os << beacons.timestamp();
-    return buffer.str();
 }
 
 string LogUtil::toString(const Acceleration& acc) {
