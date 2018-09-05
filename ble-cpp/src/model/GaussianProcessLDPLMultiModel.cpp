@@ -794,7 +794,7 @@ namespace loc{
             }
         }else if(version<=2){
             // key: long, value: ITUModelFunction
-            std::map<long, ITUModelFunction> ITUModelMapV2;
+            std::map<uint64_t, ITUModelFunction> ITUModelMapV2;
             ar(cereal::make_nvp("mITUModelMap", ITUModelMapV2));
             for(auto iter = ITUModelMapV2.begin(); iter!=ITUModelMapV2.end(); iter++){
                 auto key = iter->first;
