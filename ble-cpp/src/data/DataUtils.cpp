@@ -37,6 +37,7 @@
 #include <boost/uuid/uuid_io.hpp>
 #include <boost/archive/iterators/binary_from_base64.hpp>
 #include <boost/archive/iterators/transform_width.hpp>
+#include <boost/algorithm/string/replace.hpp>
 
 //http://stackoverflow.com/questions/10521581/base64-encode-using-boost-throw-exception
 using namespace boost::archive::iterators;
@@ -122,6 +123,18 @@ namespace loc{
         return parseCSVSensorData<Attitude>(str);
     }
     
+    std::string removeSpaces(const std::string& str){
+        const std::string str2 = boost::algorithm::replace_all_copy(str, " ", "");
+        return str2;
+    }
+    
+    Beacons DataUtils::parseBeaconsCSV(const std::string& str){
+        const std::string str2 = removeSpaces(str);
+        Sample s = parseSampleCSV(str2);
+        return s.beacons();
+    }
+    
+    /*
     Beacons DataUtils::parseBeaconsCSV(const std::string& str){
         // timestamp, Beacon, x, y, height, floor, nBeacon, major, minor, rssi, ...
         Beacons beacons;
@@ -153,8 +166,9 @@ namespace loc{
         }
         return beacons;
     }
+    */
     
-    // param (str) "uuid-major-minor" or "uuid[0]-uuid[1]-uuid[2]-uuid[3]-uuid[4]-major-minor"
+    // param (str) "uuid-major-minor"
     // return BeaconId
     BeaconId parseBeaconIdString(const std::string& str){
         std::istringstream iss(str);
@@ -234,7 +248,6 @@ namespace loc{
         }
         return beacons;
     }
-    
     
     Beacon DataUtils::jsonBeaconObjectToBeacon(picojson::object& jsonObject){
         double majorDouble = jsonObject["major"].get<double>();
@@ -379,9 +392,9 @@ namespace loc{
         return DataUtils::parseSampleCSV(csvLine, false);
     }
     Sample DataUtils::parseSampleCSV(const std::string& csvLine, bool noBeacons) throw(std::invalid_argument) {
-        //Location location = parseLocationCSV(csvLine);
-        //Beacons beacons = parseBeaconsCSV(csvLine);
-        
+        // timestamp,"Beacon",x,y,z,floor,N,uuid1-major1-minor1,rssi1,...,uuidN-majorN-minorN,rssiN
+        // or
+        // timestamp,"Beacon",x,y,z,floor,N,major1,minor1,rssi1,...,majorN,minorN,rssiN
         const char *buffer = csvLine.c_str();
         long timestamp;
         double x, y, z, floor;
@@ -413,7 +426,7 @@ namespace loc{
                 for(int i=0; i<num; i++){
                     auto beaconId = parseBeaconIdString(csvTokens[2*i]);
                     rssi = stod(csvTokens[2*i+1]);
-                    Beacon b(beaconId.uuid(), beaconId.major(), beaconId.minor(), rssi);
+                    Beacon b(beaconId, rssi);
                     beacons.push_back(b);
                 }
             }else if(csvTokens.size() == 3*num ){ // "major,minor,rssi" format
@@ -540,7 +553,7 @@ namespace loc{
         if(samples.size()==0){
             std::cout << "Samples CSV was not found." << std::endl;
         }
-        return std::move(samples);
+        return samples;
     }
     
     std::string DataUtils::samplesToCsvSamples(const Samples &samples){
@@ -562,9 +575,10 @@ namespace loc{
     }
 
     BLEBeacon DataUtils::parseBLEBeaconCSV(const std::string& csvLine) throw(...){
+        // csv format of BLEBeacon
+        // uuid, major, minor, x, y, z, floor
         std::list<std::string> stringList = splitAndTrimCSV(csvLine);
         std::list<std::string>::iterator iter;
-        // uuid, major, minor, x, y, z, floor
         std::vector<std::string> stringVector;
         for( iter= stringList.begin(); iter!=stringList.end(); iter++){
             stringVector.push_back(*iter);
@@ -616,7 +630,6 @@ namespace loc{
         }
         return ss.str();
     }
-    
     
     Pose DataUtils::parseResetPoseCSV(const std::string& csvLine){
         

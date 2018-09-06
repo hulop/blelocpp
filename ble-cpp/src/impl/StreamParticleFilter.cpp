@@ -826,8 +826,7 @@ namespace loc{
             assert(beaconsFloorEst.size()==0);
             for(const Beacon& b: beaconsSorted){
                 BLEBeacon ble =  BLEBeacon::find(b, blebeacons);
-                assert(b.major() == ble.major());
-                assert(b.minor() == ble.minor());
+                assert(b.id() == ble.id());
                 if(ble.floor() == floor_est){
                     beaconsFloorEst.push_back(b);
                 }

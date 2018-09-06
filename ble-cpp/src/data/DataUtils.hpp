@@ -51,7 +51,18 @@ namespace loc{
         template<class T> static T parseCSVSensorData(const std::string& str);
         static Acceleration parseAccelerationCSV(const std::string& str);
         static Attitude parseAttitudeCSV(const std::string& str);
+        
         static Beacons parseBeaconsCSV(const std::string& str); //timestamp, Beacon, x, y, height, floor, nBeacon, major, minor, rssi, ...
+        
+        /**
+         return a Beacons object by parsing a csv string
+         
+         @param str a csv string
+                "Beacon",nBeacon,major,minor,rssi,....,timestamp
+                or
+                "Beacon",nBeacon,uuid-major-minor,rssi,....,timestamp
+         @return a Beacons object
+         */
         static Beacons parseLogBeaconsCSV(const std::string& str); // Beacon, nBeacon, major, minor, rssi, ...., timestamp
         
         static Beacon jsonBeaconObjectToBeacon(picojson::object& jsonObject);
@@ -64,8 +75,18 @@ namespace loc{
         static std::string stringToFile(const std::string& dataStr, const std::string& dir, const std::string& file = "");
         
         static Location parseLocationCSV(const std::string& csvLine);
-        static Sample parseSampleCSV(const std::string& csvLine)  throw (std::invalid_argument);
-        static Sample parseSampleCSV(const std::string& csvLine, bool noBeacons)  throw (std::invalid_argument);
+        
+        /**
+         return a Sample object by parsing a csv string
+
+         @param str a csv string
+                    timestamp,"Beacon",x,y,z,floor,N,major1,minor1,rssi1,...,majorN,minorN,rssiN
+                    or
+                    timestamp,"Beacon",x,y,z,floor,N,uuid1-major1-minor1,rssi1,...,uuidN-majorN-minorN,rssiN         
+         @return a Sample object
+         */
+        static Sample parseSampleCSV(const std::string& str)  throw (std::invalid_argument);
+        static Sample parseSampleCSV(const std::string& str, bool noBeacons)  throw (std::invalid_argument);
         
         static void csvLocationsToLocations(std::istream& istream, Locations& locations);
         

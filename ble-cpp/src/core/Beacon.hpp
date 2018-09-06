@@ -58,6 +58,7 @@ namespace loc{
         
         bool operator==(const BeaconId& id) const;
         bool operator<(const BeaconId& id) const;
+        const std::string toString() const;
         
         static BeaconId convertLongIdToId(long long_id); // for backward compatibility
         
@@ -76,6 +77,7 @@ namespace loc{
         double rssi_;
     public:
         
+        Beacon(const BeaconId& id, double rssi);
         Beacon(int major, int minor, double rssi);
         Beacon(const std::string& uuid, int major, int minor, double rssi);
         ~Beacon();

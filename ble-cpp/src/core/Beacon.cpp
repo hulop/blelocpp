@@ -26,9 +26,15 @@
 #include <set>
 #include <algorithm>
 
+#include <boost/lexical_cast.hpp>
 #include <boost/uuid/uuid_io.hpp>
 
 namespace loc{
+    
+    Beacon::Beacon(const BeaconId & id, double rssi){
+        id_ = id;
+        rssi_ = rssi;
+    }
     
     Beacon::Beacon(int major, int minor, double rssi){
         std::string uuid = "";
@@ -66,7 +72,7 @@ namespace loc{
     }
     
     Beacon& Beacon::minor(int minor){
-        id_ = BeaconId(id_.uuid(), id_.major(), id_.minor());
+        id_ = BeaconId(id_.uuid(), id_.major(), minor);
         return *this;
     }
     
@@ -85,7 +91,7 @@ namespace loc{
     
     std::string Beacon::toString(){
         std::stringstream stream;
-        stream << id_.major() << "," << id_.minor() << "," << rssi_;
+        stream << id_.toString() << "," << rssi_;
         return stream.str();
     }
     
@@ -112,13 +118,8 @@ namespace loc{
         Tbeacons beaconsAveraged;
         for(auto iter=id_count.begin(); iter!=id_count.end(); iter++){
             const auto& id = iter->first;
-            
-            const auto& uuid = id.uuid();
-            int major = id.major();
-            int minor = id.minor();
-            
             double rssi = id_rssiSum[id]/iter->second;
-            Beacon b(uuid, major,minor,rssi);
+            Beacon b(id, rssi);
             beaconsAveraged.push_back(b);
         }
         return beaconsAveraged;
@@ -185,7 +186,7 @@ namespace loc{
         uuid_ = uuid;
         major_ = major;
         minor_ = minor;
-        setuuid(uuid_);
+        setuuid(uuid);
     }
     
     template<class Archive>
@@ -204,6 +205,7 @@ namespace loc{
             buuid_ = boost::uuids::string_generator()(uuid);
         }else{
             buuid_ = boost::uuids::nil_uuid();
+            uuid_ = boost::lexical_cast<std::string>(buuid_);
         }
     }
     
@@ -249,6 +251,12 @@ namespace loc{
                 return this->buuid_ < id.buuid_;
             }
         }
+    }
+    
+    const std::string BeaconId::toString() const{
+        std::stringstream ss;
+        ss << uuid() << "-" << major() << "-" << minor();
+        return ss.str();
     }
         
     BeaconId BeaconId::convertLongIdToId(long long_id){

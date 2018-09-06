@@ -88,7 +88,7 @@ namespace loc{
     }
     
     std::ostream& operator<<(std::ostream& os, const BLEBeacon& bleBeacon){
-        os << bleBeacon.x() <<"," << bleBeacon.y() <<","<< bleBeacon.z()<<","<<bleBeacon.floor() << "," <<bleBeacon.major() <<","<< bleBeacon.minor();
+        os << bleBeacon.toString();
         return os;
     }
     

@@ -468,7 +468,7 @@ namespace loc{
             int index = mBeaconIdIndexMap.at(id);
             double var = indexRssiSum[index] /(indexCount[index]);
             if (isnan(var)) {
-                std::cerr << "Stdev is NaN for beacon(" << ble.major() << ", " << ble.minor() << ")" << std::endl;
+                std::cerr << "Stdev is NaN for beacon(" << ble.id().toString() << ")" << std::endl;
             }
             double stdev = sqrt(var);
             stdevs.push_back(stdev);

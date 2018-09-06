@@ -90,7 +90,7 @@ namespace loc{
         for(Tbeacon b: beacons){
             const auto& id = b.id();
             if(ids.count(id)>0){
-                ss << "BLEBeacon(major=" << b.major() <<", minor=" << b.minor() << ") is duplicated" << std::endl ;
+                ss << "BLEBeacon(" << b.uuid() << "=" << b.major() <<"-" << b.minor() << ") is duplicated" << std::endl ;
                 flag = false;
                 count += 1;
             }
