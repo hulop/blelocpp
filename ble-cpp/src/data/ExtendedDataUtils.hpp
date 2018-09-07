@@ -45,7 +45,7 @@ namespace loc{
                 auto min = id.minor();
                 double pred = it->second.mean();
                 double stdev = it->second.stdev();
-                obj.insert(std::make_pair("uuid", picojson::value((double) maj)));
+                obj.insert(std::make_pair("uuid", picojson::value(uuid)));
                 obj.insert(std::make_pair("major", picojson::value((double) maj)));
                 obj.insert(std::make_pair("minor", picojson::value((double) min)));
                 obj.insert(std::make_pair("mean", picojson::value(pred)));

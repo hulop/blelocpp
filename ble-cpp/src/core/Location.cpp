@@ -217,7 +217,7 @@ namespace loc{
     
     
     template <class Tlocation>
-    int Location::findKNNDensestLocationIndex(const std::vector<Tlocation>& locs, int knn, double floorCoeff){
+    long Location::findKNNDensestLocationIndex(const std::vector<Tlocation>& locs, int knn, double floorCoeff){
         int n = (int) locs.size();
         if(knn<=0){
             knn = (int) n/10;
@@ -247,7 +247,7 @@ namespace loc{
     }
     
     template <class Tlocation, class Tstate>
-    int Location::findClosestLocationIndex(const Tlocation& queryLocation, const std::vector<Tstate>& locs, double floorCoeff){
+    long Location::findClosestLocationIndex(const Tlocation& queryLocation, const std::vector<Tstate>& locs, double floorCoeff){
         int n = (int) locs.size();
         cv::Mat data = cv::Mat::zeros(n, 4, CV_32FC1);
         for(int i=0; i<n; i++){
@@ -274,7 +274,7 @@ namespace loc{
     }
     
     template <class Tlocation>
-    int Location::findKDEDensestLocationIndex(const std::vector<Tlocation>& locs, double bandwidth, double floorCoeff){
+    long Location::findKDEDensestLocationIndex(const std::vector<Tlocation>& locs, double bandwidth, double floorCoeff){
         int n = (int) locs.size();
         std::vector<double> knn_dists;
         for(int i=0; i<n; i++){
@@ -292,15 +292,15 @@ namespace loc{
         return index;
     }
     
-    template int Location::findKNNDensestLocationIndex<Location>(const std::vector<Location>& locs, int knn, double floorCoeff);
-    template int Location::findKNNDensestLocationIndex<State>(const std::vector<State>& locs, int knn, double floorCoeff);
-    template int Location::findKNNDensestLocationIndex<Pose>(const std::vector<Pose>& locs, int knn, double floorCoeff);
+    template long Location::findKNNDensestLocationIndex<Location>(const std::vector<Location>& locs, int knn, double floorCoeff);
+    template long Location::findKNNDensestLocationIndex<State>(const std::vector<State>& locs, int knn, double floorCoeff);
+    template long Location::findKNNDensestLocationIndex<Pose>(const std::vector<Pose>& locs, int knn, double floorCoeff);
     
-    template int Location::findClosestLocationIndex<Location, State>(const Location& queryLocation, const std::vector<State>& locs, double floorCoeff);
-    template int Location::findClosestLocationIndex<Pose, State>(const Pose& queryLocation, const std::vector<State>& locs, double floorCoeff);
-    template int Location::findClosestLocationIndex<State, State>(const State& queryLocation, const std::vector<State>& locs, double floorCoeff);
+    template long Location::findClosestLocationIndex<Location, State>(const Location& queryLocation, const std::vector<State>& locs, double floorCoeff);
+    template long Location::findClosestLocationIndex<Pose, State>(const Pose& queryLocation, const std::vector<State>& locs, double floorCoeff);
+    template long Location::findClosestLocationIndex<State, State>(const State& queryLocation, const std::vector<State>& locs, double floorCoeff);
     
-    template int Location::findKDEDensestLocationIndex<State>(const std::vector<State>& locs, double bandwidth, double floorCoeff);
+    template long Location::findKDEDensestLocationIndex<State>(const std::vector<State>& locs, double bandwidth, double floorCoeff);
     
     
     template <class Tlocation>

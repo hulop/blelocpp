@@ -107,15 +107,15 @@ namespace loc{
         template<class Archive>
         void serialize(Archive & ar, std::uint32_t const version)
         {
-            if (0 <= version) {
-                ar(CEREAL_NVP(meanRssiBias_));
-                ar(CEREAL_NVP(stdRssiBias_));
-                ar(CEREAL_NVP(diffusionRssiBias_));
-                ar(CEREAL_NVP(diffusionOrientationBias_));
-                
-                ar(CEREAL_NVP(minRssiBias_));
-                ar(CEREAL_NVP(maxRssiBias_));
-            }
+            //if (0 <= version) {
+            ar(CEREAL_NVP(meanRssiBias_));
+            ar(CEREAL_NVP(stdRssiBias_));
+            ar(CEREAL_NVP(diffusionRssiBias_));
+            ar(CEREAL_NVP(diffusionOrientationBias_));
+            
+            ar(CEREAL_NVP(minRssiBias_));
+            ar(CEREAL_NVP(maxRssiBias_));
+            //}
         }
     };
 }

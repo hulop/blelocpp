@@ -187,14 +187,14 @@ namespace loc {
         template<class Archive>
         void serialize(Archive & ar, std::uint32_t const version)
         {
-            if (0 <= version) {
-                ar(CEREAL_NVP(meanVelocity_));
-                ar(CEREAL_NVP(stdVelocity_));
-                ar(CEREAL_NVP(diffusionVelocity_));
-                ar(CEREAL_NVP(minVelocity_));
-                ar(CEREAL_NVP(maxVelocity_));
-                ar(CEREAL_NVP(stdOrientation_));
-            }
+            //if (0 <= version) {
+            ar(CEREAL_NVP(meanVelocity_));
+            ar(CEREAL_NVP(stdVelocity_));
+            ar(CEREAL_NVP(diffusionVelocity_));
+            ar(CEREAL_NVP(minVelocity_));
+            ar(CEREAL_NVP(maxVelocity_));
+            ar(CEREAL_NVP(stdOrientation_));
+            //}
         }
     };
 }

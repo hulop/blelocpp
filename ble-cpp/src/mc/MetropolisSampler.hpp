@@ -77,29 +77,29 @@ namespace loc{
     public:
         
         void parameters(Parameters params);
-        void input(const Tinput& input);
+        void input(const Tinput& input) override;
         void stdevLocation(const Location& stdevLocation){
             mStdevLocation = stdevLocation;
         }
         
-        void observationModel(std::shared_ptr<ObservationModel<Tstate, Tinput>> obsModel);
-        void statusInitializer(std::shared_ptr<StatusInitializerImpl> statusInitializer);
+        void observationModel(std::shared_ptr<ObservationModel<Tstate, Tinput>> obsModel) override;
+        void statusInitializer(std::shared_ptr<StatusInitializerImpl> statusInitializer) override;
         
         void prepare();
-        void startBurnIn();
-        void startBurnIn(int burnIn);
+        void startBurnIn() override;
+        void startBurnIn(int burnIn) override;
         std::vector<Tstate> getAllStates() const override;
         std::vector<double> getAllLogLLs() const override;
         
         bool sample();
         bool sample(bool transitLoc, bool transitRssiBias);
-        std::vector<Tstate> sampling(int n);
+        std::vector<Tstate> sampling(int n) override;
         std::vector<Tstate> sampling(int n, bool withOrdering);
-        std::vector<Tstate> sampling(int n, const Location &location);
+        std::vector<Tstate> sampling(int n, const Location &location) override;
         
         void clear();
         
-        void print() const;
+        void print() const override;
         
     };
     

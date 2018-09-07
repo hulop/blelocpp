@@ -408,7 +408,7 @@ namespace loc{
         if (isTrackingLocalizer() && isStatesConverged) {
             Pose refPose = *mResult->meanPose();
             std::vector<State> states = *mResult->states();
-            int idx = Location::findClosestLocationIndex(refPose, states);
+            auto idx = Location::findClosestLocationIndex(refPose, states);
             Location locClosest = states.at(idx);
             refPose.copyLocation(locClosest);
 

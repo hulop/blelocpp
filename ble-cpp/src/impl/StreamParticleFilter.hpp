@@ -141,12 +141,12 @@ namespace loc {
             template<class Archive>
             void serialize(Archive & ar, std::uint32_t const version)
             {
-                if (0 <= version) {
-                    ar(CEREAL_NVP(heightChangedCriterion_));
-                    ar(CEREAL_NVP(weightTransitionArea_));
-                    ar(CEREAL_NVP(mixtureProbaTransArea_));
-                    ar(CEREAL_NVP(rejectDistance_));
-                }
+                //if (0 <= version) {
+                ar(CEREAL_NVP(heightChangedCriterion_));
+                ar(CEREAL_NVP(weightTransitionArea_));
+                ar(CEREAL_NVP(mixtureProbaTransArea_));
+                ar(CEREAL_NVP(rejectDistance_));
+                //}
                 if(1<=version){
                     ar(CEREAL_NVP(durationAllowForceFloorUpdate_));
                 }
@@ -199,7 +199,7 @@ namespace loc {
         bool resetStatus() override;
         bool resetStatus(Pose pose) override;
         bool resetStatus(Pose meanPose, Pose stdevPose) override;
-        bool resetStatus(Pose meanPose, Pose stdevPose, double rateContami);
+        bool resetStatus(Pose meanPose, Pose stdevPose, double rateContami) override;
         bool resetStatus(const Beacons& beacons) override;
         bool resetStatus(const Location& location, const Beacons& beacons) override;
         

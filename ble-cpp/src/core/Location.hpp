@@ -84,11 +84,11 @@ namespace loc{
         static std::vector<Tlocation> filterLocationsOnFlatFloor(const std::vector<Tlocation>& locations);
         
         template <class Tlocation>
-        static int findKNNDensestLocationIndex(const std::vector<Tlocation>& locs, int knn=-1, double floorCoeff=1000);
+        static long findKNNDensestLocationIndex(const std::vector<Tlocation>& locs, int knn=-1, double floorCoeff=1000);
         template <class Tlocation, class Tstate>
-        static int findClosestLocationIndex(const Tlocation& queryLocation, const std::vector<Tstate>& locs, double floorCoeff=1000);
+        static long findClosestLocationIndex(const Tlocation& queryLocation, const std::vector<Tstate>& locs, double floorCoeff=1000);
         template <class Tlocation>
-        static int findKDEDensestLocationIndex(const std::vector<Tlocation>& locs, double bandwidth=0.5, double floorCoeff=1000);
+        static long findKDEDensestLocationIndex(const std::vector<Tlocation>& locs, double bandwidth=0.5, double floorCoeff=1000);
         
         // for container
         bool operator<(const Location &right) const;

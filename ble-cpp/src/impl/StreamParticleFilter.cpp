@@ -1136,7 +1136,7 @@ namespace loc{
         bool refineStatus(const Beacons& beacons){
             // TODO
             BOOST_THROW_EXCEPTION(LocException("unsupported method"));
-            
+            /*
             const Beacons& beaconsFiltered = filterBeacons(beacons);
 
             if(beaconsFiltered.size()>0){
@@ -1152,6 +1152,7 @@ namespace loc{
             status->states(statesNew, Status::RESET);
             callback(status.get());
             return false;
+            */
         }
 
         void processResetStatus(){

@@ -116,33 +116,33 @@ namespace loc{
         template<class Archive>
         void serialize(Archive & ar, std::uint32_t const version)
         {
-            if (0 <= version) {
-                OPTIONAL_NVP(ar, probabilityUpStair_);
-                OPTIONAL_NVP(ar, probabilityDownStair_);
-                OPTIONAL_NVP(ar, probabilityStayStair_);
+            //if (0 <= version) {
+            OPTIONAL_NVP(ar, probabilityUpStair_);
+            OPTIONAL_NVP(ar, probabilityDownStair_);
+            OPTIONAL_NVP(ar, probabilityStayStair_);
 
-                OPTIONAL_NVP(ar, probabilityUpElevator_);
-                OPTIONAL_NVP(ar, probabilityDownElevator_);
-                OPTIONAL_NVP(ar, probabilityStayElevator_);
+            OPTIONAL_NVP(ar, probabilityUpElevator_);
+            OPTIONAL_NVP(ar, probabilityDownElevator_);
+            OPTIONAL_NVP(ar, probabilityStayElevator_);
 
-                OPTIONAL_NVP(ar, probabilityUpEscalator_);
-                OPTIONAL_NVP(ar, probabilityDownEscalator_);
-                OPTIONAL_NVP(ar, probabilityStayEscalator_);
+            OPTIONAL_NVP(ar, probabilityUpEscalator_);
+            OPTIONAL_NVP(ar, probabilityDownEscalator_);
+            OPTIONAL_NVP(ar, probabilityStayEscalator_);
 
-                OPTIONAL_NVP(ar, probabilityFloorJump_);
+            OPTIONAL_NVP(ar, probabilityFloorJump_);
 
-                OPTIONAL_NVP(ar, wallCrossingAliveRate_);
-                OPTIONAL_NVP(ar, maxIncidenceAngle_);
+            OPTIONAL_NVP(ar, wallCrossingAliveRate_);
+            OPTIONAL_NVP(ar, maxIncidenceAngle_);
 
-                OPTIONAL_NVP(ar, velocityRateFloor_);
-                OPTIONAL_NVP(ar, velocityRateStair_);
-                OPTIONAL_NVP(ar, velocityRateElevator_);
-                OPTIONAL_NVP(ar, velocityRateEscalator_);
+            OPTIONAL_NVP(ar, velocityRateFloor_);
+            OPTIONAL_NVP(ar, velocityRateStair_);
+            OPTIONAL_NVP(ar, velocityRateElevator_);
+            OPTIONAL_NVP(ar, velocityRateEscalator_);
 
-                OPTIONAL_NVP(ar, relativeVelocityEscalator_);
+            OPTIONAL_NVP(ar, relativeVelocityEscalator_);
 
-                OPTIONAL_NVP(ar, weightDecayRate_);
-            }
+            OPTIONAL_NVP(ar, weightDecayRate_);
+            //}
         }
     };
     
