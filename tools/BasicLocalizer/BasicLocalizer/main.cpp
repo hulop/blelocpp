@@ -377,7 +377,16 @@ int main(int argc, char * argv[]) {
         return localizer;
     };
     
-    BasicLocalizer localizer = resetBasicLocalizer(opt, ud);
+    BasicLocalizer localizer;
+    try{
+        localizer = resetBasicLocalizer(opt, ud);
+    }catch(std::string& str){
+        std::cerr << str << std::endl;
+        return -1;
+    }catch(const char* ch){
+        std::cerr << ch << std::endl;
+        return -1;
+    }
     // Parameter for reset log play
     double dx_reset = 1.0;
     double dy_reset = 1.0;

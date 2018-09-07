@@ -606,6 +606,9 @@ namespace loc{
         
         std::ifstream file;
         file.open(modelPath, std::ios::in);
+        if(!file.is_open()){
+            throw "model file not found at "+modelPath;
+        }
         std::istreambuf_iterator<char> input(file);
         
         picojson::value v;
