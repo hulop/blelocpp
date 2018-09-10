@@ -685,7 +685,7 @@ namespace loc{
         dataStore = std::shared_ptr<DataStoreImpl> (new DataStoreImpl());
         dataStore->building(buildingBuilder.build());
         
-        deserializedModel = std::shared_ptr<GaussianProcessLDPLMultiModel<State, Beacons>> (new GaussianProcessLDPLMultiModel<State, Beacons>());
+        deserializedModel = std::make_shared<GaussianProcessLDPLMultiModel<State, Beacons>>();
         
         bool doTraining = true;
         try{
@@ -842,29 +842,26 @@ namespace loc{
         if(doTraining || forceTraining){
             std::cerr << "Training will be processed" << std::endl;
             // Train observation model
-            std::shared_ptr<GaussianProcessLDPLMultiModelTrainer<State, Beacons>>obsModelTrainer( new GaussianProcessLDPLMultiModelTrainer<State, Beacons>());
+            auto obsModelTrainer = std::make_shared<GaussianProcessLDPLMultiModelTrainer<State, Beacons>>();
             obsModelTrainer->setGPType(basicLocalizerOptions.gpType);
             obsModelTrainer->dataStore(dataStore);
-            std::shared_ptr<GaussianProcessLDPLMultiModel<State, Beacons>> obsModel( obsModelTrainer->train());
-            //localizer->observationModel(obsModel);
+            std::shared_ptr<GaussianProcessLDPLMultiModel<State, Beacons>> obsModel(obsModelTrainer->train());
             
             std::ostringstream oss;
             obsModel->save(oss, binaryOutput);
             json["ObservationModelParameters"] = (picojson::value)oss.str();
             json.erase("BinaryObservationModelParameters");
             
+            // serialize the trained model
             std::ofstream of;
             of.open(trainedFile);
             of << v.serialize();
             of.close();
+            
+            // replace the deserialized model with the trained model
+            deserializedModel = obsModel;
         }
         
-        // update additional parameters in the observation model
-        deserializedModel->coeffDiffFloorStdev(coeffDiffFloorStdev);
-        if(1<=tDelay){
-            deserializedModel->tDelay(tDelay);
-        }
-
         // finalize mapdata file
         if(finalizeMapdata){
             std::cerr << "Finalizing map data." << std::endl;
@@ -898,6 +895,13 @@ namespace loc{
             of.open(finalizedFile);
             of << v.serialize();
             of.close();
+        }
+        
+        // update additional parameters in the observation model
+        // after training and serialization
+        deserializedModel->coeffDiffFloorStdev(coeffDiffFloorStdev);
+        if(1<=tDelay){
+            deserializedModel->tDelay(tDelay);
         }
         
         // Instantiate sensor data processors
