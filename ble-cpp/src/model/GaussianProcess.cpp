@@ -37,6 +37,8 @@ namespace loc{
     // Explicit instanciation
     template void GaussianProcess::serialize<cereal::JSONInputArchive> (cereal::JSONInputArchive& archive);
     template void GaussianProcess::serialize<cereal::JSONOutputArchive> (cereal::JSONOutputArchive& archive);
+    template void GaussianProcess::serialize<cereal::PortableBinaryInputArchive> (cereal::PortableBinaryInputArchive& archive);
+    template void GaussianProcess::serialize<cereal::PortableBinaryOutputArchive> (cereal::PortableBinaryOutputArchive& archive);
     
     GaussianProcess& GaussianProcess::sigmaN(double sigmaN){
         sigmaN_ = sigmaN;

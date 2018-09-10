@@ -108,6 +108,8 @@ namespace loc{
         return os;
     }
     
-    template void BLEBeacon::serialize<cereal::JSONOutputArchive> (cereal::JSONOutputArchive& archive);
     template void BLEBeacon::serialize<cereal::JSONInputArchive> (cereal::JSONInputArchive& archive);
+    template void BLEBeacon::serialize<cereal::JSONOutputArchive> (cereal::JSONOutputArchive& archive);
+    template void BLEBeacon::serialize<cereal::PortableBinaryInputArchive> (cereal::PortableBinaryInputArchive& archive);
+    template void BLEBeacon::serialize<cereal::PortableBinaryOutputArchive> (cereal::PortableBinaryOutputArchive& archive);
 }

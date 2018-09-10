@@ -59,6 +59,8 @@ void GaussianKernel::Parameters::serialize(Archive& ar){
 
 template void GaussianKernel::Parameters::serialize<cereal::JSONInputArchive> (cereal::JSONInputArchive& archive);
 template void GaussianKernel::Parameters::serialize<cereal::JSONOutputArchive> (cereal::JSONOutputArchive& archive);
+template void GaussianKernel::Parameters::serialize<cereal::PortableBinaryInputArchive> (cereal::PortableBinaryInputArchive& archive);
+template void GaussianKernel::Parameters::serialize<cereal::PortableBinaryOutputArchive> (cereal::PortableBinaryOutputArchive& archive);
 
 template<class Archive>
 void GaussianKernel::save(Archive& ar) const{
@@ -73,6 +75,8 @@ void GaussianKernel::load(Archive& ar){
 
 template void GaussianKernel::save<cereal::JSONOutputArchive> (cereal::JSONOutputArchive& archive) const;
 template void GaussianKernel::load<cereal::JSONInputArchive> (cereal::JSONInputArchive& archive);
+template void GaussianKernel::save<cereal::PortableBinaryOutputArchive> (cereal::PortableBinaryOutputArchive& archive) const;
+template void GaussianKernel::load<cereal::PortableBinaryInputArchive> (cereal::PortableBinaryInputArchive& archive);
 
 std::string GaussianKernel::Parameters::toString() const{
     std::stringstream ss;

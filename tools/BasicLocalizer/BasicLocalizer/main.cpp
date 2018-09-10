@@ -35,6 +35,7 @@ typedef struct {
     std::string mapPath = "";
     std::string testPath = "";
     std::string outputPath = "";
+    std::string workingDir = ".";
     double meanRssiBias = 0.0;
     double minRssiBias = -10;
     double maxRssiBias = 10;
@@ -50,6 +51,10 @@ typedef struct {
     bool usesRestart = false;
     bool forceTraining = false;
     bool finalizeMapdata = false;
+    bool binaryOutput = false;
+    std::string trainedFile = "";
+    std::string finalizedFile = "";
+    std::string binaryFile = "";
     std::string restartLogPath = "";
     bool longLog = false;
     
@@ -65,7 +70,8 @@ void printHelp() {
     std::cout << "Options for Basic Localizer" << std::endl;
     std::cout << " -h                  show this help" << std::endl;
     std::cout << " -m mapfile          set map data file" << std::endl;
-    std::cout << " --train             force training parameters" << std::endl;
+    std::cout << " --wd <dir>          working directory (default .)" << std::endl;
+    std::cout << " --train [<name>]    force training parameters (save to <name>)" << std::endl;
     std::cout << " --gptype <string>   set gptype [normal,light] for training" << std::endl;
     std::cout << " -t testfile         set test csv data file" << std::endl;
     std::cout << " -o output           set output file" << std::endl;
@@ -85,7 +91,8 @@ void printHelp() {
     std::cout << " --oj                output path for localizer config json" << std::endl;
     std::cout << " --declination       set magnetic declination to compute true north (east-positive, west-negative)" << std::endl;
     std::cout << " -v                  set verbosity" << std::endl;
-    std::cout << " --finalize          finalize map data file" << std::endl;
+    std::cout << " --finalize [<name>] finalize map data file (save to <name>)" << std::endl;
+    std::cout << " --binary [<name>]   save model as binary" << std::endl;
     std::cout << " --skip              set skip count of initial beacon inputs" << std::endl;
 }
 
@@ -105,11 +112,13 @@ Option parseArguments(int argc, char *argv[]){
         {"restart",    optional_argument , NULL, 0},
         {"lj",         required_argument , NULL, 0},
         {"oj",         required_argument , NULL, 0},
-        {"train",    no_argument , NULL, 0},
+        {"train",    optional_argument , NULL, 0},
         {"declination",         required_argument , NULL, 0},
         //{"stdY",            required_argument, NULL,  0 },
         {"gptype",   required_argument , NULL, 0},
-        {"finalize",   required_argument , NULL, 0},
+        {"finalize",   optional_argument , NULL, 0},
+        {"binary",   optional_argument , NULL, 0},
+        {"wd",   required_argument , NULL, 0},
         {"skip",         required_argument , NULL, 0},
         {"vl",         required_argument , NULL, 0},
         {0,         0,                 0,  0 }
@@ -170,6 +179,9 @@ Option parseArguments(int argc, char *argv[]){
             }
             if (strcmp(long_options[option_index].name, "train") == 0){
                 opt.forceTraining = true;
+                if (optarg) {
+                    opt.trainedFile.assign(optarg);
+                }
             }
             if (strcmp(long_options[option_index].name, "gptype") == 0){
                 std::string str(optarg);
@@ -187,6 +199,18 @@ Option parseArguments(int argc, char *argv[]){
             }
             if (strcmp(long_options[option_index].name, "finalize") == 0){
                 opt.finalizeMapdata = true;
+                if (optarg) {
+                    opt.finalizedFile.assign(optarg);
+                }
+            }
+            if (strcmp(long_options[option_index].name, "binary") == 0){
+                opt.binaryOutput = true;
+                if (optarg) {
+                    opt.binaryFile.assign(optarg);
+                }
+            }
+            if (strcmp(long_options[option_index].name, "wd") == 0){
+                opt.workingDir.assign(optarg);
             }
             if (strcmp(long_options[option_index].name, "skip") == 0){
                 opt.skipBeacon = atoi(optarg);
@@ -326,6 +350,17 @@ int main(int argc, char * argv[]) {
     } else {
         ud.out = &std::cout;
     }
+    size_t lastindex = opt.mapPath.find_last_of(".");
+    std::string rawname = opt.mapPath.substr(0, lastindex);
+    if (opt.binaryOutput && opt.binaryFile.length() == 0) {
+        opt.binaryFile.assign(rawname+".ObservationModelParameters.bin");
+    }
+    if (opt.forceTraining && opt.trainedFile.length() == 0) {
+        opt.trainedFile.assign(rawname+".trained.json");
+    }
+    if (opt.finalizeMapdata && opt.finalizedFile.length() == 0) {
+        opt.finalizedFile.assign(rawname+".finalized.json");
+    }
 
     auto resetBasicLocalizer = [](Option& opt, MyData& ud){
         BasicLocalizer localizer;
@@ -360,7 +395,11 @@ int main(int argc, char * argv[]) {
         localizer.forceTraining = opt.forceTraining;
         localizer.basicLocalizerOptions = opt.basicLocalizerOptions;
         localizer.finalizeMapdata = opt.finalizeMapdata;
-        localizer.setModel(opt.mapPath, "./");
+        localizer.binaryOutput = opt.binaryOutput;
+        localizer.binaryFile = opt.binaryFile;
+        localizer.trainedFile = opt.trainedFile;
+        localizer.finalizedFile = opt.finalizedFile;
+        localizer.setModel(opt.mapPath, opt.workingDir);
         localizer.normalFunction(opt.normFunc, opt.tDistNu); // set after calling setModel
         ud.latLngConverter = localizer.latLngConverter();
         

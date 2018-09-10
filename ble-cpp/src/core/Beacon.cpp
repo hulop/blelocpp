@@ -199,6 +199,8 @@ namespace loc{
     
     template void BeaconId::serialize<cereal::JSONOutputArchive> (cereal::JSONOutputArchive& archive, std::uint32_t const version);
     template void BeaconId::serialize<cereal::JSONInputArchive> (cereal::JSONInputArchive& archive, std::uint32_t const version);
+    template void BeaconId::serialize<cereal::PortableBinaryOutputArchive> (cereal::PortableBinaryOutputArchive& archive, std::uint32_t const version);
+    template void BeaconId::serialize<cereal::PortableBinaryInputArchive> (cereal::PortableBinaryInputArchive& archive, std::uint32_t const version);
     
     void BeaconId::setuuid(const std::string& uuid){
         if(!uuid.empty()){
