@@ -68,8 +68,17 @@ namespace loc{
         bool isTransitionArea(const Location& location) const;
         std::vector<Location> findClosestTransitionAreaLocations(const Location& location) const;
         
+        template<class Archive>
+        void serialize(Archive & ar, std::uint32_t const version)
+        {
+            ar(CEREAL_NVP(mCoordSys));
+            ar(CEREAL_NVP(mImage));
+        }
+        
     protected:
         bool isInsideFloor(const Location& location) const;
     };
 }
+
+CEREAL_CLASS_VERSION(loc::FloorMap, 0);
 #endif /* Floor_hpp */

@@ -27,6 +27,8 @@
 #include <iostream>
 #include <memory>
 
+#include "SerializeUtils.hpp"
+
 namespace loc {
 
     enum ImageHolderMode{
@@ -104,7 +106,10 @@ namespace loc {
         
         static void setPrecomputesIndex(bool precomputesIdx);
         
+        template<class Archive>
+        void serialize(Archive & ar, std::uint32_t const version);
     };
-    
 }
+
+CEREAL_CLASS_VERSION(loc::ImageHolder, 0);
 #endif /* ImageMap_hpp */

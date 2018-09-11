@@ -28,6 +28,7 @@
 
 #include <stdio.h>
 #include "LocException.hpp"
+#include "SerializeUtils.hpp"
 
 namespace loc{
     // Parameters to define coordinate transformation
@@ -43,8 +44,18 @@ namespace loc{
         ~CoordinateSystemParameters() = default;
         
         CoordinateSystemParameters(double punit_x, double punit_y, double punit_z, double x_origin, double y_origin, double z_origin);
+        
+        template<class Archive>
+        void serialize(Archive & ar, std::uint32_t const version)
+        {
+            ar(CEREAL_NVP(punit_x));
+            ar(CEREAL_NVP(punit_y));
+            ar(CEREAL_NVP(punit_z));
+            ar(CEREAL_NVP(x_origin));
+            ar(CEREAL_NVP(y_origin));
+            ar(CEREAL_NVP(z_origin));
+        }
     };
-
     
     class CoordinateSystem {
         CoordinateSystemParameters mPara;
@@ -55,6 +66,12 @@ namespace loc{
         }
         template<class Tstate> Tstate worldToLocalState(const Tstate& state) const;
         template<class Tstate> Tstate localToWorldState(const Tstate& state) const;
+        
+        template<class Archive>
+        void serialize(Archive & ar, std::uint32_t const version)
+        {
+            ar(CEREAL_NVP(mPara));
+        }
     };
     
     template<class Tstate>
@@ -87,4 +104,8 @@ namespace loc{
         return stateNew;
     }
 }
+
+CEREAL_CLASS_VERSION(loc::CoordinateSystemParameters, 0);
+CEREAL_CLASS_VERSION(loc::CoordinateSystem, 0);
+
 #endif /* CoordinateSystem_hpp */

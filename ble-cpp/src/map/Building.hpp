@@ -68,6 +68,15 @@ namespace loc {
         bool isValidFloor(int floor);
         
         double estimateWallAngle(const Location& start, const Location &end) const;
+        
+        template<class Archive>
+        void serialize(Archive & ar, std::uint32_t const version)
+        {
+            ar(CEREAL_NVP(minFloor_));
+            ar(CEREAL_NVP(maxFloor_));
+            ar(CEREAL_NVP(floors));
+        }
+        
     };
     
     class BuildingBuilder{
@@ -79,4 +88,6 @@ namespace loc {
         Building build();
     };
 }
+
+CEREAL_CLASS_VERSION(loc::Building, 0);
 #endif /* MapFloorsModel_hpp */

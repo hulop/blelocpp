@@ -259,6 +259,8 @@ namespace loc{
         std::string name_;
         Eigen::SparseMatrix<uint8_t> mat_;
         boost::bimap<Color, uint8_t> colorIntBM;
+        
+        uint32_t cereal_class_version = 0;
     public:
         ImplLight(){
             using bm_type = boost::bimap<Color, uint8_t>;
@@ -297,6 +299,7 @@ namespace loc{
             }
             
             mat_.setFromTriplets(tripletList.begin(), tripletList.end());
+            mat_.makeCompressed();
             
             this->setUpIndices();
         }
@@ -367,6 +370,15 @@ namespace loc{
             }
             return points;
         }
+        
+        
+        template<class Archive>
+        void serialize(Archive & ar)
+        {
+            ar(cereal::make_nvp("cereal_class_version", cereal_class_version));
+            ar(cereal::make_nvp("name_", name_));
+            ar(cereal::make_nvp("mat_", mat_));
+        }
     };
     
     ImageHolder::ImageHolder(){
@@ -424,4 +436,25 @@ namespace loc{
     void ImageHolder::setPrecomputesIndex(bool precomputesIdx){
         ImageHolder::precomputesIndex = precomputesIdx;
     }
+    
+    
+    template<class Archive>
+    void ImageHolder::serialize(Archive & ar, std::uint32_t const version)
+    {
+        ar(cereal::make_nvp("mode", mode_));
+        ar(cereal::make_nvp("precomputesIndex", precomputesIndex));
+        
+        if(mode_ == ImageHolderMode::light){
+            auto implLight = std::dynamic_pointer_cast<ImplLight>(impl);
+            ar(cereal::make_nvp("implLight", *implLight));
+        }else if(mode_ == ImageHolderMode::heavy){
+            LocException ex("Serialization of ImageHolder::ImplHeavy is currently unsupported.");
+            BOOST_THROW_EXCEPTION(ex);
+        }
+    }
+    
+    template void ImageHolder::serialize<cereal::JSONOutputArchive>(cereal::JSONOutputArchive& ar, std::uint32_t const version);
+    template void ImageHolder::serialize<cereal::JSONInputArchive>(cereal::JSONInputArchive& ar, std::uint32_t const version);
+    template void ImageHolder::serialize<cereal::PortableBinaryOutputArchive>(cereal::PortableBinaryOutputArchive& ar, std::uint32_t const version);
+    template void ImageHolder::serialize<cereal::PortableBinaryInputArchive>(cereal::PortableBinaryInputArchive& ar, std::uint32_t const version);
 }
