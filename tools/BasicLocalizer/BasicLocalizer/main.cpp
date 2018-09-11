@@ -353,7 +353,7 @@ int main(int argc, char * argv[]) {
     size_t lastindex = opt.mapPath.find_last_of(".");
     std::string rawname = opt.mapPath.substr(0, lastindex);
     if (opt.binaryOutput && opt.binaryFile.length() == 0) {
-        opt.binaryFile.assign(rawname+".ObservationModelParameters.bin");
+        opt.binaryFile.assign(rawname+".BinaryModelData.bin");
     }
     if (opt.forceTraining && opt.trainedFile.length() == 0) {
         opt.trainedFile.assign(rawname+".trained.json");
