@@ -165,8 +165,10 @@ namespace loc{
         
         void save(std::ofstream& ofs, bool binary);
         void save(std::ostringstream& oss, bool binary);
+        void save(cereal::PortableBinaryOutputArchive & oarchive, const std::string& name);
         void load(std::ifstream& ifs, bool binary);
         void load(std::istringstream& iss, bool binary);
+        void load(cereal::PortableBinaryInputArchive & oarchive, const std::string& name);
         
         bool applyLowestLogLikelihood = false;
     };

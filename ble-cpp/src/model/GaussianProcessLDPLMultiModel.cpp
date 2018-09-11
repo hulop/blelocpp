@@ -914,6 +914,18 @@ namespace loc{
     }
     
     template<class Tstate, class Tinput>
+    void GaussianProcessLDPLMultiModel<Tstate, Tinput>::save(cereal::PortableBinaryOutputArchive& oarchive, const std::string& name) {
+        if (version < BINARY_SUPPORTED_MIN_VERSION) {
+            version = BINARY_SUPPORTED_MIN_VERSION;
+        }
+        if(name.length()==0){
+            oarchive(*this);
+        }else{
+            oarchive(cereal::make_nvp(name, *this));
+        }
+    }
+    
+    template<class Tstate, class Tinput>
     void GaussianProcessLDPLMultiModel<Tstate, Tinput>::load(std::ifstream& ifs, bool binary){
         if (binary) {
             cereal::PortableBinaryInputArchive iarchive(ifs);
@@ -932,6 +944,15 @@ namespace loc{
         } else {
             cereal::JSONInputArchive iarchive(iss);
             iarchive(*this);
+        }
+    }
+    
+    template<class Tstate, class Tinput>
+    void GaussianProcessLDPLMultiModel<Tstate, Tinput>::load(cereal::PortableBinaryInputArchive& ar, const std::string& name){
+        if(name.length()==0){
+            ar(*this);
+        }else{
+            ar(cereal::make_nvp(name, *this));
         }
     }
     

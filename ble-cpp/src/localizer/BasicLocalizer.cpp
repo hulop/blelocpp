@@ -728,7 +728,8 @@ namespace loc{
                     //deserializedModel->load(ifs, true);
                     // Open an input archive here to load the objects from one file.
                     cereal::PortableBinaryInputArchive iarchive(ifs);
-                    iarchive(cereal::make_nvp("ObservationModelParameters", deserializedModel));
+                    deserializedModel->load(iarchive, "ObservationModelParameters");
+                    
                     Building bldg;
                     iarchive(cereal::make_nvp("building", bldg));
                     
@@ -900,7 +901,7 @@ namespace loc{
                 //deserializedModel->save(of, binaryOutput);
                 // Open an output archive to save the objects into one file.
                 cereal::PortableBinaryOutputArchive oarchive(of);
-                oarchive(cereal::make_nvp("ObservationModelParameters", deserializedModel));
+                deserializedModel->save(oarchive, "ObservationModelParameters");
                 oarchive(cereal::make_nvp("building", bldg));
                 
                 json["BinaryModelData"] = (picojson::value)binaryFile;
