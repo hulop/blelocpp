@@ -758,7 +758,24 @@ namespace loc{
         ar(CEREAL_NVP(version));
         ar(CEREAL_NVP(mBLEBeacons));
         
-        ar(CEREAL_NVP(mITUModelMap));
+        // mITUModelMap
+        if(version<=2){
+            // key: long, value: ITUModelFunction
+            std::map<uint64_t, ITUModelFunction> ITUModelMapV2;
+            for(auto iter=mITUModelMap.begin(); iter!=mITUModelMap.end(); iter++){
+                auto id = iter->first;
+                auto value = iter->second;
+                long long_id = BeaconId::convertToLongId(id);
+                ITUModelMapV2[long_id] = value;
+            }
+            ar(cereal::make_nvp("mITUModelMap", ITUModelMapV2));
+        }else if(version<=3){
+            // key: BeaconId, value: ITUModelFunction
+            ar(CEREAL_NVP(mITUModelMap));
+        }else{
+            BOOST_THROW_EXCEPTION(LocException("unsupported version (version=" + std::to_string(version) +")"));
+        }
+
         ar(CEREAL_NVP(mITUParameters));
 
         if(version <= 1){
@@ -800,6 +817,7 @@ namespace loc{
         std::cout << "loading version = " << version << std::endl;
         ar(CEREAL_NVP(mBLEBeacons));
         
+        // mITUModelMap
         if(version==0){
             ITUModelFunction mITUModel;
             ar(CEREAL_NVP(mITUModel));

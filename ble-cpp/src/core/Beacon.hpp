@@ -60,6 +60,7 @@ namespace loc{
         bool operator<(const BeaconId& id) const;
         const std::string toString() const;
         
+        static long convertToLongId(const BeaconId& id);
         static BeaconId convertLongIdToId(long long_id); // for backward compatibility
         
         template<class Archive>

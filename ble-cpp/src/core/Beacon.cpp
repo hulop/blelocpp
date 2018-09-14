@@ -260,7 +260,7 @@ namespace loc{
         ss << uuid() << "-" << major() << "-" << minor();
         return ss.str();
     }
-        
+    
     BeaconId BeaconId::convertLongIdToId(long long_id){
         int major = convertIdToMajor(long_id);
         int minor = convertIdToMinor(long_id);
@@ -268,6 +268,10 @@ namespace loc{
         id.major_ = major;
         id.minor_ = minor;
         return id;
+    }
+    
+    long BeaconId::convertToLongId(const BeaconId& id){
+        return Impl::large_value * id.major() + id.minor();
     }
     
     // Encoding rule
