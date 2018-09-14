@@ -68,58 +68,52 @@ namespace cereal{
     /**
      Funtions to save/load Eigen::SparseMatrix
      **/
+    
     template<class Archive, class _Scalar, int _Options, class _StorageIndex>
     void save(Archive& ar, Eigen::SparseMatrix<_Scalar, _Options, _StorageIndex> const & X, const std::uint32_t version){
         // column-major
-        typename Eigen::SparseMatrix<_Scalar, _Options, _StorageIndex>::Index rows = X.rows(), cols = X.cols(), nonZeros = X.nonZeros();
+        typename Eigen::SparseMatrix<_Scalar, _Options, _StorageIndex>::Index rows = X.rows(), cols = X.cols(), nonZeros = X.nonZeros(), outerSize = X.outerSize(), innerSize = X.innerSize();
         ar(CEREAL_NVP(rows));
         ar(CEREAL_NVP(cols));
         ar(CEREAL_NVP(nonZeros));
-
-        std::vector<int> rowIndices(nonZeros);
-        std::vector<int> colIndices(nonZeros);
-        std::vector<_Scalar> values(nonZeros);
-
-        int index = 0;
-        for (int k=0; k<X.outerSize(); ++k){
-            for (typename Eigen::SparseMatrix<_Scalar, _Options, _StorageIndex>::InnerIterator it(X,k); it; ++it){
-                rowIndices[index] = it.row();
-                colIndices[index] = it.col();
-                values[index] = it.value();
-                index++;
-            }
-        }
-
-        ar(CEREAL_NVP(rowIndices));
-        ar(CEREAL_NVP(colIndices));
+        ar(CEREAL_NVP(outerSize));
+        ar(CEREAL_NVP(innerSize));
+        
+        std::vector<_StorageIndex> outerStarts(X.outerIndexPtr(), X.outerIndexPtr() + outerSize + 1);
+        std::vector<_StorageIndex> innerIndices(X.innerIndexPtr(), X.innerIndexPtr() + nonZeros);
+        std::vector<_Scalar> values(X.valuePtr(), X.valuePtr() + nonZeros);
+                
+        ar(CEREAL_NVP(outerStarts));
+        ar(CEREAL_NVP(innerIndices));
         ar(CEREAL_NVP(values));
     }
-
+    
     template<class Archive, class _Scalar, int _Options, class _StorageIndex>
     void load(Archive& ar, Eigen::SparseMatrix<_Scalar, _Options, _StorageIndex> & X, const std::uint32_t version){
         // column-major
-        typename Eigen::SparseMatrix<_Scalar, _Options, _StorageIndex>::Index rows = X.rows(), cols = X.cols(), nonZeros = X.nonZeros();
+        typename Eigen::SparseMatrix<_Scalar, _Options, _StorageIndex>::Index rows = X.rows(), cols = X.cols(), nonZeros = X.nonZeros(), outerSize = X.outerSize(), innerSize = X.innerSize();
         ar(CEREAL_NVP(rows));
         ar(CEREAL_NVP(cols));
         ar(CEREAL_NVP(nonZeros));
-
-        std::vector<int> rowIndices(nonZeros);
-        std::vector<int> colIndices(nonZeros);
-        std::vector<_Scalar> values(nonZeros);
-
-        ar(CEREAL_NVP(rowIndices));
-        ar(CEREAL_NVP(colIndices));
+        ar(CEREAL_NVP(outerSize));
+        ar(CEREAL_NVP(innerSize));
+        
+        std::vector<_StorageIndex> outerStarts;
+        std::vector<_StorageIndex> innerIndices;
+        std::vector<_Scalar> values;
+        
+        ar(CEREAL_NVP(outerStarts));
+        ar(CEREAL_NVP(innerIndices));
         ar(CEREAL_NVP(values));
-
+        
         X.resize(rows, cols);
-        using Triplet = typename Eigen::Triplet<_Scalar>;
-        std::vector<Triplet> tripletList;
-
-        for(int i=0; i<nonZeros; i++){
-            tripletList.push_back(Triplet(rowIndices.at(i), colIndices.at(i), values.at(i)));
-        }
-        X.setFromTriplets(tripletList.begin(), tripletList.end());
         X.makeCompressed();
+        X.resizeNonZeros(nonZeros);
+        
+        std::copy(outerStarts.begin(), outerStarts.end(), X.outerIndexPtr());
+        std::copy(innerIndices.begin(), innerIndices.end(), X.innerIndexPtr());
+        std::copy(values.begin(), values.end(), X.valuePtr());
+        
         X.finalize();
     }
 

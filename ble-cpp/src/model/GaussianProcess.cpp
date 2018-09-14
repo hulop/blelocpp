@@ -398,6 +398,7 @@ namespace loc{
             if(asSparse_){
                 // from dense to sparse
                 WeightsSparse_ = Weights_.sparseView();
+                WeightsSparse_.makeCompressed();
                 Weights_.resize(0,0);
             }else{
                 // from sparse to dense
