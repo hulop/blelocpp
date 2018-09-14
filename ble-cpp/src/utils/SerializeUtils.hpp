@@ -136,5 +136,6 @@ namespace cereal{
 }
 
 CEREAL_CLASS_VERSION(Eigen::SparseMatrix<uint8_t>, 0);
+CEREAL_CLASS_VERSION(Eigen::SparseMatrix<double>, 0);
 
 #endif /* EigenSerializeUtils_h */

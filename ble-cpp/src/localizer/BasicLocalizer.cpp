@@ -909,6 +909,10 @@ namespace loc{
                 json.erase("layers");
                 
                 of.close();
+            }else{
+                std::ostringstream oss;
+                deserializedModel->save(oss, binaryOutput);
+                json["ObservationModelParameters"] = (picojson::value)oss.str();
             }
             
             // output mapdata

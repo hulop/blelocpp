@@ -425,6 +425,9 @@ int main(int argc, char * argv[]) {
     }catch(const char* ch){
         std::cerr << ch << std::endl;
         return -1;
+    }catch(LocException& e){
+        std::cerr << boost::diagnostic_information(e) << std::endl;
+        return -1;
     }
     // Parameter for reset log play
     double dx_reset = 1.0;

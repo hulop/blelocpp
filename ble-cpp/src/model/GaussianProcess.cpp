@@ -25,15 +25,41 @@
 #include "SerializeUtils.hpp"
 
 namespace loc{
+    
+    bool GaussianProcess::allowsAutoVersionUp = false;
 
     template<class Archive>
     void GaussianProcess::serialize(Archive& ar){
+        try{
+            ar(CEREAL_NVP(cereal_class_version));
+        }catch(cereal::Exception& e){
+            cereal_class_version = 0;
+        }
+        
         ar(CEREAL_NVP(sigmaN_));
         // ar(CEREAL_NVP(mKernel));
         ar(CEREAL_NVP(mGaussianKernel));
         ar(CEREAL_NVP(X_));
-        ar(CEREAL_NVP(Weights_));
+        
+        // Weights_
+        if(cereal_class_version==0){
+            asSparse_ = false;
+            ar(CEREAL_NVP(Weights_));
+            
+            if(allowsAutoVersionUp){
+                cereal_class_version = 1;
+                setAsSparse(true);
+            }
+        }else{
+            ar(CEREAL_NVP(asSparse_));
+            if(asSparse_){
+                ar(CEREAL_NVP(WeightsSparse_));
+            }else{
+                ar(CEREAL_NVP(Weights_));
+            }
+        }
     }
+    
     // Explicit instanciation
     template void GaussianProcess::serialize<cereal::JSONInputArchive> (cereal::JSONInputArchive& archive);
     template void GaussianProcess::serialize<cereal::JSONOutputArchive> (cereal::JSONOutputArchive& archive);
@@ -163,7 +189,12 @@ namespace loc{
     }
     
     Eigen::VectorXd GaussianProcess::predict(const Eigen::VectorXd& kstar) const{
-        Eigen::VectorXd ypred = Weights_.transpose()*(kstar);
+        Eigen::VectorXd ypred;
+        if(asSparse_){
+            ypred = (kstar.transpose() * WeightsSparse_).transpose();
+        }else{
+            ypred = (kstar.transpose() * Weights_).transpose();
+        }
         return ypred;
     }
     
@@ -183,7 +214,12 @@ namespace loc{
         std::vector<double> ypreds(m);
         for(int i=0; i<m; i++){
             int index = indices.at(i);
-            Eigen::VectorXd ypred = (Weights_.col(index).transpose())*(kstar);
+            Eigen::VectorXd ypred;
+            if(asSparse_){
+                ypred = kstar.transpose() * WeightsSparse_.col(index);
+            }else{
+                ypred = (Weights_.col(index).transpose())*(kstar);
+            }
             ypreds[i]=ypred(0);
         }
         return ypreds;
@@ -354,5 +390,21 @@ namespace loc{
         this->gaussianKernel(gKernel);
         
         this->fit(X,Y,Actives);
+    }
+    
+    void GaussianProcess::setAsSparse(bool asSparse){
+        if(asSparse_ != asSparse){
+            asSparse_ = asSparse;
+            if(asSparse_){
+                // from dense to sparse
+                WeightsSparse_ = Weights_.sparseView();
+                Weights_.resize(0,0);
+            }else{
+                // from sparse to dense
+                Weights_ = WeightsSparse_.toDense();
+                WeightsSparse_.resize(0,0);
+                WeightsSparse_.data().squeeze();
+            }
+        }
     }
 }

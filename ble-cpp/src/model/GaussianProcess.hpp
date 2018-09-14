@@ -33,6 +33,7 @@
 #include <Eigen/Core>
 #include <Eigen/LU>
 #include <Eigen/Eigenvalues>
+#include <Eigen/SparseCore>
 
 #include "KernelFunction.hpp"
 #include "MathUtils.hpp"
@@ -63,6 +64,10 @@ namespace loc{
         Eigen::MatrixXd Weights_;
         double sigmaN_ = 1.0;
         
+        std::uint32_t cereal_class_version = 1;
+        bool asSparse_ = false;
+        Eigen::SparseMatrix<double> WeightsSparse_;
+        
         // variables not to be serialized
         Eigen::MatrixXd Y_;
         Eigen::MatrixXd K_;
@@ -73,8 +78,7 @@ namespace loc{
         
     public:
         // A function for serealization
-        template<class Archive>
-        void serialize(Archive& ar);
+        template<class Archive> void serialize(Archive& ar);
         
         virtual GaussianProcess& sigmaN(double sigmaN);
         virtual double sigmaN() const;
@@ -113,6 +117,9 @@ namespace loc{
         
         virtual std::vector<GaussianProcessParameters> createParameterMatrix(const GaussianProcessParameterSet&) const;
         virtual void fitCV(const Eigen::MatrixXd & X, const Eigen::MatrixXd& Y, const Eigen::MatrixXd& Actives);
+        
+        virtual void setAsSparse(bool asSparse);
+        static bool allowsAutoVersionUp;
     };
 }
 
