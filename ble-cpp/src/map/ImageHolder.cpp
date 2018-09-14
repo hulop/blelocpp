@@ -55,13 +55,12 @@ namespace loc{
         color::lime,
         color::blue,
         color::yellow,
-        color::green
-        
+        color::green,
+        color::aqua
         /*
         color::olive,
         color::fuchsia,
         color::silver,
-        color::aqua,
         color::gray,
         color::purple,
         color::navy,
@@ -75,7 +74,8 @@ namespace loc{
         color::lime,
         color::blue,
         color::yellow,
-        color::green
+        color::green,
+        color::aqua
     };
     
     bool Color::equals(const Color& c)const{
@@ -256,11 +256,14 @@ namespace loc{
     };
     
     class ImageHolder::ImplLight : public ImageHolder::Impl{
+        // variables to be serialized
+        uint32_t cereal_class_version = 0;
         std::string name_;
         Eigen::SparseMatrix<uint8_t> mat_;
+        
+        // not to be serialized (created)
         boost::bimap<Color, uint8_t> colorIntBM;
         
-        uint32_t cereal_class_version = 0;
     public:
         ImplLight(){
             using bm_type = boost::bimap<Color, uint8_t>;
@@ -288,7 +291,7 @@ namespace loc{
                         int g = vec[1];
                         int r = vec[2];
                         Color color(r,g,b);
-                        uint8_t code = colorToUint8(color);
+                        uint8_t code = colorToUint8BM(color);
                         if(code!=0){
                             tripletList.push_back(Triplet(y,x,code));
                         }
@@ -305,6 +308,7 @@ namespace loc{
         }
         ~ImplLight() = default;
         
+        /*
         uint8_t colorToUint8(const Color& color) const{
             for(int i=0; i<colorList.size(); i++){
                 const Color& c = colorList.at(i);
@@ -322,6 +326,7 @@ namespace loc{
                 return colorList.at(0);
             }
         }
+        */
         
         uint8_t colorToUint8BM(const Color& color) const{
             if(colorIntBM.left.count(color) != 0){
@@ -349,13 +354,13 @@ namespace loc{
         
         Color get(int y, int x) const{
             uint8_t code = mat_.coeff(y,x);
-            Color color = uint8ToColor(code);
+            Color color = uint8ToColorBM(code);
             return color;
         }
         
         std::vector<Point> getPoints(const Color& c) const{
             Points points;
-            uint8_t code_q = colorToUint8(c);
+            uint8_t code_q = colorToUint8BM(c);
             for(int k=0; k<mat_.outerSize(); k++){
                 auto iter = Eigen::SparseMatrix<uint8_t>::InnerIterator(mat_, k);
                 for(; iter; ++iter){
@@ -373,11 +378,164 @@ namespace loc{
         
         
         template<class Archive>
-        void serialize(Archive & ar)
+        void save(Archive & ar) const
         {
             ar(cereal::make_nvp("cereal_class_version", cereal_class_version));
             ar(cereal::make_nvp("name_", name_));
             ar(cereal::make_nvp("mat_", mat_));
+            //saveColorMat(ar);
+        }
+        
+        template<class Archive>
+        void load(Archive & ar)
+        {
+            ar(cereal::make_nvp("cereal_class_version", cereal_class_version));
+            ar(cereal::make_nvp("name_", name_));
+            ar(cereal::make_nvp("mat_", mat_));
+            //loadColorMat(ar);
+        }
+        
+        class BinarySparseMatrix{
+        public:
+            uint8_t value;
+            Eigen::SparseMatrix<uint8_t> X;
+            
+            template<class Archive>
+            void save(Archive& ar) const{
+                // column-major
+                typename Eigen::SparseMatrix<uint8_t>::Index rows = X.rows(), cols = X.cols(), nonZeros = X.nonZeros(), outerSize = X.outerSize(), innerSize = X.innerSize();
+                ar(CEREAL_NVP(rows));
+                ar(CEREAL_NVP(cols));
+                ar(CEREAL_NVP(nonZeros));
+                ar(CEREAL_NVP(outerSize));
+                ar(CEREAL_NVP(innerSize));
+                
+                std::vector<int> outerStarts(X.outerIndexPtr(), X.outerIndexPtr() + outerSize + 1);
+                std::vector<int> innerIndices(X.innerIndexPtr(), X.innerIndexPtr() + nonZeros);
+                
+                ar(CEREAL_NVP(value));
+                ar(CEREAL_NVP(outerStarts));
+                ar(CEREAL_NVP(innerIndices));
+            }
+            
+            template<class Archive>
+            void load(Archive& ar){
+                // column-major
+                typename Eigen::SparseMatrix<uint8_t>::Index rows = X.rows(), cols = X.cols(), nonZeros = X.nonZeros(), outerSize = X.outerSize(), innerSize = X.innerSize();
+                ar(CEREAL_NVP(rows));
+                ar(CEREAL_NVP(cols));
+                ar(CEREAL_NVP(nonZeros));
+                ar(CEREAL_NVP(outerSize));
+                ar(CEREAL_NVP(innerSize));
+                
+                std::vector<int> outerStarts;
+                std::vector<int> innerIndices;
+                //std::vector<uint8_t> values;
+                
+                ar(CEREAL_NVP(value));
+                ar(CEREAL_NVP(outerStarts));
+                ar(CEREAL_NVP(innerIndices));
+                
+                X.resize(rows, cols);
+                X.makeCompressed();
+                X.resizeNonZeros(nonZeros);
+                
+                std::copy(outerStarts.begin(), outerStarts.end(), X.outerIndexPtr());
+                std::copy(innerIndices.begin(), innerIndices.end(), X.innerIndexPtr());
+                for(int i=0; i<nonZeros; i++){
+                    X.valuePtr()[i] = value;
+                }
+                X.finalize();
+            }
+        };
+        
+        class LayeredSparseMatrix{
+        public:
+            int rows;
+            int cols;
+            std::vector<BinarySparseMatrix> bsMats;
+            
+            template<class Archive>
+            void serialize(Archive& ar){
+                ar(cereal::make_nvp("rows", rows));
+                ar(cereal::make_nvp("cols", cols));
+                ar(cereal::make_nvp("mats", bsMats));
+            }
+        };
+        
+        template<class Archive>
+        void saveColorMat(Archive & ar) const
+        {
+            int rows = mat_.rows();
+            int cols = mat_.cols();
+            
+            typedef Eigen::Triplet<uint8_t> Triplet;
+            std::map<uint8_t, std::vector<Triplet>> colorTriplets;
+            
+            for (int k=0; k<mat_.outerSize(); ++k){
+                for (Eigen::SparseMatrix<uint8_t>::InnerIterator it(mat_,k); it; ++it){
+                    uint8_t val = it.value();
+                    if(val==0){// stores only non-zero elements
+                        continue;
+                    }
+                    if(colorTriplets.count(val) == 0){
+                        colorTriplets[val] = std::vector<Triplet>();
+                    }
+                    colorTriplets[val].push_back(Triplet(it.row(), it.col(), val));
+                }
+            }
+            
+            std::vector<BinarySparseMatrix> bsMats;
+            for(auto iter=colorTriplets.begin(); iter!=colorTriplets.end(); iter++){
+                uint8_t value = iter->first;
+                auto triplets = iter->second;
+                Eigen::SparseMatrix<uint8_t> sMat;
+                sMat.resize(rows, cols);
+                sMat.setFromTriplets(triplets.begin(), triplets.end());
+                sMat.makeCompressed();
+                BinarySparseMatrix bsMat;
+                bsMat.value = value;
+                bsMat.X = sMat;
+                bsMats.push_back(bsMat);
+            }
+            
+            LayeredSparseMatrix lsm;
+            lsm.rows = rows;
+            lsm.cols = cols;
+            lsm.bsMats = bsMats;
+            
+            ar(cereal::make_nvp("layered", lsm));
+        }
+        
+        
+        template<class Archive>
+        void loadColorMat(Archive & ar)
+        {
+            LayeredSparseMatrix lsm;
+            ar(cereal::make_nvp("layered", lsm));
+    
+            int rows = lsm.rows;
+            int cols = lsm.cols;
+            std::vector<BinarySparseMatrix> bsMats = lsm.bsMats;
+            
+            typedef Eigen::Triplet<uint8_t> Triplet;
+            std::vector<Triplet> triplets;
+            for(auto bsMat: bsMats){
+                auto value = bsMat.value;
+                auto X = bsMat.X;
+                for (int k=0; k<X.outerSize(); ++k){
+                    for (Eigen::SparseMatrix<uint8_t>::InnerIterator it(X,k); it; ++it){
+                        triplets.push_back(Triplet(it.row(), it.col(), value));
+                    }
+                }
+            }
+            
+            Eigen::SparseMatrix<uint8_t> sMat;
+            sMat.resize(rows, cols);
+            sMat.setFromTriplets(triplets.begin(), triplets.end());
+            sMat.makeCompressed();
+            
+            mat_ = sMat;
         }
     };
     
