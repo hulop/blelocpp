@@ -40,6 +40,11 @@
 
 namespace loc{
     
+    enum MatType{
+        DENSE = 0,
+        SPARSE = 1
+    };
+    
     class GaussianProcessParameterSet{
     public:
         std::vector<double> sigmaFs{1,2,3,5};
@@ -65,7 +70,6 @@ namespace loc{
         double sigmaN_ = 1.0;
         
         std::uint32_t cereal_class_version = 1;
-        bool asSparse_ = false;
         Eigen::SparseMatrix<double> WeightsSparse_;
         
         // variables not to be serialized
@@ -76,7 +80,10 @@ namespace loc{
         Eigen::MatrixXd Actives_;
         GaussianProcessParameterSet mParameterSet;
         
-    public:
+    protected:
+        bool asSparse_ = false;
+        
+    public:        
         // A function for serealization
         template<class Archive> void serialize(Archive& ar);
         

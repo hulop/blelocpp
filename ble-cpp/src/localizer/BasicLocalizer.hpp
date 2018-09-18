@@ -316,6 +316,7 @@ namespace loc {
     class BasicLocalizerOptions{
     public:
         GPType gpType = GPNORMAL;
+        MatType matType = DENSE;
     };
     
     class BasicLocalizer: public StreamLocalizer, public BasicLocalizerParameters{

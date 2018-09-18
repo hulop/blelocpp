@@ -121,6 +121,7 @@ namespace loc{
 
         const int BINARY_SUPPORTED_MIN_VERSION = 3;
         GPType gpType = GPNORMAL;
+        MatType matType = DENSE;
         
         //parameters for delayed prediction
         int mTDelay = 1;
@@ -200,9 +201,14 @@ namespace loc{
             gpType = gt;
         }
         
+        void setMatType(MatType mt){
+            matType = mt;
+        }
+        
     private:
         std::shared_ptr<DataStore> mDataStore;
         GPType gpType = GPNORMAL;
+        MatType matType = DENSE;
     };
     
 }

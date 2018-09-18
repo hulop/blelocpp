@@ -125,6 +125,13 @@ namespace loc{
         
         Weights_ = invKy_*Y_;
         
+        if(asSparse_){
+            // from dense to sparse
+            WeightsSparse_ = Weights_.sparseView();
+            WeightsSparse_.makeCompressed();
+            Weights_.resize(0,0);
+        }
+        
         return *this;
     }
     

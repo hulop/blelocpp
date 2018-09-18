@@ -134,6 +134,7 @@ namespace loc{
             //Get local models by cluster
             for (auto k=0; k < cr.nCluster(); k++) {
                 GaussianProcess gp;
+                gp.setAsSparse(this->asSparse_);
                 gp.sigmaN(sigmaN_);
                 gp.gaussianKernel(gaussianKernel_);
                 

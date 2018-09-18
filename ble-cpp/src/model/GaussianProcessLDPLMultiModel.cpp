@@ -339,6 +339,12 @@ namespace loc{
             mGP = std::make_shared<GaussianProcessLight>();
         }
         
+        if(matType==DENSE){
+            mGP->setAsSparse(false);
+        }else if(matType==SPARSE){
+            mGP->setAsSparse(true);
+        }
+        
         std::vector<Sample> samplesAveraged = Sample::mean(Sample::splitSamplesToConsecutiveSamples(samples)); // averaging consecutive samples
         std::cout << "#samplesAveraged = " << samplesAveraged.size() << std::endl;
         
@@ -995,6 +1001,7 @@ namespace loc{
         GaussianProcessLDPLMultiModel<Tstate, Tinput>* obsModel = new GaussianProcessLDPLMultiModel<Tstate, Tinput>();
         
         obsModel->gpType = gpType;
+        obsModel->matType = matType;
         
         obsModel->bleBeacons(bleBeacons);
         obsModel->train(samplesFiltered);

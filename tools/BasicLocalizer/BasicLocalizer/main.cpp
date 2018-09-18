@@ -74,6 +74,7 @@ void printHelp() {
     std::cout << " --wd <dir>          working directory (default .)" << std::endl;
     std::cout << " --train [<name>]    force training parameters (save to <name>)" << std::endl;
     std::cout << " --gptype <string>   set gptype [normal,light] for training" << std::endl;
+    std::cout << " --mattype <string>  set matrix type [dense,sparse] for observation model" << std::endl;
     std::cout << " -t testfile         set test csv data file" << std::endl;
     std::cout << " -o output           set output file" << std::endl;
     std::cout << " -n                  use normal distribution" << std::endl;
@@ -118,6 +119,7 @@ Option parseArguments(int argc, char *argv[]){
         {"declination",         required_argument , NULL, 0},
         //{"stdY",            required_argument, NULL,  0 },
         {"gptype",   required_argument , NULL, 0},
+        {"mattype",   required_argument , NULL, 0},
         {"finalize",   optional_argument , NULL, 0},
         {"binary",   optional_argument , NULL, 0},
         {"btarget",   required_argument , NULL, 0},
@@ -194,6 +196,17 @@ Option parseArguments(int argc, char *argv[]){
                     opt.basicLocalizerOptions.gpType = GPLIGHT;
                 }else{
                     std::cerr << "Unknown gptype: " << optarg << std::endl;
+                    abort();
+                }
+            }
+            if (strcmp(long_options[option_index].name, "mattype") == 0){
+                std::string str(optarg);
+                if(str=="dense"){
+                    opt.basicLocalizerOptions.matType = DENSE;
+                }else if(str=="sparse"){
+                    opt.basicLocalizerOptions.matType = SPARSE;
+                }else{
+                    std::cerr << "Unknown mattype: " << optarg << std::endl;
                     abort();
                 }
             }
