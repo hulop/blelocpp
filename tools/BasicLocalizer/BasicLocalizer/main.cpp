@@ -55,6 +55,7 @@ typedef struct {
     std::string trainedFile = "";
     std::string finalizedFile = "";
     std::string binaryFile = "";
+    std::set<std::string> binarizeTargets{"model"};
     std::string restartLogPath = "";
     bool longLog = false;
     
@@ -93,6 +94,7 @@ void printHelp() {
     std::cout << " -v                  set verbosity" << std::endl;
     std::cout << " --finalize [<name>] finalize map data file (save to <name>)" << std::endl;
     std::cout << " --binary [<name>]   save model as binary" << std::endl;
+    std::cout << " --btarget [name ...] set binarize targets " << std::endl;
     std::cout << " --skip              set skip count of initial beacon inputs" << std::endl;
 }
 
@@ -118,6 +120,7 @@ Option parseArguments(int argc, char *argv[]){
         {"gptype",   required_argument , NULL, 0},
         {"finalize",   optional_argument , NULL, 0},
         {"binary",   optional_argument , NULL, 0},
+        {"btarget",   required_argument , NULL, 0},
         {"wd",   required_argument , NULL, 0},
         {"skip",         required_argument , NULL, 0},
         {"vl",         required_argument , NULL, 0},
@@ -207,6 +210,25 @@ Option parseArguments(int argc, char *argv[]){
                 opt.binaryOutput = true;
                 if (optarg) {
                     opt.binaryFile.assign(optarg);
+                }
+            }
+            if (strcmp(long_options[option_index].name, "btarget") == 0){
+                std::string btarget(optarg);
+                std::stringstream ss(btarget);
+                std::string field;
+                std::set<std::string> candidates{"model","building"};
+                opt.binarizeTargets.clear();
+                int err = 0;
+                while (std::getline(ss, field, ',')) {
+                    if(candidates.count(field)){
+                        opt.binarizeTargets.insert(field);
+                    }else{
+                        std::cerr << "unrecognized binarize target = " << field << std::endl;
+                        err=1;
+                    }
+                }
+                if(err!=0){
+                    exit(1);
                 }
             }
             if (strcmp(long_options[option_index].name, "wd") == 0){
@@ -399,6 +421,7 @@ int main(int argc, char * argv[]) {
         localizer.binaryFile = opt.binaryFile;
         localizer.trainedFile = opt.trainedFile;
         localizer.finalizedFile = opt.finalizedFile;
+        localizer.binarizeTargets = opt.binarizeTargets;
         localizer.setModel(opt.mapPath, opt.workingDir);
         localizer.normalFunction(opt.normFunc, opt.tDistNu); // set after calling setModel
         ud.latLngConverter = localizer.latLngConverter();

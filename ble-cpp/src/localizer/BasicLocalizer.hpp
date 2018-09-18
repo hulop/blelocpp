@@ -398,6 +398,8 @@ namespace loc {
         std::string finalizedFile = "";
         BasicLocalizerOptions basicLocalizerOptions;
         
+        std::set<std::string> binarizeTargets{"model"}; // "model", "building"
+        
         bool finalizeMapdata = false;
         
         OrientationMeterAverageParameters orientationMeterAverageParameters;

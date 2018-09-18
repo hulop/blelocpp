@@ -728,17 +728,24 @@ namespace loc{
                     //deserializedModel->load(ifs, true);
                     // Open an input archive here to load the objects from one file.
                     cereal::PortableBinaryInputArchive iarchive(ifs);
-                    deserializedModel->load(iarchive, "ObservationModelParameters");
                     
-                    Building bldg;
-                    iarchive(cereal::make_nvp("building", bldg));
+                    std::set<std::string> bTargets;
+                    iarchive(cereal::make_nvp("targets", bTargets));
+                    
+                    for(const auto& bTarget: bTargets){
+                        if(bTarget=="model"){
+                            deserializedModel->load(iarchive, "ObservationModelParameters");
+                        }else if(bTarget=="building"){
+                            Building bldg;
+                            iarchive(cereal::make_nvp("building", bldg));
+                            dataStore->building(bldg);
+                        }
+                    }
                     
                     std::cout << "loaded" << std::endl;
                     msec = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now()-s).count();
                     std::cerr << "load deserialized model: " << msec << "ms" << std::endl;
                     doTraining = false;
-                    
-                    dataStore->building(bldg);
                 }
                 
                 msec = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now()-s).count();
@@ -896,17 +903,23 @@ namespace loc{
             if (binaryOutput) {
                 std::ofstream of;
                 of.open(workingDir+"/"+binaryFile);
-                
-                auto bldg = dataStore->getBuilding();
                 //deserializedModel->save(of, binaryOutput);
                 // Open an output archive to save the objects into one file.
                 cereal::PortableBinaryOutputArchive oarchive(of);
-                deserializedModel->save(oarchive, "ObservationModelParameters");
-                oarchive(cereal::make_nvp("building", bldg));
+                
+                oarchive(cereal::make_nvp("targets", binarizeTargets));
                 
                 json["BinaryModelData"] = (picojson::value)binaryFile;
-                json.erase("ObservationModelParameters");
-                json.erase("layers");
+                for(const auto& bTarget: binarizeTargets){
+                    if(bTarget=="model"){
+                        deserializedModel->save(oarchive, "ObservationModelParameters");
+                        json.erase("ObservationModelParameters");
+                    }else if(bTarget=="building"){
+                        auto bldg = dataStore->getBuilding();
+                        oarchive(cereal::make_nvp("building", bldg));
+                        json.erase("layers");
+                    }
+                }
                 
                 of.close();
             }else{
