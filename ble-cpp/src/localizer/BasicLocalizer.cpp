@@ -56,7 +56,8 @@ namespace loc{
         BasicLocalizer* localizer = udb->basicLocalizer;
         UserData* userData = udb->userData;
         
-        localizer->updateLocationStatus(localizer->getStatus());
+        //localizer->updateLocationStatus(localizer->getStatus()); // bad access
+        localizer->updateLocationStatus(status); // status == localizer->getStatus() ( == localizer->mLocalizer->impl->status.get() )
         
         udb->functionCalledAfterUpdateWithPtr(userData, status);
     }
