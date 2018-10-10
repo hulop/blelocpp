@@ -418,7 +418,7 @@ namespace loc{
         for(auto& ble: mBLEBeacons){
             const auto& id = ble.id();
             int index = mBeaconIdIndexMap.at(id);
-            std::cout << "stdev(" <<ble.major() << "," << ble.minor() << ") = " << mRssiStandardDeviations.at(index) <<std::endl;
+            std::cout << "stdev(" << ble.uuid() << "," << ble.major() << "," << ble.minor() << ") = " << mRssiStandardDeviations.at(index) <<std::endl;
         }
         
         if(mStdevRssiForUnknownBeacon==0){
