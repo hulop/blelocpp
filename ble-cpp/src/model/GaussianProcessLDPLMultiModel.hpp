@@ -75,7 +75,6 @@ namespace loc{
         
         std::vector<double> lambdas{1000.0, 0.001, 1000, 1000};
         std::vector<double> rhos{0, 0, 100, 100};
-        
     };
     
     template<class Tstate, class Tinput>
@@ -113,7 +112,7 @@ namespace loc{
         GaussianProcessLDPLMultiModel& bleBeacons(BLEBeacons bleBeacons);
         GaussianProcessLDPLMultiModel& train(Samples samples);
         std::vector<std::vector<double>> fitITUModel(Samples samples);
-        std::vector<double> computeRssiStandardDeviations(Samples samples);
+        std::tuple<std::vector<int>, std::vector<double>, std::vector<double>> computeRssiStandardDeviations(Samples samples);
         std::vector<int> extractKnownBeaconIndices(const Tinput& beacons) const;
         
         friend class GaussianProcessLDPLMultiModelTrainer<Tstate, Tinput>;
@@ -129,6 +128,11 @@ namespace loc{
         double mDTDelay = 1000; //ms
         double mDTDelayMargin = 200; //ms
         
+        // stdev smoothing
+        bool mStdSmooth = false;
+        double mGammaK = 0.0;
+        double mGammaLmd = 0.0;
+
     public:
         GaussianProcessLDPLMultiModel() = default;
         ~GaussianProcessLDPLMultiModel() = default;

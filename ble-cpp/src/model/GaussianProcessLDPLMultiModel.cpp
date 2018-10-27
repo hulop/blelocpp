@@ -414,11 +414,25 @@ namespace loc{
         mGP->fitCV(X, dY, Actives);
         
         // Estimate variance parameter (sigma_n) by using raw (=not averaged) data
-        mRssiStandardDeviations = computeRssiStandardDeviations(samples);
-        for(auto& ble: mBLEBeacons){
-            const auto& id = ble.id();
-            int index = mBeaconIdIndexMap.at(id);
-            std::cout << "stdev(" << ble.uuid() << "," << ble.major() << "," << ble.minor() << ") = " << mRssiStandardDeviations.at(index) <<std::endl;
+        auto rssiStandardDeviationsTemp = computeRssiStandardDeviations(samples);
+        std::vector<int> rssiCounts = std::get<0>(rssiStandardDeviationsTemp);
+        auto RssiStdevs = std::get<1>(rssiStandardDeviationsTemp);
+        auto RssiStdevGammas = std::get<2>(rssiStandardDeviationsTemp);
+        
+        if(!mStdSmooth){
+            mRssiStandardDeviations = RssiStdevs;
+            for(auto& ble: mBLEBeacons){
+                const auto& id = ble.id();
+                int index = mBeaconIdIndexMap.at(id); // id = 0,1,2,..,mBLEBeacons.size()-1
+                std::cout << "stdev(" << ble.uuid() << "," << ble.major() << "," << ble.minor() << ") = " << mRssiStandardDeviations.at(index) << "(n=" << rssiCounts.at(index) << ")" << std::endl;
+            }
+        }else{
+            mRssiStandardDeviations = RssiStdevGammas;
+            for(auto& ble: mBLEBeacons){
+                const auto& id = ble.id();
+                int index = mBeaconIdIndexMap.at(id); // id = 0,1,2,..,mBLEBeacons.size()-1
+                std::cout << "stdevMMSE(" << ble.uuid() << "," << ble.major() << "," << ble.minor() << ") = " << mRssiStandardDeviations.at(index) << "(n=" << rssiCounts.at(index) << "), stdev=" << RssiStdevs.at(index) << std::endl;
+            }
         }
         
         if(mStdevRssiForUnknownBeacon==0){
@@ -430,8 +444,8 @@ namespace loc{
     
     // compute standard deviation of RSSI for each ble beacon
     template<class Tstate, class Tinput>
-    std::vector<double> GaussianProcessLDPLMultiModel<Tstate, Tinput>::computeRssiStandardDeviations(Samples samples){
-        
+    std::tuple<std::vector<int>, std::vector<double>, std::vector<double>> GaussianProcessLDPLMultiModel<Tstate, Tinput>::computeRssiStandardDeviations(Samples samples){
+
         std::map<int, int> indexCount;
         std::map<int, double> indexRssiSum;
         for(auto iter=mBeaconIdIndexMap.begin(); iter!=mBeaconIdIndexMap.end(); iter++){
@@ -470,19 +484,24 @@ namespace loc{
             
         }
         
+        std::vector<int> counts;
         std::vector<double> stdevs;
+        std::vector<double> stdevGammas;
         for(auto& ble: mBLEBeacons){
             const auto& id = ble.id();
             int index = mBeaconIdIndexMap.at(id);
             double var = indexRssiSum[index] /(indexCount[index]);
+            double varGamma = (indexRssiSum[index] + 2.0*mGammaLmd)/(indexCount[index] + 2.0*mGammaK);
             if (isnan(var)) {
                 std::cerr << "Stdev is NaN for beacon(" << ble.id().toString() << ")" << std::endl;
             }
+            counts.push_back(indexCount[index]);
             double stdev = sqrt(var);
             stdevs.push_back(stdev);
+            stdevGammas.push_back(std::sqrt(varGamma));
         }
 
-        return stdevs;
+        return std::make_tuple(counts,stdevs,stdevGammas);
     }
     
     template<class Tstate, class Tinput>
