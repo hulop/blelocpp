@@ -117,8 +117,9 @@ namespace loc{
         std::vector<int> extractKnownBeaconIndices(const Tinput& beacons) const;
         
         friend class GaussianProcessLDPLMultiModelTrainer<Tstate, Tinput>;
-        int version = 3;
+        int version = 2;
 
+        const int MULTIUUID_SUPPORTED_MIN_VERSION = 3;
         const int BINARY_SUPPORTED_MIN_VERSION = 3;
         GPType gpType = GPNORMAL;
         MatType matType = DENSE;
@@ -172,6 +173,8 @@ namespace loc{
         void load(cereal::PortableBinaryInputArchive & oarchive, const std::string& name);
         
         bool applyLowestLogLikelihood = false;
+
+        void serializeVersionCheck();
     };
     
     

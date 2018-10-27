@@ -979,7 +979,14 @@ namespace loc{
             ar(cereal::make_nvp(name, *this));
         }
     }
-    
+
+    template<class Tstate, class Tinput>
+    void GaussianProcessLDPLMultiModel<Tstate, Tinput>::serializeVersionCheck(){
+        auto nUUID = BLEBeacon::countUUID(mBLEBeacons);
+        if(1<nUUID && version < MULTIUUID_SUPPORTED_MIN_VERSION){
+            version = MULTIUUID_SUPPORTED_MIN_VERSION;
+        }
+    }
     
     /**
      Implementation of GaussianProcessLDPLMultiModelTrainer

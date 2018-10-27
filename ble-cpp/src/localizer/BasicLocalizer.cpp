@@ -867,6 +867,7 @@ namespace loc{
             obsModelTrainer->setMatType(basicLocalizerOptions.matType);
             obsModelTrainer->dataStore(dataStore);
             std::shared_ptr<GaussianProcessLDPLMultiModel<State, Beacons>> obsModel(obsModelTrainer->train());
+            obsModel->serializeVersionCheck();
             
             std::ostringstream oss;
             obsModel->save(oss, binaryOutput);

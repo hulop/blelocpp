@@ -76,6 +76,9 @@ namespace loc{
         static Tout find(const Tin& beacon, const std::vector<Tout>& beacons);
         
         friend std::ostream& operator<<(std::ostream& os, const BLEBeacon& bleBeacon);
+
+        template<class Tbeacon>
+        static size_t countUUID(const std::vector<Tbeacon>& beacons);
     };
     
     
@@ -149,6 +152,15 @@ namespace loc{
             }
         }
         BOOST_THROW_EXCEPTION(LocException("input beacon was not found in beacon list."));
+    }
+
+    template<class Tbeacon>
+    size_t BLEBeacon::countUUID(const std::vector<Tbeacon>& beacons){
+        std::set<boost::uuids::uuid> uuidset;
+        for(const Tbeacon& b: beacons){
+            uuidset.insert(b.id().buuid());
+        }
+        return uuidset.size();
     }
 }
 
