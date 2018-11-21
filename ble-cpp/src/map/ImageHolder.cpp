@@ -291,7 +291,7 @@ namespace loc{
                         int g = vec[1];
                         int r = vec[2];
                         Color color(r,g,b);
-                        uint8_t code = colorToUint8BM(color);
+                        uint8_t code = colorToUint8(color);
                         if(code!=0){
                             tripletList.push_back(Triplet(y,x,code));
                         }
@@ -308,7 +308,7 @@ namespace loc{
         }
         ~ImplLight() = default;
         
-        /*
+        
         uint8_t colorToUint8(const Color& color) const{
             for(int i=0; i<colorList.size(); i++){
                 const Color& c = colorList.at(i);
@@ -326,8 +326,8 @@ namespace loc{
                 return colorList.at(0);
             }
         }
-        */
         
+        /*
         uint8_t colorToUint8BM(const Color& color) const{
             if(colorIntBM.left.count(color) != 0){
                 return colorIntBM.left.at(color);
@@ -343,7 +343,7 @@ namespace loc{
                 return colorIntBM.right.at(i);
             }
         }
-        
+        */
         
         int rows() const{
             return mat_.rows();
@@ -354,13 +354,13 @@ namespace loc{
         
         Color get(int y, int x) const{
             uint8_t code = mat_.coeff(y,x);
-            Color color = uint8ToColorBM(code);
+            Color color = uint8ToColor(code);
             return color;
         }
         
         std::vector<Point> getPoints(const Color& c) const{
             Points points;
-            uint8_t code_q = colorToUint8BM(c);
+            uint8_t code_q = colorToUint8(c);
             for(int k=0; k<mat_.outerSize(); k++){
                 auto iter = Eigen::SparseMatrix<uint8_t>::InnerIterator(mat_, k);
                 for(; iter; ++iter){
