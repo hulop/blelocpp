@@ -43,12 +43,14 @@ namespace loc{
     class BLEBeacon : public Location{
     protected:
         BeaconId id_;
+        double power_ = 0.0;
     public:
         
         BLEBeacon() = default;
         ~BLEBeacon() = default;
         
         BLEBeacon(const std::string& uuid, int major, int minor, double x, double y, double z, double floor);
+        BLEBeacon(const std::string& uuid, int major, int minor, double x, double y, double z, double floor, double power);
         
         const BeaconId& id() const;
         BLEBeacon& uuid(const std::string& uuid);
@@ -58,6 +60,8 @@ namespace loc{
         int major() const;
         int minor() const;
         std::string toString() const;
+        BLEBeacon& power(double power);
+        double power() const;
         
         template<class Archive> void serialize(Archive& ar);
         

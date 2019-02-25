@@ -50,6 +50,15 @@ namespace loc{
         this->id_ = BeaconId(uuid, major, minor);
     }
     
+    BLEBeacon::BLEBeacon(const std::string& uuid, int major, int minor, double x, double y, double z, double floor, double power){
+        this->x(x);
+        this->y(y);
+        this->z(z);
+        this->floor(floor);
+        this->id_ = BeaconId(uuid, major, minor);
+        this->power_ = power;
+    }
+    
     BLEBeacon& BLEBeacon::uuid(const std::string& uuid){
         id_ = BeaconId(uuid, id_.major(), id_.minor());
         return *this;
@@ -85,6 +94,15 @@ namespace loc{
         std::stringstream strstream;
         strstream << uuid()  << "," << major() << "," << minor() << "," << this->Location::toString();
         return strstream.str();
+    }
+    
+    BLEBeacon& BLEBeacon::power(double power){
+        power_ = power;
+        return *this;
+    }
+    
+    double BLEBeacon::power() const{
+        return power_;
     }
     
     std::ostream& operator<<(std::ostream& os, const BLEBeacon& bleBeacon){

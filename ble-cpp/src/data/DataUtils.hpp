@@ -42,6 +42,7 @@ namespace loc{
     public:
         static std::list<std::string> splitCSV(const std::string & str);
         static std::list<std::string> splitAndTrimCSV(const std::string & str);
+        template<class T> static std::vector<T> listToVector(const std::list<T>& listObject);
         
         static bool csvCheckSensorType(const std::string& str, const std::string& type);
         static bool csvCheckAcceleration(const std::string& str);
@@ -116,7 +117,6 @@ namespace loc{
         static picojson::object statusToJSONObject(Status status, bool optOutputStates);
         
         static picojson::array beaconsToJSONArray(const Beacons& beacons);
-        
     };
     
     // Implementation
@@ -127,6 +127,14 @@ namespace loc{
             ss << s << std::endl;
         }
         return ss.str();
+    }
+    
+    template<class T> std::vector<T> DataUtils::listToVector(const std::list<T>& listObject){
+        std::vector<T> vec;
+        for(auto iter=listObject.begin(); iter!=listObject.end(); iter++){
+            vec.push_back(*iter);
+        }
+        return vec;
     }
     
 }

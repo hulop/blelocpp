@@ -574,8 +574,12 @@ namespace loc{
         return ss.str();
     }
 
+    
+    
+    
+    
     BLEBeacon DataUtils::parseBLEBeaconCSV(const std::string& csvLine) throw(...){
-        // csv format of BLEBeacon
+        // minimum csv format of BLEBeacon
         // uuid, major, minor, x, y, z, floor
         std::list<std::string> stringList = splitAndTrimCSV(csvLine);
         std::list<std::string>::iterator iter;
@@ -598,16 +602,87 @@ namespace loc{
         
     }
     
-    BLEBeacons DataUtils::csvBLEBeaconsToBLEBeacons(std::istream& istream){
+    std::string DataUtils::BLEBeaconsToCSV(const BLEBeacons &bleBeacons){
+        // uuid,major,minor,x,y,z,floor,power
+        std::stringstream ss;
+        for(auto& b: bleBeacons){
+            ss << b.uuid() << "," << b.major() << "," << b.minor()
+            << "," << b.x() << "," << b.y() << "," << b.z() << "," << b.floor()
+            << "," << b.power();
+            ss << std::endl;
+        }
+        return ss.str();
+    }
+    
+    BLEBeacons csvBLEBeaconsToBLEBeaconsNoHeader(std::istream& istream){
         BLEBeacons bleBeacons;
         std::string strBuffer;
         while(std::getline(istream, strBuffer)){
             try{
-                BLEBeacon bleBeacon = parseBLEBeaconCSV(strBuffer);
+                BLEBeacon bleBeacon = DataUtils::parseBLEBeaconCSV(strBuffer);
                 bleBeacons.push_back(bleBeacon);
             }catch(std::invalid_argument e){
                 std::cout << "Invalid csv line was found. line=" <<strBuffer << std::endl;
                 //std::cout << "Header line is found in csv BLEBeacons." << std::endl;
+            }catch(std::out_of_range& e){
+                std::cout << "Invalid csv line was found. line=" <<strBuffer << std::endl;
+            }
+        }
+        if(bleBeacons.size()==0){
+            std::cout << "BLEBeacons CSV was not found." << std::endl;
+        }
+        return bleBeacons;
+    }
+    
+    BLEBeacons csvBLEBeaconsToBLEBeaconsWithHeader(std::istream& istream){
+        BLEBeacons bleBeacons;
+        std::string strBuffer;
+        std::vector<std::string> headerKeys;
+        
+        while(std::getline(istream, strBuffer)){
+            // check header
+            std::string headerMain = "uuid,major,minor,x,y,z,floor";
+            if(strBuffer.find(headerMain) == 0){
+                std::cout << "Header line is found. line=" <<strBuffer << std::endl;
+                std::list<std::string> stringList = DataUtils::splitAndTrimCSV(strBuffer);
+                std::vector<std::string> stringVector = DataUtils::listToVector(stringList);
+                headerKeys = stringVector;
+            }
+            
+            // read csv blebeacon
+            try{
+                std::list<std::string> stringList = DataUtils::splitAndTrimCSV(strBuffer);
+                std::vector<std::string> strVec = DataUtils::listToVector(stringList);
+                
+                std::string uuid = strVec.at(0);
+                int major = std::stoi(strVec.at(1));
+                int minor = std::stoi(strVec.at(2));
+                double x = std::stod(strVec.at(3));
+                double y = std::stod(strVec.at(4));
+                double z = std::stod(strVec.at(5));
+                double floor = std::stod(strVec.at(6));
+                BLEBeacon bleBeacon(uuid, major, minor, x, y, z, floor);
+                
+                // parse optional variables
+                if( 7 < headerKeys.size()){ // header exists
+                    for(int i = 7; i<headerKeys.size() ; i++){
+                        const auto& headerKey = headerKeys.at(i);
+                        if(headerKey == "power"){
+                            bleBeacon.power(std::stod(strVec.at(i)));
+                        }
+                    }
+                }else{
+                    // assumes the default header
+                    // "uuid,major,minor,x,y,z,floor,power"
+                    for(int i = 7; i<strVec.size(); i++){
+                        if(i==7){
+                            bleBeacon.power(std::stod(strVec.at(i)));
+                        }
+                    }
+                }
+                bleBeacons.push_back(bleBeacon);
+            }catch(std::invalid_argument e){
+                std::cout << "Invalid csv line was found. line=" <<strBuffer << std::endl;
             }catch(std::out_of_range& e){
                 std::cout << "Invalid csv line was found. line=" <<strBuffer << std::endl;
             }
@@ -620,16 +695,14 @@ namespace loc{
         return bleBeacons;
     }
     
-    std::string DataUtils::BLEBeaconsToCSV(const BLEBeacons &bleBeacons){
-        // UUID, major, minor, x,y,z,floor
-        std::stringstream ss;
-        for(auto& b: bleBeacons){
-            ss << b.uuid() << "," << b.major() << "," << b.minor()
-            << "," << b.x() << "," << b.y() << "," << b.z() << "," << b.floor();
-            ss << std::endl;
-        }
-        return ss.str();
+    BLEBeacons DataUtils::csvBLEBeaconsToBLEBeacons(std::istream& istream){
+        //return csvBLEBeaconsToBLEBeaconsNoHeader(istream);
+        return csvBLEBeaconsToBLEBeaconsWithHeader(istream);
     }
+    
+    
+    
+    
     
     Pose DataUtils::parseResetPoseCSV(const std::string& csvLine){
         
