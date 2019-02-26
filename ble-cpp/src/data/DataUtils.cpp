@@ -643,10 +643,11 @@ namespace loc{
             // check header
             std::string headerMain = "uuid,major,minor,x,y,z,floor";
             if(strBuffer.find(headerMain) == 0){
-                std::cout << "Header line is found. line=" <<strBuffer << std::endl;
+                std::cout << "Header line was found. line=" <<strBuffer << std::endl;
                 std::list<std::string> stringList = DataUtils::splitAndTrimCSV(strBuffer);
                 std::vector<std::string> stringVector = DataUtils::listToVector(stringList);
                 headerKeys = stringVector;
+                continue;
             }
             
             // read csv blebeacon

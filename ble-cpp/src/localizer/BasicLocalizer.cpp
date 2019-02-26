@@ -1088,6 +1088,9 @@ namespace loc{
         // Beacon filter
         auto registeredBeaconFilter = std::make_shared<RegisteredBeaconFilter>(bleBeacons);
         auto strongestBeaconFilter = std::make_shared<StrongestBeaconFilter>(nStrongest);
+        if(adjustsBeaconSort==1){
+            strongestBeaconFilter->bleBeacons(dataStore->getBLEBeacons());
+        }
         auto filterChain = std::make_shared<BeaconFilterChain>();
         filterChain->addFilter(registeredBeaconFilter).addFilter(strongestBeaconFilter);
         beaconFilter = filterChain;

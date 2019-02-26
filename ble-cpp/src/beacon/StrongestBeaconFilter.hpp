@@ -25,6 +25,7 @@
 
 #include <stdio.h>
 #include "BeaconFilter.hpp"
+#include "BLEBeacon.hpp"
 
 namespace loc{
     
@@ -32,6 +33,9 @@ namespace loc{
     private:
         double cutoffRssi_ = -100;
         int nStrongest_ = 10;
+        
+        bool adjustsPower_ = false;
+        std::map<BeaconId, double> idPowerMap_;
     public:
         StrongestBeaconFilter() = default;
         StrongestBeaconFilter(int nStrongest);
@@ -39,6 +43,8 @@ namespace loc{
         
         Beacons filter(const Beacons& beacons) const;
         StrongestBeaconFilter& nStrongest(int nStrongest);
+        StrongestBeaconFilter& bleBeacons(const BLEBeacons& bleBeacons);
+        StrongestBeaconFilter& adjustsPower(bool adjustsPower);
         StrongestBeaconFilter& cutoffRssi(double cutoffRssi);
     };
 }

@@ -207,6 +207,8 @@ namespace loc {
         // yaw drift adjuster
         bool applysYawDriftAdjust = false;
         
+        int adjustsBeaconSort = 0;
+        
     protected:
         double meanRssiBias_ = 0.0;
         double minRssiBias_ = -10;
@@ -303,6 +305,8 @@ namespace loc {
             if(1<=version){
                 OPTIONAL_NVP(ar,applysYawDriftAdjust);
             }
+            
+            OPTIONAL_NVP(ar, adjustsBeaconSort);
             
             try{
                 ar(CEREAL_NVP(tDelay));

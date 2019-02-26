@@ -23,13 +23,42 @@
 #include "StrongestBeaconFilter.hpp"
 
 namespace loc{
+        
+    class AdjustComparator{
+    private:
+        std::map<BeaconId, double> idPowerMap_;
+    public:
+        AdjustComparator(const std::map<BeaconId, double>& idPowerMap){
+            idPowerMap_ = idPowerMap;
+        }
+        
+        bool operator()(const Beacon& b1, const Beacon& b2){
+            double r1 = b1.rssi();
+            if(idPowerMap_.count(b1.id()) == 1){
+                r1 -= idPowerMap_[b1.id()];
+            }
+            double r2 = b2.rssi();
+            if(idPowerMap_.count(b2.id()) == 1){
+                r2 -= idPowerMap_[b2.id()];
+            }
+            return r1 < r2;
+        }
+    };
     
     StrongestBeaconFilter::StrongestBeaconFilter(int nStrongest){
         nStrongest_ = nStrongest;
     }
     
     Beacons StrongestBeaconFilter::filter(const Beacons& beacons) const{
-        Beacons beaconsSorted = Beacon::sortByRssi(beacons);
+        Beacons beaconsSorted;
+        
+        if(adjustsPower_){
+            beaconsSorted = Beacons(beacons);
+            std::sort(beaconsSorted.begin(), beaconsSorted.end(), AdjustComparator(idPowerMap_));
+        }else{
+            beaconsSorted = Beacon::sortByRssi(beacons);
+        }
+        
         Beacons beaconsFiltered(beaconsSorted);
         beaconsFiltered.clear();
         int n = static_cast<int>( beaconsSorted.size() );
@@ -46,6 +75,19 @@ namespace loc{
     
     StrongestBeaconFilter& StrongestBeaconFilter::nStrongest(int nStrongest){
         nStrongest_ = nStrongest;
+        return *this;
+    }
+    
+    StrongestBeaconFilter& StrongestBeaconFilter::bleBeacons(const BLEBeacons& bleBeacons){
+        for(const auto& ble : bleBeacons){
+            idPowerMap_[ble.id()] = ble.power();
+        }
+        this->adjustsPower(true);
+        return *this;
+    }
+    
+    StrongestBeaconFilter& StrongestBeaconFilter::adjustsPower(bool adjustsPower){
+        adjustsPower_ = adjustsPower;
         return *this;
     }
     
