@@ -669,15 +669,28 @@ namespace loc{
                     for(int i = 7; i<headerKeys.size() ; i++){
                         const auto& headerKey = headerKeys.at(i);
                         if(headerKey == "power"){
-                            bleBeacon.power(std::stod(strVec.at(i)));
+                            try{
+                                bleBeacon.power(std::stod(strVec.at(i)));
+                            }catch(const std::invalid_argument& e){
+                                std::cout << "invalid value for BLEBeacon power. value=" << strVec.at(i) << std::endl;
+                                bleBeacon.power(0.0);
+                            }catch(const std::out_of_range& e){
+                                std::cout << "out_of_range for BLEBeacon power. line=" << strBuffer << strBuffer << std::endl;
+                                bleBeacon.power(0.0);
+                            }
                         }
                     }
                 }else{
                     // assumes the default header
                     // "uuid,major,minor,x,y,z,floor,power"
                     for(int i = 7; i<strVec.size(); i++){
-                        if(i==7){
-                            bleBeacon.power(std::stod(strVec.at(i)));
+                        if(i==7){ // power
+                            try{
+                                bleBeacon.power(std::stod(strVec.at(i)));
+                            }catch(const std::invalid_argument& e){
+                                std::cout << "invalid value for BLEBeacon power. value=" << strVec.at(i) << std::endl;
+                                bleBeacon.power(0.0);
+                            }
                         }
                     }
                 }
