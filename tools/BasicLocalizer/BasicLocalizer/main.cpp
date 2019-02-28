@@ -65,6 +65,7 @@ typedef struct {
     bool verbose = false;
     BasicLocalizerOptions basicLocalizerOptions;
     int skipBeacon = 0;
+    long maxBeaconInterval = std::numeric_limits<long>::max();
 } Option;
 
 void printHelp() {
@@ -76,6 +77,7 @@ void printHelp() {
     std::cout << " --gptype <string>   set gptype [normal,light] for training" << std::endl;
     std::cout << " --mattype <string>  set matrix type [dense,sparse] for observation model" << std::endl;
     std::cout << " -t testfile         set test csv data file" << std::endl;
+    std::cout << " --maxInterval       set max timestamp interval between beacon inputs [ms] (default=inf)" << std::endl;
     std::cout << " -o output           set output file" << std::endl;
     std::cout << " -n                  use normal distribution" << std::endl;
     std::cout << " --minRssiBias       set minimum value of rssi bias" << std::endl;
@@ -120,6 +122,7 @@ Option parseArguments(int argc, char *argv[]){
         //{"stdY",            required_argument, NULL,  0 },
         {"gptype",   required_argument , NULL, 0},
         {"mattype",   required_argument , NULL, 0},
+        {"maxInterval",   required_argument , NULL, 0},
         {"finalize",   optional_argument , NULL, 0},
         {"binary",   optional_argument , NULL, 0},
         {"btarget",   required_argument , NULL, 0},
@@ -252,6 +255,9 @@ Option parseArguments(int argc, char *argv[]){
             }
             if (strcmp(long_options[option_index].name, "vl") == 0){
                 opt.longLog = true;
+            }
+            if (strcmp(long_options[option_index].name, "maxInterval") == 0){
+                opt.maxBeaconInterval = atoi(optarg);
             }
             break;
         case 'h':
@@ -577,14 +583,24 @@ int main(int argc, char * argv[]) {
                                 b.rssi( b.rssi() < 0 ? b.rssi() : -100);
                             }
                             
+                            // check timeout for beacon inputs and reset the localizer if required
+                            auto diffTimestamp = beacons.timestamp() - beaconsRecent.timestamp();
+                            if(0<beaconReceiveCount && diffTimestamp > opt.maxBeaconInterval){
+                                if(opt.verbose){
+                                    std::cout << "Localizer status was reset because diffTimestamp=" << diffTimestamp << " was larger than maxInterval=" << opt.maxBeaconInterval << "." <<  std::endl;
+                                }
+                                localizer.resetAllStatus();
+                            }
+                            
                             beaconReceiveCount++;
                             if(opt.skipBeacon<beaconReceiveCount){
-                                ud.recentBeacons = beacons;
+                                ud.recentBeacons = beacons; // ud.recentBeacons is used in the callback function.
                                 localizer.putBeacons(beacons);
-                                beaconsRecent = beacons;
                             }else{
                                 std::cout << "First "<< beaconReceiveCount << " beacon input was skipped." << std::endl;
                             }
+                            beaconsRecent = beacons; // beaconsRecent is used in this while loop.
+                            
                             // Compute likelihood at recent pose
                             //{
                             //    auto recentPose = ud.recentPose;
