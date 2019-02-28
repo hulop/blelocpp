@@ -33,6 +33,11 @@
 
 namespace loc{
     
+    enum KNLType{
+        KNLALL,
+        KNLCLUSTERED
+    };
+    
     class GaussianProcessLight : public GaussianProcess{
         
     private:
@@ -42,6 +47,8 @@ namespace loc{
         
         double sigmaN_ = 1.0;
         GaussianKernel gaussianKernel_;
+        KNLType knlType;
+        double overlapScale = 0.001;
         
     public:
         static const int N_FEATURES = 4;
@@ -55,7 +62,7 @@ namespace loc{
         };
         ClusteringType clType = KMEANS;
         bool usesOverlap = true;
-        int mLocalsMixed_ = 3;
+        int mLocalsMixed_ = 3; // designed value
         
         // A function for serealization
         template<class Archive>
@@ -91,6 +98,14 @@ namespace loc{
             return sigmaN_;
         }
         
+        void setKNLType(KNLType knl){
+            knlType = knl;
+        }
+        
+        void setOverlapScale(double os){
+            overlapScale = os;
+        }
+        
         //Calculate maximum cluster size based on max complexity of the function predict()
         static const size_t MAX_CLUSTER_SIZE(const size_t MAX_COMPLEXITY,
                                              const size_t MAX_N_OVERLAP,
@@ -121,10 +136,9 @@ namespace loc{
             cr.printSummary();
 
             if(usesOverlap){
-            //Improve the clusters
-            const double OVERLAP_SCALE = 0.001;
-            improveWithOverlap(cr, OVERLAP_SCALE, X, Y);
-            cr.printSummary();
+                //Improve the clusters
+                improveWithOverlap(cr, overlapScale, X, Y);
+                cr.printSummary();
             }
                 
             std::cout << "clustered into " << cr.nCluster() << " local models" << std::endl;
@@ -196,6 +210,15 @@ namespace loc{
          */
         void fitCV(const Eigen::MatrixXd& X, const Eigen::MatrixXd& Y, const Eigen::MatrixXd& Actives)
         {
+            if(knlType==KNLALL){
+                this->fitGlobalCV(X, Y, Actives);
+            }else if(knlType==KNLCLUSTERED){
+                this->fitFixedClusterCV(X, Y, Actives);
+            }
+        }
+        
+        void fitGlobalCV(const Eigen::MatrixXd& X, const Eigen::MatrixXd& Y, const Eigen::MatrixXd& Actives)
+        {
             GaussianProcess gp;
             gp.sigmaN(sigmaN_);
             gp.gaussianKernel(gaussianKernel_);
@@ -206,8 +229,66 @@ namespace loc{
             // set estimated parameters to this
             sigmaN_ = gp.sigmaN();
             gaussianKernel_ = gp.gaussianKernel();
-        
+            
             this->fit(X, Y);
+        }
+        
+        void fitFixedClusterCV(const Eigen::MatrixXd& X, const Eigen::MatrixXd& Y, const Eigen::MatrixXd& A)
+        {
+            // Set the kernel with hardcoded parameters (set large clusters)
+            GaussianKernel::Parameters gkParams;
+            gkParams.sigma_f = 2.0;   //1.0
+            gkParams.lengthes[0] = 7.0;  //3.0
+            gkParams.lengthes[1] = 7.0;
+            gkParams.lengthes[2] = 7.0;
+            gkParams.lengthes[3] = 0.01;
+            GaussianKernel gKernel(gkParams);
+            gaussianKernel_ = gKernel;
+            
+            // Change the number of mixed local models to reduce the computation time
+            mLocalsMixed_ = 1;
+            
+            //Clustering samples
+            const size_t TARGET_N_CLUSTER = 1 + (X.rows() / MAX_CLUSTER_SIZE(800, 3, 3));
+            CentroidBasedClusteringResult cr;
+            if(clType==GREEDY){
+                cr = clusteringGreedyWithMagicThreshold(X, Y, A, 1e-8);
+            }else if(clType==KMEANS){
+                cr = kMeansClustering(X, Y, A, TARGET_N_CLUSTER);
+            }
+            
+            cr.printSummary();
+            std::cout << "overlapScale " << overlapScale << std::endl;
+            
+            if(usesOverlap){
+                //Improve the clusters
+                improveWithOverlap(cr, overlapScale, X, Y, A);
+                cr.printSummary();
+            }
+            
+            std::cout << "clustered into " << cr.nCluster() << " local models" << std::endl;
+            
+            centers_ = cr.centers;
+            
+            // set parameters for clustered CV
+            GaussianProcessParameterSet gpParamSet;
+            //gpParamSet.sigmaFs = sigmaFsClustered;
+            //gpParamSet.lengthes = lengthesClustered;
+            //gpParamSet.lengthFloors = lengthFloorsClustered;
+            //gpParamSet.sigmaNs = sigmaNsClustered;
+            
+            //Get local models by cluster
+            for (auto k=0; k < cr.nCluster(); k++) {
+                GaussianProcess gp;
+                gp.setAsSparse(this->asSparse_);
+                gp.sigmaN(sigmaN_);
+                gp.gaussianKernel(gaussianKernel_);
+                gp.gaussianProcessParameterSet(gpParamSet);
+                
+                gp.fitCV(cr.XC[k], cr.YC[k], cr.AC[k]); // Estimate hyper parameters
+                
+                LGPs_.push_back(gp);
+            }
         }
         
 //        Eigen::VectorXd predictVarianceF(double x[]) const;
@@ -219,6 +300,7 @@ namespace loc{
         public:
             std::vector<Eigen::MatrixXd> XC;
             std::vector<Eigen::MatrixXd> YC;
+            std::vector<Eigen::MatrixXd> AC;
             std::vector<Eigen::VectorXd> centers = {};
             size_t nCluster() const { return centers.size(); }
             void printSummary() const;
@@ -233,16 +315,38 @@ namespace loc{
                                                        const size_t TARGET_N_CLUSTER) const;
         
         /**
+         * k-means++ clustering with Actives matrix
+         */
+        CentroidBasedClusteringResult kMeansClustering(const Eigen::MatrixXd& X,
+                                                       const Eigen::MatrixXd& Y,
+                                                       const Eigen::MatrixXd& A,
+                                                       const size_t TARGET_N_CLUSTER) const;
+        
+        /**
          * Greedy clustering 
          */
         CentroidBasedClusteringResult clusteringGreedyWithMagicThreshold(const Eigen::MatrixXd& X,
                                                                          const Eigen::MatrixXd& Y,
                                                                          const double MAGIC_W_THRESHOLD) const;
         
+        /**
+         * Greedy clustering with Actives matrix
+         */
+        CentroidBasedClusteringResult clusteringGreedyWithMagicThreshold(const Eigen::MatrixXd& X,
+                                                                         const Eigen::MatrixXd& Y,
+                                                                         const Eigen::MatrixXd& A,
+                                                                         const double MAGIC_W_THRESHOLD) const;
+        
         void improveWithOverlap(CentroidBasedClusteringResult& cr,
                                 const double OVERLAP_SCALE,
                                 const Eigen::MatrixXd& X,
                                 const Eigen::MatrixXd& Y) const;
+        
+        void improveWithOverlap(CentroidBasedClusteringResult& cr,
+                                const double OVERLAP_SCALE,
+                                const Eigen::MatrixXd& X,
+                                const Eigen::MatrixXd& Y,
+                                const Eigen::MatrixXd& A ) const;
         
     public:
         // TODO move to an appropriate util class

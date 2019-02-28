@@ -31,6 +31,7 @@
 #include "bleloc.h"
 #include "KernelFunction.hpp"
 #include "GaussianProcess.hpp"
+#include "GaussianProcessLight.hpp"
 #include "ObservationModel.hpp"
 #include "ObservationModelTrainer.hpp"
 
@@ -121,6 +122,8 @@ namespace loc{
         const int MULTIUUID_SUPPORTED_MIN_VERSION = 3;
         const int BINARY_SUPPORTED_MIN_VERSION = 3;
         GPType gpType = GPNORMAL;
+        KNLType knlType = KNLALL;
+        double overlapScale = 0.001;
         MatType matType = DENSE;
         
         //parameters for delayed prediction
@@ -208,6 +211,14 @@ namespace loc{
             gpType = gt;
         }
         
+        void setKNLType(KNLType knl){
+            knlType = knl;
+        }
+        
+        void setOverlapScale(double os){
+            overlapScale = os;
+        }
+        
         void setMatType(MatType mt){
             matType = mt;
         }
@@ -215,6 +226,8 @@ namespace loc{
     private:
         std::shared_ptr<DataStore> mDataStore;
         GPType gpType = GPNORMAL;
+        KNLType knlType = KNLALL;
+        double overlapScale = 0.001;
         MatType matType = DENSE;
     };
     

@@ -320,6 +320,8 @@ namespace loc {
     class BasicLocalizerOptions{
     public:
         GPType gpType = GPNORMAL;
+        KNLType knlType = KNLALL;
+        double overlapScale = 0.001;
         MatType matType = DENSE;
     };
     

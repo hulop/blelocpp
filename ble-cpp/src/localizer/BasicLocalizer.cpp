@@ -872,6 +872,8 @@ namespace loc{
             // Train observation model
             auto obsModelTrainer = std::make_shared<GaussianProcessLDPLMultiModelTrainer<State, Beacons>>();
             obsModelTrainer->setGPType(basicLocalizerOptions.gpType);
+            obsModelTrainer->setKNLType(basicLocalizerOptions.knlType);
+            obsModelTrainer->setOverlapScale(basicLocalizerOptions.overlapScale);
             obsModelTrainer->setMatType(basicLocalizerOptions.matType);
             obsModelTrainer->dataStore(dataStore);
             std::shared_ptr<GaussianProcessLDPLMultiModel<State, Beacons>> obsModel(obsModelTrainer->train());

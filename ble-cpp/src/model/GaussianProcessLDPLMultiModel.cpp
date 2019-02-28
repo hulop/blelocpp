@@ -25,8 +25,6 @@
 #include "SerializeUtils.hpp"
 #include "DataLogger.hpp"
 
-#include "GaussianProcessLight.hpp"
-
 //#include "ExtendedDataUtils.hpp"
 
 namespace loc{
@@ -335,8 +333,11 @@ namespace loc{
         
         if(gpType==GPNORMAL){
             mGP = std::make_shared<GaussianProcess>();
-        }else{
-            mGP = std::make_shared<GaussianProcessLight>();
+        }else if(gpType==GPLIGHT){
+            auto gpLight = std::make_shared<GaussianProcessLight>();
+            gpLight->setKNLType(knlType);
+            gpLight->setOverlapScale(overlapScale);
+            mGP = gpLight;
         }
         
         if(matType==DENSE){
@@ -1027,6 +1028,8 @@ namespace loc{
         GaussianProcessLDPLMultiModel<Tstate, Tinput>* obsModel = new GaussianProcessLDPLMultiModel<Tstate, Tinput>();
         
         obsModel->gpType = gpType;
+        obsModel->knlType = knlType;
+        obsModel->overlapScale = overlapScale;
         obsModel->matType = matType;
         
         obsModel->bleBeacons(bleBeacons);
