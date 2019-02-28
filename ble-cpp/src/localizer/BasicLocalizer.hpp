@@ -457,6 +457,8 @@ namespace loc {
         bool resetStatus(Pose meanPose, Pose stdevPose, double rateContami) override;
         bool resetStatus(const Beacons& beacons) override;
         bool resetStatus(const Location& location, const Beacons& beacons) override;
+        
+        bool resetAllStatus();
 
         BasicLocalizer& setModel(std::string modelPath, std::string workingDir);
         

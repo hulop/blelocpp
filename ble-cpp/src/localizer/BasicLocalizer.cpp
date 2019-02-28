@@ -341,9 +341,9 @@ namespace loc{
         
         
         auto statusLatest = mLocalizer->getStatus();
-        auto mResult = std::make_shared<Status>(); // local
+        auto currentStatus = std::make_shared<Status>(); // local
         if (smoothType == SMOOTH_LOCATION) {
-            *mResult = *statusLatest;
+            *currentStatus = *statusLatest;
             ////loc::Status *status = new loc::Status(*statusLatest);
             
             int nSmoothTmp;
@@ -381,24 +381,24 @@ namespace loc{
                 }
             }
             
-            mResult->states(states, Status::RESET);
-            mResult->locationStatus(mLocationStatus);
+            currentStatus->states(states, Status::RESET);
+            currentStatus->locationStatus(mLocationStatus);
             
-            updateLocationStatus(mResult.get());
-            if(mResult->locationStatus() == Status::STABLE){
+            updateLocationStatus(currentStatus.get());
+            if(currentStatus->locationStatus() == Status::STABLE){
                 isStatesConverged = true;
             }
         } else {
-            mResult.reset(statusLatest);
+            currentStatus.reset(statusLatest);
             BOOST_THROW_EXCEPTION(LocException("smoothType!=SMOOTH_LOCATION is not supported"));
         }
 
         if (mFunctionCalledAfterUpdate) {
-            mFunctionCalledAfterUpdate(mResult.get());
+            mFunctionCalledAfterUpdate(currentStatus.get());
         }
         
         if (mFunctionCalledAfterUpdate2 && mUserData) {
-            mFunctionCalledAfterUpdate2(mUserData, mResult.get());
+            mFunctionCalledAfterUpdate2(mUserData, currentStatus.get());
         }
         
         //if (isTrackingLocalizer() && smooth_count >= nSmooth && mState != TRACKING) {
@@ -407,13 +407,13 @@ namespace loc{
         }
         //if (isTrackingLocalizer() && isStatesConverged && mLocationStatus!=Status::STABLE) {
         if (isTrackingLocalizer() && isStatesConverged) {
-            Pose refPose = *mResult->meanPose();
-            std::vector<State> states = *mResult->states();
+            Pose refPose = *currentStatus->meanPose();
+            std::vector<State> states = *currentStatus->states();
             auto idx = Location::findClosestLocationIndex(refPose, states);
             Location locClosest = states.at(idx);
             refPose.copyLocation(locClosest);
 
-            auto std = loc::Location::standardDeviation(*mResult->states());
+            auto std = loc::Location::standardDeviation(*currentStatus->states());
             refPose.floor(roundf(refPose.floor()));
             loc::Pose stdevPose;
             double largeOridev = 10*M_PI;
@@ -558,6 +558,14 @@ namespace loc{
         mEstimatedRssiBias = meanBias / mLocalizer->getStatus()->states()->size();
 
         return ret;
+    }
+    
+    bool BasicLocalizer::resetAllStatus() {
+        mTrackedStatus.reset();
+        smooth_count = 0;
+        mLocationStatus = Status::UNKNOWN;
+        
+        return mLocalizer->resetStatus();
     }
     
     const bool has(const picojson::value::object &obj, std::string key) {
