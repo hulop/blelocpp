@@ -77,6 +77,7 @@ void printHelp() {
     std::cout << " --gptype <string>   set gptype [normal,light] for training" << std::endl;
     std::cout << " --knltype <string>  set knltype [all,clustered] for training" << std::endl;
     std::cout << " --overlapScale <double> set the overlap scale for gplight (default=0.001)" << std::endl;
+    std::cout << " --noPathLoss        train model without pathloss model" << std::endl;
     std::cout << " --mattype <string>  set matrix type [dense,sparse] for observation model" << std::endl;
     std::cout << " -t testfile         set test csv data file" << std::endl;
     std::cout << " --maxInterval       set max timestamp interval between beacon inputs [ms] (default=inf)" << std::endl;
@@ -126,6 +127,7 @@ Option parseArguments(int argc, char *argv[]){
         {"knltype",   required_argument , NULL, 0},
         {"overlapScale", required_argument , NULL, 0},
         {"mattype",   required_argument , NULL, 0},
+        {"noPathLoss",   no_argument , NULL, 0},
         {"maxInterval",   required_argument , NULL, 0},
         {"finalize",   optional_argument , NULL, 0},
         {"binary",   optional_argument , NULL, 0},
@@ -219,6 +221,9 @@ Option parseArguments(int argc, char *argv[]){
             }
             if (strcmp(long_options[option_index].name, "overlapScale") == 0){
                 opt.basicLocalizerOptions.overlapScale = atof(optarg);
+            }
+            if (strcmp(long_options[option_index].name, "noPathLoss") == 0){
+                opt.basicLocalizerOptions.noPathLoss = true;
             }
             if (strcmp(long_options[option_index].name, "mattype") == 0){
                 std::string str(optarg);

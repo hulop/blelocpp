@@ -875,6 +875,8 @@ namespace loc{
             obsModelTrainer->setKNLType(basicLocalizerOptions.knlType);
             obsModelTrainer->setOverlapScale(basicLocalizerOptions.overlapScale);
             obsModelTrainer->setMatType(basicLocalizerOptions.matType);
+            obsModelTrainer->setNoPathLoss(basicLocalizerOptions.noPathLoss);
+            
             obsModelTrainer->dataStore(dataStore);
             std::shared_ptr<GaussianProcessLDPLMultiModel<State, Beacons>> obsModel(obsModelTrainer->train());
             obsModel->serializeVersionCheck();

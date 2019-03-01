@@ -113,6 +113,7 @@ namespace loc{
         GaussianProcessLDPLMultiModel& bleBeacons(BLEBeacons bleBeacons);
         GaussianProcessLDPLMultiModel& train(Samples samples);
         std::vector<std::vector<double>> fitITUModel(Samples samples);
+        std::vector<std::vector<double>> setFixedITUModel();
         std::tuple<std::vector<int>, std::vector<double>, std::vector<double>> computeRssiStandardDeviations(Samples samples);
         std::vector<int> extractKnownBeaconIndices(const Tinput& beacons) const;
         
@@ -125,6 +126,7 @@ namespace loc{
         KNLType knlType = KNLALL;
         double overlapScale = 0.001;
         MatType matType = DENSE;
+        bool noPathLoss = false;
         
         //parameters for delayed prediction
         int mTDelay = 1;
@@ -223,12 +225,17 @@ namespace loc{
             matType = mt;
         }
         
+        void setNoPathLoss(bool npl){
+            noPathLoss = npl;
+        }
+        
     private:
         std::shared_ptr<DataStore> mDataStore;
         GPType gpType = GPNORMAL;
         KNLType knlType = KNLALL;
         double overlapScale = 0.001;
         MatType matType = DENSE;
+        bool noPathLoss = false;
     };
     
 }

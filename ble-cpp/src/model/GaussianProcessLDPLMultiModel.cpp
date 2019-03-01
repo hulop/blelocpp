@@ -327,6 +327,30 @@ namespace loc{
         return ITUParameters;
     }
     
+    template<class Tstate, class Tinput>
+    std::vector<std::vector<double>> GaussianProcessLDPLMultiModel<Tstate, Tinput>::setFixedITUModel(){
+        size_t m = mBeaconIdIndexMap.size();
+        static const int ndim = ITUModelFunction::ndim_;
+
+        // Set fixed values for ITU component.
+        std::vector<std::vector<double>> ITUParameters(m);
+        for(int i=0; i<m; i++){
+            std::vector<double> params(ndim, 0.0);
+            params[1] = -100.0; // A = - 100;
+            ITUParameters[i] = params;
+        }
+        
+        for(const auto & ble: mBLEBeacons){
+            int index = mBeaconIdIndexMap.at(ble.id());
+            std::cout << "parameters(" << ble.major() << "," << ble.minor() << ") =" ;
+            for(int j=0; j<ndim; j++){
+               std::cout << " " << ITUParameters[index][j];
+            }
+            std::cout << std::endl;
+        }
+        
+        return ITUParameters;
+    }
     
     template<class Tstate, class Tinput>
     GaussianProcessLDPLMultiModel<Tstate, Tinput>& GaussianProcessLDPLMultiModel<Tstate, Tinput>::train(Samples samples){
@@ -365,7 +389,11 @@ namespace loc{
         bool usesMinRssiObs = true;
         
         // FIT ITU model parameters
-        mITUParameters = fitITUModel(samples);
+        if(noPathLoss){
+            mITUParameters = setFixedITUModel();
+        }else{ // use path loss model
+            mITUParameters = fitITUModel(samples);
+        }
         
         for(int i=0; i<n; i++){
             Sample smp = samplesAveraged.at(i);
@@ -1031,6 +1059,7 @@ namespace loc{
         obsModel->knlType = knlType;
         obsModel->overlapScale = overlapScale;
         obsModel->matType = matType;
+        obsModel->noPathLoss = noPathLoss;
         
         obsModel->bleBeacons(bleBeacons);
         obsModel->train(samplesFiltered);

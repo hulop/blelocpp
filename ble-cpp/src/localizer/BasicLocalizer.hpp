@@ -323,6 +323,7 @@ namespace loc {
         KNLType knlType = KNLALL;
         double overlapScale = 0.001;
         MatType matType = DENSE;
+        bool noPathLoss = false;
     };
     
     class BasicLocalizer: public StreamLocalizer, public BasicLocalizerParameters{
