@@ -66,6 +66,8 @@ typedef struct {
     BasicLocalizerOptions basicLocalizerOptions;
     int skipBeacon = 0;
     long maxBeaconInterval = std::numeric_limits<long>::max();
+    int runMode = 0;
+    std::string outDir = "";
 } Option;
 
 void printHelp() {
@@ -107,6 +109,12 @@ void printHelp() {
 Option parseArguments(int argc, char *argv[]){
     Option opt;
     
+    if (strcmp(argv[1], "predict")==0){
+        opt.runMode = 1;
+    }else{
+        opt.runMode = 0;
+    }
+    
     int c = 0;
     int option_index = 0;
     struct option long_options[] = {
@@ -135,6 +143,7 @@ Option parseArguments(int argc, char *argv[]){
         {"wd",   required_argument , NULL, 0},
         {"skip",         required_argument , NULL, 0},
         {"vl",         required_argument , NULL, 0},
+        {"outDir",     required_argument , NULL, 0},
         {0,         0,                 0,  0 }
     };
 
@@ -279,6 +288,9 @@ Option parseArguments(int argc, char *argv[]){
             if (strcmp(long_options[option_index].name, "vl") == 0){
                 opt.longLog = true;
             }
+            if (strcmp(long_options[option_index].name, "outDir") == 0){
+                opt.outDir.assign(optarg);
+            }
             if (strcmp(long_options[option_index].name, "maxInterval") == 0){
                 opt.maxBeaconInterval = atoi(optarg);
             }
@@ -395,6 +407,238 @@ void functionCalledWhenUpdated(void *userData, loc::Status *pStatus){
     }
 }
 
+
+class Restarter{
+public:
+    int counter=0;
+    long tsStart;
+    long tsEnd;
+    std::shared_ptr<Location> markerLocStart;
+    std::shared_ptr<Location> markerLocEnd;
+    std::shared_ptr<Pose> repPoseStart;
+    std::shared_ptr<Pose> repPoseEnd;
+    States statesStart;
+    States statesEnd;
+    
+    void reset(){
+        markerLocStart.reset();
+        markerLocEnd.reset();
+        repPoseStart.reset();
+        repPoseEnd.reset();
+        counter=0;
+    }
+};
+
+
+int findRssiBias(Option& opt, MyData& ud, BasicLocalizer& localizer){
+    double step = (opt.maxRssiBias - opt.minRssiBias)/20;
+    for(double rssiBias = opt.minRssiBias; rssiBias < opt.maxRssiBias; rssiBias += step) {
+        localizer.meanRssiBias(rssiBias);
+        localizer.minRssiBias(rssiBias-step);
+        localizer.maxRssiBias(rssiBias+step);
+        ud.status_list.empty();
+        
+        if(!opt.testPath.empty()){
+            std::ifstream ifs(opt.testPath);
+            std::string str;
+            if (ifs.fail())
+            {
+                std::cerr << "test file is unable to read: " << opt.testPath << std::endl;
+                return -1;
+            }
+            while (getline(ifs, str))
+            {
+                try {
+                    std::list<std::string> stringList;
+                    std::string delim (" ");
+                    boost::split(stringList, str, boost::is_any_of(delim));
+                    
+                    for(auto iter = stringList.begin(); iter != stringList.end(); iter++) {
+                        if (iter->compare(0, 7, "Beacon,") == 0) {
+                            Beacons beacons = DataUtils::parseBeaconsCSV(*iter);
+                            localizer.putBeacons(beacons);
+                            break;
+                        }
+                    }
+                    
+                } catch (std::invalid_argument e){
+                    std::cerr << e.what() << std::endl;
+                }
+            }
+            for(loc::Status *st: ud.status_list) {
+                loc::Location stdev = loc::Location::standardDeviation(*st->states());
+                std::cout << rssiBias << "," << stdev << std::endl;
+            }
+        }else{
+            std::cout << "test file is not specified" << std::endl;
+        }
+    }
+    return 0;
+}
+
+BasicLocalizer resetBasicLocalizer(Option& opt, MyData& ud){
+    BasicLocalizer localizer;
+    
+    std::ifstream ifs;
+    if(opt.localizerJSONPath!=""){
+        ifs = std::ifstream(opt.localizerJSONPath);
+    }
+    if(ifs.is_open()){
+        std::cout << "localizerJSON=" << opt.localizerJSONPath << " is opened." << std::endl;
+        BasicLocalizerParameters localizerParams;
+        cereal::JSONInputArchive iarchive(ifs);
+        iarchive(localizerParams);
+        localizer = BasicLocalizer(localizerParams);
+    }else{
+        localizer.localizeMode = opt.localizeMode;
+        localizer.nSmooth = opt.nSmooth;
+        localizer.smoothType = opt.smoothType;
+        localizer.nStates = opt.nStates;
+        // Some parameters must be set before calling setModel function.
+        localizer.walkDetectSigmaThreshold = opt.walkDetectSigmaThreshold;
+        
+        localizer.meanRssiBias(opt.meanRssiBias);
+        localizer.minRssiBias(opt.minRssiBias);
+        localizer.maxRssiBias(opt.maxRssiBias);
+        
+        localizer.headingConfidenceForOrientationInit(0.5);
+    }
+    
+    localizer.isVerboseLocalizer = opt.verbose;
+    localizer.updateHandler(functionCalledWhenUpdated, &ud);
+    localizer.forceTraining = opt.forceTraining;
+    localizer.basicLocalizerOptions = opt.basicLocalizerOptions;
+    localizer.finalizeMapdata = opt.finalizeMapdata;
+    localizer.binaryOutput = opt.binaryOutput;
+    localizer.binaryFile = opt.binaryFile;
+    localizer.trainedFile = opt.trainedFile;
+    localizer.finalizedFile = opt.finalizedFile;
+    localizer.binarizeTargets = opt.binarizeTargets;
+    localizer.setModel(opt.mapPath, opt.workingDir);
+    localizer.normalFunction(opt.normFunc, opt.tDistNu); // set after calling setModel
+    ud.latLngConverter = localizer.latLngConverter();
+    
+    if(opt.outputLocalizerJSONPath!=""){
+        std::string strPath = opt.outputLocalizerJSONPath;
+        std::ofstream ofs(strPath);
+        if(ofs.is_open()){
+            cereal::JSONOutputArchive oarchive(ofs);
+            BasicLocalizerParameters localizerParams(localizer);
+            oarchive(localizerParams);
+        }
+    }
+    
+    return localizer;
+}
+
+int runPredict(Option& opt, MyData& ud, BasicLocalizer& localizer){
+    if(!opt.testPath.empty()){
+        std::ifstream ifs(opt.testPath);
+        std::string str;
+        if (ifs.fail())
+        {
+            std::cerr << "test file is unable to read: " << opt.testPath << std::endl;
+            return -1;
+        }
+        
+        auto obsModel = localizer.observationModel();
+        auto beaconFilter = localizer.beaconFilter; // apply the same becon filter
+        auto statusInitializer = localizer.statusInitializer;
+        
+        double radius2D = 30.0;
+        double floorDiffMax = 100.0;
+        
+        int beaconReceiveCount = 0;
+        while (getline(ifs, str))
+        {
+            try {
+                std::vector<std::string> v;
+                boost::split(v, str, boost::is_any_of(" "));
+                if(v.size() > 3){
+                    std::string logString = v.at(3);
+                    // Parsing beacons values
+                    if (logString.compare(0, 7, "Beacon,") == 0) {
+                        Beacons beacons = LogUtil::toBeacons(logString);
+                        for(auto& b: beacons){
+                            b.rssi( b.rssi() < 0 ? b.rssi() : -100);
+                        }
+                        beaconReceiveCount++;
+                        auto ts = beacons.timestamp();
+                        
+                        if(opt.skipBeacon!=0){
+                            if(beaconReceiveCount % opt.skipBeacon != 0){
+                                continue;
+                            }
+                        }
+                        
+                        auto beaconsTemp = beaconFilter->filter(beacons);
+                        auto closeLocations = statusInitializer->extractLocationsCloseToBeacons(beaconsTemp, radius2D, floorDiffMax);
+                        States evalStates;
+                        for(const auto& loc: closeLocations){
+                            evalStates.push_back(State(loc));
+                        }
+                        
+                        auto logLLs = obsModel->computeLogLikelihood(evalStates, beaconsTemp);
+                        
+                        std::map<BeaconId, std::vector<double>> idTologLL;
+                        for(const auto& b: beaconsTemp){
+                            Beacons bs;
+                            bs.timestamp(beaconsTemp.timestamp());
+                            bs.push_back(b);
+                            std::vector<double> logLL = obsModel->computeLogLikelihood(evalStates, bs);
+                            idTologLL[b.id()] = logLL;
+                        }
+                        
+                        std::cout << beacons.timestamp() << ",Beacons," << beaconsTemp.size() << std::endl;
+                        if(!opt.outDir.empty()){
+                            std::string outFilePath = opt.outDir + "/" + "logLikelihood_timestamp" + std::to_string(ts) + ".csv";
+                            std::ofstream ofs(outFilePath);
+                            if (ofs.fail()) {
+                                std::cerr << "output file is unable to write: " << outFilePath << std::endl;
+                                return -1;
+                            }
+                            
+                            // header
+                            // timestamp,x,y,floor,logLikelihood,n_beacons,beaconID0,beaconID1,...,beaconIDN
+                            ofs << "timestamp,x,y,floor,logLikelihood,n_beacons";
+                            for(const auto& b: beaconsTemp){
+                                if(b.id().buuid()==boost::uuids::nil_uuid()){
+                                    ofs << "," << b.id().major() << "-" << b.id().minor();;
+                                }else{
+                                    ofs << "," << b.id().toString();
+                                }
+                            }
+                            ofs << std::endl;
+                            
+                            // data
+                            // timestamp,x,y,floor,sum_logLikelihood,n_beacons,logLL_for_beaconID0,...,logLL_for_beaconIDN
+                            for(int i = 0; i<evalStates.size() ; i++){
+                                const auto& s = evalStates.at(i);
+                                const auto& logLL = logLLs.at(i);
+                                ofs << ts << "," << s.x() << "," << s.y() << "," << s.floor() << "," << logLL;
+                                ofs << "," << beaconsTemp.size() ;
+                                for(int j = 0; j < beaconsTemp.size() ; j++){
+                                    ofs << "," << idTologLL[beaconsTemp.at(j).id()].at(i) ;
+                                }
+                                ofs << std::endl;
+                            }
+                            ofs.close();
+                        }
+                    }
+                }
+            }catch (LocException& e){
+                std::cerr << boost::diagnostic_information(e) << std::endl;
+            }catch (std::invalid_argument e){
+                std::cerr << e.what() << std::endl;
+                std::cerr << "error in parse log file" << std::endl;
+            }
+        }
+    }else{
+        std::cout << "test file is not specified" << std::endl;
+    }
+    return 0;
+}
+
 int main(int argc, char * argv[]) {
     if (argc <= 1) {
         printHelp();
@@ -426,61 +670,6 @@ int main(int argc, char * argv[]) {
         opt.finalizedFile.assign(rawname+".finalized.json");
     }
 
-    auto resetBasicLocalizer = [](Option& opt, MyData& ud){
-        BasicLocalizer localizer;
-        
-        std::ifstream ifs;
-        if(opt.localizerJSONPath!=""){
-            ifs = std::ifstream(opt.localizerJSONPath);
-        }
-        if(ifs.is_open()){
-            std::cout << "localizerJSON=" << opt.localizerJSONPath << " is opened." << std::endl;
-            BasicLocalizerParameters localizerParams;
-            cereal::JSONInputArchive iarchive(ifs);
-            iarchive(localizerParams);
-            localizer = BasicLocalizer(localizerParams);
-        }else{
-            localizer.localizeMode = opt.localizeMode;
-            localizer.nSmooth = opt.nSmooth;
-            localizer.smoothType = opt.smoothType;
-            localizer.nStates = opt.nStates;
-            // Some parameters must be set before calling setModel function.
-            localizer.walkDetectSigmaThreshold = opt.walkDetectSigmaThreshold;
-            
-            localizer.meanRssiBias(opt.meanRssiBias);
-            localizer.minRssiBias(opt.minRssiBias);
-            localizer.maxRssiBias(opt.maxRssiBias);
-            
-            localizer.headingConfidenceForOrientationInit(0.5);
-        }
-        
-        localizer.isVerboseLocalizer = opt.verbose;
-        localizer.updateHandler(functionCalledWhenUpdated, &ud);
-        localizer.forceTraining = opt.forceTraining;
-        localizer.basicLocalizerOptions = opt.basicLocalizerOptions;
-        localizer.finalizeMapdata = opt.finalizeMapdata;
-        localizer.binaryOutput = opt.binaryOutput;
-        localizer.binaryFile = opt.binaryFile;
-        localizer.trainedFile = opt.trainedFile;
-        localizer.finalizedFile = opt.finalizedFile;
-        localizer.binarizeTargets = opt.binarizeTargets;
-        localizer.setModel(opt.mapPath, opt.workingDir);
-        localizer.normalFunction(opt.normFunc, opt.tDistNu); // set after calling setModel
-        ud.latLngConverter = localizer.latLngConverter();
-        
-        if(opt.outputLocalizerJSONPath!=""){
-            std::string strPath = opt.outputLocalizerJSONPath;
-            std::ofstream ofs(strPath);
-            if(ofs.is_open()){
-                cereal::JSONOutputArchive oarchive(ofs);
-                BasicLocalizerParameters localizerParams(localizer);
-                oarchive(localizerParams);
-            }
-        }
-        
-        return localizer;
-    };
-    
     BasicLocalizer localizer;
     try{
         localizer = resetBasicLocalizer(opt, ud);
@@ -494,57 +683,23 @@ int main(int argc, char * argv[]) {
         std::cerr << boost::diagnostic_information(e) << std::endl;
         return -1;
     }
-    // Parameter for reset log play
-    double dx_reset = 1.0;
-    double dy_reset = 1.0;
-    double std_ori_reset = 10;
     
     if (opt.findRssiBias) {
-        double step = (opt.maxRssiBias - opt.minRssiBias)/20;
-        for(double rssiBias = opt.minRssiBias; rssiBias < opt.maxRssiBias; rssiBias += step) {
-            localizer.meanRssiBias(rssiBias);
-            localizer.minRssiBias(rssiBias-step);
-            localizer.maxRssiBias(rssiBias+step);
-            ud.status_list.empty();
-            
-            if(!opt.testPath.empty()){
-                std::ifstream ifs(opt.testPath);
-                std::string str;
-                if (ifs.fail())
-                {
-                    std::cerr << "test file is unable to read: " << opt.testPath << std::endl;
-                    return -1;
-                }
-                while (getline(ifs, str))
-                {
-                    try {
-                        std::list<std::string> stringList;
-                        std::string delim (" ");
-                        boost::split(stringList, str, boost::is_any_of(delim));
-                        
-                        for(auto iter = stringList.begin(); iter != stringList.end(); iter++) {
-                            if (iter->compare(0, 6, "Beacon") == 0) {
-                                Beacons beacons = DataUtils::parseBeaconsCSV(*iter);
-                                localizer.putBeacons(beacons);
-                                break;
-                            }
-                        }
-                        
-                    } catch (std::invalid_argument e){
-                        std::cerr << e.what() << std::endl;
-                    }
-                }
-                
-                for(loc::Status *st: ud.status_list) {
-                    loc::Location stdev = loc::Location::standardDeviation(*st->states());
-                    std::cout << rssiBias << "," << stdev << std::endl;
-                }
-            }else{
-                std::cout << "test file is not specified" << std::endl;
-            }
+        int ret = findRssiBias(opt, ud, localizer);
+        if(ret!=0){
+            return ret;
         }
-        
+    } else if (opt.runMode==1){
+        int ret = runPredict(opt, ud, localizer);
+        if(ret!=0){
+            return ret;
+        }
     } else {
+        // Parameter for reset log play
+        double dx_reset = 1.0;
+        double dy_reset = 1.0;
+        double std_ori_reset = 10;
+        
         // Sequential Log Replay
         if(!opt.testPath.empty()){
             std::ifstream ifs(opt.testPath);
@@ -566,27 +721,7 @@ int main(int argc, char * argv[]) {
                 }
             }
             
-            class Restarter{
-            public:
-                int counter=0;
-                long tsStart;
-                long tsEnd;
-                std::shared_ptr<Location> markerLocStart;
-                std::shared_ptr<Location> markerLocEnd;
-                std::shared_ptr<Pose> repPoseStart;
-                std::shared_ptr<Pose> repPoseEnd;
-                States statesStart;
-                States statesEnd;
-                
-                void reset(){
-                    markerLocStart.reset();
-                    markerLocEnd.reset();
-                    repPoseStart.reset();
-                    repPoseEnd.reset();
-                    counter=0;
-                }
-            } restarter;
-            
+            Restarter restarter;
             Beacons beaconsRecent;
             std::vector<double> errorsAtMarkers;
             
@@ -865,6 +1000,5 @@ int main(int argc, char * argv[]) {
             std::cout << "test file is not specified" << std::endl;
         }
     }
-    
     return 0;
 }
