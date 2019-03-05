@@ -312,13 +312,12 @@ namespace loc{
     }
     
     
-    Locations StatusInitializerImpl::extractLocationsCloseToBeacons(const std::vector<Beacon> &beacons, double radius2D) const{
+    Locations StatusInitializerImpl::extractLocationsCloseToBeacons(const std::vector<Beacon> &beacons, double radius2D, double floorDiff) const{
         
         auto& uniqueLocations = mDataStore->getLocations();
         auto& bleBeacons = mDataStore->getBLEBeacons();
         
         const auto& idToIndexMap = BLEBeacon::constructBeaconIdToIndexMap(bleBeacons);
-        std::vector<Location> selectedLocations;
         
         std::vector<BLEBeacon> observedBLEBeacons;
         for(auto& b: beacons){
@@ -328,15 +327,21 @@ namespace loc{
             }
         }
         
+        std::set<Location> locationsSet;
         for(auto& loc: uniqueLocations){
             for(auto& bloc: observedBLEBeacons){
                 double dist = Location::distance2D(loc, bloc);
                 double floorDiff = Location::floorDifference(loc, bloc);
-                if(dist <= radius2D && floorDiff==0){
-                    selectedLocations.push_back(loc);
+                if(dist <= radius2D && floorDiff <= floorDiff){
+                    locationsSet.insert(loc);
                     continue;
                 }
             }
+        }
+        
+        std::vector<Location> selectedLocations;
+        for(const auto& loc : locationsSet){
+            selectedLocations.push_back(loc);
         }
         
         return selectedLocations;

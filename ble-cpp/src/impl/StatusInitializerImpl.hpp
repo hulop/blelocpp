@@ -85,7 +85,7 @@ namespace loc{
         States resetStates(int n, const std::vector<Beacon>& beacons);
         
         States initializeStatesFromLocations(const std::vector<Location>& locations);
-        Locations extractLocationsCloseToBeacons(const std::vector<Beacon>& beacons, double radius2D) const;
+        Locations extractLocationsCloseToBeacons(const std::vector<Beacon>& beacons, double radius2D, double floorDiff = 0.0) const;
         Locations generateLocationsCloseToBeaconsWithPerturbation(const std::vector<Beacon> &beacons, double radius2D);
     };
     
