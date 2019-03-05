@@ -106,7 +106,7 @@ namespace loc{
         bool mFillsUnknownBeaconRssi = false;
         double mStdevRssiForUnknownBeacon = 0.0;
         double computeNormalStandardDeviation(std::vector<double> standardDeviations);
-        double mCoeffDiffFloorStdev = 5.0;
+        double mCoeffDiffFloorStdev = 1.0;
         
         // Private function to train the model
         //GaussianProcessLDPLMultiModel& kernelFunction(std::shared_ptr<KernelFunction> kernel);

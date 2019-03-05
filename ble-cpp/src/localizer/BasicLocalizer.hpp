@@ -191,8 +191,8 @@ namespace loc {
         bool usesAltimeterForFloorTransCheck = false;
         
         // for observation model
-        double coeffDiffFloorStdev = 5.0;
-        int tDelay = -1; // 
+        double coeffDiffFloorStdev = 1.0;
+        int tDelay = -1; // negative value will not be set to the observation model
         
         OrientationMeterType orientationMeterType = RAW_AVERAGE;
 
