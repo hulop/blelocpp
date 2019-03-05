@@ -532,6 +532,44 @@ BasicLocalizer resetBasicLocalizer(Option& opt, MyData& ud){
 }
 
 int runPredict(Option& opt, MyData& ud, BasicLocalizer& localizer){
+    if (opt.outputPath.length() > 0) {
+        std::ofstream ofs(opt.outputPath);
+        if (ofs.fail()) {
+            std::cerr << "output file is unable to write: " << opt.outputPath << std::endl;
+            return -1;
+        }
+        
+        auto obsModel = localizer.observationModel();
+        auto dataStore = localizer.dataStore;
+        auto locs = dataStore->getLocations();
+        auto bleBeacons = dataStore->getBLEBeacons();
+        
+        Beacons beacons;
+        for(const auto& ble : bleBeacons){
+            double rssi = -70;
+            Beacon b(ble.id(), rssi);
+            beacons.push_back(b);
+        }
+        
+        // header
+        ofs << "x,y,z,floor,uuid,major,minor,mean,std" << std::endl;
+        // data
+        for(const auto& loc: locs){
+            State s(loc);
+            auto idPredMap = obsModel->predict(s, beacons);
+            for(auto iter=idPredMap.begin() ; iter!=idPredMap.end(); iter++){
+                auto bid = iter->first;
+                auto res = iter->second;
+                if(-100 < res.mean()){
+                    ofs << s.x() << "," << s.y() << "," << s.z() << "," << s.floor()
+                    << "," << bid.uuid() << "," << bid.major() << "," << bid.minor()
+                    << "," << res.mean() << "," << res.stdev() << std::endl;
+                }
+            }
+        }
+        ofs.close();
+    }
+    
     if(!opt.testPath.empty()){
         std::ifstream ifs(opt.testPath);
         std::string str;
