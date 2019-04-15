@@ -225,7 +225,7 @@
 		FB6ADB431E2DE3A7009943C0 /* TransformedOrientationMeterAverage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB6ADB411E2DE3A7009943C0 /* TransformedOrientationMeterAverage.cpp */; };
 		FB6ADB441E2DE3A7009943C0 /* TransformedOrientationMeterAverage.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FB6ADB421E2DE3A7009943C0 /* TransformedOrientationMeterAverage.hpp */; };
 		FB6ADB561E2F5CCD009943C0 /* GaussianProcessLight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB6ADB541E2F5CCD009943C0 /* GaussianProcessLight.cpp */; };
-		FB6ADB571E2F5CCD009943C0 /* GaussianProcessLight.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FB6ADB551E2F5CCD009943C0 /* GaussianProcessLight.hpp */; };
+		FB6ADB571E2F5CCD009943C0 /* GaussianProcessLight.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FB6ADB551E2F5CCD009943C0 /* GaussianProcessLight.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		FB71CE4F1C46889F00A4DB67 /* MathUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB71CE4E1C46889F00A4DB67 /* MathUtils.cpp */; };
 		FB71CE561C475B4600A4DB67 /* BeaconFilterChain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB71CE541C475B4600A4DB67 /* BeaconFilterChain.cpp */; };
 		FB71CE571C475B4600A4DB67 /* BeaconFilterChain.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FB71CE551C475B4600A4DB67 /* BeaconFilterChain.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -813,7 +813,6 @@
 				7E6F25491C0F1D76007A97A1 /* Attitude.hpp in Headers */,
 				7E6F25F91C0F1D79007A97A1 /* ArrayUtils.hpp in Headers */,
 				7E6F25A31C0F1D77007A97A1 /* StreamParticleFilter.hpp in Headers */,
-				FB6ADB571E2F5CCD009943C0 /* GaussianProcessLight.hpp in Headers */,
 				7E6F25B51C0F1D77007A97A1 /* GaussianProcess.hpp in Headers */,
 				7E6F25871C0F1D76007A97A1 /* DataUtils.hpp in Headers */,
 				7E6F25A71C0F1D77007A97A1 /* Building.hpp in Headers */,
@@ -852,6 +851,7 @@
 				FBE5831A1DF9BF1B00057DB5 /* AltitudeManager.hpp in Headers */,
 				FBE5831C1DF9BF1B00057DB5 /* AltitudeManagerSimple.hpp in Headers */,
 				FB315CE51F53DF4A00681EAB /* OrientationAdjuster.hpp in Headers */,
+				FB6ADB571E2F5CCD009943C0 /* GaussianProcessLight.hpp in Headers */,
 				7E92393E1D54764000875766 /* LatLngUtil.hpp in Headers */,
 				FBE583191DF9BF1B00057DB5 /* Altimeter.hpp in Headers */,
 				7EDEDC121D1CCCD800AC111A /* BasicLocalizer.hpp in Headers */,

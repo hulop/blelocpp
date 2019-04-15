@@ -393,6 +393,8 @@ namespace loc{
             ar(cereal::make_nvp("name_", name_));
             ar(cereal::make_nvp("mat_", mat_));
             //loadColorMat(ar);
+            
+            this->setUpIndices();
         }
         
         class BinarySparseMatrix{
