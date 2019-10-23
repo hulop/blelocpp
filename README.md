@@ -15,6 +15,9 @@ A BLE beacon-based localization library. This library is used as an iOS framewor
 - $pip install mercurial
 - Install CocoaPods
 
+### Install cmake (version 3.15.2)
+- $brew instal cmake
+
 ### Build bleloc Framework
 - $git clone https://github.com/hulop/blelocpp.git
 - $cd blelocpp/platform/ios
