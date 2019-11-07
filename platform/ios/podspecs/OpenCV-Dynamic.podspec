@@ -41,5 +41,6 @@ OpenCV: open source computer vision library
     s.prepare_command = <<-CMD
         /usr/bin/python ./platforms/ios/build_framework.py ios --dynamic
         cp -a ./ios/opencv2.framework ./opencv2.framework
+        install_name_tool -id "@rpath/opencv2.framework/opencv2" ./opencv2.framework/opencv2
     CMD
 end

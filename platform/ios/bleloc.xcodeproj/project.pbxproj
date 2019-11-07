@@ -981,6 +981,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 			);
 			mainGroup = 7E8A88771C071C2F00C32E70;
@@ -1184,6 +1185,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = NO;
 			};
 			name = Debug;
 		};
@@ -1191,6 +1193,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = NO;
 			};
 			name = Release;
 		};
@@ -1237,6 +1240,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "$(inherited)";
 				SDKROOT = iphoneos;
+				SUPPORTS_MACCATALYST = NO;
 				VALID_ARCHS = "arm64 x86_64";
 			};
 			name = Debug;
@@ -1282,6 +1286,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "$(inherited)";
 				SDKROOT = iphoneos;
+				SUPPORTS_MACCATALYST = NO;
 				VALIDATE_PRODUCT = YES;
 				VALID_ARCHS = "arm64 x86_64";
 			};
@@ -1305,6 +1310,7 @@
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
 				VALID_ARCHS = "$(inherited)";
 			};
 			name = Debug;
@@ -1326,6 +1332,7 @@
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
 				VALID_ARCHS = "$(inherited)";
 			};
 			name = Release;
