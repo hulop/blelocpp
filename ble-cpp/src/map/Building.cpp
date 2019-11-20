@@ -56,6 +56,9 @@ namespace loc{
         if( maxFloor() < floor_num){
             BOOST_THROW_EXCEPTION(LocException("maxFloor < floor_num"));
         }
+        if(floors.count(floor_num) == 0){
+            BOOST_THROW_EXCEPTION(LocException("floor="+std::to_string(floor_num)+" was not found in floors."));
+        }
         return floors.at(floor_num);
     }
     
@@ -169,8 +172,7 @@ namespace loc{
     }
 
     bool Building::isValidFloor(int floor){
-        if(minFloor()<=floor
-           && floor<=maxFloor()){
+        if(floors.count(floor) != 0){
             return true;
         }else{
             return false;
