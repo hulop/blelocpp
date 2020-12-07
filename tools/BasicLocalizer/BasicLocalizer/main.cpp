@@ -362,7 +362,7 @@ void functionCalledWhenUpdated(void *userData, loc::Status *pStatus){
         std::stringstream ssBeacons;
         ssBeacons << nBeacons << "," << nStrong;
         for(const auto& b: bs){
-            ssBeacons << "," << b.major() << "," << b.minor() << "," << b.rssi();
+            ssBeacons << "," << b.majorId() << "," << b.minorId() << "," << b.rssi();
         }
         auto strBeacons = ssBeacons.str();
         
@@ -562,7 +562,7 @@ int runPredict(Option& opt, MyData& ud, BasicLocalizer& localizer){
                 auto res = iter->second;
                 if(-100 < res.mean()){
                     ofs << s.x() << "," << s.y() << "," << s.z() << "," << s.floor()
-                    << "," << bid.uuid() << "," << bid.major() << "," << bid.minor()
+                    << "," << bid.uuid() << "," << bid.majorId() << "," << bid.minorId()
                     << "," << res.mean() << "," << res.stdev() << std::endl;
                 }
             }
@@ -641,7 +641,7 @@ int runPredict(Option& opt, MyData& ud, BasicLocalizer& localizer){
                             ofs << "timestamp,x,y,floor,logLikelihood,n_beacons";
                             for(const auto& b: beaconsTemp){
                                 if(b.id().buuid()==boost::uuids::nil_uuid()){
-                                    ofs << "," << b.id().major() << "-" << b.id().minor();;
+                                    ofs << "," << b.id().majorId() << "-" << b.id().minorId();;
                                 }else{
                                     ofs << "," << b.id().toString();
                                 }
@@ -962,7 +962,7 @@ int main(int argc, char * argv[]) {
                                 for(auto& b : beaconsRecent){
                                     if(b.rssi() > -100){
                                         auto pred = predictions.at(b.id());
-                                        std::cout << "(" << b.minor() << "," << b.rssi()  << "," << pred.mean() << "),";
+                                        std::cout << "(" << b.minorId() << "," << b.rssi()  << "," << pred.mean() << "),";
                                     }
                                 }
                                 std::cout << std::endl;

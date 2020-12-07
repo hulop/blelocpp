@@ -34,43 +34,43 @@ namespace loc{
         ar(CEREAL_NVP(floor_));
         
         std::string uuid = id_.uuid();
-        int major = id_.major();
-        int minor = id_.minor();
+        int majorId = id_.majorId();
+        int minorId = id_.minorId();
         ar(cereal::make_nvp("uuid_", uuid));
-        ar(cereal::make_nvp("major_", major));
-        ar(cereal::make_nvp("minor_", minor));
-        id_ = BeaconId(uuid, major, minor);
+        ar(cereal::make_nvp("major_", majorId));
+        ar(cereal::make_nvp("minor_", minorId));
+        id_ = BeaconId(uuid, majorId, minorId);
     }
     
-    BLEBeacon::BLEBeacon(const std::string& uuid, int major, int minor, double x, double y, double z, double floor){
+    BLEBeacon::BLEBeacon(const std::string& uuid, int majorId, int minorId, double x, double y, double z, double floor){
         this->x(x);
         this->y(y);
         this->z(z);
         this->floor(floor);
-        this->id_ = BeaconId(uuid, major, minor);
+        this->id_ = BeaconId(uuid, majorId, minorId);
     }
     
-    BLEBeacon::BLEBeacon(const std::string& uuid, int major, int minor, double x, double y, double z, double floor, double power){
+    BLEBeacon::BLEBeacon(const std::string& uuid, int majorId, int minorId, double x, double y, double z, double floor, double power){
         this->x(x);
         this->y(y);
         this->z(z);
         this->floor(floor);
-        this->id_ = BeaconId(uuid, major, minor);
+        this->id_ = BeaconId(uuid, majorId, minorId);
         this->power_ = power;
     }
     
     BLEBeacon& BLEBeacon::uuid(const std::string& uuid){
-        id_ = BeaconId(uuid, id_.major(), id_.minor());
+        id_ = BeaconId(uuid, id_.majorId(), id_.minorId());
         return *this;
     }
     
-    BLEBeacon& BLEBeacon::major(int major){
-        id_ = BeaconId(id_.uuid(), major, id_.minor());
+    BLEBeacon& BLEBeacon::majorId(int majorId){
+        id_ = BeaconId(id_.uuid(), majorId, id_.minorId());
         return *this;
     }
     
-    BLEBeacon& BLEBeacon::minor(int minor){
-        id_ = BeaconId(id_.uuid(), id_.major(), minor);
+    BLEBeacon& BLEBeacon::minorId(int minorId){
+        id_ = BeaconId(id_.uuid(), id_.majorId(), minorId);
         return *this;
     }
     
@@ -78,12 +78,12 @@ namespace loc{
         return id_.uuid();
     }
     
-    int BLEBeacon::major() const{
-        return id_.major();
+    int BLEBeacon::majorId() const{
+        return id_.majorId();
     }
     
-    int BLEBeacon::minor() const{
-        return id_.minor();
+    int BLEBeacon::minorId() const{
+        return id_.minorId();
     }
     
     const BeaconId& BLEBeacon::id() const{
@@ -92,7 +92,7 @@ namespace loc{
     
     std::string BLEBeacon::toString() const{
         std::stringstream strstream;
-        strstream << uuid()  << "," << major() << "," << minor() << "," << this->Location::toString();
+        strstream << uuid()  << "," << majorId() << "," << minorId() << "," << this->Location::toString();
         return strstream.str();
     }
     

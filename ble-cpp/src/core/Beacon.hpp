@@ -53,8 +53,8 @@ namespace loc{
         
         const std::string& uuid() const;
         const boost::uuids::uuid& buuid() const;
-        int major() const;
-        int minor() const;
+        int majorId() const;
+        int minorId() const;
         
         bool operator==(const BeaconId& id) const;
         bool operator<(const BeaconId& id) const;
@@ -84,15 +84,15 @@ namespace loc{
         ~Beacon();
         
         const std::string& uuid() const;
-        int major() const;
-        int minor() const;
+        int majorId() const;
+        int minorId() const;
         double rssi() const;
         
         const BeaconId& id() const;
         
         Beacon& uuid(const std::string& uuid);
-        Beacon& major(int major);
-        Beacon& minor(int minor);
+        Beacon& majorId(int major);
+        Beacon& minorId(int minor);
         Beacon& rssi(double rssi);
        
         std::string toString();

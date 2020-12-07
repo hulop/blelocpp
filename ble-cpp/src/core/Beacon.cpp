@@ -36,14 +36,14 @@ namespace loc{
         rssi_ = rssi;
     }
     
-    Beacon::Beacon(int major, int minor, double rssi){
+    Beacon::Beacon(int majorId, int minorId, double rssi){
         std::string uuid = "";
-        id_ = BeaconId(uuid, major, minor);
+        id_ = BeaconId(uuid, majorId, minorId);
         rssi_ = rssi;
     }
     
-    Beacon::Beacon(const std::string& uuid, int major, int minor, double rssi){
-        id_ = BeaconId(uuid, major, minor);
+    Beacon::Beacon(const std::string& uuid, int majorId, int minorId, double rssi){
+        id_ = BeaconId(uuid, majorId, minorId);
         rssi_ = rssi;
     }
     
@@ -54,25 +54,25 @@ namespace loc{
     }
 
     Beacon& Beacon::uuid(const std::string& uuid){
-        id_ = BeaconId(uuid, id_.major(), id_.minor());
+        id_ = BeaconId(uuid, id_.majorId(), id_.minorId());
         return *this;
     }
 
-    int Beacon::major() const{
-        return id_.major();
+    int Beacon::majorId() const{
+        return id_.majorId();
     }
     
-    Beacon& Beacon::major(int major){
-        id_ = BeaconId(id_.uuid(), major, id_.minor());
+    Beacon& Beacon::majorId(int majorId){
+        id_ = BeaconId(id_.uuid(), majorId, id_.minorId());
         return *this;
     }
     
-    int Beacon::minor() const{
-        return id_.minor();
+    int Beacon::minorId() const{
+        return id_.minorId();
     }
     
-    Beacon& Beacon::minor(int minor){
-        id_ = BeaconId(id_.uuid(), id_.major(), minor);
+    Beacon& Beacon::minorId(int minorId){
+        id_ = BeaconId(id_.uuid(), id_.majorId(), minorId);
         return *this;
     }
     
@@ -156,7 +156,7 @@ namespace loc{
     }
     
     std::ostream& operator<<(std::ostream&os, const Beacon& beacon){
-        os << beacon.major() <<"," << beacon.minor() <<"," << beacon.rssi();
+        os << beacon.majorId() <<"," << beacon.minorId() <<"," << beacon.rssi();
         return os;
     }
     
@@ -182,10 +182,10 @@ namespace loc{
     
     // Beacon Id class
     
-    BeaconId::BeaconId(const std::string& uuid, int major, int minor){
+    BeaconId::BeaconId(const std::string& uuid, int majorId, int minorId){
         uuid_ = uuid;
-        major_ = major;
-        minor_ = minor;
+        major_ = majorId;
+        minor_ = minorId;
         setuuid(uuid);
     }
     
@@ -219,11 +219,11 @@ namespace loc{
         return buuid_;
     }
     
-    int BeaconId::major() const{
+    int BeaconId::majorId() const{
         return major_;
     }
     
-    int BeaconId::minor() const{
+    int BeaconId::minorId() const{
         return minor_;
     }
     
@@ -257,21 +257,21 @@ namespace loc{
     
     const std::string BeaconId::toString() const{
         std::stringstream ss;
-        ss << uuid() << "-" << major() << "-" << minor();
+        ss << uuid() << "-" << majorId() << "-" << minorId();
         return ss.str();
     }
     
     BeaconId BeaconId::convertLongIdToId(long long_id){
-        int major = convertIdToMajor(long_id);
-        int minor = convertIdToMinor(long_id);
+        int majorId = convertIdToMajor(long_id);
+        int minorId = convertIdToMinor(long_id);
         BeaconId id;
-        id.major_ = major;
-        id.minor_ = minor;
+        id.major_ = majorId;
+        id.minor_ = minorId;
         return id;
     }
     
     long BeaconId::convertToLongId(const BeaconId& id){
-        return Impl::large_value * id.major() + id.minor();
+        return Impl::large_value * id.majorId() + id.minorId();
     }
     
     // Encoding rule
@@ -289,14 +289,14 @@ namespace loc{
     
     int BeaconId::convertIdToMajor(long id){
         long large_value = Impl::large_value;
-        int major = static_cast<int>(id/large_value);
-        return major;
+        int majorId = static_cast<int>(id/large_value);
+        return majorId;
     }
     
     int BeaconId::convertIdToMinor(long id){
         long large_value = Impl::large_value;
-        int minor = static_cast<int>(id%large_value);
-        return minor;
+        int minorId = static_cast<int>(id%large_value);
+        return minorId;
     }
     
     

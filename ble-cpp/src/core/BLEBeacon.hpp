@@ -54,11 +54,11 @@ namespace loc{
         
         const BeaconId& id() const;
         BLEBeacon& uuid(const std::string& uuid);
-        BLEBeacon& major(int major);
-        BLEBeacon& minor(int minor);
+        BLEBeacon& majorId(int majorId);
+        BLEBeacon& minorId(int minorId);
         const std::string& uuid() const;
-        int major() const;
-        int minor() const;
+        int majorId() const;
+        int minorId() const;
         std::string toString() const;
         BLEBeacon& power(double power);
         double power() const;
@@ -97,7 +97,7 @@ namespace loc{
         for(Tbeacon b: beacons){
             const auto& id = b.id();
             if(ids.count(id)>0){
-                ss << "BLEBeacon(" << b.uuid() << "=" << b.major() <<"-" << b.minor() << ") is duplicated" << std::endl ;
+                ss << "BLEBeacon(" << b.uuid() << "=" << b.majorId() <<"-" << b.minorId() << ") is duplicated" << std::endl ;
                 flag = false;
                 count += 1;
             }

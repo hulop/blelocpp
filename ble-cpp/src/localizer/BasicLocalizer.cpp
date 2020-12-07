@@ -197,8 +197,8 @@ namespace loc{
         for(auto itr = allBeacons.begin(); itr != allBeacons.end(); ++itr) {
             const auto& id = itr->first;
             const auto& uuid = id.uuid();
-            auto major = id.major();
-            auto minor = id.minor();
+            auto majorId = id.majorId();
+            auto minorId = id.minorId();
             auto& bs = itr->second;
             int c = 0;
             double rssi = 0;
@@ -206,7 +206,7 @@ namespace loc{
                 rssi += b.rssi();
                 c++;
             }
-            beaconsAveraged.insert(beaconsAveraged.end(), loc::Beacon(uuid, major, minor, rssi/c));
+            beaconsAveraged.insert(beaconsAveraged.end(), loc::Beacon(uuid, majorId, minorId, rssi/c));
         }
         return beaconsAveraged;
     }

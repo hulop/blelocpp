@@ -309,7 +309,7 @@ namespace loc{
             //std::cout << "parameters = " << paramsMatrix << std::endl;
             for(auto & ble: mBLEBeacons){
                 int index = mBeaconIdIndexMap.at(ble.id());
-                std::cout << "parameters(" << ble.major() << "," << ble.minor() << ") = " <<paramsMatrix.row(index) << std::endl;
+                std::cout << "parameters(" << ble.majorId() << "," << ble.minorId() << ") = " <<paramsMatrix.row(index) << std::endl;
             }
             
             // Update ITUParameters by optimized parameters
@@ -342,7 +342,7 @@ namespace loc{
         
         for(const auto & ble: mBLEBeacons){
             int index = mBeaconIdIndexMap.at(ble.id());
-            std::cout << "parameters(" << ble.major() << "," << ble.minor() << ") =" ;
+            std::cout << "parameters(" << ble.majorId() << "," << ble.minorId() << ") =" ;
             for(int j=0; j<ndim; j++){
                std::cout << " " << ITUParameters[index][j];
             }
@@ -453,14 +453,14 @@ namespace loc{
             for(auto& ble: mBLEBeacons){
                 const auto& id = ble.id();
                 int index = mBeaconIdIndexMap.at(id); // id = 0,1,2,..,mBLEBeacons.size()-1
-                std::cout << "stdev(" << ble.uuid() << "," << ble.major() << "," << ble.minor() << ") = " << mRssiStandardDeviations.at(index) << "(n=" << rssiCounts.at(index) << ")" << std::endl;
+                std::cout << "stdev(" << ble.uuid() << "," << ble.majorId() << "," << ble.minorId() << ") = " << mRssiStandardDeviations.at(index) << "(n=" << rssiCounts.at(index) << ")" << std::endl;
             }
         }else{
             mRssiStandardDeviations = RssiStdevGammas;
             for(auto& ble: mBLEBeacons){
                 const auto& id = ble.id();
                 int index = mBeaconIdIndexMap.at(id); // id = 0,1,2,..,mBLEBeacons.size()-1
-                std::cout << "stdevMMSE(" << ble.uuid() << "," << ble.major() << "," << ble.minor() << ") = " << mRssiStandardDeviations.at(index) << "(n=" << rssiCounts.at(index) << "), stdev=" << RssiStdevs.at(index) << std::endl;
+                std::cout << "stdevMMSE(" << ble.uuid() << "," << ble.majorId() << "," << ble.minorId() << ") = " << mRssiStandardDeviations.at(index) << "(n=" << rssiCounts.at(index) << "), stdev=" << RssiStdevs.at(index) << std::endl;
             }
         }
         

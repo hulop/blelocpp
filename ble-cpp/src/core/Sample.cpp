@@ -170,7 +170,7 @@ namespace loc{
             std::stringstream ss1;
             ss1 << "Registered beacons(major,minor) = ";
             for(const BLEBeacon& ble: bleBeacons){
-                ss1 << "(" << ble.major() << "," << ble.minor() <<"),";
+                ss1 << "(" << ble.majorId() << "," << ble.minorId() <<"),";
             }
             BOOST_THROW_EXCEPTION(LocException("No sample contains beacon signals from the registered beacons"));
         }

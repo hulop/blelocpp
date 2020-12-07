@@ -185,9 +185,9 @@ namespace loc{
         }
         uuid += tokens[n-3];
         
-        int major = stoi(tokens.at(n-2));
-        int minor = stoi(tokens.at(n-1));
-        return BeaconId(uuid, major, minor);
+        int majorId = stoi(tokens.at(n-2));
+        int minorId = stoi(tokens.at(n-1));
+        return BeaconId(uuid, majorId, minorId);
     }
     
     Beacons DataUtils::parseLogBeaconsCSV(const std::string& str){
@@ -203,8 +203,8 @@ namespace loc{
         beacons.timestamp(timestamp);
         int nBeacons = 0;
         std::string uuid;
-        int major=0;
-        int minor=0;
+        int majorId=0;
+        int minorId=0;
         double rssi = -100;
         
         for( iter= stringList.begin(); iter!=stringList.end(); iter++){
@@ -222,23 +222,23 @@ namespace loc{
                             std::string idStr = *iter;
                             auto bId = parseBeaconIdString(idStr);
                             uuid = bId.uuid();
-                            major = bId.major();
-                            minor = bId.minor();
+                            majorId = bId.majorId();
+                            minorId = bId.minorId();
                         }
                         if(i%2==1){
                             rssi = std::stod(*iter);
-                            Beacon b(uuid, major, minor, rssi);
+                            Beacon b(uuid, majorId, minorId, rssi);
                             beacons.push_back(b);
                         }
                     }
                 }else if(stringList.size() == 3*nBeacons + 3) {
                     // "Beacon",nBeacon,major,minor,rssi,....,timestamp
                     if(i>1 && i-2 < 3*nBeacons){
-                        if(i%3==2) major = std::stoi(*iter);
-                        if(i%3==0) minor = std::stoi(*iter);
+                        if(i%3==2) majorId = std::stoi(*iter);
+                        if(i%3==0) minorId = std::stoi(*iter);
                         if(i%3==1){
                             rssi = std::stod(*iter);
-                            Beacon b(major, minor, rssi);
+                            Beacon b(majorId, minorId, rssi);
                             beacons.push_back(b);
                         }
                     }
@@ -411,7 +411,7 @@ namespace loc{
         sample.location(location)->timestamp(timestamp);
         
         if (!noBeacons) {
-            int major, minor;
+            int majorId, minorId;
             double rssi;
             Beacons beacons;
             beacons.timestamp(timestamp);
@@ -431,9 +431,9 @@ namespace loc{
                 }
             }else if(csvTokens.size() == 3*num ){ // "major,minor,rssi" format
                 for(int i = 0; i < num; i++) {
-                    sscanf(buffer, "%d,%d,%lf,%n", &major, &minor, &rssi, &n);
+                    sscanf(buffer, "%d,%d,%lf,%n", &majorId, &minorId, &rssi, &n);
                     buffer += n;
-                    beacons.push_back(Beacon(major, minor, rssi));
+                    beacons.push_back(Beacon(majorId, minorId, rssi));
                 }
             }else{
                 throw std::invalid_argument("Invalid csv line was found.");
@@ -511,14 +511,14 @@ namespace loc{
         buffer += n;
         Location location(x,y,z,floor);
         
-        int major, minor;
+        int majorId, minorId;
         double rssi;
         Beacons beacons;
         beacons.timestamp(timestamp);
         for(int i = 0; i < num; i++) {
-            sscanf(buffer, "%d,%d,%lf,%n", &major, &minor, &rssi, &n);
+            sscanf(buffer, "%d,%d,%lf,%n", &majorId, &minorId, &rssi, &n);
             buffer += n;
-            beacons.push_back(Beacon(major, minor, rssi));
+            beacons.push_back(Beacon(majorId, minorId, rssi));
         }
         
         Sample sample;
@@ -589,15 +589,15 @@ namespace loc{
         }
         
         std::string uuid = stringVector.at(0);
-        int major = std::stoi(stringVector.at(1));
-        int minor = std::stoi(stringVector.at(2));
+        int majorId = std::stoi(stringVector.at(1));
+        int minorId = std::stoi(stringVector.at(2));
         
         double x = std::stod(stringVector.at(3));
         double y = std::stod(stringVector.at(4));
         double z = std::stod(stringVector.at(5));
         double floor = std::stod(stringVector.at(6));
         
-        BLEBeacon bleBeacon(uuid, major, minor, x, y, z, floor);
+        BLEBeacon bleBeacon(uuid, majorId, minorId, x, y, z, floor);
         return bleBeacon;
         
     }
@@ -606,7 +606,7 @@ namespace loc{
         // uuid,major,minor,x,y,z,floor,power
         std::stringstream ss;
         for(auto& b: bleBeacons){
-            ss << b.uuid() << "," << b.major() << "," << b.minor()
+            ss << b.uuid() << "," << b.majorId() << "," << b.minorId()
             << "," << b.x() << "," << b.y() << "," << b.z() << "," << b.floor()
             << "," << b.power();
             ss << std::endl;
@@ -656,13 +656,13 @@ namespace loc{
                 std::vector<std::string> strVec = DataUtils::listToVector(stringList);
                 
                 std::string uuid = strVec.at(0);
-                int major = std::stoi(strVec.at(1));
-                int minor = std::stoi(strVec.at(2));
+                int majorId = std::stoi(strVec.at(1));
+                int minorId = std::stoi(strVec.at(2));
                 double x = std::stod(strVec.at(3));
                 double y = std::stod(strVec.at(4));
                 double z = std::stod(strVec.at(5));
                 double floor = std::stod(strVec.at(6));
-                BLEBeacon bleBeacon(uuid, major, minor, x, y, z, floor);
+                BLEBeacon bleBeacon(uuid, majorId, minorId, x, y, z, floor);
                 
                 // parse optional variables
                 if( 7 < headerKeys.size()){ // header exists
@@ -813,8 +813,8 @@ namespace loc{
         picojson::array array;
         for(const Beacon& b: beacons){
             picojson::object obj;
-            obj.insert(std::make_pair("major", picojson::value((double)b.major())));
-            obj.insert(std::make_pair("minor", picojson::value((double)b.minor())));
+            obj.insert(std::make_pair("major", picojson::value((double)b.majorId())));
+            obj.insert(std::make_pair("minor", picojson::value((double)b.minorId())));
             obj.insert(std::make_pair("rssi", picojson::value(b.rssi())));
             array.emplace_back(obj);
         }

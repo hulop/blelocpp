@@ -41,8 +41,8 @@ namespace loc{
                 picojson::object obj;
                 const auto& id = it->first;
                 const auto& uuid = id.uuid();
-                auto maj = id.major();
-                auto min = id.minor();
+                auto maj = id.majorId();
+                auto min = id.minorId();
                 double pred = it->second.mean();
                 double stdev = it->second.stdev();
                 obj.insert(std::make_pair("uuid", picojson::value(uuid)));

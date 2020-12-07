@@ -36,7 +36,7 @@ string LogUtil::toString(const Beacons& beacons, const std::uint32_t version) {
         std::ostream os (&buffer);
         os << "Beacon," << beacons.size() << ",";
         for(const Beacon&b: beacons) {
-            os << b.major() << "," << b.minor() << "," << b.rssi() << ",";
+            os << b.majorId() << "," << b.minorId() << "," << b.rssi() << ",";
         }
         os << beacons.timestamp();
         return buffer.str();
@@ -45,7 +45,7 @@ string LogUtil::toString(const Beacons& beacons, const std::uint32_t version) {
         std::ostream os (&buffer);
         os << "Beacon," << beacons.size() << ",";
         for(const Beacon&b: beacons) {
-            os << b.uuid() << "-" << b.major() << "-" << b.minor() << "," << b.rssi() << ",";
+            os << b.uuid() << "-" << b.majorId() << "-" << b.minorId() << "," << b.rssi() << ",";
         }
         os << beacons.timestamp();
         return buffer.str();
