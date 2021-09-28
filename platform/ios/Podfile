@@ -1,17 +1,18 @@
 project 'bleloc'
 
 target 'bleloc' do
-  platform :ios, '8.4'
-  pod 'OpenCV-Dynamic', :podspec => './podspecs/OpenCV-Dynamic.podspec'
+  use_frameworks!
+  platform :ios, '9.0'
+  pod 'OpenCV', :podspec => './podspecs/OpenCV.podspec'
   pod 'boost', :podspec => './podspecs/boost.podspec.json'
-  pod 'eigen', '3.2.5'
+  pod 'eigen', :podspec => './podspecs/eigen.podspec.json'
   pod 'picojson', :podspec => './podspecs/picojson.podspec'
   pod 'cereal', :podspec => './podspecs/cereal.podspec'
 end
 target 'blelocjni' do
   platform :osx
   pod 'boost', :podspec => './podspecs/boost.podspec.json'
-  pod 'eigen', '3.2.5'
+  pod 'eigen', :podspec => './podspecs/eigen.podspec.json'
   pod 'picojson', :podspec => './podspecs/picojson.podspec'
   pod 'cereal', :podspec => './podspecs/cereal.podspec'
 end
