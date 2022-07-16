@@ -1,18 +1,19 @@
 xcodeproj 'BasicLocalizer'
 
 target 'BasicLocalizer' do
-  platform :osx
+  platform :osx, '10.10'
+  pod 'OpenCV', :podspec => '../../platform/ios/podspecs/OpenCV.podspec'
   pod 'boost', :podspec => '../../platform/ios/podspecs/boost.podspec.json'
-  pod 'eigen', '3.2.5'
+  pod 'eigen', :podspec => '../../platform/ios/podspecs/eigen.podspec.json'
   pod 'picojson', :podspec => '../../platform/ios/podspecs/picojson.podspec'
   pod 'cereal', :podspec => '../../platform/ios/podspecs/cereal.podspec'
 end
 
 
 target 'BasicLocalizerTest' do
-  platform :osx
+  platform :osx, '10.10'
   pod 'boost', :podspec => '../../platform/ios/podspecs/boost.podspec.json'
-  pod 'eigen', '3.2.5'
+  pod 'eigen', :podspec => '../../platform/ios/podspecs/eigen.podspec.json'
   pod 'picojson', :podspec => '../../platform/ios/podspecs/picojson.podspec'
   pod 'cereal', :podspec => '../../platform/ios/podspecs/cereal.podspec'
 end

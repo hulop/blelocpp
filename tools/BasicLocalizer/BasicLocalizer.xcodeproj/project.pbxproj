@@ -76,13 +76,20 @@
 		FBEB01F01D7588F200CB808D /* RandomWalkerMotion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBEB01EB1D7588F200CB808D /* RandomWalkerMotion.cpp */; };
 		FBEB01F11D7588F200CB808D /* SystemModelInBuilding.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBEB01ED1D7588F200CB808D /* SystemModelInBuilding.cpp */; };
 		FBEB01F21D7588F200CB808D /* SystemModelInBuilding.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBEB01ED1D7588F200CB808D /* SystemModelInBuilding.cpp */; };
-		FBF93E441FB19D0600815833 /* libopencv_core.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FBF93E3F1FB19D0600815833 /* libopencv_core.dylib */; };
-		FBF93E491FB1A5F200815833 /* libopencv_flann.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FBF93E421FB19D0600815833 /* libopencv_flann.dylib */; };
-		FBF93E4A1FB1A5FC00815833 /* libopencv_imgcodecs.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FBF93E401FB19D0600815833 /* libopencv_imgcodecs.dylib */; };
 		FBFF263120D7965200DD3645 /* RegisteredBeaconFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBFF262F20D7965200DD3645 /* RegisteredBeaconFilter.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		3041599E28834DA900D4CABA /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		7E12B4421D3473D100614DBB /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -226,9 +233,6 @@
 		FBEB01EC1D7588F200CB808D /* RandomWalkerMotion.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = RandomWalkerMotion.hpp; sourceTree = "<group>"; };
 		FBEB01ED1D7588F200CB808D /* SystemModelInBuilding.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SystemModelInBuilding.cpp; sourceTree = "<group>"; };
 		FBEB01EE1D7588F200CB808D /* SystemModelInBuilding.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SystemModelInBuilding.hpp; sourceTree = "<group>"; };
-		FBF93E3F1FB19D0600815833 /* libopencv_core.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_core.dylib; path = /usr/local/opt/opencv/lib/libopencv_core.dylib; sourceTree = "<group>"; };
-		FBF93E401FB19D0600815833 /* libopencv_imgcodecs.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_imgcodecs.dylib; path = /usr/local/opt/opencv/lib/libopencv_imgcodecs.dylib; sourceTree = "<group>"; };
-		FBF93E421FB19D0600815833 /* libopencv_flann.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_flann.dylib; path = /usr/local/opt/opencv/lib/libopencv_flann.dylib; sourceTree = "<group>"; };
 		FBFF262F20D7965200DD3645 /* RegisteredBeaconFilter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RegisteredBeaconFilter.cpp; sourceTree = "<group>"; };
 		FBFF263020D7965200DD3645 /* RegisteredBeaconFilter.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = RegisteredBeaconFilter.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -239,9 +243,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				916257440C884FB7A77F40E3 /* libPods-BasicLocalizer.a in Frameworks */,
-				FBF93E441FB19D0600815833 /* libopencv_core.dylib in Frameworks */,
-				FBF93E4A1FB1A5FC00815833 /* libopencv_imgcodecs.dylib in Frameworks */,
-				FBF93E491FB1A5F200815833 /* libopencv_flann.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -259,9 +260,6 @@
 		15143BD69BDE75B4BEBF884C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				FBF93E3F1FB19D0600815833 /* libopencv_core.dylib */,
-				FBF93E421FB19D0600815833 /* libopencv_flann.dylib */,
-				FBF93E401FB19D0600815833 /* libopencv_imgcodecs.dylib */,
 				C74F6AB1A8EEE2133B72A321 /* libPods-BasicLocalizer.a */,
 				4F67493B6BCE17ED3C1E9133 /* libPods-BasicLocalizerTest.a */,
 			);
@@ -565,6 +563,7 @@
 				7E12B4411D3473D100614DBB /* Frameworks */,
 				7E12B4421D3473D100614DBB /* CopyFiles */,
 				FB0CDF721E51637C0014E104 /* ShellScript */,
+				3041599E28834DA900D4CABA /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -615,6 +614,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 			);
 			mainGroup = 7E12B43B1D3473D000614DBB;
@@ -879,9 +879,9 @@
 					"\"${PODS_ROOT}/Headers/Public/cereal\"",
 					"\"${PODS_ROOT}/Headers/Public/eigen\"",
 					"\"${PODS_ROOT}/Headers/Public/picojson\"",
-					"\"/usr/local/Cellar/opencv/\"/**",
 				);
-				LIBRARY_SEARCH_PATHS = "/usr/local/Cellar/opencv/**";
+				LIBRARY_SEARCH_PATHS = "$(SDKROOT)/usr/lib/swift";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -900,9 +900,9 @@
 					"\"${PODS_ROOT}/Headers/Public/cereal\"",
 					"\"${PODS_ROOT}/Headers/Public/eigen\"",
 					"\"${PODS_ROOT}/Headers/Public/picojson\"",
-					"\"/usr/local/Cellar/opencv/\"/**",
 				);
-				LIBRARY_SEARCH_PATHS = "/usr/local/Cellar/opencv/**";
+				LIBRARY_SEARCH_PATHS = "$(SDKROOT)/usr/lib/swift";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
