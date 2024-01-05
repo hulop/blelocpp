@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2016  IBM Corporation and others
+ * Copyright (c) 2014, 2015  IBM Corporation and others
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,46 +20,36 @@
  * THE SOFTWARE.
  *******************************************************************************/
 
-#ifndef LatLngUtil_hpp
-#define LatLngUtil_hpp
+#ifdef ANDROID_STL_EXT
+#ifndef string_ext_hpp
+#define string_ext_hpp
 
-#include <stdio.h>
-#include <cmath>
-#include <limits>
+#include <string>
+#include <sstream>
 
-namespace loc {
-    
-    typedef struct {
-        double x = 0;
-        double y = 0;
-    } Point2D;
-    
-    typedef struct {
-        double lat = 0;
-        double lng = 0;
-    } LatLng;
-    
-    typedef struct {
-        LatLng latlng;
-        double rotate = 0; //Degree
-        double magneticDeclination = std::numeric_limits<double>::quiet_NaN();
-    } Anchor;
+namespace std {
 
-    class LatLngUtil {
-    private:
-        template <typename P>
-        bool non_precise_ct();
-        template <typename P, typename Spheroid>
-        static Point2D transform(LatLng latlng, Anchor anchor, Spheroid spheroid);
-        
-        template <typename P, typename Spheroid>
-        static LatLng transform(LatLng latlng, double dist, double angle, Spheroid spheroid);
-        
-    public:
-        static LatLng localToGlobal(const Point2D p, const Anchor anchor);
-        static Point2D globalToLocal(const LatLng latlng, const Anchor anchor);
-    };
-    
+    std::string to_string(const int& n);
+    std::string to_string(const long& n);
+    std::string to_string(const size_t& n);
+
+    int stoi(const std::string &str, std::size_t *idx = 0, int base = 10);
+
+    long stol(const std::string &str, std::size_t *idx = 0, int base = 10);
+
+    unsigned long stoul(const std::string &str, std::size_t *idx = 0, int base = 10);
+
+    long long stoll(const std::string &str, std::size_t *idx = 0, int base = 10);
+
+    unsigned long long stoull(const std::string &str, std::size_t *idx = 0, int base = 10);
+
+    float stof(const std::string &str, std::size_t *idx = 0);
+
+    double stod(const std::string &str, std::size_t *idx = 0);
+
+    long double stold(const std::string &str, std::size_t *idx = 0);
+
 }
 
-#endif /* LatLngUtil_hpp */
+#endif /* string_ext_hpp */
+#endif /* ANDROID_STL_EXT */
