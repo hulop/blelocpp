@@ -11,4 +11,6 @@ cereal is a header-only C++11 serialization library.
   s.source       = { :git => "https://github.com/USCiLab/cereal.git", :tag => "v1.1.2" }
   s.source_files = "include/cereal/**/*.{h,hpp}"
   s.xcconfig     = { :HEADER_SEARCH_PATHS => "\"${PODS_ROOT}/cereal/include\""}
+  s.ios.deployment_target = "9.0"
+  s.osx.deployment_target = "10.6"
 end

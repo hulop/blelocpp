@@ -6,263 +6,223 @@
 	objectVersion = 46;
 	objects = {
 
-/* Begin PBXAggregateTarget section */
-		7E60021C1C076D71007A9B2B /* framework */ = {
-			isa = PBXAggregateTarget;
-			buildConfigurationList = 7E60021D1C076D71007A9B2B /* Build configuration list for PBXAggregateTarget "framework" */;
-			buildPhases = (
-				7E6002201C076D79007A9B2B /* ShellScript */,
-			);
-			dependencies = (
-			);
-			name = framework;
-			productName = framework;
-		};
-/* End PBXAggregateTarget section */
-
 /* Begin PBXBuildFile section */
-		634B3C690684C08A0572FBE0 /* libPods-blelocjni.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BC1A73BB7CF5381110A675C3 /* libPods-blelocjni.a */; };
-		7E6F25371C0F1D76007A97A1 /* BaseBeaconFilter.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24C61C0F1D76007A97A1 /* BaseBeaconFilter.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		3071000026E2A57C00AF1AA1 /* Status.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24E71C0F1D76007A97A1 /* Status.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		3071000126E2A57C00AF1AA1 /* StreamLocalizer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24E81C0F1D76007A97A1 /* StreamLocalizer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		3071000226E2A57C00AF1AA1 /* LatLngUtil.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E92393C1D54764000875766 /* LatLngUtil.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		3071000326E2A57C00AF1AA1 /* LatLngConverter.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FB176CB81D7823D1008C1745 /* LatLngConverter.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		3071000426E2A57C00AF1AA1 /* Heading.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FBBA09F61DACB2DA00EB2553 /* Heading.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		3071000626E2A57C00AF1AA1 /* DataLogger.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24EB1C0F1D76007A97A1 /* DataLogger.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		3071000726E2A57C00AF1AA1 /* DataStore.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24EC1C0F1D76007A97A1 /* DataStore.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		3071000826E2A57C00AF1AA1 /* DataStoreImpl.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24EE1C0F1D76007A97A1 /* DataStoreImpl.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		3071000926E2A57D00AF1AA1 /* DataUtils.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24F01C0F1D76007A97A1 /* DataUtils.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		3071000B26E2A57D00AF1AA1 /* LazyDataStore.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24F21C0F1D76007A97A1 /* LazyDataStore.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		3071000C26E2A57D00AF1AA1 /* VirtualDevice.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24F41C0F1D76007A97A1 /* VirtualDevice.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		3071000D26E2A57D00AF1AA1 /* GridResampler.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24F71C0F1D76007A97A1 /* GridResampler.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		3071000E26E2A57D00AF1AA1 /* Resampler.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24F81C0F1D76007A97A1 /* Resampler.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		3071000F26E2A57D00AF1AA1 /* StatusInitializer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24FC1C0F1D76007A97A1 /* StatusInitializer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		3071001026E2A57D00AF1AA1 /* StreamLocalizerStub.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24FE1C0F1D76007A97A1 /* StreamLocalizerStub.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		3071001126E2A57D00AF1AA1 /* StreamParticleFilter.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F25001C0F1D76007A97A1 /* StreamParticleFilter.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		3071001226E2A57D00AF1AA1 /* StatusInitializerImpl.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F251D1C0F1D76007A97A1 /* StatusInitializerImpl.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		3071001326E2A57D00AF1AA1 /* StatusInitializerStub.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F251F1C0F1D76007A97A1 /* StatusInitializerStub.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		3071001426E2A57D00AF1AA1 /* Building.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F25031C0F1D76007A97A1 /* Building.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		3071001526E2A57D00AF1AA1 /* CoordinateSystem.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F25041C0F1D76007A97A1 /* CoordinateSystem.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		3071001626E2A57D00AF1AA1 /* FloorMap.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F25061C0F1D76007A97A1 /* FloorMap.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		3071001726E2A57D00AF1AA1 /* ImageHolder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F25081C0F1D76007A97A1 /* ImageHolder.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		3071001826E2A57D00AF1AA1 /* GaussianProcessLight.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FB6ADB551E2F5CCD009943C0 /* GaussianProcessLight.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		3071001926E2A57D00AF1AA1 /* PosteriorResampler.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FB05F26E1D8ADD0E003B472A /* PosteriorResampler.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		3071001A26E2A57D00AF1AA1 /* WeakPoseRandomWalker.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FB05F2721D8ADD0E003B472A /* WeakPoseRandomWalker.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		3071001B26E2A57D00AF1AA1 /* RandomWalkerMotion.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FBEB01E41D756F1300CB808D /* RandomWalkerMotion.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		3071001C26E2A57D00AF1AA1 /* SystemModelInBuilding.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FBEB01E61D756F1300CB808D /* SystemModelInBuilding.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		3071001D26E2A57D00AF1AA1 /* GaussianProcess.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F250B1C0F1D76007A97A1 /* GaussianProcess.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		3071001E26E2A57D00AF1AA1 /* GaussianProcessLDPLMultiModel.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F250D1C0F1D76007A97A1 /* GaussianProcessLDPLMultiModel.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		3071001F26E2A57D00AF1AA1 /* KernelFunction.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F250F1C0F1D76007A97A1 /* KernelFunction.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		3071002026E2A57D00AF1AA1 /* ObservationModel.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F25101C0F1D76007A97A1 /* ObservationModel.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		3071002126E2A57D00AF1AA1 /* ObservationModelTrainer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F25131C0F1D76007A97A1 /* ObservationModelTrainer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		3071002226E2A57D00AF1AA1 /* PoseRandomWalker.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F25171C0F1D76007A97A1 /* PoseRandomWalker.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		3071002326E2A57D00AF1AA1 /* RandomWalker.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F251B1C0F1D76007A97A1 /* RandomWalker.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		3071002426E2A57D00AF1AA1 /* SystemModel.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F25201C0F1D76007A97A1 /* SystemModel.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		3071002526E2A57D00AF1AA1 /* Altimeter.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FBE583141DF9BF1B00057DB5 /* Altimeter.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		3071002626E2A57D00AF1AA1 /* AltitudeManager.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FBE583151DF9BF1B00057DB5 /* AltitudeManager.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		3071002726E2A57D00AF1AA1 /* AltitudeManagerSimple.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FBE583171DF9BF1B00057DB5 /* AltitudeManagerSimple.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		3071002826E2A57D00AF1AA1 /* OrientationMeter.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F25231C0F1D76007A97A1 /* OrientationMeter.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		3071002926E2A57D00AF1AA1 /* OrientationMeterAverage.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F25251C0F1D76007A97A1 /* OrientationMeterAverage.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		3071002A26E2A57D00AF1AA1 /* Pedometer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F25281C0F1D76007A97A1 /* Pedometer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		3071002B26E2A57D00AF1AA1 /* PedometerWalkingState.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F252C1C0F1D76007A97A1 /* PedometerWalkingState.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		3071002C26E2A57D00AF1AA1 /* TransformedOrientationMeterAverage.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FB6ADB421E2DE3A7009943C0 /* TransformedOrientationMeterAverage.hpp */; };
+		3071002D26E2A57D00AF1AA1 /* OrientationAdjuster.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FB315CE41F53DF4A00681EAB /* OrientationAdjuster.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		3071002E26E2A57D00AF1AA1 /* ArrayUtils.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F252F1C0F1D76007A97A1 /* ArrayUtils.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		3071002F26E2A57D00AF1AA1 /* MathUtils.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F25331C0F1D76007A97A1 /* MathUtils.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		3071003026E2A57D00AF1AA1 /* RandomGenerator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F25351C0F1D76007A97A1 /* RandomGenerator.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		3071003126E2A57D00AF1AA1 /* SerializeUtils.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F25361C0F1D76007A97A1 /* SerializeUtils.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		3071003226E2A57D00AF1AA1 /* LogUtil.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7EF5DB411D46F73300D22C02 /* LogUtil.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		3071003326E2A57D00AF1AA1 /* MetropolisSampler.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FB5B4BEF1C7C41B600D00E8E /* MetropolisSampler.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		3071003426E2A57D00AF1AA1 /* ObservationDependentInitializer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FB5B4BF01C7C41B600D00E8E /* ObservationDependentInitializer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		3071FFBA26E2A55100AF1AA1 /* BasicLocalizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EDEDC0A1D1A5E1600AC111A /* BasicLocalizer.cpp */; };
+		3071FFBB26E2A55100AF1AA1 /* CleansingBeaconFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F24C81C0F1D76007A97A1 /* CleansingBeaconFilter.cpp */; };
+		3071FFBC26E2A55100AF1AA1 /* StrongestBeaconFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F24CA1C0F1D76007A97A1 /* StrongestBeaconFilter.cpp */; };
+		3071FFBD26E2A55100AF1AA1 /* BeaconFilterChain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB71CE541C475B4600A4DB67 /* BeaconFilterChain.cpp */; };
+		3071FFBE26E2A55100AF1AA1 /* RegisteredBeaconFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBFF263320D79D9500DD3645 /* RegisteredBeaconFilter.cpp */; };
+		3071FFBF26E2A55100AF1AA1 /* Acceleration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F24CD1C0F1D76007A97A1 /* Acceleration.cpp */; };
+		3071FFC026E2A55100AF1AA1 /* Attitude.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F24CF1C0F1D76007A97A1 /* Attitude.cpp */; };
+		3071FFC126E2A55100AF1AA1 /* Beacon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F24D11C0F1D76007A97A1 /* Beacon.cpp */; };
+		3071FFC226E2A55100AF1AA1 /* BLEBeacon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F24D31C0F1D76007A97A1 /* BLEBeacon.cpp */; };
+		3071FFC326E2A55100AF1AA1 /* Location.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F24DA1C0F1D76007A97A1 /* Location.cpp */; };
+		3071FFC426E2A55100AF1AA1 /* Pose.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F24E01C0F1D76007A97A1 /* Pose.cpp */; };
+		3071FFC526E2A55100AF1AA1 /* Sample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F24E21C0F1D76007A97A1 /* Sample.cpp */; };
+		3071FFC626E2A55100AF1AA1 /* State.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F24E41C0F1D76007A97A1 /* State.cpp */; };
+		3071FFC726E2A55100AF1AA1 /* Status.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F24E61C0F1D76007A97A1 /* Status.cpp */; };
+		3071FFC826E2A55100AF1AA1 /* LatLngUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E92393B1D54764000875766 /* LatLngUtil.cpp */; };
+		3071FFC926E2A55100AF1AA1 /* LatLngConverter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB176CB71D7823D1008C1745 /* LatLngConverter.cpp */; };
+		3071FFCA26E2A55100AF1AA1 /* Heading.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBBA09F51DACB2DA00EB2553 /* Heading.cpp */; };
+		3071FFCB26E2A55100AF1AA1 /* ExtendedDataUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB273EF31D22226B00F53CCB /* ExtendedDataUtils.cpp */; };
+		3071FFCC26E2A55100AF1AA1 /* DataLogger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F24EA1C0F1D76007A97A1 /* DataLogger.cpp */; };
+		3071FFCD26E2A55100AF1AA1 /* DataStoreImpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F24ED1C0F1D76007A97A1 /* DataStoreImpl.cpp */; };
+		3071FFCE26E2A55100AF1AA1 /* DataUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F24EF1C0F1D76007A97A1 /* DataUtils.cpp */; };
+		3071FFD026E2A55100AF1AA1 /* LazyDataStore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F24F11C0F1D76007A97A1 /* LazyDataStore.cpp */; };
+		3071FFD126E2A55100AF1AA1 /* VirtualDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F24F31C0F1D76007A97A1 /* VirtualDevice.cpp */; };
+		3071FFD226E2A55100AF1AA1 /* GridResampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F24F61C0F1D76007A97A1 /* GridResampler.cpp */; };
+		3071FFD326E2A55100AF1AA1 /* StreamLocalizerStub.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F24FD1C0F1D76007A97A1 /* StreamLocalizerStub.cpp */; };
+		3071FFD426E2A55100AF1AA1 /* StreamParticleFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F24FF1C0F1D76007A97A1 /* StreamParticleFilter.cpp */; };
+		3071FFD526E2A55100AF1AA1 /* StatusInitializerImpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F251C1C0F1D76007A97A1 /* StatusInitializerImpl.cpp */; };
+		3071FFD626E2A55100AF1AA1 /* StatusInitializerStub.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F251E1C0F1D76007A97A1 /* StatusInitializerStub.cpp */; };
+		3071FFD726E2A55100AF1AA1 /* Building.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F25021C0F1D76007A97A1 /* Building.cpp */; };
+		3071FFD826E2A55100AF1AA1 /* CoordinateSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB2E8B121C2404EA00C5C45C /* CoordinateSystem.cpp */; };
+		3071FFD926E2A55100AF1AA1 /* FloorMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F25051C0F1D76007A97A1 /* FloorMap.cpp */; };
+		3071FFDA26E2A55100AF1AA1 /* ImageHolder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F25071C0F1D76007A97A1 /* ImageHolder.cpp */; };
+		3071FFDB26E2A55100AF1AA1 /* GaussianProcessLight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB6ADB541E2F5CCD009943C0 /* GaussianProcessLight.cpp */; };
+		3071FFDC26E2A55100AF1AA1 /* PosteriorResampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB05F26D1D8ADD0E003B472A /* PosteriorResampler.cpp */; };
+		3071FFDD26E2A55100AF1AA1 /* WeakPoseRandomWalker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB05F2711D8ADD0E003B472A /* WeakPoseRandomWalker.cpp */; };
+		3071FFDE26E2A55100AF1AA1 /* RandomWalkerMotion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBEB01E31D756F1300CB808D /* RandomWalkerMotion.cpp */; };
+		3071FFDF26E2A55100AF1AA1 /* SystemModelInBuilding.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBEB01E51D756F1300CB808D /* SystemModelInBuilding.cpp */; };
+		3071FFE026E2A55100AF1AA1 /* GaussianProcess.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F250A1C0F1D76007A97A1 /* GaussianProcess.cpp */; };
+		3071FFE126E2A55100AF1AA1 /* GaussianProcessLDPLMultiModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F250C1C0F1D76007A97A1 /* GaussianProcessLDPLMultiModel.cpp */; };
+		3071FFE226E2A55100AF1AA1 /* KernelFunction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F250E1C0F1D76007A97A1 /* KernelFunction.cpp */; };
+		3071FFE326E2A55100AF1AA1 /* PoseRandomWalker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F25161C0F1D76007A97A1 /* PoseRandomWalker.cpp */; };
+		3071FFE426E2A55100AF1AA1 /* RandomWalker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F251A1C0F1D76007A97A1 /* RandomWalker.cpp */; };
+		3071FFE526E2A55100AF1AA1 /* SystemModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB7B22911DE495E200FF8BF3 /* SystemModel.cpp */; };
+		3071FFE626E2A55100AF1AA1 /* Altimeter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBE583131DF9BF1B00057DB5 /* Altimeter.cpp */; };
+		3071FFE726E2A55100AF1AA1 /* AltitudeManagerSimple.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBE583161DF9BF1B00057DB5 /* AltitudeManagerSimple.cpp */; };
+		3071FFE826E2A55100AF1AA1 /* OrientationMeterAverage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F25241C0F1D76007A97A1 /* OrientationMeterAverage.cpp */; };
+		3071FFE926E2A55100AF1AA1 /* PedometerWalkingState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F252B1C0F1D76007A97A1 /* PedometerWalkingState.cpp */; };
+		3071FFEA26E2A55100AF1AA1 /* TransformedOrientationMeterAverage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB6ADB411E2DE3A7009943C0 /* TransformedOrientationMeterAverage.cpp */; };
+		3071FFEB26E2A55100AF1AA1 /* ArrayUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F252E1C0F1D76007A97A1 /* ArrayUtils.cpp */; };
+		3071FFEC26E2A55100AF1AA1 /* MathUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB71CE4E1C46889F00A4DB67 /* MathUtils.cpp */; };
+		3071FFED26E2A55100AF1AA1 /* RandomGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F25341C0F1D76007A97A1 /* RandomGenerator.cpp */; };
+		3071FFEE26E2A55100AF1AA1 /* LogUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EF5DB401D46F73300D22C02 /* LogUtil.cpp */; };
+		3071FFEF26E2A55100AF1AA1 /* MetropolisSampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB5B4BEE1C7C41B600D00E8E /* MetropolisSampler.cpp */; };
+		3071FFF026E2A57C00AF1AA1 /* BasicLocalizer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7EDEDC0B1D1A5E1600AC111A /* BasicLocalizer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		3071FFF126E2A57C00AF1AA1 /* BaseBeaconFilter.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24C61C0F1D76007A97A1 /* BaseBeaconFilter.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		3071FFF226E2A57C00AF1AA1 /* BeaconFilter.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24C71C0F1D76007A97A1 /* BeaconFilter.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		3071FFF326E2A57C00AF1AA1 /* CleansingBeaconFilter.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24C91C0F1D76007A97A1 /* CleansingBeaconFilter.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		3071FFF426E2A57C00AF1AA1 /* StrongestBeaconFilter.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24CB1C0F1D76007A97A1 /* StrongestBeaconFilter.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		3071FFF526E2A57C00AF1AA1 /* BeaconFilterChain.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FB71CE551C475B4600A4DB67 /* BeaconFilterChain.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		3071FFF626E2A57C00AF1AA1 /* RegisteredBeaconFilter.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FBFF263220D79D9500DD3645 /* RegisteredBeaconFilter.hpp */; };
+		3071FFF726E2A57C00AF1AA1 /* LocException.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FBC2B5081D956CE400E09B16 /* LocException.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		3071FFF826E2A57C00AF1AA1 /* Acceleration.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24CE1C0F1D76007A97A1 /* Acceleration.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		3071FFF926E2A57C00AF1AA1 /* Attitude.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24D01C0F1D76007A97A1 /* Attitude.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		3071FFFA26E2A57C00AF1AA1 /* Beacon.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24D21C0F1D76007A97A1 /* Beacon.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		3071FFFB26E2A57C00AF1AA1 /* BLEBeacon.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24D41C0F1D76007A97A1 /* BLEBeacon.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		3071FFFC26E2A57C00AF1AA1 /* Location.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24DB1C0F1D76007A97A1 /* Location.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		3071FFFD26E2A57C00AF1AA1 /* Pose.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24E11C0F1D76007A97A1 /* Pose.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		3071FFFE26E2A57C00AF1AA1 /* Sample.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24E31C0F1D76007A97A1 /* Sample.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		3071FFFF26E2A57C00AF1AA1 /* State.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24E51C0F1D76007A97A1 /* State.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		3077FDB626E2F857006404B1 /* ExtendedDataUtils.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FB273EF41D22226B00F53CCB /* ExtendedDataUtils.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		3077FDBF26E72FF7006404B1 /* bleloc.h in Headers */ = {isa = PBXBuildFile; fileRef = 3077FDBE26E72FF6006404B1 /* bleloc.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E6F25381C0F1D76007A97A1 /* BaseBeaconFilter.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24C61C0F1D76007A97A1 /* BaseBeaconFilter.hpp */; };
-		7E6F25391C0F1D76007A97A1 /* BeaconFilter.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24C71C0F1D76007A97A1 /* BeaconFilter.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E6F253A1C0F1D76007A97A1 /* BeaconFilter.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24C71C0F1D76007A97A1 /* BeaconFilter.hpp */; };
-		7E6F253B1C0F1D76007A97A1 /* CleansingBeaconFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F24C81C0F1D76007A97A1 /* CleansingBeaconFilter.cpp */; };
 		7E6F253C1C0F1D76007A97A1 /* CleansingBeaconFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F24C81C0F1D76007A97A1 /* CleansingBeaconFilter.cpp */; };
-		7E6F253D1C0F1D76007A97A1 /* CleansingBeaconFilter.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24C91C0F1D76007A97A1 /* CleansingBeaconFilter.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E6F253E1C0F1D76007A97A1 /* CleansingBeaconFilter.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24C91C0F1D76007A97A1 /* CleansingBeaconFilter.hpp */; };
-		7E6F253F1C0F1D76007A97A1 /* StrongestBeaconFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F24CA1C0F1D76007A97A1 /* StrongestBeaconFilter.cpp */; };
 		7E6F25401C0F1D76007A97A1 /* StrongestBeaconFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F24CA1C0F1D76007A97A1 /* StrongestBeaconFilter.cpp */; };
-		7E6F25411C0F1D76007A97A1 /* StrongestBeaconFilter.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24CB1C0F1D76007A97A1 /* StrongestBeaconFilter.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E6F25421C0F1D76007A97A1 /* StrongestBeaconFilter.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24CB1C0F1D76007A97A1 /* StrongestBeaconFilter.hpp */; };
-		7E6F25431C0F1D76007A97A1 /* Acceleration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F24CD1C0F1D76007A97A1 /* Acceleration.cpp */; };
 		7E6F25441C0F1D76007A97A1 /* Acceleration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F24CD1C0F1D76007A97A1 /* Acceleration.cpp */; };
-		7E6F25451C0F1D76007A97A1 /* Acceleration.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24CE1C0F1D76007A97A1 /* Acceleration.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E6F25461C0F1D76007A97A1 /* Acceleration.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24CE1C0F1D76007A97A1 /* Acceleration.hpp */; };
-		7E6F25471C0F1D76007A97A1 /* Attitude.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F24CF1C0F1D76007A97A1 /* Attitude.cpp */; };
 		7E6F25481C0F1D76007A97A1 /* Attitude.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F24CF1C0F1D76007A97A1 /* Attitude.cpp */; };
-		7E6F25491C0F1D76007A97A1 /* Attitude.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24D01C0F1D76007A97A1 /* Attitude.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E6F254A1C0F1D76007A97A1 /* Attitude.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24D01C0F1D76007A97A1 /* Attitude.hpp */; };
-		7E6F254B1C0F1D76007A97A1 /* Beacon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F24D11C0F1D76007A97A1 /* Beacon.cpp */; };
 		7E6F254C1C0F1D76007A97A1 /* Beacon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F24D11C0F1D76007A97A1 /* Beacon.cpp */; };
-		7E6F254D1C0F1D76007A97A1 /* Beacon.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24D21C0F1D76007A97A1 /* Beacon.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E6F254E1C0F1D76007A97A1 /* Beacon.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24D21C0F1D76007A97A1 /* Beacon.hpp */; };
-		7E6F254F1C0F1D76007A97A1 /* BLEBeacon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F24D31C0F1D76007A97A1 /* BLEBeacon.cpp */; };
 		7E6F25501C0F1D76007A97A1 /* BLEBeacon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F24D31C0F1D76007A97A1 /* BLEBeacon.cpp */; };
-		7E6F25511C0F1D76007A97A1 /* BLEBeacon.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24D41C0F1D76007A97A1 /* BLEBeacon.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E6F25521C0F1D76007A97A1 /* BLEBeacon.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24D41C0F1D76007A97A1 /* BLEBeacon.hpp */; };
-		7E6F25531C0F1D76007A97A1 /* bleloc.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24D51C0F1D76007A97A1 /* bleloc.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E6F25541C0F1D76007A97A1 /* bleloc.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24D51C0F1D76007A97A1 /* bleloc.h */; };
-		7E6F255D1C0F1D76007A97A1 /* Location.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F24DA1C0F1D76007A97A1 /* Location.cpp */; };
 		7E6F255E1C0F1D76007A97A1 /* Location.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F24DA1C0F1D76007A97A1 /* Location.cpp */; };
-		7E6F255F1C0F1D76007A97A1 /* Location.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24DB1C0F1D76007A97A1 /* Location.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E6F25601C0F1D76007A97A1 /* Location.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24DB1C0F1D76007A97A1 /* Location.hpp */; };
-		7E6F25691C0F1D76007A97A1 /* Pose.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F24E01C0F1D76007A97A1 /* Pose.cpp */; };
 		7E6F256A1C0F1D76007A97A1 /* Pose.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F24E01C0F1D76007A97A1 /* Pose.cpp */; };
-		7E6F256B1C0F1D76007A97A1 /* Pose.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24E11C0F1D76007A97A1 /* Pose.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E6F256C1C0F1D76007A97A1 /* Pose.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24E11C0F1D76007A97A1 /* Pose.hpp */; };
-		7E6F256D1C0F1D76007A97A1 /* Sample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F24E21C0F1D76007A97A1 /* Sample.cpp */; };
 		7E6F256E1C0F1D76007A97A1 /* Sample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F24E21C0F1D76007A97A1 /* Sample.cpp */; };
-		7E6F256F1C0F1D76007A97A1 /* Sample.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24E31C0F1D76007A97A1 /* Sample.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E6F25701C0F1D76007A97A1 /* Sample.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24E31C0F1D76007A97A1 /* Sample.hpp */; };
-		7E6F25711C0F1D76007A97A1 /* State.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F24E41C0F1D76007A97A1 /* State.cpp */; };
 		7E6F25721C0F1D76007A97A1 /* State.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F24E41C0F1D76007A97A1 /* State.cpp */; };
-		7E6F25731C0F1D76007A97A1 /* State.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24E51C0F1D76007A97A1 /* State.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E6F25741C0F1D76007A97A1 /* State.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24E51C0F1D76007A97A1 /* State.hpp */; };
-		7E6F25751C0F1D76007A97A1 /* Status.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F24E61C0F1D76007A97A1 /* Status.cpp */; };
 		7E6F25761C0F1D76007A97A1 /* Status.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F24E61C0F1D76007A97A1 /* Status.cpp */; };
-		7E6F25771C0F1D76007A97A1 /* Status.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24E71C0F1D76007A97A1 /* Status.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E6F25781C0F1D76007A97A1 /* Status.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24E71C0F1D76007A97A1 /* Status.hpp */; };
-		7E6F25791C0F1D76007A97A1 /* StreamLocalizer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24E81C0F1D76007A97A1 /* StreamLocalizer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E6F257A1C0F1D76007A97A1 /* StreamLocalizer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24E81C0F1D76007A97A1 /* StreamLocalizer.hpp */; };
-		7E6F257B1C0F1D76007A97A1 /* DataLogger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F24EA1C0F1D76007A97A1 /* DataLogger.cpp */; };
 		7E6F257C1C0F1D76007A97A1 /* DataLogger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F24EA1C0F1D76007A97A1 /* DataLogger.cpp */; };
-		7E6F257D1C0F1D76007A97A1 /* DataLogger.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24EB1C0F1D76007A97A1 /* DataLogger.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E6F257E1C0F1D76007A97A1 /* DataLogger.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24EB1C0F1D76007A97A1 /* DataLogger.hpp */; };
-		7E6F257F1C0F1D76007A97A1 /* DataStore.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24EC1C0F1D76007A97A1 /* DataStore.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E6F25801C0F1D76007A97A1 /* DataStore.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24EC1C0F1D76007A97A1 /* DataStore.hpp */; };
-		7E6F25811C0F1D76007A97A1 /* DataStoreImpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F24ED1C0F1D76007A97A1 /* DataStoreImpl.cpp */; };
 		7E6F25821C0F1D76007A97A1 /* DataStoreImpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F24ED1C0F1D76007A97A1 /* DataStoreImpl.cpp */; };
-		7E6F25831C0F1D76007A97A1 /* DataStoreImpl.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24EE1C0F1D76007A97A1 /* DataStoreImpl.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E6F25841C0F1D76007A97A1 /* DataStoreImpl.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24EE1C0F1D76007A97A1 /* DataStoreImpl.hpp */; };
-		7E6F25851C0F1D76007A97A1 /* DataUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F24EF1C0F1D76007A97A1 /* DataUtils.cpp */; };
 		7E6F25861C0F1D76007A97A1 /* DataUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F24EF1C0F1D76007A97A1 /* DataUtils.cpp */; };
-		7E6F25871C0F1D76007A97A1 /* DataUtils.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24F01C0F1D76007A97A1 /* DataUtils.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E6F25881C0F1D76007A97A1 /* DataUtils.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24F01C0F1D76007A97A1 /* DataUtils.hpp */; };
-		7E6F25891C0F1D76007A97A1 /* LazyDataStore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F24F11C0F1D76007A97A1 /* LazyDataStore.cpp */; };
 		7E6F258A1C0F1D76007A97A1 /* LazyDataStore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F24F11C0F1D76007A97A1 /* LazyDataStore.cpp */; };
-		7E6F258B1C0F1D76007A97A1 /* LazyDataStore.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24F21C0F1D76007A97A1 /* LazyDataStore.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E6F258C1C0F1D76007A97A1 /* LazyDataStore.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24F21C0F1D76007A97A1 /* LazyDataStore.hpp */; };
-		7E6F258D1C0F1D76007A97A1 /* VirtualDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F24F31C0F1D76007A97A1 /* VirtualDevice.cpp */; };
 		7E6F258E1C0F1D76007A97A1 /* VirtualDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F24F31C0F1D76007A97A1 /* VirtualDevice.cpp */; };
-		7E6F258F1C0F1D76007A97A1 /* VirtualDevice.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24F41C0F1D76007A97A1 /* VirtualDevice.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E6F25901C0F1D76007A97A1 /* VirtualDevice.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24F41C0F1D76007A97A1 /* VirtualDevice.hpp */; };
-		7E6F25911C0F1D76007A97A1 /* GridResampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F24F61C0F1D76007A97A1 /* GridResampler.cpp */; };
 		7E6F25921C0F1D76007A97A1 /* GridResampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F24F61C0F1D76007A97A1 /* GridResampler.cpp */; };
-		7E6F25931C0F1D76007A97A1 /* GridResampler.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24F71C0F1D76007A97A1 /* GridResampler.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E6F25941C0F1D77007A97A1 /* GridResampler.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24F71C0F1D76007A97A1 /* GridResampler.hpp */; };
-		7E6F25951C0F1D77007A97A1 /* Resampler.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24F81C0F1D76007A97A1 /* Resampler.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E6F25961C0F1D77007A97A1 /* Resampler.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24F81C0F1D76007A97A1 /* Resampler.hpp */; };
-		7E6F259B1C0F1D77007A97A1 /* StatusInitializer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24FC1C0F1D76007A97A1 /* StatusInitializer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E6F259C1C0F1D77007A97A1 /* StatusInitializer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24FC1C0F1D76007A97A1 /* StatusInitializer.hpp */; };
-		7E6F259D1C0F1D77007A97A1 /* StreamLocalizerStub.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F24FD1C0F1D76007A97A1 /* StreamLocalizerStub.cpp */; };
 		7E6F259E1C0F1D77007A97A1 /* StreamLocalizerStub.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F24FD1C0F1D76007A97A1 /* StreamLocalizerStub.cpp */; };
-		7E6F259F1C0F1D77007A97A1 /* StreamLocalizerStub.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24FE1C0F1D76007A97A1 /* StreamLocalizerStub.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E6F25A01C0F1D77007A97A1 /* StreamLocalizerStub.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F24FE1C0F1D76007A97A1 /* StreamLocalizerStub.hpp */; };
-		7E6F25A11C0F1D77007A97A1 /* StreamParticleFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F24FF1C0F1D76007A97A1 /* StreamParticleFilter.cpp */; };
 		7E6F25A21C0F1D77007A97A1 /* StreamParticleFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F24FF1C0F1D76007A97A1 /* StreamParticleFilter.cpp */; };
-		7E6F25A31C0F1D77007A97A1 /* StreamParticleFilter.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F25001C0F1D76007A97A1 /* StreamParticleFilter.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E6F25A41C0F1D77007A97A1 /* StreamParticleFilter.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F25001C0F1D76007A97A1 /* StreamParticleFilter.hpp */; };
-		7E6F25A51C0F1D77007A97A1 /* Building.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F25021C0F1D76007A97A1 /* Building.cpp */; };
 		7E6F25A61C0F1D77007A97A1 /* Building.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F25021C0F1D76007A97A1 /* Building.cpp */; };
-		7E6F25A71C0F1D77007A97A1 /* Building.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F25031C0F1D76007A97A1 /* Building.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E6F25A81C0F1D77007A97A1 /* Building.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F25031C0F1D76007A97A1 /* Building.hpp */; };
-		7E6F25A91C0F1D77007A97A1 /* CoordinateSystem.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F25041C0F1D76007A97A1 /* CoordinateSystem.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E6F25AA1C0F1D77007A97A1 /* CoordinateSystem.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F25041C0F1D76007A97A1 /* CoordinateSystem.hpp */; };
-		7E6F25AB1C0F1D77007A97A1 /* FloorMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F25051C0F1D76007A97A1 /* FloorMap.cpp */; };
 		7E6F25AC1C0F1D77007A97A1 /* FloorMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F25051C0F1D76007A97A1 /* FloorMap.cpp */; };
-		7E6F25AD1C0F1D77007A97A1 /* FloorMap.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F25061C0F1D76007A97A1 /* FloorMap.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E6F25AE1C0F1D77007A97A1 /* FloorMap.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F25061C0F1D76007A97A1 /* FloorMap.hpp */; };
-		7E6F25AF1C0F1D77007A97A1 /* ImageHolder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F25071C0F1D76007A97A1 /* ImageHolder.cpp */; };
 		7E6F25B01C0F1D77007A97A1 /* ImageHolder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F25071C0F1D76007A97A1 /* ImageHolder.cpp */; };
-		7E6F25B11C0F1D77007A97A1 /* ImageHolder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F25081C0F1D76007A97A1 /* ImageHolder.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E6F25B21C0F1D77007A97A1 /* ImageHolder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F25081C0F1D76007A97A1 /* ImageHolder.hpp */; };
-		7E6F25B31C0F1D77007A97A1 /* GaussianProcess.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F250A1C0F1D76007A97A1 /* GaussianProcess.cpp */; };
 		7E6F25B41C0F1D77007A97A1 /* GaussianProcess.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F250A1C0F1D76007A97A1 /* GaussianProcess.cpp */; };
-		7E6F25B51C0F1D77007A97A1 /* GaussianProcess.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F250B1C0F1D76007A97A1 /* GaussianProcess.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E6F25B61C0F1D77007A97A1 /* GaussianProcess.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F250B1C0F1D76007A97A1 /* GaussianProcess.hpp */; };
-		7E6F25B71C0F1D77007A97A1 /* GaussianProcessLDPLMultiModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F250C1C0F1D76007A97A1 /* GaussianProcessLDPLMultiModel.cpp */; };
 		7E6F25B81C0F1D77007A97A1 /* GaussianProcessLDPLMultiModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F250C1C0F1D76007A97A1 /* GaussianProcessLDPLMultiModel.cpp */; };
-		7E6F25B91C0F1D77007A97A1 /* GaussianProcessLDPLMultiModel.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F250D1C0F1D76007A97A1 /* GaussianProcessLDPLMultiModel.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E6F25BA1C0F1D77007A97A1 /* GaussianProcessLDPLMultiModel.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F250D1C0F1D76007A97A1 /* GaussianProcessLDPLMultiModel.hpp */; };
-		7E6F25BB1C0F1D77007A97A1 /* KernelFunction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F250E1C0F1D76007A97A1 /* KernelFunction.cpp */; };
 		7E6F25BC1C0F1D77007A97A1 /* KernelFunction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F250E1C0F1D76007A97A1 /* KernelFunction.cpp */; };
-		7E6F25BD1C0F1D77007A97A1 /* KernelFunction.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F250F1C0F1D76007A97A1 /* KernelFunction.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E6F25BE1C0F1D77007A97A1 /* KernelFunction.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F250F1C0F1D76007A97A1 /* KernelFunction.hpp */; };
-		7E6F25BF1C0F1D77007A97A1 /* ObservationModel.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F25101C0F1D76007A97A1 /* ObservationModel.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E6F25C01C0F1D77007A97A1 /* ObservationModel.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F25101C0F1D76007A97A1 /* ObservationModel.hpp */; };
-		7E6F25C51C0F1D77007A97A1 /* ObservationModelTrainer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F25131C0F1D76007A97A1 /* ObservationModelTrainer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E6F25C61C0F1D77007A97A1 /* ObservationModelTrainer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F25131C0F1D76007A97A1 /* ObservationModelTrainer.hpp */; };
-		7E6F25CB1C0F1D77007A97A1 /* PoseRandomWalker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F25161C0F1D76007A97A1 /* PoseRandomWalker.cpp */; };
 		7E6F25CC1C0F1D77007A97A1 /* PoseRandomWalker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F25161C0F1D76007A97A1 /* PoseRandomWalker.cpp */; };
-		7E6F25CD1C0F1D77007A97A1 /* PoseRandomWalker.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F25171C0F1D76007A97A1 /* PoseRandomWalker.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E6F25CE1C0F1D77007A97A1 /* PoseRandomWalker.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F25171C0F1D76007A97A1 /* PoseRandomWalker.hpp */; };
-		7E6F25D31C0F1D78007A97A1 /* RandomWalker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F251A1C0F1D76007A97A1 /* RandomWalker.cpp */; };
 		7E6F25D41C0F1D78007A97A1 /* RandomWalker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F251A1C0F1D76007A97A1 /* RandomWalker.cpp */; };
-		7E6F25D51C0F1D78007A97A1 /* RandomWalker.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F251B1C0F1D76007A97A1 /* RandomWalker.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E6F25D61C0F1D78007A97A1 /* RandomWalker.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F251B1C0F1D76007A97A1 /* RandomWalker.hpp */; };
-		7E6F25D71C0F1D78007A97A1 /* StatusInitializerImpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F251C1C0F1D76007A97A1 /* StatusInitializerImpl.cpp */; };
 		7E6F25D81C0F1D78007A97A1 /* StatusInitializerImpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F251C1C0F1D76007A97A1 /* StatusInitializerImpl.cpp */; };
-		7E6F25D91C0F1D78007A97A1 /* StatusInitializerImpl.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F251D1C0F1D76007A97A1 /* StatusInitializerImpl.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E6F25DA1C0F1D78007A97A1 /* StatusInitializerImpl.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F251D1C0F1D76007A97A1 /* StatusInitializerImpl.hpp */; };
-		7E6F25DB1C0F1D78007A97A1 /* StatusInitializerStub.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F251E1C0F1D76007A97A1 /* StatusInitializerStub.cpp */; };
 		7E6F25DC1C0F1D78007A97A1 /* StatusInitializerStub.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F251E1C0F1D76007A97A1 /* StatusInitializerStub.cpp */; };
-		7E6F25DD1C0F1D78007A97A1 /* StatusInitializerStub.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F251F1C0F1D76007A97A1 /* StatusInitializerStub.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E6F25DE1C0F1D78007A97A1 /* StatusInitializerStub.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F251F1C0F1D76007A97A1 /* StatusInitializerStub.hpp */; };
-		7E6F25DF1C0F1D78007A97A1 /* SystemModel.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F25201C0F1D76007A97A1 /* SystemModel.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E6F25E01C0F1D78007A97A1 /* SystemModel.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F25201C0F1D76007A97A1 /* SystemModel.hpp */; };
-		7E6F25E31C0F1D78007A97A1 /* OrientationMeter.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F25231C0F1D76007A97A1 /* OrientationMeter.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E6F25E41C0F1D78007A97A1 /* OrientationMeter.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F25231C0F1D76007A97A1 /* OrientationMeter.hpp */; };
-		7E6F25E51C0F1D78007A97A1 /* OrientationMeterAverage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F25241C0F1D76007A97A1 /* OrientationMeterAverage.cpp */; };
 		7E6F25E61C0F1D78007A97A1 /* OrientationMeterAverage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F25241C0F1D76007A97A1 /* OrientationMeterAverage.cpp */; };
-		7E6F25E71C0F1D78007A97A1 /* OrientationMeterAverage.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F25251C0F1D76007A97A1 /* OrientationMeterAverage.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E6F25E81C0F1D78007A97A1 /* OrientationMeterAverage.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F25251C0F1D76007A97A1 /* OrientationMeterAverage.hpp */; };
-		7E6F25ED1C0F1D78007A97A1 /* Pedometer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F25281C0F1D76007A97A1 /* Pedometer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E6F25EE1C0F1D78007A97A1 /* Pedometer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F25281C0F1D76007A97A1 /* Pedometer.hpp */; };
-		7E6F25F31C0F1D78007A97A1 /* PedometerWalkingState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F252B1C0F1D76007A97A1 /* PedometerWalkingState.cpp */; };
 		7E6F25F41C0F1D78007A97A1 /* PedometerWalkingState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F252B1C0F1D76007A97A1 /* PedometerWalkingState.cpp */; };
-		7E6F25F51C0F1D78007A97A1 /* PedometerWalkingState.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F252C1C0F1D76007A97A1 /* PedometerWalkingState.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E6F25F61C0F1D79007A97A1 /* PedometerWalkingState.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F252C1C0F1D76007A97A1 /* PedometerWalkingState.hpp */; };
-		7E6F25F71C0F1D79007A97A1 /* ArrayUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F252E1C0F1D76007A97A1 /* ArrayUtils.cpp */; };
 		7E6F25F81C0F1D79007A97A1 /* ArrayUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F252E1C0F1D76007A97A1 /* ArrayUtils.cpp */; };
-		7E6F25F91C0F1D79007A97A1 /* ArrayUtils.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F252F1C0F1D76007A97A1 /* ArrayUtils.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E6F25FA1C0F1D79007A97A1 /* ArrayUtils.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F252F1C0F1D76007A97A1 /* ArrayUtils.hpp */; };
-		7E6F26011C0F1D79007A97A1 /* MathUtils.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F25331C0F1D76007A97A1 /* MathUtils.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E6F26021C0F1D79007A97A1 /* MathUtils.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F25331C0F1D76007A97A1 /* MathUtils.hpp */; };
-		7E6F26031C0F1D79007A97A1 /* RandomGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F25341C0F1D76007A97A1 /* RandomGenerator.cpp */; };
 		7E6F26041C0F1D79007A97A1 /* RandomGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F25341C0F1D76007A97A1 /* RandomGenerator.cpp */; };
-		7E6F26051C0F1D79007A97A1 /* RandomGenerator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F25351C0F1D76007A97A1 /* RandomGenerator.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E6F26061C0F1D79007A97A1 /* RandomGenerator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F25351C0F1D76007A97A1 /* RandomGenerator.hpp */; };
-		7E6F26071C0F1D79007A97A1 /* SerializeUtils.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F25361C0F1D76007A97A1 /* SerializeUtils.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E6F26081C0F1D79007A97A1 /* SerializeUtils.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E6F25361C0F1D76007A97A1 /* SerializeUtils.hpp */; };
-		7E92393D1D54764000875766 /* LatLngUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E92393B1D54764000875766 /* LatLngUtil.cpp */; };
-		7E92393E1D54764000875766 /* LatLngUtil.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7E92393C1D54764000875766 /* LatLngUtil.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		7EDEDC0F1D1CB3B300AC111A /* ExtendedDataUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EDEDC0D1D1CB3B300AC111A /* ExtendedDataUtils.cpp */; };
-		7EDEDC111D1CCCBB00AC111A /* BasicLocalizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EDEDC0A1D1A5E1600AC111A /* BasicLocalizer.cpp */; };
-		7EDEDC121D1CCCD800AC111A /* BasicLocalizer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7EDEDC0B1D1A5E1600AC111A /* BasicLocalizer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		7EF5DB421D46F73300D22C02 /* LogUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EF5DB401D46F73300D22C02 /* LogUtil.cpp */; };
-		7EF5DB431D46F73300D22C02 /* LogUtil.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 7EF5DB411D46F73300D22C02 /* LogUtil.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		A350205D9597EA9D7442790F /* libPods-bleloc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5D651D528829A828244BD797 /* libPods-bleloc.a */; };
-		F52FFB891C08861800508330 /* libopencv_contrib.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F52FFB791C08861800508330 /* libopencv_contrib.dylib */; };
-		F52FFB8A1C08861800508330 /* libopencv_core.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F52FFB7A1C08861800508330 /* libopencv_core.dylib */; };
-		F52FFB8B1C08861800508330 /* libopencv_features2d.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F52FFB7B1C08861800508330 /* libopencv_features2d.dylib */; };
-		F52FFB8C1C08861800508330 /* libopencv_flann.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F52FFB7C1C08861800508330 /* libopencv_flann.dylib */; };
-		F52FFB8D1C08861800508330 /* libopencv_gpu.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F52FFB7D1C08861800508330 /* libopencv_gpu.dylib */; };
-		F52FFB8E1C08861800508330 /* libopencv_highgui.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F52FFB7E1C08861800508330 /* libopencv_highgui.dylib */; };
-		F52FFB8F1C08861800508330 /* libopencv_imgproc.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F52FFB7F1C08861800508330 /* libopencv_imgproc.dylib */; };
-		F52FFB901C08861800508330 /* libopencv_legacy.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F52FFB801C08861800508330 /* libopencv_legacy.dylib */; };
-		F52FFB911C08861800508330 /* libopencv_ml.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F52FFB811C08861800508330 /* libopencv_ml.dylib */; };
-		F52FFB921C08861800508330 /* libopencv_objdetect.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F52FFB821C08861800508330 /* libopencv_objdetect.dylib */; };
-		F52FFB931C08861800508330 /* libopencv_ocl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F52FFB831C08861800508330 /* libopencv_ocl.dylib */; };
-		F52FFB941C08861800508330 /* libopencv_photo.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F52FFB841C08861800508330 /* libopencv_photo.dylib */; };
-		F52FFB951C08861800508330 /* libopencv_stitching.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F52FFB851C08861800508330 /* libopencv_stitching.dylib */; };
-		F52FFB961C08861800508330 /* libopencv_superres.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F52FFB861C08861800508330 /* libopencv_superres.dylib */; };
-		F52FFB971C08861800508330 /* libopencv_video.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F52FFB871C08861800508330 /* libopencv_video.dylib */; };
-		F52FFB981C08861800508330 /* libopencv_videostab.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F52FFB881C08861800508330 /* libopencv_videostab.dylib */; };
-		FB05F2731D8ADD0E003B472A /* PosteriorResampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB05F26D1D8ADD0E003B472A /* PosteriorResampler.cpp */; };
-		FB05F2741D8ADD0E003B472A /* PosteriorResampler.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FB05F26E1D8ADD0E003B472A /* PosteriorResampler.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		FB05F2771D8ADD0E003B472A /* WeakPoseRandomWalker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB05F2711D8ADD0E003B472A /* WeakPoseRandomWalker.cpp */; };
-		FB05F2781D8ADD0E003B472A /* WeakPoseRandomWalker.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FB05F2721D8ADD0E003B472A /* WeakPoseRandomWalker.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		FB176CB91D7823D1008C1745 /* LatLngConverter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB176CB71D7823D1008C1745 /* LatLngConverter.cpp */; };
-		FB176CBA1D7823D1008C1745 /* LatLngConverter.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FB176CB81D7823D1008C1745 /* LatLngConverter.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		FB176CBB1D7824A0008C1745 /* ExtendedDataUtils.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FB273EF41D22226B00F53CCB /* ExtendedDataUtils.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		FB273EF51D22226B00F53CCB /* ExtendedDataUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB273EF31D22226B00F53CCB /* ExtendedDataUtils.cpp */; };
-		FB2E8B131C2404EA00C5C45C /* CoordinateSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB2E8B121C2404EA00C5C45C /* CoordinateSystem.cpp */; };
+		9568E4E7C4F5F00DCE2046A9 /* libPods-blelocjni.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BE1063BFBC609B8327D13935 /* libPods-blelocjni.a */; };
+		9D9DD588C3AB398128EFD187 /* Pods_bleloc.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 681EB7A3E68B6C53710291F1 /* Pods_bleloc.framework */; };
 		FB2E8B141C2404F600C5C45C /* CoordinateSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB2E8B121C2404EA00C5C45C /* CoordinateSystem.cpp */; };
-		FB315CE51F53DF4A00681EAB /* OrientationAdjuster.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FB315CE41F53DF4A00681EAB /* OrientationAdjuster.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		FB5B4BF11C7C41B600D00E8E /* MetropolisSampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB5B4BEE1C7C41B600D00E8E /* MetropolisSampler.cpp */; };
-		FB5B4BF21C7C41B600D00E8E /* MetropolisSampler.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FB5B4BEF1C7C41B600D00E8E /* MetropolisSampler.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		FB5B4BF31C7C41B600D00E8E /* ObservationDependentInitializer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FB5B4BF01C7C41B600D00E8E /* ObservationDependentInitializer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		FB6ADB431E2DE3A7009943C0 /* TransformedOrientationMeterAverage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB6ADB411E2DE3A7009943C0 /* TransformedOrientationMeterAverage.cpp */; };
-		FB6ADB441E2DE3A7009943C0 /* TransformedOrientationMeterAverage.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FB6ADB421E2DE3A7009943C0 /* TransformedOrientationMeterAverage.hpp */; };
-		FB6ADB561E2F5CCD009943C0 /* GaussianProcessLight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB6ADB541E2F5CCD009943C0 /* GaussianProcessLight.cpp */; };
-		FB6ADB571E2F5CCD009943C0 /* GaussianProcessLight.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FB6ADB551E2F5CCD009943C0 /* GaussianProcessLight.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		FB71CE4F1C46889F00A4DB67 /* MathUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB71CE4E1C46889F00A4DB67 /* MathUtils.cpp */; };
-		FB71CE561C475B4600A4DB67 /* BeaconFilterChain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB71CE541C475B4600A4DB67 /* BeaconFilterChain.cpp */; };
-		FB71CE571C475B4600A4DB67 /* BeaconFilterChain.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FB71CE551C475B4600A4DB67 /* BeaconFilterChain.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		FB71CE581C475F5C00A4DB67 /* BeaconFilterChain.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FB71CE551C475B4600A4DB67 /* BeaconFilterChain.hpp */; };
 		FB71CE591C475F6500A4DB67 /* BeaconFilterChain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB71CE541C475B4600A4DB67 /* BeaconFilterChain.cpp */; };
-		FB7B22921DE495E200FF8BF3 /* SystemModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB7B22911DE495E200FF8BF3 /* SystemModel.cpp */; };
-		FBBA09F71DACB2DA00EB2553 /* Heading.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBBA09F51DACB2DA00EB2553 /* Heading.cpp */; };
-		FBBA09F81DACB2DA00EB2553 /* Heading.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FBBA09F61DACB2DA00EB2553 /* Heading.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		FBC2B5091D956CE400E09B16 /* LocException.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FBC2B5081D956CE400E09B16 /* LocException.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		FBE583181DF9BF1B00057DB5 /* Altimeter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBE583131DF9BF1B00057DB5 /* Altimeter.cpp */; };
-		FBE583191DF9BF1B00057DB5 /* Altimeter.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FBE583141DF9BF1B00057DB5 /* Altimeter.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		FBE5831A1DF9BF1B00057DB5 /* AltitudeManager.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FBE583151DF9BF1B00057DB5 /* AltitudeManager.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		FBE5831B1DF9BF1B00057DB5 /* AltitudeManagerSimple.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBE583161DF9BF1B00057DB5 /* AltitudeManagerSimple.cpp */; };
-		FBE5831C1DF9BF1B00057DB5 /* AltitudeManagerSimple.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FBE583171DF9BF1B00057DB5 /* AltitudeManagerSimple.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		FBEB01E71D756F1300CB808D /* RandomWalkerMotion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBEB01E31D756F1300CB808D /* RandomWalkerMotion.cpp */; };
-		FBEB01E81D756F1300CB808D /* RandomWalkerMotion.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FBEB01E41D756F1300CB808D /* RandomWalkerMotion.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		FBEB01E91D756F1300CB808D /* SystemModelInBuilding.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBEB01E51D756F1300CB808D /* SystemModelInBuilding.cpp */; };
-		FBEB01EA1D756F1300CB808D /* SystemModelInBuilding.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FBEB01E61D756F1300CB808D /* SystemModelInBuilding.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		FBFF263420D79D9600DD3645 /* RegisteredBeaconFilter.hpp in Headers */ = {isa = PBXBuildFile; fileRef = FBFF263220D79D9500DD3645 /* RegisteredBeaconFilter.hpp */; };
-		FBFF263520D79D9600DD3645 /* RegisteredBeaconFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FBFF263320D79D9500DD3645 /* RegisteredBeaconFilter.cpp */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXCopyFilesBuildPhase section */
-		7E8A887E1C071C2F00C32E70 /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "include/$(PRODUCT_NAME)";
-			dstSubfolderSpec = 16;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
-
 /* Begin PBXFileReference section */
-		308D6E89343F046D8CCC70C3 /* Pods-bleloc.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bleloc.release.xcconfig"; path = "Pods/Target Support Files/Pods-bleloc/Pods-bleloc.release.xcconfig"; sourceTree = "<group>"; };
-		5D651D528829A828244BD797 /* libPods-bleloc.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-bleloc.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		25532BFC6C1A24F1BD281BB1 /* Pods-bleloc.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bleloc.release.xcconfig"; path = "Pods/Target Support Files/Pods-bleloc/Pods-bleloc.release.xcconfig"; sourceTree = "<group>"; };
+		3071FFB226E2A50600AF1AA1 /* bleloc.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = bleloc.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3071FFB526E2A50600AF1AA1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3077FDBE26E72FF6006404B1 /* bleloc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = bleloc.h; path = "../../ble-cpp/src/core/bleloc.h"; sourceTree = "<group>"; };
+		681EB7A3E68B6C53710291F1 /* Pods_bleloc.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_bleloc.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7654A1CA9FFCCD15F8AD65D2 /* Pods-blelocjni.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-blelocjni.release.xcconfig"; path = "Pods/Target Support Files/Pods-blelocjni/Pods-blelocjni.release.xcconfig"; sourceTree = "<group>"; };
 		7E6F24C61C0F1D76007A97A1 /* BaseBeaconFilter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BaseBeaconFilter.hpp; sourceTree = "<group>"; };
 		7E6F24C71C0F1D76007A97A1 /* BeaconFilter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BeaconFilter.hpp; sourceTree = "<group>"; };
@@ -345,20 +305,17 @@
 		7E6F25341C0F1D76007A97A1 /* RandomGenerator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RandomGenerator.cpp; sourceTree = "<group>"; };
 		7E6F25351C0F1D76007A97A1 /* RandomGenerator.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = RandomGenerator.hpp; sourceTree = "<group>"; };
 		7E6F25361C0F1D76007A97A1 /* SerializeUtils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SerializeUtils.hpp; sourceTree = "<group>"; };
-		7E8A88801C071C2F00C32E70 /* libbleloc.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libbleloc.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		7E8A89901C073EAB00C32E70 /* blelocframework.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = blelocframework.h; sourceTree = "<group>"; };
 		7E8A89921C073EAB00C32E70 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7E92393B1D54764000875766 /* LatLngUtil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LatLngUtil.cpp; sourceTree = "<group>"; };
 		7E92393C1D54764000875766 /* LatLngUtil.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LatLngUtil.hpp; sourceTree = "<group>"; };
 		7EDEDC0A1D1A5E1600AC111A /* BasicLocalizer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = BasicLocalizer.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		7EDEDC0B1D1A5E1600AC111A /* BasicLocalizer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = BasicLocalizer.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		7EDEDC0D1D1CB3B300AC111A /* ExtendedDataUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ExtendedDataUtils.cpp; sourceTree = "<group>"; };
-		7EDEDC0E1D1CB3B300AC111A /* ExtendedDataUtils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ExtendedDataUtils.hpp; sourceTree = "<group>"; };
 		7EF5DB401D46F73300D22C02 /* LogUtil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LogUtil.cpp; sourceTree = "<group>"; };
 		7EF5DB411D46F73300D22C02 /* LogUtil.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LogUtil.hpp; sourceTree = "<group>"; };
+		947ECB3392F577F850534832 /* Pods-bleloc.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bleloc.debug.xcconfig"; path = "Pods/Target Support Files/Pods-bleloc/Pods-bleloc.debug.xcconfig"; sourceTree = "<group>"; };
 		A03FCA3CDC596C0179526256 /* Pods-blelocjni.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-blelocjni.debug.xcconfig"; path = "Pods/Target Support Files/Pods-blelocjni/Pods-blelocjni.debug.xcconfig"; sourceTree = "<group>"; };
-		BC1A73BB7CF5381110A675C3 /* libPods-blelocjni.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-blelocjni.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		BD7721527FBC1489894D04B9 /* Pods-bleloc.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bleloc.debug.xcconfig"; path = "Pods/Target Support Files/Pods-bleloc/Pods-bleloc.debug.xcconfig"; sourceTree = "<group>"; };
+		BE1063BFBC609B8327D13935 /* libPods-blelocjni.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-blelocjni.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F5013CCF1C08799F007B6557 /* libblelocjni.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libblelocjni.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		F5027DAC1C0BF5F50027329C /* AWTCocoaComponent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AWTCocoaComponent.h; sourceTree = "<group>"; };
 		F5027DAD1C0BF5F50027329C /* JavaVM.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JavaVM.h; sourceTree = "<group>"; };
@@ -372,22 +329,6 @@
 		F5027DB51C0BF5F50027329C /* jvmti.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = jvmti.h; sourceTree = "<group>"; };
 		F5027DB61C0BF5F50027329C /* NSJavaConfiguration.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NSJavaConfiguration.h; sourceTree = "<group>"; };
 		F5027DB71C0BF5F50027329C /* NSJavaVirtualMachine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NSJavaVirtualMachine.h; sourceTree = "<group>"; };
-		F52FFB791C08861800508330 /* libopencv_contrib.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_contrib.dylib; path = ../../../../../../usr/local/Cellar/opencv/2.4.12/lib/libopencv_contrib.dylib; sourceTree = "<group>"; };
-		F52FFB7A1C08861800508330 /* libopencv_core.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_core.dylib; path = ../../../../../../usr/local/Cellar/opencv/2.4.12/lib/libopencv_core.dylib; sourceTree = "<group>"; };
-		F52FFB7B1C08861800508330 /* libopencv_features2d.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_features2d.dylib; path = ../../../../../../usr/local/Cellar/opencv/2.4.12/lib/libopencv_features2d.dylib; sourceTree = "<group>"; };
-		F52FFB7C1C08861800508330 /* libopencv_flann.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_flann.dylib; path = ../../../../../../usr/local/Cellar/opencv/2.4.12/lib/libopencv_flann.dylib; sourceTree = "<group>"; };
-		F52FFB7D1C08861800508330 /* libopencv_gpu.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_gpu.dylib; path = ../../../../../../usr/local/Cellar/opencv/2.4.12/lib/libopencv_gpu.dylib; sourceTree = "<group>"; };
-		F52FFB7E1C08861800508330 /* libopencv_highgui.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_highgui.dylib; path = ../../../../../../usr/local/Cellar/opencv/2.4.12/lib/libopencv_highgui.dylib; sourceTree = "<group>"; };
-		F52FFB7F1C08861800508330 /* libopencv_imgproc.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_imgproc.dylib; path = ../../../../../../usr/local/Cellar/opencv/2.4.12/lib/libopencv_imgproc.dylib; sourceTree = "<group>"; };
-		F52FFB801C08861800508330 /* libopencv_legacy.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_legacy.dylib; path = ../../../../../../usr/local/Cellar/opencv/2.4.12/lib/libopencv_legacy.dylib; sourceTree = "<group>"; };
-		F52FFB811C08861800508330 /* libopencv_ml.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_ml.dylib; path = ../../../../../../usr/local/Cellar/opencv/2.4.12/lib/libopencv_ml.dylib; sourceTree = "<group>"; };
-		F52FFB821C08861800508330 /* libopencv_objdetect.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_objdetect.dylib; path = ../../../../../../usr/local/Cellar/opencv/2.4.12/lib/libopencv_objdetect.dylib; sourceTree = "<group>"; };
-		F52FFB831C08861800508330 /* libopencv_ocl.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_ocl.dylib; path = ../../../../../../usr/local/Cellar/opencv/2.4.12/lib/libopencv_ocl.dylib; sourceTree = "<group>"; };
-		F52FFB841C08861800508330 /* libopencv_photo.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_photo.dylib; path = ../../../../../../usr/local/Cellar/opencv/2.4.12/lib/libopencv_photo.dylib; sourceTree = "<group>"; };
-		F52FFB851C08861800508330 /* libopencv_stitching.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_stitching.dylib; path = ../../../../../../usr/local/Cellar/opencv/2.4.12/lib/libopencv_stitching.dylib; sourceTree = "<group>"; };
-		F52FFB861C08861800508330 /* libopencv_superres.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_superres.dylib; path = ../../../../../../usr/local/Cellar/opencv/2.4.12/lib/libopencv_superres.dylib; sourceTree = "<group>"; };
-		F52FFB871C08861800508330 /* libopencv_video.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_video.dylib; path = ../../../../../../usr/local/Cellar/opencv/2.4.12/lib/libopencv_video.dylib; sourceTree = "<group>"; };
-		F52FFB881C08861800508330 /* libopencv_videostab.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_videostab.dylib; path = ../../../../../../usr/local/Cellar/opencv/2.4.12/lib/libopencv_videostab.dylib; sourceTree = "<group>"; };
 		FB05F26D1D8ADD0E003B472A /* PosteriorResampler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PosteriorResampler.cpp; sourceTree = "<group>"; };
 		FB05F26E1D8ADD0E003B472A /* PosteriorResampler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = PosteriorResampler.hpp; sourceTree = "<group>"; };
 		FB05F2711D8ADD0E003B472A /* WeakPoseRandomWalker.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WeakPoseRandomWalker.cpp; sourceTree = "<group>"; };
@@ -409,7 +350,6 @@
 		FB71CE541C475B4600A4DB67 /* BeaconFilterChain.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BeaconFilterChain.cpp; sourceTree = "<group>"; };
 		FB71CE551C475B4600A4DB67 /* BeaconFilterChain.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BeaconFilterChain.hpp; sourceTree = "<group>"; };
 		FB7B22911DE495E200FF8BF3 /* SystemModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SystemModel.cpp; sourceTree = "<group>"; };
-		FB83C2531F822B4500D99713 /* libopencv2Static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libopencv2Static.a; path = Pods/OpenCV/ios/libopencv2Static.a; sourceTree = "<group>"; };
 		FBBA09F51DACB2DA00EB2553 /* Heading.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Heading.cpp; sourceTree = "<group>"; };
 		FBBA09F61DACB2DA00EB2553 /* Heading.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Heading.hpp; sourceTree = "<group>"; };
 		FBC2B5081D956CE400E09B16 /* LocException.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LocException.hpp; sourceTree = "<group>"; };
@@ -427,11 +367,11 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		7E8A887D1C071C2F00C32E70 /* Frameworks */ = {
+		3071FFAF26E2A50600AF1AA1 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A350205D9597EA9D7442790F /* libPods-bleloc.a in Frameworks */,
+				9D9DD588C3AB398128EFD187 /* Pods_bleloc.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -439,23 +379,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				634B3C690684C08A0572FBE0 /* libPods-blelocjni.a in Frameworks */,
-				F52FFB891C08861800508330 /* libopencv_contrib.dylib in Frameworks */,
-				F52FFB8A1C08861800508330 /* libopencv_core.dylib in Frameworks */,
-				F52FFB8B1C08861800508330 /* libopencv_features2d.dylib in Frameworks */,
-				F52FFB8C1C08861800508330 /* libopencv_flann.dylib in Frameworks */,
-				F52FFB8D1C08861800508330 /* libopencv_gpu.dylib in Frameworks */,
-				F52FFB8E1C08861800508330 /* libopencv_highgui.dylib in Frameworks */,
-				F52FFB8F1C08861800508330 /* libopencv_imgproc.dylib in Frameworks */,
-				F52FFB901C08861800508330 /* libopencv_legacy.dylib in Frameworks */,
-				F52FFB911C08861800508330 /* libopencv_ml.dylib in Frameworks */,
-				F52FFB921C08861800508330 /* libopencv_objdetect.dylib in Frameworks */,
-				F52FFB931C08861800508330 /* libopencv_ocl.dylib in Frameworks */,
-				F52FFB941C08861800508330 /* libopencv_photo.dylib in Frameworks */,
-				F52FFB951C08861800508330 /* libopencv_stitching.dylib in Frameworks */,
-				F52FFB961C08861800508330 /* libopencv_superres.dylib in Frameworks */,
-				F52FFB971C08861800508330 /* libopencv_video.dylib in Frameworks */,
-				F52FFB981C08861800508330 /* libopencv_videostab.dylib in Frameworks */,
+				9568E4E7C4F5F00DCE2046A9 /* libPods-blelocjni.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -527,8 +451,6 @@
 				7E6F24EE1C0F1D76007A97A1 /* DataStoreImpl.hpp */,
 				7E6F24EF1C0F1D76007A97A1 /* DataUtils.cpp */,
 				7E6F24F01C0F1D76007A97A1 /* DataUtils.hpp */,
-				7EDEDC0D1D1CB3B300AC111A /* ExtendedDataUtils.cpp */,
-				7EDEDC0E1D1CB3B300AC111A /* ExtendedDataUtils.hpp */,
 				7E6F24F11C0F1D76007A97A1 /* LazyDataStore.cpp */,
 				7E6F24F21C0F1D76007A97A1 /* LazyDataStore.hpp */,
 				7E6F24F31C0F1D76007A97A1 /* VirtualDevice.cpp */,
@@ -656,6 +578,7 @@
 		7E8A88771C071C2F00C32E70 = {
 			isa = PBXGroup;
 			children = (
+				3077FDBE26E72FF6006404B1 /* bleloc.h */,
 				F5027DAB1C0BF5F50027329C /* Headers */,
 				7E8A88821C071C2F00C32E70 /* bleloc */,
 				7E8A898F1C073EAB00C32E70 /* blelocframework */,
@@ -668,8 +591,8 @@
 		7E8A88811C071C2F00C32E70 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				7E8A88801C071C2F00C32E70 /* libbleloc.a */,
 				F5013CCF1C08799F007B6557 /* libblelocjni.dylib */,
+				3071FFB226E2A50600AF1AA1 /* bleloc.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -677,6 +600,7 @@
 		7E8A88821C071C2F00C32E70 /* bleloc */ = {
 			isa = PBXGroup;
 			children = (
+				3071FFB526E2A50600AF1AA1 /* Info.plist */,
 				7EDEDC091D1A5E1600AC111A /* localizer */,
 				7E6F24C51C0F1D76007A97A1 /* beacon */,
 				7E6F24CC1C0F1D76007A97A1 /* core */,
@@ -714,10 +638,10 @@
 		B6011AE2A8926495FA664FC2 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				BD7721527FBC1489894D04B9 /* Pods-bleloc.debug.xcconfig */,
-				308D6E89343F046D8CCC70C3 /* Pods-bleloc.release.xcconfig */,
 				A03FCA3CDC596C0179526256 /* Pods-blelocjni.debug.xcconfig */,
 				7654A1CA9FFCCD15F8AD65D2 /* Pods-blelocjni.release.xcconfig */,
+				947ECB3392F577F850534832 /* Pods-bleloc.debug.xcconfig */,
+				25532BFC6C1A24F1BD281BB1 /* Pods-bleloc.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -756,25 +680,8 @@
 		FCECB81158285F2B717D06A8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				FB83C2531F822B4500D99713 /* libopencv2Static.a */,
-				F52FFB791C08861800508330 /* libopencv_contrib.dylib */,
-				F52FFB7A1C08861800508330 /* libopencv_core.dylib */,
-				F52FFB7B1C08861800508330 /* libopencv_features2d.dylib */,
-				F52FFB7C1C08861800508330 /* libopencv_flann.dylib */,
-				F52FFB7D1C08861800508330 /* libopencv_gpu.dylib */,
-				F52FFB7E1C08861800508330 /* libopencv_highgui.dylib */,
-				F52FFB7F1C08861800508330 /* libopencv_imgproc.dylib */,
-				F52FFB801C08861800508330 /* libopencv_legacy.dylib */,
-				F52FFB811C08861800508330 /* libopencv_ml.dylib */,
-				F52FFB821C08861800508330 /* libopencv_objdetect.dylib */,
-				F52FFB831C08861800508330 /* libopencv_ocl.dylib */,
-				F52FFB841C08861800508330 /* libopencv_photo.dylib */,
-				F52FFB851C08861800508330 /* libopencv_stitching.dylib */,
-				F52FFB861C08861800508330 /* libopencv_superres.dylib */,
-				F52FFB871C08861800508330 /* libopencv_video.dylib */,
-				F52FFB881C08861800508330 /* libopencv_videostab.dylib */,
-				5D651D528829A828244BD797 /* libPods-bleloc.a */,
-				BC1A73BB7CF5381110A675C3 /* libPods-blelocjni.a */,
+				681EB7A3E68B6C53710291F1 /* Pods_bleloc.framework */,
+				BE1063BFBC609B8327D13935 /* libPods-blelocjni.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -782,79 +689,79 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		7E8A89231C072C7B00C32E70 /* Headers */ = {
+		3071FFAD26E2A50600AF1AA1 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7E6F25451C0F1D76007A97A1 /* Acceleration.hpp in Headers */,
-				7E6F25771C0F1D76007A97A1 /* Status.hpp in Headers */,
-				7E6F257F1C0F1D76007A97A1 /* DataStore.hpp in Headers */,
-				7E6F26051C0F1D79007A97A1 /* RandomGenerator.hpp in Headers */,
-				7E6F25E31C0F1D78007A97A1 /* OrientationMeter.hpp in Headers */,
-				7E6F25511C0F1D76007A97A1 /* BLEBeacon.hpp in Headers */,
-				FB176CBB1D7824A0008C1745 /* ExtendedDataUtils.hpp in Headers */,
-				FBFF263420D79D9600DD3645 /* RegisteredBeaconFilter.hpp in Headers */,
-				FB6ADB441E2DE3A7009943C0 /* TransformedOrientationMeterAverage.hpp in Headers */,
-				7E6F25531C0F1D76007A97A1 /* bleloc.h in Headers */,
-				7E6F25BF1C0F1D77007A97A1 /* ObservationModel.hpp in Headers */,
-				7E6F25A91C0F1D77007A97A1 /* CoordinateSystem.hpp in Headers */,
-				7E6F25BD1C0F1D77007A97A1 /* KernelFunction.hpp in Headers */,
-				7E6F259F1C0F1D77007A97A1 /* StreamLocalizerStub.hpp in Headers */,
-				7E6F25D91C0F1D78007A97A1 /* StatusInitializerImpl.hpp in Headers */,
-				7E6F25D51C0F1D78007A97A1 /* RandomWalker.hpp in Headers */,
-				7E6F257D1C0F1D76007A97A1 /* DataLogger.hpp in Headers */,
-				7E6F25F51C0F1D78007A97A1 /* PedometerWalkingState.hpp in Headers */,
-				7E6F26011C0F1D79007A97A1 /* MathUtils.hpp in Headers */,
-				7E6F25E71C0F1D78007A97A1 /* OrientationMeterAverage.hpp in Headers */,
-				7E6F25CD1C0F1D77007A97A1 /* PoseRandomWalker.hpp in Headers */,
-				7E6F253D1C0F1D76007A97A1 /* CleansingBeaconFilter.hpp in Headers */,
-				7E6F25391C0F1D76007A97A1 /* BeaconFilter.hpp in Headers */,
-				7E6F25C51C0F1D77007A97A1 /* ObservationModelTrainer.hpp in Headers */,
-				7E6F25491C0F1D76007A97A1 /* Attitude.hpp in Headers */,
-				7E6F25F91C0F1D79007A97A1 /* ArrayUtils.hpp in Headers */,
-				7E6F25A31C0F1D77007A97A1 /* StreamParticleFilter.hpp in Headers */,
-				7E6F25B51C0F1D77007A97A1 /* GaussianProcess.hpp in Headers */,
-				7E6F25871C0F1D76007A97A1 /* DataUtils.hpp in Headers */,
-				7E6F25A71C0F1D77007A97A1 /* Building.hpp in Headers */,
-				7E6F25791C0F1D76007A97A1 /* StreamLocalizer.hpp in Headers */,
-				7E6F258B1C0F1D76007A97A1 /* LazyDataStore.hpp in Headers */,
-				7E6F256F1C0F1D76007A97A1 /* Sample.hpp in Headers */,
-				7E6F259B1C0F1D77007A97A1 /* StatusInitializer.hpp in Headers */,
-				7E6F258F1C0F1D76007A97A1 /* VirtualDevice.hpp in Headers */,
-				7E6F25731C0F1D76007A97A1 /* State.hpp in Headers */,
-				7E6F26071C0F1D79007A97A1 /* SerializeUtils.hpp in Headers */,
-				7E6F25AD1C0F1D77007A97A1 /* FloorMap.hpp in Headers */,
-				7E6F25371C0F1D76007A97A1 /* BaseBeaconFilter.hpp in Headers */,
-				7E6F25B11C0F1D77007A97A1 /* ImageHolder.hpp in Headers */,
-				7E6F254D1C0F1D76007A97A1 /* Beacon.hpp in Headers */,
-				7E6F256B1C0F1D76007A97A1 /* Pose.hpp in Headers */,
-				7E6F25DD1C0F1D78007A97A1 /* StatusInitializerStub.hpp in Headers */,
-				7E6F25931C0F1D76007A97A1 /* GridResampler.hpp in Headers */,
-				7E6F25ED1C0F1D78007A97A1 /* Pedometer.hpp in Headers */,
-				7E6F25411C0F1D76007A97A1 /* StrongestBeaconFilter.hpp in Headers */,
-				7E6F25B91C0F1D77007A97A1 /* GaussianProcessLDPLMultiModel.hpp in Headers */,
-				7E6F255F1C0F1D76007A97A1 /* Location.hpp in Headers */,
-				7E6F25951C0F1D77007A97A1 /* Resampler.hpp in Headers */,
-				7E6F25DF1C0F1D78007A97A1 /* SystemModel.hpp in Headers */,
-				FB5B4BF21C7C41B600D00E8E /* MetropolisSampler.hpp in Headers */,
-				FB71CE571C475B4600A4DB67 /* BeaconFilterChain.hpp in Headers */,
-				FB5B4BF31C7C41B600D00E8E /* ObservationDependentInitializer.hpp in Headers */,
-				FB176CBA1D7823D1008C1745 /* LatLngConverter.hpp in Headers */,
-				FBEB01EA1D756F1300CB808D /* SystemModelInBuilding.hpp in Headers */,
-				FBC2B5091D956CE400E09B16 /* LocException.hpp in Headers */,
-				FBEB01E81D756F1300CB808D /* RandomWalkerMotion.hpp in Headers */,
-				7EF5DB431D46F73300D22C02 /* LogUtil.hpp in Headers */,
-				7E6F25831C0F1D76007A97A1 /* DataStoreImpl.hpp in Headers */,
-				FB05F2781D8ADD0E003B472A /* WeakPoseRandomWalker.hpp in Headers */,
-				FB05F2741D8ADD0E003B472A /* PosteriorResampler.hpp in Headers */,
-				FBBA09F81DACB2DA00EB2553 /* Heading.hpp in Headers */,
-				FBE5831A1DF9BF1B00057DB5 /* AltitudeManager.hpp in Headers */,
-				FBE5831C1DF9BF1B00057DB5 /* AltitudeManagerSimple.hpp in Headers */,
-				FB315CE51F53DF4A00681EAB /* OrientationAdjuster.hpp in Headers */,
-				FB6ADB571E2F5CCD009943C0 /* GaussianProcessLight.hpp in Headers */,
-				7E92393E1D54764000875766 /* LatLngUtil.hpp in Headers */,
-				FBE583191DF9BF1B00057DB5 /* Altimeter.hpp in Headers */,
-				7EDEDC121D1CCCD800AC111A /* BasicLocalizer.hpp in Headers */,
+				3077FDBF26E72FF7006404B1 /* bleloc.h in Headers */,
+				3077FDB626E2F857006404B1 /* ExtendedDataUtils.hpp in Headers */,
+				3071FFF026E2A57C00AF1AA1 /* BasicLocalizer.hpp in Headers */,
+				3071FFF126E2A57C00AF1AA1 /* BaseBeaconFilter.hpp in Headers */,
+				3071FFF226E2A57C00AF1AA1 /* BeaconFilter.hpp in Headers */,
+				3071FFF326E2A57C00AF1AA1 /* CleansingBeaconFilter.hpp in Headers */,
+				3071FFF426E2A57C00AF1AA1 /* StrongestBeaconFilter.hpp in Headers */,
+				3071FFF526E2A57C00AF1AA1 /* BeaconFilterChain.hpp in Headers */,
+				3071FFF726E2A57C00AF1AA1 /* LocException.hpp in Headers */,
+				3071FFF826E2A57C00AF1AA1 /* Acceleration.hpp in Headers */,
+				3071FFF926E2A57C00AF1AA1 /* Attitude.hpp in Headers */,
+				3071FFFA26E2A57C00AF1AA1 /* Beacon.hpp in Headers */,
+				3071FFFB26E2A57C00AF1AA1 /* BLEBeacon.hpp in Headers */,
+				3071FFFC26E2A57C00AF1AA1 /* Location.hpp in Headers */,
+				3071FFFD26E2A57C00AF1AA1 /* Pose.hpp in Headers */,
+				3071FFFE26E2A57C00AF1AA1 /* Sample.hpp in Headers */,
+				3071FFFF26E2A57C00AF1AA1 /* State.hpp in Headers */,
+				3071000026E2A57C00AF1AA1 /* Status.hpp in Headers */,
+				3071000126E2A57C00AF1AA1 /* StreamLocalizer.hpp in Headers */,
+				3071000226E2A57C00AF1AA1 /* LatLngUtil.hpp in Headers */,
+				3071000326E2A57C00AF1AA1 /* LatLngConverter.hpp in Headers */,
+				3071000426E2A57C00AF1AA1 /* Heading.hpp in Headers */,
+				3071000626E2A57C00AF1AA1 /* DataLogger.hpp in Headers */,
+				3071000726E2A57C00AF1AA1 /* DataStore.hpp in Headers */,
+				3071000826E2A57C00AF1AA1 /* DataStoreImpl.hpp in Headers */,
+				3071000926E2A57D00AF1AA1 /* DataUtils.hpp in Headers */,
+				3071000B26E2A57D00AF1AA1 /* LazyDataStore.hpp in Headers */,
+				3071000C26E2A57D00AF1AA1 /* VirtualDevice.hpp in Headers */,
+				3071000D26E2A57D00AF1AA1 /* GridResampler.hpp in Headers */,
+				3071000E26E2A57D00AF1AA1 /* Resampler.hpp in Headers */,
+				3071000F26E2A57D00AF1AA1 /* StatusInitializer.hpp in Headers */,
+				3071001026E2A57D00AF1AA1 /* StreamLocalizerStub.hpp in Headers */,
+				3071001126E2A57D00AF1AA1 /* StreamParticleFilter.hpp in Headers */,
+				3071001226E2A57D00AF1AA1 /* StatusInitializerImpl.hpp in Headers */,
+				3071001326E2A57D00AF1AA1 /* StatusInitializerStub.hpp in Headers */,
+				3071001426E2A57D00AF1AA1 /* Building.hpp in Headers */,
+				3071001526E2A57D00AF1AA1 /* CoordinateSystem.hpp in Headers */,
+				3071001626E2A57D00AF1AA1 /* FloorMap.hpp in Headers */,
+				3071001726E2A57D00AF1AA1 /* ImageHolder.hpp in Headers */,
+				3071001826E2A57D00AF1AA1 /* GaussianProcessLight.hpp in Headers */,
+				3071001926E2A57D00AF1AA1 /* PosteriorResampler.hpp in Headers */,
+				3071001A26E2A57D00AF1AA1 /* WeakPoseRandomWalker.hpp in Headers */,
+				3071001B26E2A57D00AF1AA1 /* RandomWalkerMotion.hpp in Headers */,
+				3071001C26E2A57D00AF1AA1 /* SystemModelInBuilding.hpp in Headers */,
+				3071001D26E2A57D00AF1AA1 /* GaussianProcess.hpp in Headers */,
+				3071001E26E2A57D00AF1AA1 /* GaussianProcessLDPLMultiModel.hpp in Headers */,
+				3071001F26E2A57D00AF1AA1 /* KernelFunction.hpp in Headers */,
+				3071002026E2A57D00AF1AA1 /* ObservationModel.hpp in Headers */,
+				3071002126E2A57D00AF1AA1 /* ObservationModelTrainer.hpp in Headers */,
+				3071002226E2A57D00AF1AA1 /* PoseRandomWalker.hpp in Headers */,
+				3071002326E2A57D00AF1AA1 /* RandomWalker.hpp in Headers */,
+				3071002426E2A57D00AF1AA1 /* SystemModel.hpp in Headers */,
+				3071002526E2A57D00AF1AA1 /* Altimeter.hpp in Headers */,
+				3071002626E2A57D00AF1AA1 /* AltitudeManager.hpp in Headers */,
+				3071002726E2A57D00AF1AA1 /* AltitudeManagerSimple.hpp in Headers */,
+				3071002826E2A57D00AF1AA1 /* OrientationMeter.hpp in Headers */,
+				3071002926E2A57D00AF1AA1 /* OrientationMeterAverage.hpp in Headers */,
+				3071002A26E2A57D00AF1AA1 /* Pedometer.hpp in Headers */,
+				3071002B26E2A57D00AF1AA1 /* PedometerWalkingState.hpp in Headers */,
+				3071002D26E2A57D00AF1AA1 /* OrientationAdjuster.hpp in Headers */,
+				3071002E26E2A57D00AF1AA1 /* ArrayUtils.hpp in Headers */,
+				3071002F26E2A57D00AF1AA1 /* MathUtils.hpp in Headers */,
+				3071003026E2A57D00AF1AA1 /* RandomGenerator.hpp in Headers */,
+				3071003126E2A57D00AF1AA1 /* SerializeUtils.hpp in Headers */,
+				3071003226E2A57D00AF1AA1 /* LogUtil.hpp in Headers */,
+				3071003326E2A57D00AF1AA1 /* MetropolisSampler.hpp in Headers */,
+				3071003426E2A57D00AF1AA1 /* ObservationDependentInitializer.hpp in Headers */,
+				3071002C26E2A57D00AF1AA1 /* TransformedOrientationMeterAverage.hpp in Headers */,
+				3071FFF626E2A57C00AF1AA1 /* RegisteredBeaconFilter.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -917,16 +824,15 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		7E8A887F1C071C2F00C32E70 /* bleloc */ = {
+		3071FFB126E2A50600AF1AA1 /* bleloc */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 7E8A88891C071C2F00C32E70 /* Build configuration list for PBXNativeTarget "bleloc" */;
+			buildConfigurationList = 3071FFB726E2A50600AF1AA1 /* Build configuration list for PBXNativeTarget "bleloc" */;
 			buildPhases = (
-				8C086403DFA5BDC14D48FAF6 /* [CP] Check Pods Manifest.lock */,
-				7E8A887C1C071C2F00C32E70 /* Sources */,
-				7E8A887D1C071C2F00C32E70 /* Frameworks */,
-				7E8A887E1C071C2F00C32E70 /* CopyFiles */,
-				7E8A89231C072C7B00C32E70 /* Headers */,
-				7E8A89881C073E8400C32E70 /* ShellScript */,
+				6735F7FAF2CD9283A9863B94 /* [CP] Check Pods Manifest.lock */,
+				3071FFAD26E2A50600AF1AA1 /* Headers */,
+				3071FFAE26E2A50600AF1AA1 /* Sources */,
+				3071FFAF26E2A50600AF1AA1 /* Frameworks */,
+				3071FFB026E2A50600AF1AA1 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -934,8 +840,8 @@
 			);
 			name = bleloc;
 			productName = bleloc;
-			productReference = 7E8A88801C071C2F00C32E70 /* libbleloc.a */;
-			productType = "com.apple.product-type.library.static";
+			productReference = 3071FFB226E2A50600AF1AA1 /* bleloc.framework */;
+			productType = "com.apple.product-type.framework";
 		};
 		F5013CCE1C08799F007B6557 /* blelocjni */ = {
 			isa = PBXNativeTarget;
@@ -945,7 +851,6 @@
 				F5013CCB1C08799F007B6557 /* Sources */,
 				F5013CCC1C08799F007B6557 /* Frameworks */,
 				F5013CCD1C08799F007B6557 /* Headers */,
-				F5027DAA1C0BEE9F0027329C /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -962,14 +867,13 @@
 		7E8A88781C071C2F00C32E70 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				DefaultBuildSystemTypeForWorkspace = Original;
 				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = HULOP;
 				TargetAttributes = {
-					7E60021C1C076D71007A9B2B = {
-						CreatedOnToolsVersion = 7.1.1;
-					};
-					7E8A887F1C071C2F00C32E70 = {
-						CreatedOnToolsVersion = 7.1.1;
+					3071FFB126E2A50600AF1AA1 = {
+						CreatedOnToolsVersion = 12.5.1;
+						ProvisioningStyle = Automatic;
 					};
 					F5013CCE1C08799F007B6557 = {
 						CreatedOnToolsVersion = 7.0;
@@ -989,50 +893,37 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				7E8A887F1C071C2F00C32E70 /* bleloc */,
-				7E60021C1C076D71007A9B2B /* framework */,
+				3071FFB126E2A50600AF1AA1 /* bleloc */,
 				F5013CCE1C08799F007B6557 /* blelocjni */,
 			);
 		};
 /* End PBXProject section */
 
+/* Begin PBXResourcesBuildPhase section */
+		3071FFB026E2A50600AF1AA1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
 /* Begin PBXShellScriptBuildPhase section */
-		7E6002201C076D79007A9B2B /* ShellScript */ = {
+		6735F7FAF2CD9283A9863B94 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "set -e\nset +u\n# Avoid recursively calling this script.\nif [[ $SF_MASTER_SCRIPT_RUNNING ]]\nthen\nexit 0\nfi\nset -u\nexport SF_MASTER_SCRIPT_RUNNING=1\n\nSF_TARGET_NAME=${PROJECT_NAME}\nSF_EXECUTABLE_PATH=\"lib${SF_TARGET_NAME}.a\"\nSF_WRAPPER_NAME=\"${SF_TARGET_NAME}.framework\"\n\n# The following conditionals come from\n# https://github.com/kstenerud/iOS-Universal-Framework\n\nif [[ \"$SDK_NAME\" =~ ([A-Za-z]+) ]]\nthen\nSF_SDK_PLATFORM=${BASH_REMATCH[1]}\nelse\necho \"Could not find platform name from SDK_NAME: $SDK_NAME\"\nexit 1\nfi\n\nif [[ \"$SDK_NAME\" =~ ([0-9]+.*$) ]]\nthen\nSF_SDK_VERSION=${BASH_REMATCH[1]}\nelse\necho \"Could not find sdk version from SDK_NAME: $SDK_NAME\"\nexit 1\nfi\n\nif [[ \"$SF_SDK_PLATFORM\" = \"iphoneos\" ]]\nthen\nSF_OTHER_PLATFORM=iphonesimulator\nelse\nSF_OTHER_PLATFORM=iphoneos\nfi\n\nif [[ \"$BUILT_PRODUCTS_DIR\" =~ (.*)$SF_SDK_PLATFORM$ ]]\nthen\nSF_OTHER_BUILT_PRODUCTS_DIR=\"${BASH_REMATCH[1]}${SF_OTHER_PLATFORM}\"\nelse\necho \"Could not find platform name from build products directory: $BUILT_PRODUCTS_DIR\"\nexit 1\nfi\n\n# Build the other platform.\nxcodebuild -project \"${PROJECT_FILE_PATH}\" -target \"${TARGET_NAME}\" -configuration \"${CONFIGURATION}\" -sdk ${SF_OTHER_PLATFORM}${SF_SDK_VERSION} BUILD_DIR=\"${BUILD_DIR}\" OBJROOT=\"${OBJROOT}\" BUILD_ROOT=\"${BUILD_ROOT}\" SYMROOT=\"${SYMROOT}\" $ACTION\n\n# Smash the two static libraries into one fat binary and store it in the .framework\nlipo -create \"${BUILT_PRODUCTS_DIR}/${SF_EXECUTABLE_PATH}\" \"${SF_OTHER_BUILT_PRODUCTS_DIR}/${SF_EXECUTABLE_PATH}\" -output \"${BUILT_PRODUCTS_DIR}/${SF_WRAPPER_NAME}/Versions/A/${SF_TARGET_NAME}\"\n\n# Copy the binary to the other architecture folder to have a complete framework in both.\ncp -a \"${BUILT_PRODUCTS_DIR}/${SF_WRAPPER_NAME}/Versions/A/${SF_TARGET_NAME}\" \"${SF_OTHER_BUILT_PRODUCTS_DIR}/${SF_WRAPPER_NAME}/Versions/A/${SF_TARGET_NAME}\"\n\n\n\necho done\n";
-		};
-		7E8A89881C073E8400C32E70 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "set -e\n\nmkdir -p \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/A/Headers\"\n\n# Link the \"Current\" version to \"A\"\n/bin/ln -sfh A \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/Current\"\n/bin/ln -sfh Versions/Current/Headers \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Headers\"\n/bin/ln -sfh \"Versions/Current/${PRODUCT_NAME}\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/${PRODUCT_NAME}\"\n\n# The -a ensures that the headers maintain the source modification date so that we don't constantly\n# cause propagating rebuilds of files that import these headers.\necho \"${TARGET_BUILD_DIR}/${PUBLIC_HEADERS_FOLDER_PATH}/\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/\" > ~/watsonsdklocation.txt\necho \"${TARGET_BUILD_DIR}/${PUBLIC_HEADERS_FOLDER_PATH}/\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/A/Headers\"\n\n\n/bin/cp -a \"${TARGET_BUILD_DIR}/${PUBLIC_HEADERS_FOLDER_PATH}/\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/A/Headers\"\n\n# create a zip of the framework and add it to the project root\n# clean the framework in the project root\ncd ${SRCROOT}\nrm -rf ${PRODUCT_NAME}.framework ${PRODUCT_NAME}.framework.zip\n# copy the framework to the project root before creating a zip\ncd ${BUILT_PRODUCTS_DIR}\ncp -RH ${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework ${SRCROOT}\n# create a zip\nzip -r ${SRCROOT}/${PRODUCT_NAME}.framework.zip ${PRODUCT_NAME}.framework\ncd ${SRCROOT}\n# unzip -o ${PRODUCT_NAME}.framework.zip\n\n# [Rob] we need to copy the other headers keeping their folder structure\n#echo 'SRCROOT:'${SRCROOT}\n#cd ${SRCROOT}/watsonsdk\n\n# I have to move up a directory due to my layout.\n#echo 'Copying Headers into Framework..'\n#for H in `find ./ -name \"*.h\"`;  do\n#echo ${H}\n#ditto ${H} ${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/A/Headers/${H}\n#done\n\n";
-		};
-		8C086403DFA5BDC14D48FAF6 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
+			inputFileListPaths = (
 			);
 			inputPaths = (
 				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
 				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
 			outputPaths = (
 				"$(DERIVED_FILE_DIR)/Pods-bleloc-checkManifestLockResult.txt",
 			);
@@ -1059,80 +950,66 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		F5027DAA1C0BEE9F0027329C /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "mv /Users/toshinariitoko/Library/Developer/Xcode/DerivedData/bleloc-bnnddoshrgoryievibdzzmykfhaz/Build/Products/Debug/libblelocjni.dylib /Users/toshinariitoko/git/BLELocalization/LocationService/cpplib/libblelocjni.jnilib";
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		7E8A887C1C071C2F00C32E70 /* Sources */ = {
+		3071FFAE26E2A50600AF1AA1 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7EDEDC111D1CCCBB00AC111A /* BasicLocalizer.cpp in Sources */,
-				7E6F25DB1C0F1D78007A97A1 /* StatusInitializerStub.cpp in Sources */,
-				7E6F25B71C0F1D77007A97A1 /* GaussianProcessLDPLMultiModel.cpp in Sources */,
-				7E6F253B1C0F1D76007A97A1 /* CleansingBeaconFilter.cpp in Sources */,
-				7E6F25911C0F1D76007A97A1 /* GridResampler.cpp in Sources */,
-				7E6F26031C0F1D79007A97A1 /* RandomGenerator.cpp in Sources */,
-				7E6F25AB1C0F1D77007A97A1 /* FloorMap.cpp in Sources */,
-				7E6F25851C0F1D76007A97A1 /* DataUtils.cpp in Sources */,
-				7E6F256D1C0F1D76007A97A1 /* Sample.cpp in Sources */,
-				7E6F25711C0F1D76007A97A1 /* State.cpp in Sources */,
-				7EDEDC0F1D1CB3B300AC111A /* ExtendedDataUtils.cpp in Sources */,
-				FB273EF51D22226B00F53CCB /* ExtendedDataUtils.cpp in Sources */,
-				FB71CE4F1C46889F00A4DB67 /* MathUtils.cpp in Sources */,
-				7E6F254B1C0F1D76007A97A1 /* Beacon.cpp in Sources */,
-				FBE5831B1DF9BF1B00057DB5 /* AltitudeManagerSimple.cpp in Sources */,
-				FBFF263520D79D9600DD3645 /* RegisteredBeaconFilter.cpp in Sources */,
-				FBEB01E71D756F1300CB808D /* RandomWalkerMotion.cpp in Sources */,
-				7E6F25E51C0F1D78007A97A1 /* OrientationMeterAverage.cpp in Sources */,
-				FB176CB91D7823D1008C1745 /* LatLngConverter.cpp in Sources */,
-				7E6F25D71C0F1D78007A97A1 /* StatusInitializerImpl.cpp in Sources */,
-				7E6F25CB1C0F1D77007A97A1 /* PoseRandomWalker.cpp in Sources */,
-				7E6F25471C0F1D76007A97A1 /* Attitude.cpp in Sources */,
-				FB7B22921DE495E200FF8BF3 /* SystemModel.cpp in Sources */,
-				FB5B4BF11C7C41B600D00E8E /* MetropolisSampler.cpp in Sources */,
-				FB6ADB561E2F5CCD009943C0 /* GaussianProcessLight.cpp in Sources */,
-				7E6F255D1C0F1D76007A97A1 /* Location.cpp in Sources */,
-				7E92393D1D54764000875766 /* LatLngUtil.cpp in Sources */,
-				FB05F2771D8ADD0E003B472A /* WeakPoseRandomWalker.cpp in Sources */,
-				7E6F25811C0F1D76007A97A1 /* DataStoreImpl.cpp in Sources */,
-				7E6F258D1C0F1D76007A97A1 /* VirtualDevice.cpp in Sources */,
-				FB6ADB431E2DE3A7009943C0 /* TransformedOrientationMeterAverage.cpp in Sources */,
-				FB05F2731D8ADD0E003B472A /* PosteriorResampler.cpp in Sources */,
-				7E6F257B1C0F1D76007A97A1 /* DataLogger.cpp in Sources */,
-				7E6F25B31C0F1D77007A97A1 /* GaussianProcess.cpp in Sources */,
-				7E6F259D1C0F1D77007A97A1 /* StreamLocalizerStub.cpp in Sources */,
-				7E6F253F1C0F1D76007A97A1 /* StrongestBeaconFilter.cpp in Sources */,
-				7E6F25691C0F1D76007A97A1 /* Pose.cpp in Sources */,
-				7EF5DB421D46F73300D22C02 /* LogUtil.cpp in Sources */,
-				FB2E8B131C2404EA00C5C45C /* CoordinateSystem.cpp in Sources */,
-				7E6F25D31C0F1D78007A97A1 /* RandomWalker.cpp in Sources */,
-				7E6F254F1C0F1D76007A97A1 /* BLEBeacon.cpp in Sources */,
-				7E6F25F71C0F1D79007A97A1 /* ArrayUtils.cpp in Sources */,
-				FBBA09F71DACB2DA00EB2553 /* Heading.cpp in Sources */,
-				FBE583181DF9BF1B00057DB5 /* Altimeter.cpp in Sources */,
-				7E6F25A51C0F1D77007A97A1 /* Building.cpp in Sources */,
-				7E6F25BB1C0F1D77007A97A1 /* KernelFunction.cpp in Sources */,
-				7E6F25F31C0F1D78007A97A1 /* PedometerWalkingState.cpp in Sources */,
-				7E6F25431C0F1D76007A97A1 /* Acceleration.cpp in Sources */,
-				7E6F25891C0F1D76007A97A1 /* LazyDataStore.cpp in Sources */,
-				FB71CE561C475B4600A4DB67 /* BeaconFilterChain.cpp in Sources */,
-				7E6F25AF1C0F1D77007A97A1 /* ImageHolder.cpp in Sources */,
-				FBEB01E91D756F1300CB808D /* SystemModelInBuilding.cpp in Sources */,
-				7E6F25751C0F1D76007A97A1 /* Status.cpp in Sources */,
-				7E6F25A11C0F1D77007A97A1 /* StreamParticleFilter.cpp in Sources */,
+				3071FFBA26E2A55100AF1AA1 /* BasicLocalizer.cpp in Sources */,
+				3071FFBB26E2A55100AF1AA1 /* CleansingBeaconFilter.cpp in Sources */,
+				3071FFBC26E2A55100AF1AA1 /* StrongestBeaconFilter.cpp in Sources */,
+				3071FFBD26E2A55100AF1AA1 /* BeaconFilterChain.cpp in Sources */,
+				3071FFBE26E2A55100AF1AA1 /* RegisteredBeaconFilter.cpp in Sources */,
+				3071FFBF26E2A55100AF1AA1 /* Acceleration.cpp in Sources */,
+				3071FFC026E2A55100AF1AA1 /* Attitude.cpp in Sources */,
+				3071FFC126E2A55100AF1AA1 /* Beacon.cpp in Sources */,
+				3071FFC226E2A55100AF1AA1 /* BLEBeacon.cpp in Sources */,
+				3071FFC326E2A55100AF1AA1 /* Location.cpp in Sources */,
+				3071FFC426E2A55100AF1AA1 /* Pose.cpp in Sources */,
+				3071FFC526E2A55100AF1AA1 /* Sample.cpp in Sources */,
+				3071FFC626E2A55100AF1AA1 /* State.cpp in Sources */,
+				3071FFC726E2A55100AF1AA1 /* Status.cpp in Sources */,
+				3071FFC826E2A55100AF1AA1 /* LatLngUtil.cpp in Sources */,
+				3071FFC926E2A55100AF1AA1 /* LatLngConverter.cpp in Sources */,
+				3071FFCA26E2A55100AF1AA1 /* Heading.cpp in Sources */,
+				3071FFCB26E2A55100AF1AA1 /* ExtendedDataUtils.cpp in Sources */,
+				3071FFCC26E2A55100AF1AA1 /* DataLogger.cpp in Sources */,
+				3071FFCD26E2A55100AF1AA1 /* DataStoreImpl.cpp in Sources */,
+				3071FFCE26E2A55100AF1AA1 /* DataUtils.cpp in Sources */,
+				3071FFD026E2A55100AF1AA1 /* LazyDataStore.cpp in Sources */,
+				3071FFD126E2A55100AF1AA1 /* VirtualDevice.cpp in Sources */,
+				3071FFD226E2A55100AF1AA1 /* GridResampler.cpp in Sources */,
+				3071FFD326E2A55100AF1AA1 /* StreamLocalizerStub.cpp in Sources */,
+				3071FFD426E2A55100AF1AA1 /* StreamParticleFilter.cpp in Sources */,
+				3071FFD526E2A55100AF1AA1 /* StatusInitializerImpl.cpp in Sources */,
+				3071FFD626E2A55100AF1AA1 /* StatusInitializerStub.cpp in Sources */,
+				3071FFD726E2A55100AF1AA1 /* Building.cpp in Sources */,
+				3071FFD826E2A55100AF1AA1 /* CoordinateSystem.cpp in Sources */,
+				3071FFD926E2A55100AF1AA1 /* FloorMap.cpp in Sources */,
+				3071FFDA26E2A55100AF1AA1 /* ImageHolder.cpp in Sources */,
+				3071FFDB26E2A55100AF1AA1 /* GaussianProcessLight.cpp in Sources */,
+				3071FFDC26E2A55100AF1AA1 /* PosteriorResampler.cpp in Sources */,
+				3071FFDD26E2A55100AF1AA1 /* WeakPoseRandomWalker.cpp in Sources */,
+				3071FFDE26E2A55100AF1AA1 /* RandomWalkerMotion.cpp in Sources */,
+				3071FFDF26E2A55100AF1AA1 /* SystemModelInBuilding.cpp in Sources */,
+				3071FFE026E2A55100AF1AA1 /* GaussianProcess.cpp in Sources */,
+				3071FFE126E2A55100AF1AA1 /* GaussianProcessLDPLMultiModel.cpp in Sources */,
+				3071FFE226E2A55100AF1AA1 /* KernelFunction.cpp in Sources */,
+				3071FFE326E2A55100AF1AA1 /* PoseRandomWalker.cpp in Sources */,
+				3071FFE426E2A55100AF1AA1 /* RandomWalker.cpp in Sources */,
+				3071FFE526E2A55100AF1AA1 /* SystemModel.cpp in Sources */,
+				3071FFE626E2A55100AF1AA1 /* Altimeter.cpp in Sources */,
+				3071FFE726E2A55100AF1AA1 /* AltitudeManagerSimple.cpp in Sources */,
+				3071FFE826E2A55100AF1AA1 /* OrientationMeterAverage.cpp in Sources */,
+				3071FFE926E2A55100AF1AA1 /* PedometerWalkingState.cpp in Sources */,
+				3071FFEA26E2A55100AF1AA1 /* TransformedOrientationMeterAverage.cpp in Sources */,
+				3071FFEB26E2A55100AF1AA1 /* ArrayUtils.cpp in Sources */,
+				3071FFEC26E2A55100AF1AA1 /* MathUtils.cpp in Sources */,
+				3071FFED26E2A55100AF1AA1 /* RandomGenerator.cpp in Sources */,
+				3071FFEE26E2A55100AF1AA1 /* LogUtil.cpp in Sources */,
+				3071FFEF26E2A55100AF1AA1 /* MetropolisSampler.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1181,19 +1058,101 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		7E60021E1C076D71007A9B2B /* Debug */ = {
+		3071FFB826E2A50600AF1AA1 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 947ECB3392F577F850534832 /* Pods-bleloc.debug.xcconfig */;
 			buildSettings = {
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SUPPORTS_MACCATALYST = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = "${inherited}";
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_BITCODE = NO;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = bleloc/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_VERIFY_BITCODE = NO;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = org.hulop.bleloc;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
 			};
 			name = Debug;
 		};
-		7E60021F1C076D71007A9B2B /* Release */ = {
+		3071FFB926E2A50600AF1AA1 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 25532BFC6C1A24F1BD281BB1 /* Pods-bleloc.release.xcconfig */;
 			buildSettings = {
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SUPPORTS_MACCATALYST = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = "${inherited}";
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_BITCODE = NO;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = bleloc/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_VERIFY_BITCODE = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = org.hulop.bleloc;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
 			};
 			name = Release;
 		};
@@ -1241,7 +1200,7 @@
 				OTHER_LDFLAGS = "$(inherited)";
 				SDKROOT = iphoneos;
 				SUPPORTS_MACCATALYST = NO;
-				VALID_ARCHS = "arm64 x86_64";
+				VALID_ARCHS = "arm64 armv7 x86_64";
 			};
 			name = Debug;
 		};
@@ -1288,52 +1247,7 @@
 				SDKROOT = iphoneos;
 				SUPPORTS_MACCATALYST = NO;
 				VALIDATE_PRODUCT = YES;
-				VALID_ARCHS = "arm64 x86_64";
-			};
-			name = Release;
-		};
-		7E8A888A1C071C2F00C32E70 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = BD7721527FBC1489894D04B9 /* Pods-bleloc.debug.xcconfig */;
-			buildSettings = {
-				GCC_OPTIMIZATION_LEVEL = 3;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					"COCOAPODS=1",
-					"WITH_FFMPEG=OFF",
-				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Pods/OpenCV/ios",
-				);
-				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = "$(inherited)";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SUPPORTS_MACCATALYST = NO;
-				VALID_ARCHS = "$(inherited)";
-			};
-			name = Debug;
-		};
-		7E8A888B1C071C2F00C32E70 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 308D6E89343F046D8CCC70C3 /* Pods-bleloc.release.xcconfig */;
-			buildSettings = {
-				GCC_OPTIMIZATION_LEVEL = 3;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					"COCOAPODS=1",
-				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Pods/OpenCV/ios",
-				);
-				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = "$(inherited)";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SUPPORTS_MACCATALYST = NO;
-				VALID_ARCHS = "$(inherited)";
+				VALID_ARCHS = "arm64 armv7 x86_64";
 			};
 			name = Release;
 		};
@@ -1409,11 +1323,11 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		7E60021D1C076D71007A9B2B /* Build configuration list for PBXAggregateTarget "framework" */ = {
+		3071FFB726E2A50600AF1AA1 /* Build configuration list for PBXNativeTarget "bleloc" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				7E60021E1C076D71007A9B2B /* Debug */,
-				7E60021F1C076D71007A9B2B /* Release */,
+				3071FFB826E2A50600AF1AA1 /* Debug */,
+				3071FFB926E2A50600AF1AA1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1423,15 +1337,6 @@
 			buildConfigurations = (
 				7E8A88871C071C2F00C32E70 /* Debug */,
 				7E8A88881C071C2F00C32E70 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		7E8A88891C071C2F00C32E70 /* Build configuration list for PBXNativeTarget "bleloc" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				7E8A888A1C071C2F00C32E70 /* Debug */,
-				7E8A888B1C071C2F00C32E70 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
